@@ -1,0 +1,20 @@
+{
+  "valid-users": [
+    {
+      "email": "email1@example.com",
+      "password": "test1234",
+      "display-name": "Test User 1"
+    },
+    {
+      "email": "email2@example.com",
+      "password": "test@#$%!*",
+      "display-name": "Test User 2"
+    }
+  ],
+  "valid-blogs": [
+    {
+      "name": "my-blog",
+      "title": "My Blog"
+    }
+  ]
+}

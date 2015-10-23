@@ -1,0 +1,5 @@
+{
+    "database-name": "weblogjstest",
+    "database-host": "localhost",
+    "database-port": 27017
+}
