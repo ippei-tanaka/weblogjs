@@ -1,0 +1,29 @@
+{
+  "name": "weblogjs",
+  "version": "1.0.0",
+  "description": "a library for weblogs",
+  "main": "./src",
+  "scripts": {
+    "test": "./node_modules/.bin/gulp test"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.3.0",
+    "gulp": "^3.9.0",
+    "gulp-mocha": "^2.1.3",
+    "request": "^2.65.0",
+    "run-sequence": "^1.1.4"
+  },
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "mongoose": "^4.1.12",
+    "mongoose-unique-validator": "^0.5.1",
+    "mongoose-validator": "^1.2.4",
+    "passport": "^0.3.0",
+    "passport-http": "^0.3.0",
+    "request": "^2.65.0"
+  }
+}

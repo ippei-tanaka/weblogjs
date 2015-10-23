@@ -1,0 +1,5 @@
+{
+    "database-name": "weblogjs",
+    "database-host": "localhost",
+    "database-port": 27017
+}
