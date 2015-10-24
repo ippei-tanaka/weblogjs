@@ -3,10 +3,10 @@
 var errors = require('../errors');
 
 var defaultSetting = {
-    "database-name": "weblogjs",
-    "database-host": "localhost",
-    "database-port": 27017,
-    web_server_port: 8080,
+    database_name: "weblogjs",
+    database_host: "localhost",
+    database_port: 27017,
+    web_server_port: 80,
     web_server_host: 'localhost'
 };
 
