@@ -1,5 +1,7 @@
 {
-    "database-name": "weblogjstest",
-    "database-host": "localhost",
-    "database-port": 27017
+    "database_name": "weblogjstest",
+    "database_host": "localhost",
+    "database_port": 27017,
+    "web_server_port": 8080,
+    "web_server_host": "localhost"
 }

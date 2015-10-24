@@ -12,7 +12,7 @@ var req = function (method, path, data, username, password) {
         };
 
         var requestObject = request(options, (error, response, body) => {
-            if (!error) {
+            if (error) {
                 reject(error);
             }
 

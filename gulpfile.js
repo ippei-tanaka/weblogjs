@@ -18,3 +18,4 @@ gulp.task('test', () => {
         });
 });
 
+gulp.task('default', ['test']);

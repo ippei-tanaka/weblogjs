@@ -42,7 +42,7 @@ var emailValidator = [
 ];
 
 var UserSchema = new mongoose.Schema({
-    "email": {
+    email: {
         type: String,
         validate: emailValidator,
         required: 'An email is required.',
@@ -50,24 +50,24 @@ var UserSchema = new mongoose.Schema({
         unique: true
     },
 
-    "password": {
+    password: {
         type: String,
         required: 'A password is required.',
         validate: passwordValidator,
         select: false
     },
 
-    "display-name": {
+    display_name: {
         type: String,
         required: 'A display Name is required.',
         validate: displayNameValidator
     },
 
-    "created": {
+    created: {
         type: Date
     },
 
-    "updated": {
+    updated: {
         type: Date
     }
 });
