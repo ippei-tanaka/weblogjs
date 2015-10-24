@@ -16,6 +16,10 @@ var req = function (method, path, data, username, password) {
                 reject(error);
             }
 
+            if (response.statusCode !== 200) {
+                reject(new Error(`${response.statusCode} ${body}`));
+            }
+
             resolve(body);
         });
 

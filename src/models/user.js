@@ -59,7 +59,7 @@ var UserSchema = new mongoose.Schema({
 
     display_name: {
         type: String,
-        required: 'A display Name is required.',
+        required: 'A display name is required.',
         validate: displayNameValidator
     },
 
