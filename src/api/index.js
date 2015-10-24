@@ -6,6 +6,8 @@ var errors = require('../errors');
 var router = require('./router');
 var bodyParser = require('body-parser');
 var expressApp = require('express')();
+var userManager = require('../services/user-manager');
+
 
 /**
  * @returns {Promise}
@@ -30,6 +32,23 @@ var dbConnect = () => {
         settings.database_port)
 };
 
+/**
+ * @returns {Promise}
+ */
+var createAdminUser = () => new Promise((resolve, reject) => {
+    var settings = config.load();
+    userManager.createUser({
+        email: settings.admin_email,
+        password: settings.admin_password,
+        display_name: "Admin"
+    }).then((user) => {
+        resolve(user);
+    }).catch((err) => {
+        console.error(err);
+        reject(err);
+    });
+});
+
 
 /**
  * @returns {Promise}
@@ -48,6 +67,7 @@ var dbDisconnect = () => db.disconnect();
         var settings = config.load();
 
         dbConnect()
+            .then(() => createAdminUser())
             .then(() => {
                 webServer = expressApp.listen(settings.web_server_port, settings.web_server_host,
                     (err) => {
@@ -63,7 +83,7 @@ var dbDisconnect = () => db.disconnect();
         if (webServer) {
             webServer.close((err) => {
                 if (!err) {
-                    dbDisconnect
+                    dbDisconnect()
                         .then(resolve)
                         .catch(reject);
                 }
@@ -86,7 +106,6 @@ module.exports = (_config) => {
 
     return {
         dbClear,
-        dbConnect,
         startServer,
         stopServer
     };
