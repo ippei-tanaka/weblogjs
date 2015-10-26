@@ -20,7 +20,7 @@ var userManager = require('../services/user-manager');
 
     // Authentication
     authHandler = (email, password, done) => {
-        userManager.isValidUser({email: email, password: password})
+        userManager.isValid({email: email, password: password})
             .then((user) => {
                 return done(null, user);
             })
@@ -50,22 +50,30 @@ var userManager = require('../services/user-manager');
         }
     };
 
-    // Root
     routes.get('/', response((ok) => {
         ok({});
     }));
 
-    // get users
     routes.get('/users', auth, response((ok, error) => {
-        userManager.getUserList()
+        userManager.getList()
             .then(ok)
             .catch(error);
     }));
 
+    routes.get('/users/:id', auth, response((ok, error, request, response) => {
+        userManager.findById(request.params.id)
+            .then(ok)
+            .catch(error);
+    }));
 
-    // Create the new user
     routes.post('/users', auth, response((ok, error, request) => {
-        userManager.createUser(request.body)
+        userManager.create(request.body)
+            .then(ok)
+            .catch(error);
+    }));
+
+    routes.delete('/users/:id', auth, response((ok, error, request, response) => {
+        userManager.remove(request.params.id)
             .then(ok)
             .catch(error);
     }));

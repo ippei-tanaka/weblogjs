@@ -37,7 +37,7 @@ var dbConnect = () => {
  */
 var createAdminUser = () => new Promise((resolve, reject) => {
     var settings = config.load();
-    userManager.createUser({
+    userManager.create({
         email: settings.admin_email,
         password: settings.admin_password,
         display_name: "Admin"
