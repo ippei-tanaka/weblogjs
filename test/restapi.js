@@ -10,6 +10,7 @@ var admin = Object.freeze(Object.assign({
     email: settings.admin_email,
     password: settings.admin_password
 }));
+
 var testUser = Object.freeze(Object.assign(testData["valid-users"][0]));
 
 const BASE_URL = "http://localhost:8080";
@@ -37,7 +38,7 @@ describe('/users', () => {
                 expect(user["_id"]).to.be.string;
                 expect(user["email"]).to.equal(testUser["email"]);
                 expect(user).to.not.have.property('password');
-                expect(user["display-name"]).to.equal(testUser["display-name"]);
+                expect(user["display_name"]).to.equal(testUser["display_name"]);
                 done();
             })
             .catch((err) => {
@@ -60,6 +61,24 @@ describe('/users', () => {
             })
             .catch((err) => {
                 done(new Error(err));
+            });
+    });
+
+    it('should return a user and delete a user', (done) => {
+        var createdUser;
+        httpRequest.post(`${BASE_URL}/users`, testUser, admin.email, admin.password)
+            .then((user) => {
+                createdUser = user;
+                return httpRequest.get(`${BASE_URL}/users/${createdUser._id}`, null, testUser.email, testUser.password);
+            })
+            .then(() => {
+                return httpRequest.del(`${BASE_URL}/users/${createdUser._id}`, null, testUser.email, testUser.password);
+            })
+            .then(() => {
+                return httpRequest.get(`${BASE_URL}/users/${createdUser._id}`, null, admin.email, admin.password);
+            })
+            .catch((err) => {
+                done();
             });
     });
 

@@ -12,7 +12,7 @@ var errors = require('../errors');
  * @param {string} userInfo.display_name - The display name of the user.
  * @returns {Promise}
  */
-var createUser = (userInfo) => new Promise((resolve, reject) => {
+var create = (userInfo) => new Promise((resolve, reject) => {
     var user = new User({
         email: userInfo.email,
         display_name: userInfo.display_name,
@@ -34,7 +34,7 @@ var createUser = (userInfo) => new Promise((resolve, reject) => {
 /**
  * @returns {Promise}
  */
-var getUserList = () => new Promise((resolve, reject) => {
+var getList = () => new Promise((resolve, reject) => {
     User.find({}).exec((err, users) => {
         if (err) return reject(err);
         resolve({
@@ -45,13 +45,40 @@ var getUserList = () => new Promise((resolve, reject) => {
 
 
 /**
+ * @param {string} id - a user id
+ * @returns {Promise}
+ */
+var findById = (id) => new Promise((resolve, reject) => {
+    User.findById(id).exec((err, user) => {
+        if (err) return reject(err);
+
+        if (!user)
+            return reject(new errors.WeblogJsError("The user doesn't exist."));
+
+        resolve(user);
+    });
+});
+
+
+/**
+ * @param {string} id - a user id
+ * @returns {Promise}
+ */
+var remove = (id) => new Promise((resolve, reject) => {
+    User.remove({_id: id}).exec((err) => {
+        if (err) return reject(err);
+        resolve();
+    });
+});
+
+
+/**
  * @param {object} credential - Credential of the user.
  * @param {string} credential.email - The email of the user.
  * @param {string} credential.password - The password of the user.
  * @returns {Promise}
  */
-var isValidUser = (credential) =>  new Promise((resolve, reject) => {
-
+var isValid = (credential) =>  new Promise((resolve, reject) => {
     User
         .findOne({"email": credential.email})
         .select('password')
@@ -74,7 +101,9 @@ var isValidUser = (credential) =>  new Promise((resolve, reject) => {
 
 
 module.exports = {
-    createUser,
-    getUserList,
-    isValidUser
+    create,
+    getList,
+    findById,
+    isValid,
+    remove
 };
