@@ -2,57 +2,38 @@
 
 var mongoose = require('mongoose');
 var validate = require('mongoose-validator');
+var uniqueValidatorPlugin = require('mongoose-unique-validator');
+var formatter = require('../services/string-formatter');
 
-var titleValidator = [
-    /*
-    validate({
-        validator: 'matches',
-        arguments: /^[a-zA-Z0-9#!@%&\*]*$/,
-        message: 'Only alphabets, numbers and some symbols (#, !, @, %, &, *) are allowed for Password.'
-    }),
-    */
+
+var nameValidator = [
     validate({
         validator: 'isLength',
         arguments: [1, 200],
-        message: 'Title should be between {ARGS[0]} and {ARGS[1]} characters.'
+        message: 'A title should be between {ARGS[0]} and {ARGS[1]} characters.'
     })
 ];
 
-var contentValidator = [
-    /*
-    validate({
-        validator: 'matches',
-        arguments: /^[a-zA-Z0-9_\-#!@%&\* ]*$/,
-        message: 'Only alphabets, numbers, spaces and some symbols (_, -, #, !, @, %, &, *) are allowed for Display Name.'
-    }),
-    */
+var slugValidator = [
     validate({
         validator: 'isLength',
-        arguments: [1, 10000],
-        message: 'Body should be between {ARGS[0]} and {ARGS[1]} characters.'
+        arguments: [1, 1000],
+        message: 'A slug should be between {ARGS[0]} and {ARGS[1]} characters.'
     })
 ];
 
-var ArticleSchema = new mongoose.Schema({
-    "title": {
+var CategorySchema = new mongoose.Schema({
+    "name": {
         type: String,
-        validate: titleValidator,
-        required: 'Title is required.'
+        validate: nameValidator,
+        required: 'A name is required.'
     },
 
-    "content": {
+    "slug": {
         type: String,
-        required: 'Content is required.',
-        validate: contentValidator
-    },
-
-    "author": {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
-
-    "publish-date": {
-        type: Date
+        validate: slugValidator,
+        required: 'A slug is required.',
+        unique: true
     },
 
     "created": {
@@ -65,8 +46,7 @@ var ArticleSchema = new mongoose.Schema({
 });
 
 
-// Hook for updated and created dates
-ArticleSchema.pre('save', function (next) {
+CategorySchema.pre('save', function (next) {
     var now = new Date();
 
     this.updated = now;
@@ -79,4 +59,30 @@ ArticleSchema.pre('save', function (next) {
 });
 
 
-module.exports = mongoose.model('Article', ArticleSchema);
+CategorySchema.plugin(
+    uniqueValidatorPlugin,
+    {
+        message: 'The {PATH}, "{VALUE}", has been registered.'
+    });
+
+
+CategorySchema.pre('validate', function (next) {
+    if (!this.slug) {
+        this.slug = formatter.dasherize(this.name);
+    }
+
+    mongoose.model('Category')
+        .count({slug: this.slug})
+        .exec(function (err, count) {
+            if (err)
+                return next(err);
+
+            if (count > 0) {
+                this.slug += (count + 1);
+            }
+            next();
+        }.bind(this));
+});
+
+
+module.exports = mongoose.model('Category', CategorySchema);

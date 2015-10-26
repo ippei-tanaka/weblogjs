@@ -11,10 +11,17 @@
       "display_name": "Test User 2"
     }
   ],
-  "valid-blogs": [
+  "valid-posts": [
     {
-      "name": "my-blog",
-      "title": "My Blog"
+      "title": "My Post Title",
+      "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
+      "category": "oh-my-category"
+    }
+  ],
+  "valid-categories": [
+    {
+      "name": "Oh My Category",
+      "slug": "oh-my-category"
     }
   ]
 }
