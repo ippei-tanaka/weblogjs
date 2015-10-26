@@ -13,6 +13,10 @@ var admin = Object.freeze(Object.assign({
 
 var testUser = Object.freeze(Object.assign(testData["valid-users"][0]));
 
+var testPost = Object.freeze(Object.assign(testData["valid-posts"][0]));
+
+var testCategory = Object.freeze(Object.assign(testData["valid-categories"][0]));
+
 const BASE_URL = "http://localhost:8080";
 
 {
@@ -53,6 +57,16 @@ describe('/users', () => {
             });
     });
 
+    it('should not create a new user when the email has already been registered', (done) => {
+        httpRequest.post(`${BASE_URL}/users`, testUser, admin.email, admin.password)
+            .then(() => {
+                return httpRequest.post(`${BASE_URL}/users`, testUser, admin.email, admin.password);
+            })
+            .catch(() => {
+                done();
+            });
+    });
+
     it('should return a list of users', (done) => {
         httpRequest.get(`${BASE_URL}/users`, testUser, admin.email, admin.password)
             .then((users) => {
@@ -77,9 +91,71 @@ describe('/users', () => {
             .then(() => {
                 return httpRequest.get(`${BASE_URL}/users/${createdUser._id}`, null, admin.email, admin.password);
             })
-            .catch((err) => {
+            .catch(() => {
                 done();
             });
     });
 
 });
+
+
+describe('/categories', () => {
+
+    it('should create a new category', (done) => {
+        var categoryWithoutSlug = {
+            name: testCategory.name
+        };
+
+        httpRequest.post(`${BASE_URL}/categories`, categoryWithoutSlug, admin.email, admin.password)
+            .then((category) => {
+                expect(category._id).to.be.string;
+                expect(category.name).to.equal(testCategory.name);
+                expect(category.slug).to.equal(testCategory.slug);
+                done();
+            })
+            .catch((err) => {
+                done(new Error(err));
+            });
+    });
+
+    it('should create a new category even when the name is duplicated', (done) => {
+        var categoryWithoutSlug = {
+            name: testCategory.name
+        };
+
+        httpRequest.post(`${BASE_URL}/categories`, categoryWithoutSlug, admin.email, admin.password)
+            .then((category) => {
+                expect(category._id).to.be.string;
+                expect(category.name).to.equal(testCategory.name);
+                expect(category.slug).to.equal(testCategory.slug);
+                return httpRequest.post(`${BASE_URL}/categories`, categoryWithoutSlug, admin.email, admin.password)
+            })
+            .then((category) => {
+                expect(category._id).to.be.string;
+                expect(category.name).to.equal(testCategory.name);
+                expect(category.slug).to.equal(testCategory.slug + "2");
+                done();
+            })
+            .catch((err) => {
+                done(new Error(err));
+            });
+    });
+
+});
+
+/*
+describe('/posts', () => {
+
+    it('should create a new post', (done) => {
+        httpRequest.post(`${BASE_URL}/posts`, testPost, admin.email, admin.password)
+            .then((post) => {
+                expect(post["_id"]).to.be.string;
+                done();
+            })
+            .catch((err) => {
+                done(new Error(err));
+            });
+    });
+
+});
+*/

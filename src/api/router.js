@@ -5,6 +5,8 @@ var passport = require('passport');
 var errors = require('../errors');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var userManager = require('../services/user-manager');
+var postManager = require('../services/post-manager');
+var categoryManager = require('../services/category-manager');
 
 //====================================================
 // Passport Setting
@@ -60,7 +62,7 @@ var userManager = require('../services/user-manager');
             .catch(error);
     }));
 
-    routes.get('/users/:id', auth, response((ok, error, request, response) => {
+    routes.get('/users/:id', auth, response((ok, error, request) => {
         userManager.findById(request.params.id)
             .then(ok)
             .catch(error);
@@ -72,8 +74,23 @@ var userManager = require('../services/user-manager');
             .catch(error);
     }));
 
-    routes.delete('/users/:id', auth, response((ok, error, request, response) => {
+    routes.delete('/users/:id', auth, response((ok, error, request) => {
         userManager.remove(request.params.id)
+            .then(ok)
+            .catch(error);
+    }));
+
+    routes.post('/categories', auth, response((ok, error, request) => {
+        categoryManager.create(request.body)
+            .then(ok)
+            .catch(error);
+    }));
+
+    routes.post('/posts', auth, response((ok, error, request) => {
+        var post = Object.assign(
+            request.body, { author: request.user._id });
+
+        postManager.create(post)
             .then(ok)
             .catch(error);
     }));
