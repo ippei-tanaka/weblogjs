@@ -64,7 +64,7 @@ var findById = (id) => new Promise((resolve, reject) => {
  * @param {string} id - a user id
  * @returns {Promise}
  */
-var remove = (id) => new Promise((resolve, reject) => {
+var removeById = (id) => new Promise((resolve, reject) => {
     User.remove({_id: id}).exec((err) => {
         if (err) return reject(err);
         resolve();
@@ -105,5 +105,5 @@ module.exports = {
     getList,
     findById,
     isValid,
-    remove
+    removeById
 };

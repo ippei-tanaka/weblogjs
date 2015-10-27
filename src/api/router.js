@@ -56,6 +56,8 @@ var categoryManager = require('../services/category-manager');
         ok({});
     }));
 
+    // User
+
     routes.get('/users', auth, response((ok, error) => {
         userManager.getList()
             .then(ok)
@@ -75,7 +77,15 @@ var categoryManager = require('../services/category-manager');
     }));
 
     routes.delete('/users/:id', auth, response((ok, error, request) => {
-        userManager.remove(request.params.id)
+        userManager.removeById(request.params.id)
+            .then(ok)
+            .catch(error);
+    }));
+
+    // Category
+
+    routes.get('/categories', auth, response((ok, error) => {
+        categoryManager.getList()
             .then(ok)
             .catch(error);
     }));
@@ -85,6 +95,8 @@ var categoryManager = require('../services/category-manager');
             .then(ok)
             .catch(error);
     }));
+
+    // Post
 
     routes.post('/posts', auth, response((ok, error, request) => {
         var post = Object.assign(

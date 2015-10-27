@@ -3,7 +3,7 @@
 var mongoose = require('mongoose');
 var validate = require('mongoose-validator');
 var uniqueValidatorPlugin = require('mongoose-unique-validator');
-var formatter = require('../services/string-formatter');
+
 
 var titleValidator = [
     validate({
@@ -102,12 +102,6 @@ PostSchema.pre('save', function (next) {
         this.created = now;
     }
 
-    next();
-});
-
-
-PostSchema.pre('validate', function (next) {
-    this.slug = formatter.dasherize(this.title);
     next();
 });
 

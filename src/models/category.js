@@ -3,7 +3,7 @@
 var mongoose = require('mongoose');
 var validate = require('mongoose-validator');
 var uniqueValidatorPlugin = require('mongoose-unique-validator');
-var formatter = require('../services/string-formatter');
+var slugPlugin = require('../services/slug-plugin');
 
 
 var nameValidator = [
@@ -33,7 +33,8 @@ var CategorySchema = new mongoose.Schema({
         type: String,
         validate: slugValidator,
         required: 'A slug is required.',
-        unique: true
+        unique: true,
+        slug: "name"
     },
 
     "created": {
@@ -65,24 +66,6 @@ CategorySchema.plugin(
         message: 'The {PATH}, "{VALUE}", has been registered.'
     });
 
-
-CategorySchema.pre('validate', function (next) {
-    if (!this.slug) {
-        this.slug = formatter.dasherize(this.name);
-    }
-
-    mongoose.model('Category')
-        .count({slug: this.slug})
-        .exec(function (err, count) {
-            if (err)
-                return next(err);
-
-            if (count > 0) {
-                this.slug += (count + 1);
-            }
-            next();
-        }.bind(this));
-});
-
+CategorySchema.plugin(slugPlugin);
 
 module.exports = mongoose.model('Category', CategorySchema);
