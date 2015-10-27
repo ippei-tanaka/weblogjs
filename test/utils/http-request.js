@@ -17,8 +17,7 @@ var req = function (method, path, data, username, password) {
             }
 
             if (response.statusCode !== 200) {
-                console.log(body);
-                reject(new Error(`${response.statusCode} ${body}`));
+                reject({response, body});
             }
 
             resolve(body);

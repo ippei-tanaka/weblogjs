@@ -38,11 +38,11 @@ var getList = () => new Promise((resolve, reject) => {
 
 
 /**
- * @param {string} slug
+ * @param {string} id
  * @returns {Promise}
  */
-var findBySlug = (slug) => new Promise((resolve, reject) => {
-    Category.find({slug: slug}).exec((err, categoty) => {
+var findById = (id) => new Promise((resolve, reject) => {
+    Category.findById(id).exec((err, categoty) => {
         if (err) return reject(err);
 
         if (!categoty)
@@ -57,8 +57,43 @@ var findBySlug = (slug) => new Promise((resolve, reject) => {
  * @param {string} slug
  * @returns {Promise}
  */
-var removeBySlug = (slug) => new Promise((resolve, reject) => {
-    Category.remove({slug: slug}).exec((err) => {
+var findBySlug = (slug) => new Promise((resolve, reject) => {
+    Category.findOne({slug: slug}).exec((err, categoty) => {
+        if (err) return reject(err);
+
+        if (!categoty)
+            return reject(new errors.WeblogJsError("The category doesn't exist."));
+
+        resolve(categoty);
+    });
+});
+
+
+/**
+ * @param {string} id
+ * @param {object} newCategory
+ * @param {string} [newCategory.name] - The name of the category.
+ * @param {string} [newCategory.slug] - The content of the category.
+ * @returns {Promise}
+ */
+var updateById = (id, newCategory) => new Promise((resolve, reject) => {
+    Category.findByIdAndUpdate(id, {$set: newCategory}).exec((err, categoty) => {
+        if (err) return reject(err);
+
+        if (!categoty)
+            return reject(new errors.WeblogJsError("The category doesn't exist."));
+
+        resolve(categoty);
+    });
+});
+
+
+/**
+ * @param {string} id
+ * @returns {Promise}
+ */
+var removeById = (id) => new Promise((resolve, reject) => {
+    Category.remove({_id: id}).exec((err) => {
         if (err) return reject(err);
         resolve();
     });
@@ -67,10 +102,9 @@ var removeBySlug = (slug) => new Promise((resolve, reject) => {
 
 module.exports = {
     create,
-    getList
-    /*
-     findById,
-    isValid,
-    remove
-    */
+    getList,
+    findById,
+    findBySlug,
+    updateById,
+    removeById
 };

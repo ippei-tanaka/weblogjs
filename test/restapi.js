@@ -33,7 +33,7 @@ const BASE_URL = "http://localhost:8080";
     afterEach(() => weblogjs.stopServer());
 }
 
-/*
+
 describe('/users', () => {
 
     it('should create a new user', (done) => {
@@ -46,7 +46,8 @@ describe('/users', () => {
                 done();
             })
             .catch((err) => {
-                done(new Error(err));
+                console.error(err);
+                done(new Error());
             });
     });
 
@@ -69,12 +70,13 @@ describe('/users', () => {
 
     it('should return a list of users', (done) => {
         httpRequest.get(`${BASE_URL}/users`, testUser, admin.email, admin.password)
-            .then((users) => {
-                expect(users.users.length).to.equal(1);
+            .then((obj) => {
+                expect(obj.users.length).to.equal(1);
                 done();
             })
             .catch((err) => {
-                done(new Error(err));
+                console.error(err);
+                done(new Error());
             });
     });
 
@@ -97,11 +99,10 @@ describe('/users', () => {
     });
 
 });
-*/
+
 
 describe('/categories', () => {
 
-    /*
     it('should create a new category', (done) => {
         var categoryWithoutSlug = {
             name: testCategory.name
@@ -115,10 +116,10 @@ describe('/categories', () => {
                 done();
             })
             .catch((err) => {
-                done(new Error(err));
+                console.error(err);
+                done(new Error());
             });
     });
-*/
 
     it('should create a new category even when the name is duplicated', (done) => {
         var categoryWithoutSlug = {
@@ -158,12 +159,76 @@ describe('/categories', () => {
                 done();
             })
             .catch((err) => {
-                done(new Error(err));
+                console.error(err);
+                done(new Error());
             });
     });
 
-    /*
     it('should return a list of categories', (done) => {
+        httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password)
+            .then(() => {
+                return httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password)
+            })
+            .then(() => {
+                return httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password)
+            })
+            .then(() => {
+                return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
+            })
+            .then((obj) => {
+                expect(obj.categories).to.have.length(3);
+                done();
+            })
+            .catch((err) => {
+                console.error(err);
+                done(new Error());
+            });
+    });
+
+    it('should return a category', (done) => {
+        httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password)
+            .then((category) => {
+                return httpRequest.get(`${BASE_URL}/categories/${category._id}`, null, admin.email, admin.password)
+            })
+            .then((category) => {
+                expect(category._id).to.be.string;
+                expect(category.name).to.equal(testCategory.name);
+                expect(category.slug).to.equal(testCategory.slug);
+                done();
+            })
+            .catch((err) => {
+                console.error(err);
+                done(new Error());
+            });
+    });
+
+    it('should update a category', (done) => {
+        httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password)
+            .then(() => {
+                return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
+            })
+            .then((obj) => {
+                expect(obj.categories).to.have.length(1);
+                expect(obj.categories[0].name).to.equal(testCategory.name);
+                expect(obj.categories[0].slug).to.equal(testCategory.slug);
+                return httpRequest.put(`${BASE_URL}/categories/${obj.categories[0]._id}`, { name: "Hello World", slug: "hello-world" }, admin.email, admin.password)
+            })
+            .then(() => {
+                return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
+            })
+            .then((obj) => {
+                expect(obj.categories).to.have.length(1);
+                expect(obj.categories[0].name).to.equal("Hello World");
+                expect(obj.categories[0].slug).to.equal("hello-world");
+                done();
+            })
+            .catch((err) => {
+                console.error(err);
+                done(new Error());
+            });
+    });
+
+    it('should delete a category', (done) => {
         httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password)
             .then(() => {
                 return httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password)
@@ -171,19 +236,22 @@ describe('/categories', () => {
             .then(() => {
                 return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
             })
+            .then((obj) => {
+                expect(obj.categories).to.have.length(2);
+                return httpRequest.del(`${BASE_URL}/categories/${obj.categories[0]._id}`, null, admin.email, admin.password)
+            })
             .then(() => {
                 return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
             })
-            .then((categories) => {
-                expect(categories.categories).to.have.length(3);
+            .then((obj) => {
+                expect(obj.categories).to.have.length(1);
                 done();
             })
             .catch((err) => {
-                done(new Error(err));
+                console.error(err);
+                done(new Error());
             });
     });
-*/
-
 });
 
 /*
@@ -195,8 +263,9 @@ describe('/posts', () => {
                 expect(post["_id"]).to.be.string;
                 done();
             })
-            .catch((err) => {
-                done(new Error(err));
+            .catch((obj) => {
+                console.error(obj.body.errors);
+                done(new Error());
             });
     });
 
