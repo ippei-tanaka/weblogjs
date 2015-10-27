@@ -90,8 +90,26 @@ var categoryManager = require('../services/category-manager');
             .catch(error);
     }));
 
+    routes.get('/categories/:id', auth, response((ok, error, request) => {
+        categoryManager.findById(request.params.id)
+            .then(ok)
+            .catch(error);
+    }));
+
     routes.post('/categories', auth, response((ok, error, request) => {
         categoryManager.create(request.body)
+            .then(ok)
+            .catch(error);
+    }));
+
+    routes.put('/categories/:id', auth, response((ok, error, request) => {
+        categoryManager.updateById(request.params.id, request.body)
+            .then(ok)
+            .catch(error);
+    }));
+
+    routes.delete('/categories/:id', auth, response((ok, error, request) => {
+        categoryManager.removeById(request.params.id)
             .then(ok)
             .catch(error);
     }));

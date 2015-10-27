@@ -3,6 +3,7 @@
 var mongoose = require('mongoose');
 var validate = require('mongoose-validator');
 var uniqueValidatorPlugin = require('mongoose-unique-validator');
+var slugPlugin = require('../services/slug-plugin');
 
 
 var titleValidator = [
@@ -54,7 +55,8 @@ var PostSchema = new mongoose.Schema({
         type: String,
         validate: slugValidator,
         required: 'A slug is required.',
-        unique: true
+        unique: true,
+        slug: "title"
     },
 
     "author": {
@@ -86,13 +88,6 @@ var PostSchema = new mongoose.Schema({
 });
 
 
-PostSchema.plugin(
-    uniqueValidatorPlugin,
-    {
-        message: 'The {PATH}, "{VALUE}", has been registered.'
-    });
-
-
 PostSchema.pre('save', function (next) {
     var now = new Date();
 
@@ -104,6 +99,16 @@ PostSchema.pre('save', function (next) {
 
     next();
 });
+
+
+PostSchema.plugin(
+    uniqueValidatorPlugin,
+    {
+        message: 'The {PATH}, "{VALUE}", has been registered.'
+    });
+
+
+PostSchema.plugin(slugPlugin);
 
 
 module.exports = mongoose.model('Post', PostSchema);

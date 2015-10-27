@@ -66,6 +66,8 @@ CategorySchema.plugin(
         message: 'The {PATH}, "{VALUE}", has been registered.'
     });
 
+
 CategorySchema.plugin(slugPlugin);
+
 
 module.exports = mongoose.model('Category', CategorySchema);

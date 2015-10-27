@@ -78,36 +78,6 @@ var remove = (id) => new Promise((resolve, reject) => {
 });
 */
 
-
-/**
- * @param {object} credential - Credential of the user.
- * @param {string} credential.email - The email of the user.
- * @param {string} credential.password - The password of the user.
- * @returns {Promise}
- */
-    /*
-var isValid = (credential) =>  new Promise((resolve, reject) => {
-    User
-        .findOne({"email": credential.email})
-        .select('password')
-        .exec((err, user) => {
-
-            if (err)
-                return reject(err);
-
-            if (!user)
-                return reject(new errors.WeblogJsError("The email hasn't been registered or the password is incorrect."));
-
-            user.verifyPassword(credential.password, (err, isMatch) => {
-                if (err && !isMatch)
-                    return reject(new errors.WeblogJsError("The email hasn't been registered or the password is incorrect."));
-
-                resolve(user.toJSON());
-            });
-        });
-});
-*/
-
 module.exports = {
     create,
     /*
