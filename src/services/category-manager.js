@@ -27,84 +27,49 @@ var create = (categoryInfo) => new Promise((resolve, reject) => {
 /**
  * @returns {Promise}
  */
-    /*
 var getList = () => new Promise((resolve, reject) => {
-    User.find({}).exec((err, users) => {
+    Category.find({}).exec((err, categories) => {
         if (err) return reject(err);
         resolve({
-            users: users.map((_user) => _user.toJSON())
+            categories: categories.map((_category) => _category.toJSON())
         });
     });
 });
-*/
 
 
 /**
- * @param {string} id - a user id
+ * @param {string} slug
  * @returns {Promise}
  */
-    /*
-var findById = (id) => new Promise((resolve, reject) => {
-    User.findById(id).exec((err, user) => {
+var findBySlug = (slug) => new Promise((resolve, reject) => {
+    Category.find({slug: slug}).exec((err, categoty) => {
         if (err) return reject(err);
 
-        if (!user)
-            return reject(new errors.WeblogJsError("The user doesn't exist."));
+        if (!categoty)
+            return reject(new errors.WeblogJsError("The category doesn't exist."));
 
-        resolve(user);
+        resolve(categoty);
     });
 });
-*/
 
 
 /**
- * @param {string} id - a user id
+ * @param {string} slug
  * @returns {Promise}
  */
-    /*
-var remove = (id) => new Promise((resolve, reject) => {
-    User.remove({_id: id}).exec((err) => {
+var removeBySlug = (slug) => new Promise((resolve, reject) => {
+    Category.remove({slug: slug}).exec((err) => {
         if (err) return reject(err);
         resolve();
     });
 });
-*/
 
-
-/**
- * @param {object} credential - Credential of the user.
- * @param {string} credential.email - The email of the user.
- * @param {string} credential.password - The password of the user.
- * @returns {Promise}
- */
-    /*
-var isValid = (credential) =>  new Promise((resolve, reject) => {
-    User
-        .findOne({"email": credential.email})
-        .select('password')
-        .exec((err, user) => {
-
-            if (err)
-                return reject(err);
-
-            if (!user)
-                return reject(new errors.WeblogJsError("The email hasn't been registered or the password is incorrect."));
-
-            user.verifyPassword(credential.password, (err, isMatch) => {
-                if (err && !isMatch)
-                    return reject(new errors.WeblogJsError("The email hasn't been registered or the password is incorrect."));
-
-                resolve(user.toJSON());
-            });
-        });
-});
-*/
 
 module.exports = {
     create,
+    getList
     /*
-    getList,
-    findById,
+     findById,
     isValid,
     remove
     */

@@ -33,7 +33,7 @@ const BASE_URL = "http://localhost:8080";
     afterEach(() => weblogjs.stopServer());
 }
 
-
+/*
 describe('/users', () => {
 
     it('should create a new user', (done) => {
@@ -97,10 +97,11 @@ describe('/users', () => {
     });
 
 });
-
+*/
 
 describe('/categories', () => {
 
+    /*
     it('should create a new category', (done) => {
         var categoryWithoutSlug = {
             name: testCategory.name
@@ -117,6 +118,7 @@ describe('/categories', () => {
                 done(new Error(err));
             });
     });
+*/
 
     it('should create a new category even when the name is duplicated', (done) => {
         var categoryWithoutSlug = {
@@ -131,15 +133,56 @@ describe('/categories', () => {
                 return httpRequest.post(`${BASE_URL}/categories`, categoryWithoutSlug, admin.email, admin.password)
             })
             .then((category) => {
-                expect(category._id).to.be.string;
                 expect(category.name).to.equal(testCategory.name);
-                expect(category.slug).to.equal(testCategory.slug + "2");
+                expect(category.slug).to.equal(testCategory.slug + "-2");
+                return httpRequest.post(`${BASE_URL}/categories`, categoryWithoutSlug, admin.email, admin.password)
+            })
+            .then((category) => {
+                expect(category.name).to.equal(testCategory.name);
+                expect(category.slug).to.equal(testCategory.slug + "-3");
+                return httpRequest.post(`${BASE_URL}/categories`, { name: testCategory.name, "slug" : testCategory.slug + "-2" }, admin.email, admin.password)
+            })
+            .then((category) => {
+                expect(category.name).to.equal(testCategory.name);
+                expect(category.slug).to.equal(testCategory.slug + "-4");
+                return httpRequest.post(`${BASE_URL}/categories`, { name: testCategory.name, "slug" : testCategory.slug + "-02" }, admin.email, admin.password)
+            })
+            .then((category) => {
+                expect(category.name).to.equal(testCategory.name);
+                expect(category.slug).to.equal(testCategory.slug + "-02");
+                return httpRequest.post(`${BASE_URL}/categories`, categoryWithoutSlug, admin.email, admin.password)
+            })
+            .then((category) => {
+                expect(category.name).to.equal(testCategory.name);
+                expect(category.slug).to.equal(testCategory.slug + "-5");
                 done();
             })
             .catch((err) => {
                 done(new Error(err));
             });
     });
+
+    /*
+    it('should return a list of categories', (done) => {
+        httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password)
+            .then(() => {
+                return httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password)
+            })
+            .then(() => {
+                return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
+            })
+            .then(() => {
+                return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
+            })
+            .then((categories) => {
+                expect(categories.categories).to.have.length(3);
+                done();
+            })
+            .catch((err) => {
+                done(new Error(err));
+            });
+    });
+*/
 
 });
 
