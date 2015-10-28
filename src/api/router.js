@@ -5,9 +5,9 @@ var passport = require('passport');
 var url = require('url');
 var errors = require('../errors');
 var BasicStrategy = require('passport-http').BasicStrategy;
-var userManager = require('../services/user-manager');
-var postManager = require('../services/post-manager');
-var categoryManager = require('../services/category-manager');
+var userManager = require('../model-managers/user-manager');
+var postManager = require('../model-managers/post-manager');
+var categoryManager = require('../model-managers/category-manager');
 
 //====================================================
 // Passport Setting

@@ -6,7 +6,7 @@ var errors = require('../errors');
 var router = require('./router');
 var bodyParser = require('body-parser');
 var expressApp = require('express')();
-var userManager = require('../services/user-manager');
+var userManager = require('../model-managers/user-manager');
 var webServer;
 
 

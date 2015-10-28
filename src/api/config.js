@@ -20,7 +20,7 @@ module.exports = {
 
     initialize: (_settings) => {
         if (settings) {
-            throw new errors.WeblogJsError ("Config has been already initialized.");
+            throw new errors.WeblogJsConfigError ("Config has been already initialized.");
         }
 
         settings = Object.assign(defaultSetting, _settings || {});
@@ -29,7 +29,7 @@ module.exports = {
 
     load: () => {
         if (!settings) {
-            throw new errors.WeblogJsError ("Config needs to be initialized before loaded.");
+            throw new errors.WeblogJsConfigError ("Config needs to be initialized before loaded.");
         }
 
         return settings;
