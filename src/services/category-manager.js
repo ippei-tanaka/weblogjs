@@ -44,10 +44,6 @@ var getList = () => new Promise((resolve, reject) => {
 var findById = (id) => new Promise((resolve, reject) => {
     Category.findById(id).exec((err, categoty) => {
         if (err) return reject(err);
-
-        if (!categoty)
-            return reject(new errors.WeblogJsError("The category doesn't exist."));
-
         resolve(categoty);
     });
 });
@@ -60,10 +56,6 @@ var findById = (id) => new Promise((resolve, reject) => {
 var findBySlug = (slug) => new Promise((resolve, reject) => {
     Category.findOne({slug: slug}).exec((err, categoty) => {
         if (err) return reject(err);
-
-        if (!categoty)
-            return reject(new errors.WeblogJsError("The category doesn't exist."));
-
         resolve(categoty);
     });
 });
@@ -79,10 +71,6 @@ var findBySlug = (slug) => new Promise((resolve, reject) => {
 var updateById = (id, newCategory) => new Promise((resolve, reject) => {
     Category.findByIdAndUpdate(id, {$set: newCategory}).exec((err, categoty) => {
         if (err) return reject(err);
-
-        if (!categoty)
-            return reject(new errors.WeblogJsError("The category doesn't exist."));
-
         resolve(categoty);
     });
 });

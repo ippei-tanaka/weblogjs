@@ -2,6 +2,7 @@
 
 var routes = require('express').Router();
 var passport = require('passport');
+var url = require('url');
 var errors = require('../errors');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var userManager = require('../services/user-manager');
@@ -58,8 +59,11 @@ var categoryManager = require('../services/category-manager');
 
     // User
 
-    routes.get('/users', auth, response((ok, error) => {
-        userManager.getList()
+    routes.get('/users', auth, response((ok, error, request) => {
+        var urlParts = url.parse(request.url, true),
+            query = urlParts.query;
+
+        userManager.getList(query)
             .then(ok)
             .catch(error);
     }));
@@ -72,6 +76,12 @@ var categoryManager = require('../services/category-manager');
 
     routes.post('/users', auth, response((ok, error, request) => {
         userManager.create(request.body)
+            .then(ok)
+            .catch(error);
+    }));
+
+    routes.put('/users/:id', auth, response((ok, error, request) => {
+        userManager.updateById(request.params.id, request.body)
             .then(ok)
             .catch(error);
     }));
@@ -117,8 +127,7 @@ var categoryManager = require('../services/category-manager');
     // Post
 
     routes.post('/posts', auth, response((ok, error, request) => {
-        var post = Object.assign(
-            request.body, { author: request.user._id });
+        var post = Object.assign(request.body, { author: request.user._id });
 
         postManager.create(post)
             .then(ok)

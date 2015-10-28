@@ -7,12 +7,13 @@ var router = require('./router');
 var bodyParser = require('body-parser');
 var expressApp = require('express')();
 var userManager = require('../services/user-manager');
+var webServer;
 
 
 /**
  * @returns {Promise}
  */
-var dbClear = () => new Promise ((resolve, reject) => {
+var dbClear = () => new Promise((resolve, reject) => {
     dbConnect().then(() => {
         db.dropCollections()
             .then(resolve)
@@ -35,19 +36,14 @@ var dbConnect = () => {
 /**
  * @returns {Promise}
  */
-var createAdminUser = () => new Promise((resolve, reject) => {
+var createAdminUser = () => {
     var settings = config.load();
-    userManager.create({
+    return userManager.create({
         email: settings.admin_email,
         password: settings.admin_password,
         display_name: "Admin"
-    }).then((user) => {
-        resolve(user);
-    }).catch((err) => {
-        console.error(err);
-        reject(err);
     });
-});
+};
 
 
 /**
@@ -56,46 +52,39 @@ var createAdminUser = () => new Promise((resolve, reject) => {
 var dbDisconnect = () => db.disconnect();
 
 
-{
-    let webServer;
+/**
+ * @returns {Promise}
+ */
+var startServer = () => new Promise((resolve, reject) => {
+    var settings = config.load();
+    dbConnect()
+        .then(() => {
+            webServer = expressApp.listen(settings.web_server_port, settings.web_server_host,
+                (err) => {
+                    !err ? resolve() : reject(err);
+                });
+        });
+});
 
-    /**
-     * @returns {Promise}
-     */
-    var startServer = () => new Promise((resolve, reject) => {
+/**
+ * @returns {Promise}
+ */
+var stopServer = () => new Promise((resolve, reject) => {
+    if (webServer) {
+        webServer.close((err) => {
+            if (!err) {
+                dbDisconnect()
+                    .then(resolve)
+                    .catch(reject);
+            }
+        });
+    }
+});
 
-        var settings = config.load();
 
-        dbConnect()
-            .then(() => createAdminUser())
-            .then(() => {
-                webServer = expressApp.listen(settings.web_server_port, settings.web_server_host,
-                    (err) => {
-                        !err ? resolve() : reject(err);
-                    });
-            });
-    });
-
-    /**
-     * @returns {Promise}
-     */
-    var stopServer = () => new Promise((resolve, reject) => {
-        if (webServer) {
-            webServer.close((err) => {
-                if (!err) {
-                    dbDisconnect()
-                        .then(resolve)
-                        .catch(reject);
-                }
-            });
-        }
-    });
-
-    expressApp.use(bodyParser.json());
-    expressApp.use(router.passport.initialize());
-    expressApp.use('/', router.routes);
-
-}
+expressApp.use(bodyParser.json());
+expressApp.use(router.passport.initialize());
+expressApp.use('/', router.routes);
 
 
 module.exports = (_config) => {
@@ -106,6 +95,7 @@ module.exports = (_config) => {
 
     return {
         dbClear,
+        createAdminUser,
         startServer,
         stopServer
     };

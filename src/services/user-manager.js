@@ -32,13 +32,50 @@ var create = (userInfo) => new Promise((resolve, reject) => {
 
 
 /**
+ * @param {object} [options]
+ * @param {string} [options.sort] - info for sort. (e.g.) "author asc,datepublished desc"
+ * @param {number} [options.limit]
  * @returns {Promise}
  */
-var getList = () => new Promise((resolve, reject) => {
-    User.find({}).exec((err, users) => {
+var getList = (options) => new Promise((resolve, reject) => {
+    options = options || {};
+
+    var query = User.find({}),
+        sortInfo = {};
+
+    if (options.sort) {
+
+        options.sort.split(',').forEach((info) => {
+            var arr = info.split(' '),
+                path,
+                direction = 0;
+
+            if (arr.length !== 2) {
+                return;
+            }
+
+            path = arr[0];
+
+            if (arr[1] === "asc") {
+                direction = 1;
+            } else if (arr[1] === "desc") {
+                direction = -1;
+            }
+
+            if (direction === 0) {
+                return;
+            }
+
+            sortInfo[path] = direction;
+        });
+
+        query.sort(sortInfo);
+    }
+
+    query.exec((err, users) => {
         if (err) return reject(err);
         resolve({
-            users: users.map((_user) => _user.toJSON())
+            items: users.map((_user) => _user.toJSON())
         });
     });
 });
@@ -55,6 +92,22 @@ var findById = (id) => new Promise((resolve, reject) => {
         if (!user)
             return reject(new errors.WeblogJsError("The user doesn't exist."));
 
+        resolve(user);
+    });
+});
+
+
+/**
+ * @param {string} id
+ * @param {object} userInfo
+ * @param {string} [userInfo.email] - The email of the user.
+ * @param {string} [userInfo.password] - The password of the user.
+ * @param {string} [userInfo.display_name] - The display name of the user.
+ * @returns {Promise}
+ */
+var updateById = (id, userInfo) => new Promise((resolve, reject) => {
+    User.findByIdAndUpdate(id, {$set: userInfo}).exec((err, user) => {
+        if (err) return reject(err);
         resolve(user);
     });
 });
@@ -104,6 +157,7 @@ module.exports = {
     create,
     getList,
     findById,
+    updateById,
     isValid,
     removeById
 };

@@ -28,9 +28,11 @@ const BASE_URL = "http://localhost:8080";
             });
     };
 
+    before(clearDb);
+    before(() => weblogjs.startServer());
     beforeEach(clearDb);
-    beforeEach(() => weblogjs.startServer());
-    afterEach(() => weblogjs.stopServer());
+    beforeEach(() => weblogjs.createAdminUser());
+    after(() => weblogjs.stopServer());
 }
 
 
@@ -69,9 +71,34 @@ describe('/users', () => {
     });
 
     it('should return a list of users', (done) => {
-        httpRequest.get(`${BASE_URL}/users`, testUser, admin.email, admin.password)
+        httpRequest.get(`${BASE_URL}/users`, null, admin.email, admin.password)
             .then((obj) => {
-                expect(obj.users.length).to.equal(1);
+                expect(obj.items.length).to.equal(1);
+                done();
+            })
+            .catch((err) => {
+                console.error(err);
+                done(new Error());
+            });
+    });
+
+    it('should update a user', (done) => {
+        var testUser2 = Object.freeze(Object.assign(testData["valid-users"][1]));
+
+        httpRequest.post(`${BASE_URL}/users`, testUser, admin.email, admin.password)
+            .then((user) => {
+                return httpRequest.put(`${BASE_URL}/users/${user._id}`, testUser2, testUser.email, testUser.password)
+            })
+            .then(() => {
+                return httpRequest.get(`${BASE_URL}/users?sort=created+desc`, null, testUser2.email, testUser2.password)
+            })
+            .then((obj) => {
+                var user = obj.items[0];
+                expect(obj.items.length).to.equal(2);
+                expect(user["_id"]).to.be.string;
+                expect(user["email"]).to.equal(testUser2.email);
+                expect(user).to.not.have.property('password');
+                expect(user["display_name"]).to.equal(testUser2.display_name);
                 done();
             })
             .catch((err) => {
@@ -99,7 +126,6 @@ describe('/users', () => {
     });
 
 });
-
 
 describe('/categories', () => {
 
@@ -254,20 +280,20 @@ describe('/categories', () => {
     });
 });
 
-/*
 describe('/posts', () => {
 
     it('should create a new post', (done) => {
-        httpRequest.post(`${BASE_URL}/posts`, testPost, admin.email, admin.password)
+        httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password)
+            .then(() => {
+                return httpRequest.post(`${BASE_URL}/posts`, testPost, admin.email, admin.password)
+            })
             .then((post) => {
-                expect(post["_id"]).to.be.string;
+                expect(post._id).to.be.string;
                 done();
             })
-            .catch((obj) => {
-                console.error(obj.body.errors);
+            .catch(() => {
                 done(new Error());
             });
     });
 
 });
-*/
