@@ -120,8 +120,13 @@ describe('/users', () => {
             .then(() => {
                 return httpRequest.get(`${BASE_URL}/users/${createdUser._id}`, null, admin.email, admin.password);
             })
-            .catch(() => {
+            .then((user) => {
+                expect(user).to.be.null;
                 done();
+            })
+            .catch((err) => {
+                console.error(err);
+                done(new Error());
             });
     });
 
@@ -202,7 +207,7 @@ describe('/categories', () => {
                 return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
             })
             .then((obj) => {
-                expect(obj.categories).to.have.length(3);
+                expect(obj.items).to.have.length(3);
                 done();
             })
             .catch((err) => {
@@ -234,18 +239,18 @@ describe('/categories', () => {
                 return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
             })
             .then((obj) => {
-                expect(obj.categories).to.have.length(1);
-                expect(obj.categories[0].name).to.equal(testCategory.name);
-                expect(obj.categories[0].slug).to.equal(testCategory.slug);
-                return httpRequest.put(`${BASE_URL}/categories/${obj.categories[0]._id}`, { name: "Hello World", slug: "hello-world" }, admin.email, admin.password)
+                expect(obj.items).to.have.length(1);
+                expect(obj.items[0].name).to.equal(testCategory.name);
+                expect(obj.items[0].slug).to.equal(testCategory.slug);
+                return httpRequest.put(`${BASE_URL}/categories/${obj.items[0]._id}`, { name: "Hello World", slug: "hello-world" }, admin.email, admin.password)
             })
             .then(() => {
                 return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
             })
             .then((obj) => {
-                expect(obj.categories).to.have.length(1);
-                expect(obj.categories[0].name).to.equal("Hello World");
-                expect(obj.categories[0].slug).to.equal("hello-world");
+                expect(obj.items).to.have.length(1);
+                expect(obj.items[0].name).to.equal("Hello World");
+                expect(obj.items[0].slug).to.equal("hello-world");
                 done();
             })
             .catch((err) => {
@@ -263,14 +268,14 @@ describe('/categories', () => {
                 return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
             })
             .then((obj) => {
-                expect(obj.categories).to.have.length(2);
-                return httpRequest.del(`${BASE_URL}/categories/${obj.categories[0]._id}`, null, admin.email, admin.password)
+                expect(obj.items).to.have.length(2);
+                return httpRequest.del(`${BASE_URL}/categories/${obj.items[0]._id}`, null, admin.email, admin.password)
             })
             .then(() => {
                 return httpRequest.get(`${BASE_URL}/categories`, null, admin.email, admin.password)
             })
             .then((obj) => {
-                expect(obj.categories).to.have.length(1);
+                expect(obj.items).to.have.length(1);
                 done();
             })
             .catch((err) => {
@@ -291,7 +296,8 @@ describe('/posts', () => {
                 expect(post._id).to.be.string;
                 done();
             })
-            .catch(() => {
+            .catch((err) => {
+                console.error(err);
                 done(new Error());
             });
     });
