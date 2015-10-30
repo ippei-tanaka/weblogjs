@@ -60,7 +60,53 @@ var getList = modelManager.getList.bind({}, Post, null);
 
 
 /**
- * @param {string} id - a user id
+ * @param {string} id
+ * @param {object} postInfo - Information about the post.
+ * @param {string} postInfo.title - The title of the post.
+ * @param {string} postInfo.content - The content of the post.
+ * @param {string} postInfo.author - The author ID of the post.
+ * @param {string} [postInfo.category] - The category slug or ID of the post.
+ * @param {string} [postInfo.slug] - The slug of the post.
+ * @param {[string]} [postInfo.tags] - The tags of the post.
+ * @returns {Promise}
+ */
+var updateById = (id, postInfo) => new Promise((resolve, reject) => {
+
+    var promise,
+        categoryValue = String(postInfo.category);
+
+    if (!postInfo.category) {
+        promise = Promise.resolve(null);
+    } else if (checkForHexRegExp.test(categoryValue)) {
+        promise = categoryManager.findById(categoryValue);
+    } else {
+        promise = categoryManager.findBySlug(categoryValue);
+    }
+
+    promise
+        .then((category) => {
+            modelManager.updateById(Post, id, {
+                title: postInfo.title,
+                content: postInfo.content,
+                author: postInfo.author,
+                category: category ? category.id : undefined,
+                slug: postInfo.slug,
+                tags: postInfo.tags
+            })
+                .then((post) => {
+                    findById(post.id)
+                        .then(resolve)
+                        .catch(reject);
+                })
+                .catch(reject);
+        })
+        .catch(reject);
+
+});
+
+
+/**
+ * @param {string} id
  * @returns {Promise}
  */
 var findById = (id) => {
@@ -69,24 +115,15 @@ var findById = (id) => {
 
 
 /**
- * @param {string} id - a user id
+ * @param {string} id
  * @returns {Promise}
  */
-/*
- var remove = (id) => new Promise((resolve, reject) => {
- User.remove({_id: id}).exec((err) => {
- if (err) return reject(err);
- resolve();
- });
- });
- */
+var removeById = modelManager.removeById.bind({}, Post);
+
 
 module.exports = {
     create,
-    getList
-    /*
-     findById,
-     isValid,
-     remove
-     */
+    getList,
+    findById,
+    removeById
 };
