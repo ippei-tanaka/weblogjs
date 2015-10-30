@@ -293,7 +293,7 @@ describe('/posts', () => {
     };
 
     var testPost2 = {
-        "title": "It is - the  title 0 --- ",
+        "title": "It is - the  title 1 --- ",
         "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
         "category": undefined
     };
@@ -330,7 +330,7 @@ describe('/posts', () => {
             .then((post) => {
                 expect(post._id).to.be.string;
                 expect(post.title).to.equal(testPost2.title);
-                expect(post.slug).to.equal("it-is-the-title-0");
+                expect(post.slug).to.equal("it-is-the-title-1");
                 expect(post.content).to.equal(testPost2.content);
 
                 return httpRequest.post(`${BASE_URL}/posts`, testPost2, admin.email, admin.password);
@@ -338,7 +338,7 @@ describe('/posts', () => {
             .then((post) => {
                 expect(post._id).to.be.string;
                 expect(post.title).to.equal(testPost2.title);
-                expect(post.slug).to.equal("it-is-the-title-0-2");
+                expect(post.slug).to.equal("it-is-the-title-2");
                 expect(post.content).to.equal(testPost2.content);
                 done();
             })
@@ -347,5 +347,18 @@ describe('/posts', () => {
                 done(new Error());
             });
     });
+
+    /*
+    it('should get a list of posts', (done) => {
+        Promise.resolve()
+            .then(() => {
+                return httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password);
+            })
+            .then(() => {
+                return httpRequest.post(`${BASE_URL}/post`, testPost1, admin.email, admin.password);
+            });
+
+    });
+    */
 
 });

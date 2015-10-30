@@ -126,10 +126,37 @@ var categoryManager = require('../model-managers/category-manager');
 
     // Post
 
+    routes.get('/posts', auth, response((ok, error) => {
+        var urlParts = url.parse(request.url, true),
+            query = urlParts.query;
+
+        postManager.getList(query)
+            .then(ok)
+            .catch(error);
+    }));
+
+    routes.get('/posts/:id', auth, response((ok, error, request) => {
+        postManager.findById(request.params.id)
+            .then(ok)
+            .catch(error);
+    }));
+
     routes.post('/posts', auth, response((ok, error, request) => {
         var post = Object.assign(request.body, { author: request.user._id });
 
         postManager.create(post)
+            .then(ok)
+            .catch(error);
+    }));
+
+    routes.put('/posts/:id', auth, response((ok, error, request) => {
+        postManager.updateById(request.params.id, request.body)
+            .then(ok)
+            .catch(error);
+    }));
+
+    routes.delete('/posts/:id', auth, response((ok, error, request) => {
+        postManager.removeById(request.params.id)
             .then(ok)
             .catch(error);
     }));
