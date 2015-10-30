@@ -26,14 +26,14 @@ var create = (categoryInfo) => {
  * @param {number} [options.limit]
  * @returns {Promise}
  */
-var getList = modelManager.getList.bind({}, Category);
+var getList = modelManager.getList.bind({}, Category, null);
 
 
 /**
  * @param {string} id
  * @returns {Promise}
  */
-var findById = modelManager.findById.bind({}, Category);
+var findById = modelManager.findById.bind({}, Category, null);
 
 
 /**

@@ -14,23 +14,30 @@ var create = (Model, obj) => new Promise((resolve, reject) => {
 
     doc.save((err) => {
         if (err) return reject(err);
-        resolve(doc.toJSON());
+        resolve(doc);
     });
 });
 
 
 /**
  * @param {mongoose.Model} Model
- * @param {object} [options]
- * @param {string} [options.sort] - info for sort. (e.g.) "author asc,datepublished desc"
- * @param {number} [options.limit]
+ * @param {Array<String>} [populate]
+ * @param {Object} [options]
+ * @param {String} [options.sort] - info for sort. (e.g.) "author asc,datepublished desc"
+ * @param {Number} [options.limit]
  * @returns {Promise}
  */
-var getList = (Model, options) => new Promise((resolve, reject) => {
+var getList = (Model, populate, options) => new Promise((resolve, reject) => {
     options = options || {};
 
     var query = Model.find({}),
         sortInfo = {};
+
+    if (Array.isArray(populate)) {
+        populate.forEach((path) => {
+            query.populate(path);
+        });
+    }
 
     if (options.sort) {
 
@@ -64,7 +71,7 @@ var getList = (Model, options) => new Promise((resolve, reject) => {
     query.exec((err, items) => {
         if (err) return reject(err);
         resolve({
-            items: items.map((item) => item.toJSON())
+            items: items
         });
     });
 });
@@ -72,14 +79,25 @@ var getList = (Model, options) => new Promise((resolve, reject) => {
 
 /**
  * @param {mongoose.Model} Model
+ * @param {Array<String>} populate
  * @param {string} id
  * @returns {Promise}
  */
-var findById = (Model, id) => new Promise((resolve, reject) => {
-    Model.findById(id).exec((err, doc) => {
+var findById = (Model, populate, id) => new Promise((resolve, reject) => {
+
+    var query = Model.findById(id);
+
+    if (Array.isArray(populate)) {
+        populate.forEach((path) => {
+            query = query.populate(path);
+        });
+    }
+
+    query.exec((err, doc) => {
         if (err) return reject(err);
         resolve(doc);
     });
+
 });
 
 

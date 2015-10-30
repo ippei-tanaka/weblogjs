@@ -84,9 +84,12 @@ var slugPlugin = (schema, options) => {
  * @returns {string}
  */
 var slugfy = (str) => {
-    return str.replace(/[A-Z]/g, (char, index) => {
-        return (index !== 0 ? '-' : '') + char.toLowerCase();
-    }).replace(/[^a-zA-Z0-9\-]/g, "");
+    return str
+        .replace(/[^A-Za-z0-9 ]/g, "")
+        .replace(/[ ]+/g, " ")
+        .trim()
+        .replace(/[ ]/g, "-")
+        .toLowerCase();
 };
 
 

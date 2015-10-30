@@ -2,6 +2,7 @@
 
 
 var categoryManager = require('./category-manager');
+var modelManager = require('./model-manager');
 var Post = require('../models/post');
 var errors = require('../errors/index');
 
@@ -33,77 +34,59 @@ var create = (postInfo) => new Promise((resolve, reject) => {
 
     promise
         .then((category) => {
-            var post = new Post({
+            modelManager.create(Post, {
                 title: postInfo.title,
                 content: postInfo.content,
                 author: postInfo.author,
                 category: category ? category.id : undefined,
                 slug: postInfo.slug,
                 tags: postInfo.tags
-            });
-
-            post.save((err) => {
-                if (err) return reject(err);
-                resolve(post.toJSON());
-            });
+            })
+                .then((post) => {
+                    findById(post.id)
+                        .then(resolve)
+                        .catch(reject);
+                })
+                .catch(reject);
         })
         .catch(reject);
-
 });
 
 
 /**
  * @returns {Promise}
  */
-    /*
-var getList = () => new Promise((resolve, reject) => {
-    User.find({}).exec((err, users) => {
-        if (err) return reject(err);
-        resolve({
-            users: users.map((_user) => _user.toJSON())
-        });
-    });
-});
-*/
+var getList = modelManager.getList.bind({}, Post, null);
 
 
 /**
  * @param {string} id - a user id
  * @returns {Promise}
  */
-    /*
-var findById = (id) => new Promise((resolve, reject) => {
-    User.findById(id).exec((err, user) => {
-        if (err) return reject(err);
-
-        if (!user)
-            return reject(new errors.WeblogJsError("The user doesn't exist."));
-
-        resolve(user);
-    });
-});
-*/
+var findById = (id) => {
+    return modelManager.findById(Post, ["category", "author"], id);
+};
 
 
 /**
  * @param {string} id - a user id
  * @returns {Promise}
  */
-    /*
-var remove = (id) => new Promise((resolve, reject) => {
-    User.remove({_id: id}).exec((err) => {
-        if (err) return reject(err);
-        resolve();
-    });
-});
-*/
+/*
+ var remove = (id) => new Promise((resolve, reject) => {
+ User.remove({_id: id}).exec((err) => {
+ if (err) return reject(err);
+ resolve();
+ });
+ });
+ */
 
 module.exports = {
     create,
+    getList
     /*
-    getList,
-    findById,
-    isValid,
-    remove
-    */
+     findById,
+     isValid,
+     remove
+     */
 };
