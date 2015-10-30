@@ -36,14 +36,14 @@ var create = (userInfo) => new Promise((resolve, reject) => {
  * @param {number} [options.limit]
  * @returns {Promise}
  */
-var getList = modelManager.getList.bind({}, User);
+var getList = modelManager.getList.bind({}, User, null);
 
 
 /**
  * @param {string} id - a user id
  * @returns {Promise}
  */
-var findById = modelManager.findById.bind({}, User);
+var findById = modelManager.findById.bind({}, User, null);
 
 
 /**

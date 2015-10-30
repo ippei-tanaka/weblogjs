@@ -13,8 +13,6 @@ var admin = Object.freeze(Object.assign({
 
 var testUser = Object.freeze(Object.assign(testData["valid-users"][0]));
 
-var testPost = Object.freeze(Object.assign(testData["valid-posts"][0]));
-
 var testCategory = Object.freeze(Object.assign(testData["valid-categories"][0]));
 
 const BASE_URL = "http://localhost:8080";
@@ -287,13 +285,61 @@ describe('/categories', () => {
 
 describe('/posts', () => {
 
+    var testPost1 = {
+        "title": " ## My Post Title! ",
+        "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
+        "category": testCategory.slug,
+        "tags": ["tag1", "tag2"]
+    };
+
+    var testPost2 = {
+        "title": "It is - the  title 0 --- ",
+        "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
+        "category": undefined
+    };
+
     it('should create a new post', (done) => {
+        var category;
+
         httpRequest.post(`${BASE_URL}/categories`, testCategory, admin.email, admin.password)
-            .then(() => {
-                return httpRequest.post(`${BASE_URL}/posts`, testPost, admin.email, admin.password)
+            .then((_category) => {
+                category = _category;
+                return httpRequest.post(`${BASE_URL}/posts`, testPost1, admin.email, admin.password);
             })
             .then((post) => {
                 expect(post._id).to.be.string;
+                expect(post.title).to.equal(testPost1.title);
+                expect(post.slug).to.equal("my-post-title");
+                expect(post.content).to.equal(testPost1.content);
+                expect(post.tags).to.include("tag1");
+                expect(post.tags).to.include("tag2");
+                return httpRequest.post(`${BASE_URL}/posts`, testPost1, admin.email, admin.password);
+            })
+            .then((post) => {
+                expect(post._id).to.be.string;
+                expect(post.title).to.equal(testPost1.title);
+                expect(post.slug).to.equal("my-post-title-2");
+                expect(post.content).to.equal(testPost1.content);
+                expect(post.tags).to.include("tag1");
+                expect(post.tags).to.include("tag2");
+
+                testPost2.category = category._id;
+
+                return httpRequest.post(`${BASE_URL}/posts`, testPost2, admin.email, admin.password);
+            })
+            .then((post) => {
+                expect(post._id).to.be.string;
+                expect(post.title).to.equal(testPost2.title);
+                expect(post.slug).to.equal("it-is-the-title-0");
+                expect(post.content).to.equal(testPost2.content);
+
+                return httpRequest.post(`${BASE_URL}/posts`, testPost2, admin.email, admin.password);
+            })
+            .then((post) => {
+                expect(post._id).to.be.string;
+                expect(post.title).to.equal(testPost2.title);
+                expect(post.slug).to.equal("it-is-the-title-0-2");
+                expect(post.content).to.equal(testPost2.content);
                 done();
             })
             .catch((err) => {
