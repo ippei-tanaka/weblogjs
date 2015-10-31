@@ -126,7 +126,7 @@ var categoryManager = require('../model-managers/category-manager');
 
     // Post
 
-    routes.get('/posts', auth, response((ok, error) => {
+    routes.get('/posts', auth, response((ok, error, request) => {
         var urlParts = url.parse(request.url, true),
             query = urlParts.query;
 

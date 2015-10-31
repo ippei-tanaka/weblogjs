@@ -13,4 +13,5 @@ weblogjs.user
     });
 */
 
-weblogjs.server.start();
+weblogjs.startServer()
+    .then(() => weblogjs.createAdminUser());
