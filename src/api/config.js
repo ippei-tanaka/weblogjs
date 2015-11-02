@@ -7,7 +7,8 @@ var defaultSetting = {
     database_host: "localhost",
     database_port: 27017,
     web_server_port: 80,
-    web_server_host: 'localhost'
+    web_server_host: 'localhost',
+    api_version: 1
 };
 
 var settings;

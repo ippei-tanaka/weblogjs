@@ -15,7 +15,7 @@ var testUser = Object.freeze(Object.assign(testData["valid-users"][0]));
 
 var testCategory = Object.freeze(Object.assign(testData["valid-categories"][0]));
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "http://localhost:8080/api/v1";
 
 {
     let clearDb = () => {

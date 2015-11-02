@@ -82,9 +82,16 @@ var stopServer = () => new Promise((resolve, reject) => {
 });
 
 
-expressApp.use(bodyParser.json());
-expressApp.use(router.passport.initialize());
-expressApp.use('/', router.routes);
+/**
+ *
+ */
+var initialize = () => {
+    var settings = config.load();
+
+    expressApp.use(bodyParser.json());
+    expressApp.use(router.passport.initialize());
+    expressApp.use(`/api/v${settings.api_version}/`, router.routes);
+};
 
 
 module.exports = (_config) => {
@@ -92,6 +99,8 @@ module.exports = (_config) => {
     if (!config.hasBeenInitialized) {
         config.initialize(_config);
     }
+
+    initialize();
 
     return {
         dbClear,
