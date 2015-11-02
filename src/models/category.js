@@ -3,7 +3,7 @@
 var mongoose = require('mongoose');
 var validate = require('mongoose-validator');
 var uniqueValidatorPlugin = require('mongoose-unique-validator');
-var slugPlugin = require('../services/slug-plugin');
+var slugPlugin = require('./plugins/slug-plugin');
 
 
 var nameValidator = [
