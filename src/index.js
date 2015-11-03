@@ -2,7 +2,8 @@
 
 
 var config = require('./config');
-
+var api = require('./api');
+var web = require('./web');
 
 module.exports = (_config) => {
 
@@ -11,7 +12,7 @@ module.exports = (_config) => {
     }
 
     return {
-        api: require('./api'),
-        web: require('./web')
+        api,
+        web
     };
 };
