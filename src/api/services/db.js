@@ -1,11 +1,7 @@
 "use strict";
 
-
 var mongoose = require('mongoose');
-var connect;
-var disconnect;
-var dropCollections;
-
+var config = require('../../config');
 
 const DISCONNECTED = 0;
 const CONNECTED = 1;
@@ -16,8 +12,13 @@ const DISCONNECTING = 3;
 /**
  * @returns {Promise}
  */
-connect = (host, database, port) => new Promise((resolve, reject) => {
+var connect = (host, database, port) => new Promise((resolve, reject) => {
     var connection = mongoose.connection;
+    var settings = config.load();
+
+    host = host || settings.database_host;
+    database = database || settings.database_name;
+    port = port || settings.database_port;
 
     if (mongoose.connection.readyState === CONNECTED) {
         resolve();
@@ -40,7 +41,7 @@ connect = (host, database, port) => new Promise((resolve, reject) => {
 /**
  * @returns {Promise}
  */
-disconnect = () => new Promise((resolve, reject) => {
+var disconnect = () => new Promise((resolve, reject) => {
     mongoose.disconnect((err) => {
         !err ? resolve() : reject(err);
     });
@@ -50,21 +51,21 @@ disconnect = () => new Promise((resolve, reject) => {
 /**
  * @returns {Promise}
  */
-dropCollections = () => {
+var dropCollections = () => {
+    return connect().then(() => {
+        var collections = mongoose.connection.collections;
+        var promises = [];
 
-    var collections = mongoose.connection.collections;
-    var promises = [];
+        for (let name of Object.keys(collections)) {
+            promises.push(new Promise((resolve, reject) => {
+                collections[name].drop((err) => {
+                    !err ? resolve() : reject(err);
+                });
+            }));
+        }
 
-    for (let name of Object.keys(collections)) {
-        promises.push(new Promise ((resolve, reject) => {
-            collections[name].drop((err) => {
-                !err ? resolve() : reject(err);
-            });
-        }));
-    }
-
-    return Promise.all(promises);
-
+        return Promise.all(promises);
+    });
 };
 
 

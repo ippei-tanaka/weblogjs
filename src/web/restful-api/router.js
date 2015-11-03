@@ -1,12 +1,15 @@
 "use strict";
 
+
 var routes = require('express').Router();
 var passport = require('passport');
 var url = require('url');
 var BasicStrategy = require('passport-http').BasicStrategy;
-var userManager = require('../../api/model-managers/user-manager');
-var postManager = require('../../api/model-managers/post-manager');
-var categoryManager = require('../../api/model-managers/category-manager');
+var api = require('../../api');
+var userManager = api.userManager;
+var categoryManager = api.categoryManager;
+var postManager = api.postManager;
+
 
 //====================================================
 // Passport Setting

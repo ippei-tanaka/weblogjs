@@ -19,9 +19,7 @@ const BASE_URL = "http://localhost:8080/api/v1";
 
 {
     let clearDb = () => {
-        return weblogjs
-            .api
-            .dbClear()
+        return weblogjs.api.db.dropCollections()
             .catch(() => {
                 //console.error(err);
             });

@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var expressApp = require('express')();
 var userManager = require('../api/model-managers/user-manager');
 var webServer;
-
+var initialized;
 
 /**
  * @returns {Promise}
@@ -31,7 +31,7 @@ var startServer = () => new Promise((resolve, reject) => {
     initializeApp();
 
     var settings = config.load();
-    api.dbConnect()
+    api.db.connect()
         .then(() => {
             webServer = expressApp.listen(settings.web_server_port, settings.web_server_host,
                 (err) => {
@@ -49,7 +49,7 @@ var stopServer = () => new Promise((resolve, reject) => {
     if (webServer) {
         webServer.close((err) => {
             if (!err) {
-                api.dbDisconnect()
+                api.db.disconnect()
                     .then(resolve)
                     .catch(reject);
             }
@@ -61,19 +61,15 @@ var stopServer = () => new Promise((resolve, reject) => {
 /**
  *
  */
-{
-    let initialized = false;
-
-    var initializeApp = () => {
-        if (!initialized) {
-            var settings = config.load();
-            expressApp.use(bodyParser.json());
-            expressApp.use(router.passport.initialize());
-            expressApp.use(`/api/v${settings.api_version}/`, router.routes);
-            initialized = true;
-        }
-    };
-}
+var initializeApp = () => {
+    if (!initialized) {
+        var settings = config.load();
+        expressApp.use(bodyParser.json());
+        expressApp.use(router.passport.initialize());
+        expressApp.use(`/api/v${settings.api_version}/`, router.routes);
+        initialized = true;
+    }
+};
 
 
 module.exports = {
