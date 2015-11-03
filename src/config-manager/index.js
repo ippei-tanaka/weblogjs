@@ -8,10 +8,6 @@ var settings;
 
 module.exports = {
 
-    get hasBeenInitialized () {
-        return !!settings;
-    },
-
     initialize: (_settings) => {
         if (settings) {
             throw new errors.WeblogJsConfigError ("Config has been already initialized.");

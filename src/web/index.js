@@ -1,9 +1,8 @@
 "use strict";
 
-
+var config = require('../config-manager').load();
 var api = require('../api');
-var configManager = require('../config-manager');
-var restfulApiRoutes = require('./restful-api/router').routes;
+var restfulApiRouter = require('./restful-api/router');
 var publicPageRouter = require('./pages/public-router');
 var adminPageRouter = require('./pages/admin-router');
 var passport = require('./passport-manager').passport;
@@ -16,82 +15,70 @@ var logger = require('morgan');
 var hbs = require('express-hbs');
 var expressSession = require('express-session');
 var webServer;
-var initialized;
 
 
-var initializeApp = () => {
-    if (!initialized) {
-        var config = configManager.load();
-        var session = expressSession({
-            secret: 'keyboard cat',
-            resave: false,
-            saveUninitialized: false
-        });
+var session = expressSession({
+    secret: config.session_secret,
+    resave: false,
+    saveUninitialized: false
+});
 
-        //app.use(favicon(__dirname + '/public/favicon.ico'));
-        expressApp.use(logger('dev'));
-        expressApp.use(bodyParser.json());
-        expressApp.use(bodyParser.urlencoded({ extended: false }));
-        expressApp.use(cookieParser());
+//app.use(favicon(__dirname + '/public/favicon.ico'));
+expressApp.use(logger('dev'));
+expressApp.use(bodyParser.json());
+expressApp.use(bodyParser.urlencoded({extended: false}));
+expressApp.use(cookieParser());
 
-        expressApp.use(session);
+expressApp.use(session);
 
-        expressApp.use(passport.initialize());
-        expressApp.use(passport.session());
+expressApp.use(passport.initialize());
+expressApp.use(passport.session());
 
-        // Restful API
-        expressApp.use(`/api/v${config.api_version}/`, restfulApiRoutes);
+// Restful API
+expressApp.use(restfulApiRouter.baseRoute, restfulApiRouter.routes);
 
-        // View Template Settings
-        expressApp.engine('hbs', hbs.express4({
-            partialsDir: __dirname + '/pages/views/partials'
-        }));
-        expressApp.set('view engine', 'hbs');
-        expressApp.set('views', __dirname + '/pages/views');
+// HandleBar Template Settings
+expressApp.engine('hbs', hbs.express4({
+    partialsDir: __dirname + '/pages/views/partials'
+}));
+expressApp.set('view engine', 'hbs');
+expressApp.set('views', __dirname + '/pages/views/pages');
 
-        // Static Files in pages dir
-        expressApp.use(express.static(__dirname + '/pages/static'));
+// Static Files in pages dir
+expressApp.use(express.static(__dirname + '/pages/static'));
 
-        // Web Pages
-        expressApp.use('/', publicPageRouter.routes);
-        expressApp.use('/admin', adminPageRouter.routes);
+// Web Pages
+expressApp.use(publicPageRouter.baseRoute, publicPageRouter.routes);
+expressApp.use(adminPageRouter.baseRoute, adminPageRouter.routes);
 
-        /*
-         // catch 404 and forward to error handler
-         app.use(function(req, res, next) {
-         var err = new Error('Not Found');
-         err.status = 404;
-         next(err);
-         });
+/*
+ // catch 404 and forward to error handler
+ app.use(function(req, res, next) {
+ var err = new Error('Not Found');
+ err.status = 404;
+ next(err);
+ });
 
-         // error handlers
+ // error handlers
 
-         // development error handler
-         // will print stacktrace
-         if (app.get('env') === 'development') {
-         app.use(function(err, req, res, next) {
-         res.status(err.status || 500);
-         res.render('error', {
-         message: err.message,
-         error: err
-         });
-         });
-         }
-        */
-
-        initialized = true;
-    }
-};
+ // development error handler
+ // will print stacktrace
+ if (app.get('env') === 'development') {
+ app.use(function(err, req, res, next) {
+ res.status(err.status || 500);
+ res.render('error', {
+ message: err.message,
+ error: err
+ });
+ });
+ }
+ */
 
 
 /**
  * @returns {Promise}
  */
 var startServer = () => new Promise((resolve, reject) => {
-    initializeApp();
-
-    var config = configManager.load();
-
     api.db.connect()
         .then(() => {
             webServer = expressApp.listen(config.web_server_port, config.web_server_host,
@@ -105,8 +92,6 @@ var startServer = () => new Promise((resolve, reject) => {
  * @returns {Promise}
  */
 var stopServer = () => new Promise((resolve, reject) => {
-    initializeApp();
-
     if (webServer) {
         webServer.close((err) => {
             if (!err) {

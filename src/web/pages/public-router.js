@@ -3,11 +3,7 @@
 
 var routes = require('express').Router();
 var url = require('url');
-var api = require('../../api');
-var userManager = api.userManager;
-var categoryManager = api.categoryManager;
-var postManager = api.postManager;
-var auth = require('../passport-manager').basicAuth;
+var baseRoute = '/';
 
 
 // Home
@@ -27,6 +23,7 @@ routes.get('/',  (request, response) => {
 
 
 module.exports = {
-    routes
+    routes,
+    baseRoute
 };
 
