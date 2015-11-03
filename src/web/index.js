@@ -1,11 +1,15 @@
 "use strict";
 
+
 var api = require('../api');
 var configManager = require('../config-manager');
 var restfulApiRoutes = require('./restful-api/router').routes;
+var pagesRoutes = require('./pages/router').routes;
 var passport = require('./passport-manager').passport;
 var bodyParser = require('body-parser');
-var expressApp = require('express')();
+var express = require('express');
+var expressApp = express();
+var mustacheExpress = require('mustache-express');
 var webServer;
 var initialized;
 
@@ -13,9 +17,24 @@ var initialized;
 var initializeApp = () => {
     if (!initialized) {
         var config = configManager.load();
+
         expressApp.use(bodyParser.json());
         expressApp.use(passport.initialize());
+
+        // Restful API
         expressApp.use(`/api/v${config.api_version}/`, restfulApiRoutes);
+
+        // View Template Settings
+        expressApp.engine('html', mustacheExpress());
+        expressApp.set('view engine', 'html');
+        expressApp.set('views', __dirname + '/pages/views');
+
+        // Static Files in pages dir
+        expressApp.use(express.static(__dirname + '/pages/static'));
+
+        // Web Pages
+        expressApp.use('/', pagesRoutes);
+
         initialized = true;
     }
 };
