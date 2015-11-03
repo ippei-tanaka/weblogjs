@@ -12,18 +12,9 @@ var auth = require('../passport-manager').basicAuth;
 
 // Home
 
-routes.get('/',  (request, response) => {
-    response.render('admin-master', {
-        head: {
-            title: 'page title'
-        },
-        content: {
-            title: 'post title',
-            description: 'description'
-        }
-    });
+routes.get('/', (request, response) => {
+    response.render('login');
 });
-
 
 
 module.exports = {

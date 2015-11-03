@@ -10,7 +10,7 @@ var passport = require('./passport-manager').passport;
 var bodyParser = require('body-parser');
 var express = require('express');
 var expressApp = express();
-var mustacheExpress = require('mustache-express');
+var hbs = require('express-hbs');
 var webServer;
 var initialized;
 
@@ -26,8 +26,10 @@ var initializeApp = () => {
         expressApp.use(`/api/v${config.api_version}/`, restfulApiRoutes);
 
         // View Template Settings
-        expressApp.engine('html', mustacheExpress());
-        expressApp.set('view engine', 'html');
+        expressApp.engine('hbs', hbs.express4({
+            partialsDir: __dirname + '/pages/views/partials'
+        }));
+        expressApp.set('view engine', 'hbs');
         expressApp.set('views', __dirname + '/pages/views');
 
         // Static Files in pages dir
