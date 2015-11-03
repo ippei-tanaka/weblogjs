@@ -122,11 +122,16 @@ var findOneBy = (Model, path, value) => new Promise((resolve, reject) => {
  * @returns {Promise}
  */
 var updateById = (Model, id, obj) => new Promise((resolve, reject) => {
-    Model.findByIdAndUpdate(id, {$set: obj})
-        .exec((err, doc) => {
+    findById(Model, null, id).then((doc) => {
+        Object.keys(obj).forEach((key) => {
+            doc[key] = obj[key];
+        });
+
+        doc.save((err) => {
             if (err) return reject(err);
             resolve(doc);
         });
+    }).catch(reject);
 });
 
 

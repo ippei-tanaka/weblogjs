@@ -3,9 +3,11 @@
 
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
+var LocalStrategy = require('passport-local').Strategy;
 var api = require('../api');
 var authHandler;
 var basicAuth;
+var localAuth;
 
 
 authHandler = (email, password, done) => {
@@ -19,17 +21,38 @@ authHandler = (email, password, done) => {
 };
 
 
-passport.use(new BasicStrategy(
-    (username, password, done) => {
-        authHandler(username, password, done);
-    }
-));
+passport.use(new BasicStrategy(authHandler));
 
 
 basicAuth = passport.authenticate('basic', {session: false});
 
 
+passport.use(new LocalStrategy({
+    usernameField: 'email'
+}, authHandler));
+
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+
+passport.deserializeUser((id, done) => {
+    api.userManager.findById(id)
+        .then((user) => {
+            done(null, user);
+        })
+        .catch((error) => {
+            done(error, null);
+        });
+});
+
+
+localAuth = passport.authenticate('local');
+
+
 module.exports = {
     passport,
-    basicAuth
+    basicAuth,
+    localAuth
 };

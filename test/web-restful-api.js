@@ -80,22 +80,24 @@ describe('/users', () => {
     });
 
     it('should update a user', (done) => {
-        var testUser2 = Object.freeze(Object.assign(testData["valid-users"][1]));
+        var testUserUpdated = Object.assign({}, testUser);
+        testUserUpdated.display_name = "Yamako Tanaka";
+        testUserUpdated.password = "testest2test";
 
         httpRequest.post(`${BASE_URL}/users`, testUser, admin.email, admin.password)
             .then((user) => {
-                return httpRequest.put(`${BASE_URL}/users/${user._id}`, testUser2, testUser.email, testUser.password)
+                return httpRequest.put(`${BASE_URL}/users/${user._id}`, testUserUpdated, testUser.email, testUser.password)
             })
             .then(() => {
-                return httpRequest.get(`${BASE_URL}/users?sort=created+desc`, null, testUser2.email, testUser2.password)
+                return httpRequest.get(`${BASE_URL}/users?sort=created+desc`, null, testUserUpdated.email, testUserUpdated.password)
             })
             .then((obj) => {
                 var user = obj.items[0];
                 expect(obj.items.length).to.equal(2);
                 expect(user["_id"]).to.be.string;
-                expect(user["email"]).to.equal(testUser2.email);
+                expect(user["email"]).to.equal(testUserUpdated.email);
                 expect(user).to.not.have.property('password');
-                expect(user["display_name"]).to.equal(testUser2.display_name);
+                expect(user["display_name"]).to.equal(testUserUpdated.display_name);
                 done();
             })
             .catch((err) => {
