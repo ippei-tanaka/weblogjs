@@ -13,7 +13,7 @@ var auth = require('../passport-manager').basicAuth;
 // Home
 
 routes.get('/',  (request, response) => {
-    response.render('master', {
+    response.render('admin-master', {
         head: {
             title: 'page title'
         },

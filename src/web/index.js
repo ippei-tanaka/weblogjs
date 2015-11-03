@@ -4,7 +4,8 @@
 var api = require('../api');
 var configManager = require('../config-manager');
 var restfulApiRoutes = require('./restful-api/router').routes;
-var pagesRoutes = require('./pages/router').routes;
+var publicPageRouter = require('./pages/public-router').routes;
+var adminPageRouter = require('./pages/admin-router').routes;
 var passport = require('./passport-manager').passport;
 var bodyParser = require('body-parser');
 var express = require('express');
@@ -33,7 +34,8 @@ var initializeApp = () => {
         expressApp.use(express.static(__dirname + '/pages/static'));
 
         // Web Pages
-        expressApp.use('/', pagesRoutes);
+        expressApp.use('/', publicPageRouter);
+        expressApp.use('/admin', adminPageRouter);
 
         initialized = true;
     }
