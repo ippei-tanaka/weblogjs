@@ -2,23 +2,20 @@
 
 var api = require('../api');
 var configManager = require('../config-manager');
-var router = require('./restful-api/router');
+var restfulApiRoutes = require('./restful-api/router').routes;
+var passport = require('./passport-manager').passport;
 var bodyParser = require('body-parser');
 var expressApp = require('express')();
-var userManager = require('../api/model-managers/user-manager');
 var webServer;
 var initialized;
 
 
-/**
- *
- */
 var initializeApp = () => {
     if (!initialized) {
         var config = configManager.load();
         expressApp.use(bodyParser.json());
-        expressApp.use(router.passport.initialize());
-        expressApp.use(`/api/v${config.api_version}/`, router.routes);
+        expressApp.use(passport.initialize());
+        expressApp.use(`/api/v${config.api_version}/`, restfulApiRoutes);
         initialized = true;
     }
 };
