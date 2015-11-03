@@ -1,14 +1,14 @@
 "use strict";
 
 
-var config = require('./config');
+var configManager = require('./config-manager');
 var api = require('./api');
 var web = require('./web');
 
-module.exports = (_config) => {
+module.exports = (config) => {
 
-    if (!config.hasBeenInitialized) {
-        config.initialize(_config);
+    if (!configManager.hasBeenInitialized) {
+        configManager.initialize(config);
     }
 
     return {

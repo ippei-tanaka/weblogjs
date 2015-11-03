@@ -1,7 +1,7 @@
 "use strict";
 
 var api = require('../api');
-var config = require('../config');
+var configManager = require('../config-manager');
 var router = require('./restful-api/router');
 var bodyParser = require('body-parser');
 var expressApp = require('express')();
@@ -15,10 +15,10 @@ var initialized;
  */
 var initializeApp = () => {
     if (!initialized) {
-        var settings = config.load();
+        var config = configManager.load();
         expressApp.use(bodyParser.json());
         expressApp.use(router.passport.initialize());
-        expressApp.use(`/api/v${settings.api_version}/`, router.routes);
+        expressApp.use(`/api/v${config.api_version}/`, router.routes);
         initialized = true;
     }
 };
@@ -30,10 +30,11 @@ var initializeApp = () => {
 var startServer = () => new Promise((resolve, reject) => {
     initializeApp();
 
-    var settings = config.load();
+    var config = configManager.load();
+
     api.db.connect()
         .then(() => {
-            webServer = expressApp.listen(settings.web_server_port, settings.web_server_host,
+            webServer = expressApp.listen(config.web_server_port, config.web_server_host,
                 (err) => {
                     !err ? resolve() : reject(err);
                 });
