@@ -6,5 +6,6 @@
     "web_server_host": "localhost",
     "admin_email": "admin@example.com",
     "admin_password": "AdminPassword",
-    "api_version": 1
+    "api_version": 1,
+    "session_secret": "keyboard cat"
 }

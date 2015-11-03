@@ -4,36 +4,38 @@
 var routes = require('express').Router();
 var url = require('url');
 var localAuth = require('../passport-manager').localAuth;
+var baseRoute = '/admin';
 
-
-var isLoggedIn = (req, res, next) => {
-    if (req.isAuthenticated())
+var isLoggedIn = (request, response, next) => {
+    if (request.isAuthenticated())
         return next();
 
-    res.sendStatus(401);
+    response.sendStatus(401);
 };
 
-// Home
+var redirectIfLoggedIn = (request, response, next) => {
+    if (!request.isAuthenticated())
+        return next();
+
+    response.redirect(baseRoute);
+};
+
 
 routes.get('/', isLoggedIn, (request, response) => {
-    response.render('admin-home');
+    response.render('admin/home');
 });
 
-routes.get('/login', (request, response) => {
-    response.redirect('/admin/');
+routes.get('/login', redirectIfLoggedIn, (request, response) => {
+    response.render('admin/login');
 });
 
-
-routes.post('/login', localAuth, (request, response) => {
-    response.render('login');
+routes.post('/login', redirectIfLoggedIn, localAuth, (request, response) => {
+    response.redirect(baseRoute);
 });
 
-
-routes.get('/test', (request, response) => {
-    response.render('test');
-});
 
 module.exports = {
-    routes
+    routes,
+    baseRoute
 };
 

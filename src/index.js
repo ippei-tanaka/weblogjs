@@ -2,17 +2,14 @@
 
 
 var configManager = require('./config-manager');
-var api = require('./api');
-var web = require('./web');
+
 
 module.exports = (config) => {
 
-    if (!configManager.hasBeenInitialized) {
-        configManager.initialize(config);
-    }
+    configManager.initialize(config);
 
     return {
-        api,
-        web
+        api: require('./api'),
+        web: require('./web')
     };
 };

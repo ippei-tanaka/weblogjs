@@ -1,7 +1,7 @@
 "use strict";
 
 var mongoose = require('mongoose');
-var configManager = require('../../config-manager');
+var config = require('../../config-manager').load();
 
 const DISCONNECTED = 0;
 const CONNECTED = 1;
@@ -14,7 +14,6 @@ const DISCONNECTING = 3;
  */
 var connect = (host, database, port) => new Promise((resolve, reject) => {
     var connection = mongoose.connection;
-    var config = configManager.load();
 
     host = host || config.database_host;
     database = database || config.database_name;

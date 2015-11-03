@@ -8,6 +8,8 @@ var userManager = api.userManager;
 var categoryManager = api.categoryManager;
 var postManager = api.postManager;
 var auth = require('../passport-manager').basicAuth;
+var config = require('../../config-manager').load();
+var baseRoute = `/api/v${config.api_version}/`;
 
 
 // Utility Functions
@@ -140,6 +142,7 @@ routes.delete('/posts/:id', auth, response((ok, error, request) => {
 
 
 module.exports = {
-    routes
+    routes,
+    baseRoute
 };
 
