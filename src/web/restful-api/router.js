@@ -3,11 +3,10 @@
 var routes = require('express').Router();
 var passport = require('passport');
 var url = require('url');
-var errors = require('../errors');
 var BasicStrategy = require('passport-http').BasicStrategy;
-var userManager = require('../model-managers/user-manager');
-var postManager = require('../model-managers/post-manager');
-var categoryManager = require('../model-managers/category-manager');
+var userManager = require('../../api/model-managers/user-manager');
+var postManager = require('../../api/model-managers/post-manager');
+var categoryManager = require('../../api/model-managers/category-manager');
 
 //====================================================
 // Passport Setting

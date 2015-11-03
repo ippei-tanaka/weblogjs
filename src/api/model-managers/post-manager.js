@@ -3,7 +3,7 @@
 
 var categoryManager = require('./category-manager');
 var modelManager = require('./model-manager');
-var Post = require('../models/post');
+var Post = require('./models/post');
 var errors = require('../errors/index');
 
 // Regular expression that checks for hex value
