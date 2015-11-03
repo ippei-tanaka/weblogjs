@@ -15,8 +15,8 @@ authHandler = (email, password, done) => {
         .then((user) => {
             return done(null, user);
         })
-        .catch((err) => {
-            return done(err);
+        .catch(() => {
+            return done();
         });
 };
 
@@ -43,7 +43,7 @@ passport.deserializeUser((id, done) => {
             done(null, user);
         })
         .catch((error) => {
-            done(error, null);
+            done(error);
         });
 });
 
