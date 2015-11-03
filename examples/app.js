@@ -14,4 +14,4 @@ weblogjs.user
 */
 
 weblogjs.web.startServer()
-    .then(() => weblogjs.web.createAdminUser());
+    .then(() => weblogjs.api.userManager.createAdminUser());

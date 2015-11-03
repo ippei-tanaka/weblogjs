@@ -9,18 +9,18 @@ var userManager = require('../api/model-managers/user-manager');
 var webServer;
 var initialized;
 
-/**
- * @returns {Promise}
- */
-var createAdminUser = () => {
-    initializeApp();
 
-    var settings = config.load();
-    return userManager.create({
-        email: settings.admin_email,
-        password: settings.admin_password,
-        display_name: "Admin"
-    });
+/**
+ *
+ */
+var initializeApp = () => {
+    if (!initialized) {
+        var settings = config.load();
+        expressApp.use(bodyParser.json());
+        expressApp.use(router.passport.initialize());
+        expressApp.use(`/api/v${settings.api_version}/`, router.routes);
+        initialized = true;
+    }
 };
 
 
@@ -58,22 +58,7 @@ var stopServer = () => new Promise((resolve, reject) => {
 });
 
 
-/**
- *
- */
-var initializeApp = () => {
-    if (!initialized) {
-        var settings = config.load();
-        expressApp.use(bodyParser.json());
-        expressApp.use(router.passport.initialize());
-        expressApp.use(`/api/v${settings.api_version}/`, router.routes);
-        initialized = true;
-    }
-};
-
-
 module.exports = {
-    createAdminUser,
     startServer,
     stopServer
 };

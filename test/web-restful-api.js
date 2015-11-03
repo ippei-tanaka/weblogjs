@@ -28,7 +28,7 @@ const BASE_URL = "http://localhost:8080/api/v1";
     before(clearDb);
     before(() => weblogjs.web.startServer());
     beforeEach(clearDb);
-    beforeEach(() => weblogjs.web.createAdminUser());
+    beforeEach(() => weblogjs.api.userManager.createAdminUser());
     after(() => weblogjs.web.stopServer());
 }
 

@@ -4,6 +4,7 @@
 var User = require('./models/user');
 var modelManager = require('./model-manager');
 var errors = require('../errors/index');
+var config = require('../../config');
 
 
 /**
@@ -99,11 +100,25 @@ var isValid = (credential) =>  new Promise((resolve, reject) => {
 });
 
 
+/**
+ * @returns {Promise}
+ */
+var createAdminUser = () => {
+    var settings = config.load();
+    return create({
+        email: settings.admin_email,
+        password: settings.admin_password,
+        display_name: "Admin"
+    });
+};
+
+
 module.exports = {
     create,
     getList,
     findById,
     updateById,
     isValid,
-    removeById
+    removeById,
+    createAdminUser
 };
