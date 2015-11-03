@@ -1,7 +1,7 @@
 "use strict";
 
-var settings = require('./settings.json');
-var weblogjs = require('../')(settings);
+var config = require('./config.json');
+var weblogjs = require('../')(config);
 
 
 /*
@@ -13,5 +13,5 @@ weblogjs.user
     });
 */
 
-weblogjs.startServer()
-    .then(() => weblogjs.createAdminUser());
+weblogjs.web.startServer()
+    .then(() => weblogjs.web.createAdminUser());

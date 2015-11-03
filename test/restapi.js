@@ -1,14 +1,14 @@
 "use strict";
 
-var settings = require('./settings.json');
+var config = require('./config.json');
 var testData = require('./test-data.json');
-var weblogjs = require('../')(settings);
+var weblogjs = require('../')(config);
 var httpRequest = require('./utils/http-request');
 var expect = require('chai').expect;
 
 var admin = Object.freeze(Object.assign({
-    email: settings.admin_email,
-    password: settings.admin_password
+    email: config.admin_email,
+    password: config.admin_password
 }));
 
 var testUser = Object.freeze(Object.assign(testData["valid-users"][0]));
