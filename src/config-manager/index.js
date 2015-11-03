@@ -1,15 +1,8 @@
 "use strict";
 
-var errors = require('./api/errors');
+var errors = require('../api/errors');
 
-var defaultSetting = {
-    database_name: "weblogjs",
-    database_host: "localhost",
-    database_port: 27017,
-    web_server_port: 80,
-    web_server_host: 'localhost',
-    api_version: 1
-};
+var defaultSetting = require('./default.json');
 
 var settings;
 
@@ -25,6 +18,7 @@ module.exports = {
         }
 
         settings = Object.assign(defaultSetting, _settings || {});
+
         Object.freeze(settings);
     },
 

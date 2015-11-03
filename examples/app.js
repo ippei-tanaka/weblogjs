@@ -1,7 +1,6 @@
 "use strict";
 
-var config = require('./config.json');
-var weblogjs = require('../')(config);
+var weblogjs = require('../')();
 
 
 /*

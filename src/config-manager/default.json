@@ -4,6 +4,7 @@
     "database_port": 27017,
     "web_server_port": 8080,
     "web_server_host": "localhost",
-    "admin_email": "test@test.com",
-    "admin_password": "test1test2test"
+    "admin_email": "admin@example.com",
+    "admin_password": "AdminPassword",
+    "api_version": 1
 }

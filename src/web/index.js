@@ -4,8 +4,8 @@
 var api = require('../api');
 var configManager = require('../config-manager');
 var restfulApiRoutes = require('./restful-api/router').routes;
-var publicPageRouter = require('./pages/public-router').routes;
-var adminPageRouter = require('./pages/admin-router').routes;
+var publicPageRouter = require('./pages/public-router');
+var adminPageRouter = require('./pages/admin-router');
 var passport = require('./passport-manager').passport;
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -14,17 +14,19 @@ var expressApp = express();
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var hbs = require('express-hbs');
+var expressSession = require('express-session');
 var webServer;
 var initialized;
-var session = require('express-session')({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false
-});
+
 
 var initializeApp = () => {
     if (!initialized) {
         var config = configManager.load();
+        var session = expressSession({
+            secret: 'keyboard cat',
+            resave: false,
+            saveUninitialized: false
+        });
 
         //app.use(favicon(__dirname + '/public/favicon.ico'));
         expressApp.use(logger('dev'));
@@ -51,8 +53,8 @@ var initializeApp = () => {
         expressApp.use(express.static(__dirname + '/pages/static'));
 
         // Web Pages
-        expressApp.use('/', publicPageRouter);
-        expressApp.use('/admin', adminPageRouter);
+        expressApp.use('/', publicPageRouter.routes);
+        expressApp.use('/admin', adminPageRouter.routes);
 
         /*
          // catch 404 and forward to error handler
