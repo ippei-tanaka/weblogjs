@@ -20,11 +20,7 @@ var create = (userInfo) => new Promise((resolve, reject) => {
         display_name: userInfo.display_name,
         password: userInfo.password
     }).then((newUser) => {
-        User.findById(newUser._id).exec((err, _newUser) => {
-            if (err) return reject(err);
-            //if (!newUser) return reject(new errors.WeblogJsError("couldn't find the user."));
-            resolve(_newUser.toJSON());
-        });
+        findById(newUser.id).then(resolve).catch(reject);
     }).catch((err) => {
         reject(err);
     });
@@ -91,10 +87,10 @@ var isValid = (credential) =>  new Promise((resolve, reject) => {
                 return reject(new errors.WeblogJsAuthError());
 
             user.verifyPassword(credential.password, (err, isMatch) => {
-                if (err && !isMatch)
+                if (err || !isMatch)
                     return reject(new errors.WeblogJsAuthError());
 
-                resolve(user.toJSON());
+                findById(user.id).then(resolve).catch(reject);
             });
         });
 });
