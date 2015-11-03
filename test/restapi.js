@@ -20,6 +20,7 @@ const BASE_URL = "http://localhost:8080/api/v1";
 {
     let clearDb = () => {
         return weblogjs
+            .api
             .dbClear()
             .catch(() => {
                 //console.error(err);
@@ -27,10 +28,10 @@ const BASE_URL = "http://localhost:8080/api/v1";
     };
 
     before(clearDb);
-    before(() => weblogjs.startServer());
+    before(() => weblogjs.web.startServer());
     beforeEach(clearDb);
-    beforeEach(() => weblogjs.createAdminUser());
-    after(() => weblogjs.stopServer());
+    beforeEach(() => weblogjs.web.createAdminUser());
+    after(() => weblogjs.web.stopServer());
 }
 
 

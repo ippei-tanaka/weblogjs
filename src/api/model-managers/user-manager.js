@@ -1,7 +1,7 @@
 "use strict";
 
 
-var User = require('../models/user');
+var User = require('./models/user');
 var modelManager = require('./model-manager');
 var errors = require('../errors/index');
 

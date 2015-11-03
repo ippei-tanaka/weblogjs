@@ -1,6 +1,6 @@
 "use strict";
 
-var errors = require('../errors');
+var errors = require('./api/errors');
 
 var defaultSetting = {
     database_name: "weblogjs",

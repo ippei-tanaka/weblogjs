@@ -1,12 +1,11 @@
 "use strict";
 
-var db = require('../services/db');
-var config = require('./config');
-var errors = require('../errors');
-var router = require('./router');
+var config = require('../config');
+var db = require('./services/db');
+var errors = require('./errors');
 var bodyParser = require('body-parser');
 var expressApp = require('express')();
-var userManager = require('../model-managers/user-manager');
+var userManager = require('./model-managers/user-manager');
 var webServer;
 
 
@@ -33,18 +32,6 @@ var dbConnect = () => {
         settings.database_port)
 };
 
-/**
- * @returns {Promise}
- */
-var createAdminUser = () => {
-    var settings = config.load();
-    return userManager.create({
-        email: settings.admin_email,
-        password: settings.admin_password,
-        display_name: "Admin"
-    });
-};
-
 
 /**
  * @returns {Promise}
@@ -52,60 +39,8 @@ var createAdminUser = () => {
 var dbDisconnect = () => db.disconnect();
 
 
-/**
- * @returns {Promise}
- */
-var startServer = () => new Promise((resolve, reject) => {
-    var settings = config.load();
-    dbConnect()
-        .then(() => {
-            webServer = expressApp.listen(settings.web_server_port, settings.web_server_host,
-                (err) => {
-                    !err ? resolve() : reject(err);
-                });
-        });
-});
-
-/**
- * @returns {Promise}
- */
-var stopServer = () => new Promise((resolve, reject) => {
-    if (webServer) {
-        webServer.close((err) => {
-            if (!err) {
-                dbDisconnect()
-                    .then(resolve)
-                    .catch(reject);
-            }
-        });
-    }
-});
-
-
-/**
- *
- */
-var initialize = () => {
-    var settings = config.load();
-
-    expressApp.use(bodyParser.json());
-    expressApp.use(router.passport.initialize());
-    expressApp.use(`/api/v${settings.api_version}/`, router.routes);
-};
-
-
-module.exports = (_config) => {
-
-    if (!config.hasBeenInitialized) {
-        config.initialize(_config);
-    }
-
-    initialize();
-
-    return {
-        dbClear,
-        createAdminUser,
-        startServer,
-        stopServer
-    };
+module.exports = {
+    dbClear,
+    dbConnect,
+    dbDisconnect
 };
