@@ -7,12 +7,15 @@ var api = require('../../api');
 var userManager = api.userManager;
 var categoryManager = api.categoryManager;
 var postManager = api.postManager;
-var auth = require('../passport-manager').basicAuth;
+//var auth = require('../passport-manager').basicAuth;
+var localAuth = require('../passport-manager').localAuth;
 var config = require('../../config-manager').load();
-var baseRoute = `/api/v${config.api_version}/`;
+var baseRoute = `/api/v${config.api_version}`;
 
 
+//-------------------------------------------------------
 // Utility Functions
+
 var response = (callback) => {
     return (request, response) => {
         var ok = (json) => {
@@ -25,7 +28,22 @@ var response = (callback) => {
     }
 };
 
+var isLoggedIn = (request, response, next) => {
+    if (request.isAuthenticated())
+        return next();
 
+    response.sendStatus(401);
+};
+
+var redirectIfLoggedIn = (uri) => (request, response, next) => {
+    if (!request.isAuthenticated())
+        return next();
+
+    response.redirect(baseRoute + uri);
+};
+
+
+//-------------------------------------------------------
 // Home
 
 routes.get('/', response((ok) => {
@@ -33,9 +51,27 @@ routes.get('/', response((ok) => {
 }));
 
 
+//-------------------------------------------------------
+// Login
+
+routes.post('/login', redirectIfLoggedIn('/'), localAuth, response((ok) => {
+    ok({});
+}));
+
+
+//-------------------------------------------------------
+// Logout
+
+routes.get('/logout', response((ok, error, request, response) => {
+    request.logout();
+    response.redirect(baseRoute + "/");
+}));
+
+
+//-------------------------------------------------------
 // User
 
-routes.get('/users', auth, response((ok, error, request) => {
+routes.get('/users', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
@@ -44,68 +80,69 @@ routes.get('/users', auth, response((ok, error, request) => {
         .catch(error);
 }));
 
-routes.get('/users/:id', auth, response((ok, error, request) => {
+routes.get('/users/:id', isLoggedIn, response((ok, error, request) => {
     userManager.findById(request.params.id)
         .then(ok)
         .catch(error);
 }));
 
-routes.post('/users', auth, response((ok, error, request) => {
+routes.post('/users', isLoggedIn, response((ok, error, request) => {
     userManager.create(request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.put('/users/:id', auth, response((ok, error, request) => {
+routes.put('/users/:id', isLoggedIn, response((ok, error, request) => {
     userManager.updateById(request.params.id, request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.delete('/users/:id', auth, response((ok, error, request) => {
+routes.delete('/users/:id', isLoggedIn, response((ok, error, request) => {
     userManager.removeById(request.params.id)
         .then(ok)
         .catch(error);
 }));
 
 
+//-------------------------------------------------------
 // Category
 
-routes.get('/categories', auth, response((ok, error) => {
+routes.get('/categories', isLoggedIn, response((ok, error) => {
     categoryManager.getList()
         .then(ok)
         .catch(error);
 }));
 
-routes.get('/categories/:id', auth, response((ok, error, request) => {
+routes.get('/categories/:id', isLoggedIn, response((ok, error, request) => {
     categoryManager.findById(request.params.id)
         .then(ok)
         .catch(error);
 }));
 
-routes.post('/categories', auth, response((ok, error, request) => {
+routes.post('/categories', isLoggedIn, response((ok, error, request) => {
     categoryManager.create(request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.put('/categories/:id', auth, response((ok, error, request) => {
+routes.put('/categories/:id', isLoggedIn, response((ok, error, request) => {
     categoryManager.updateById(request.params.id, request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.delete('/categories/:id', auth, response((ok, error, request) => {
+routes.delete('/categories/:id', isLoggedIn, response((ok, error, request) => {
     categoryManager.removeById(request.params.id)
         .then(ok)
         .catch(error);
 }));
 
 
-
+//-------------------------------------------------------
 // Post
 
-routes.get('/posts', auth, response((ok, error, request) => {
+routes.get('/posts', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
@@ -114,13 +151,13 @@ routes.get('/posts', auth, response((ok, error, request) => {
         .catch(error);
 }));
 
-routes.get('/posts/:id', auth, response((ok, error, request) => {
+routes.get('/posts/:id', isLoggedIn, response((ok, error, request) => {
     postManager.findById(request.params.id)
         .then(ok)
         .catch(error);
 }));
 
-routes.post('/posts', auth, response((ok, error, request) => {
+routes.post('/posts', isLoggedIn, response((ok, error, request) => {
     var post = Object.assign(request.body, {author: request.user._id});
 
     postManager.create(post)
@@ -128,18 +165,20 @@ routes.post('/posts', auth, response((ok, error, request) => {
         .catch(error);
 }));
 
-routes.put('/posts/:id', auth, response((ok, error, request) => {
+routes.put('/posts/:id', isLoggedIn, response((ok, error, request) => {
     postManager.updateById(request.params.id, request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.delete('/posts/:id', auth, response((ok, error, request) => {
+routes.delete('/posts/:id', isLoggedIn, response((ok, error, request) => {
     postManager.removeById(request.params.id)
         .then(ok)
         .catch(error);
 }));
 
+
+//-------------------------------------------------------
 
 module.exports = {
     routes,

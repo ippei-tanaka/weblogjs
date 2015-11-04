@@ -1,6 +1,6 @@
 "use strict";
 
-var request = require('request');
+var request = require('request').defaults({jar: true});
 
 var req = function (method, path, data, username, password) {
     return new Promise((resolve, reject) => {
