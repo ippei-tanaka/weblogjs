@@ -16,6 +16,7 @@
     "run-sequence": "^1.1.4"
   },
   "dependencies": {
+    "babel-core": "^6.1.2",
     "bcrypt": "^0.8.5",
     "body-parser": "^1.14.1",
     "cookie-parser": "^1.4.0",

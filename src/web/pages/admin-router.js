@@ -34,6 +34,10 @@ routes.post('/login', redirectIfLoggedIn('/'), localAuth, (request, response) =>
     response.redirect(baseRoute);
 });
 
+routes.get('/logout', (request, response) => {
+    request.logout();
+    response.redirect(baseRoute + "/");
+});
 
 module.exports = {
     routes,
