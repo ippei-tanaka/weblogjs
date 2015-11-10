@@ -8,6 +8,7 @@ body {
     position: relative;
     font-family: $font-family-default;
     font-size: $font-size-base;
+    color: $font-color-default;
 }
 
 /*----------------------------
@@ -59,4 +60,32 @@ button,
 [type="submit"],
 [type="reset"] {
     @extend %button;
+}
+
+
+/*----------------------------
+ Table
+----------------------------*/
+%table{
+    td, th {
+        padding: 10px;
+        border: 1px solid $color-border-plain;
+    }
+
+    thead tr {
+        background-color: $color-table-calm-thead-bg;
+        color: $color-table-calm-thead-text;
+    }
+
+    tbody tr {
+        background-color: $color-table-calm-tbody-bg;
+
+        &:nth-child(2n) {
+            background-color: $color-table-calm-tbody-bg2;
+        }
+    }
+}
+
+table {
+    @extend %table;
 }
