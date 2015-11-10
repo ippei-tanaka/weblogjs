@@ -46,7 +46,41 @@ describe('Restful API', () => {
                 })
                 .catch((err) => {
                     console.error(err);
+
+                });
+        });
+
+        it('should return error messages when failing to create a new user', (done) => {
+
+            httpRequest.post(`${BASE_URL}/users`, {
+                "email": "wrongemail",
+                "password": "aaa",
+                "display_name": ""
+            })
+                .then(() => {
                     done(new Error());
+                })
+                .catch((err) => {
+                    var errors = err.body.errors;
+
+                    expect(errors["email"].message).to.equal("It is not a valid email address.");
+                    expect(errors["password"].message).to.equal("A password should be between 8 and 16 characters.");
+                    expect(errors["display_name"].message).to.equal("A display name is required.");
+
+                    return httpRequest.post(`${BASE_URL}/users`, testUser);
+                })
+                .then(() => {
+                    return httpRequest.post(`${BASE_URL}/users`, testUser);
+                })
+                .catch((err) => {
+                    var errors = err.body.errors;
+
+                    expect(errors["email"].message).to.equal(`The email, "${testUser.email}", has been registered.`);
+
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
                 });
         });
 
