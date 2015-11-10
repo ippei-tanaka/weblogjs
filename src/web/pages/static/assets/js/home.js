@@ -1,6 +1,6 @@
 requirejs([
-        'jsx!../components/user-manager'
+        'jsx!components/user-list'
     ],
-    function (UserManager) {
-        UserManager.render(document.querySelector("[data-react='user-manager']"));
+    function (UserList) {
+        UserList.render(document.querySelector("[data-react='user-list']"));
     });

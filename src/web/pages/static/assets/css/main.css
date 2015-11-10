@@ -2,6 +2,8 @@
    v2.0 | 20110126
    License: none (public domain)
 */
+@import url(https://fonts.googleapis.com/css?family=Lato:400,900);
+@import url(https://fonts.googleapis.com/css?family=Lato:400,900);
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
   margin: 0;
   padding: 0;
@@ -34,3 +36,151 @@ q:before, q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0; }
+
+/* -------------------------------------------------------------
+  Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
+  By: Matthieu Aussaguel, http://www.mynameismatthieu.com, @matthieu_tweets
+
+  List of CSS3 Sass Mixins File to be @imported and @included as you need
+
+  The purpose of this library is to facilitate the use of CSS3 on different browsers avoiding HARD TO READ and NEVER
+  ENDING css files
+
+  note: All CSS3 Properties are being supported by Safari 5
+  more info: http://www.findmebyip.com/litmus/#css3-properties
+
+------------------------------------------------------------- */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  font-family: Helvetica, sans-serif;
+  font-size: 16px; }
+
+/*----------------------------
+ Text Input
+----------------------------*/
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  font-size: 16px;
+  font-family: "Lato", sans-serif;
+  display: inline-block;
+  padding: 6px 10px;
+  border: 1px solid #cccccc;
+  -webkit-box-sizing: border-box;
+  -khtml-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-border-radius: 7px;
+  -khtml-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -ms-border-radius: 7px;
+  -o-border-radius: 7px;
+  border-radius: 7px;
+  -webkit-outline-radius: 7px;
+  -khtml-outline-radius: 7px;
+  -moz-outline-radius: 7px;
+  -ms-outline-radius: 7px;
+  -o-outline-radius: 7px;
+  outline-radius: 7px; }
+
+/*----------------------------
+ Button
+----------------------------*/
+button,
+[type="submit"],
+[type="reset"] {
+  font-size: 16px;
+  font-family: "Lato", sans-serif;
+  display: inline-block;
+  padding: 8px 20px;
+  border: 0;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: #215382;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#215382), to(#2a6aa6));
+  background-image: -webkit-linear-gradient(top, #215382, #2a6aa6);
+  background-image: -moz-linear-gradient(top, #215382, #2a6aa6);
+  background-image: -ms-linear-gradient(top, #215382, #2a6aa6);
+  background-image: -o-linear-gradient(top, #215382, #2a6aa6);
+  background-image: linear-gradient(top, #215382, #2a6aa6);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#215382', endColorStr='#2a6aa6');
+  -webkit-box-sizing: border-box;
+  -khtml-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-border-radius: 20px;
+  -khtml-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  border-radius: 20px;
+  -webkit-outline-radius: 20px;
+  -khtml-outline-radius: 20px;
+  -moz-outline-radius: 20px;
+  -ms-outline-radius: 20px;
+  -o-outline-radius: 20px;
+  outline-radius: 20px; }
+  button:hover,
+  [type="submit"]:hover,
+  [type="reset"]:hover {
+    background-color: #64a0d8;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#64a0d8), to(#88b6e1));
+    background-image: -webkit-linear-gradient(top, #64a0d8, #88b6e1);
+    background-image: -moz-linear-gradient(top, #64a0d8, #88b6e1);
+    background-image: -ms-linear-gradient(top, #64a0d8, #88b6e1);
+    background-image: -o-linear-gradient(top, #64a0d8, #88b6e1);
+    background-image: linear-gradient(top, #64a0d8, #88b6e1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#64a0d8', endColorStr='#88b6e1'); }
+
+/* -------------------------------------------------------------
+  Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
+  By: Matthieu Aussaguel, http://www.mynameismatthieu.com, @matthieu_tweets
+
+  List of CSS3 Sass Mixins File to be @imported and @included as you need
+
+  The purpose of this library is to facilitate the use of CSS3 on different browsers avoiding HARD TO READ and NEVER
+  ENDING css files
+
+  note: All CSS3 Properties are being supported by Safari 5
+  more info: http://www.findmebyip.com/litmus/#css3-properties
+
+------------------------------------------------------------- */
+.module-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  font-family: "Lato", sans-serif; }
+
+.module-login-form {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #f0f0f0; }
+  .module-login-form .m-lgf-wrapper {
+    width: 400px;
+    margin: 0 auto;
+    padding: 50px 30px; }
+  .module-login-form .m-lgf-title {
+    font-size: 38px;
+    margin-bottom: 30px; }
+  .module-login-form .m-lgf-field-container {
+    margin-bottom: 20px; }
+  .module-login-form .m-lgf-label {
+    display: none; }
+  .module-login-form .m-lgf-input {
+    width: 200px; }
+  .module-login-form .m-lgf-checkbox-label {
+    cursor: pointer; }
+
+.module-user-list .md-usl-table {
+  width: 100%; }
+
+.module-user-list .md-usl-table td, .module-user-list th {
+  border: 1px solid #f0f0f0; }
