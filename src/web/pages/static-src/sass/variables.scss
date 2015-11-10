@@ -2,6 +2,7 @@
 
 $font-family-default: Helvetica, sans-serif;
 $font-family-lato: 'Lato', sans-serif;
+$font-color-default: #000000;
 
 $font-size-base: 16px;
 $font-size-header: 38px;
@@ -15,3 +16,10 @@ $color-btn-calm-hover-bg-end: lighten($color-btn-calm-bg-end, 30%);
 
 $color-bg-plain: #f0f0f0;
 $color-border-plain: #cccccc;
+
+$color-table-calm-thead-bg: #2a6aa6;
+$color-table-calm-thead-text: #ffffff;
+$color-table-calm-tbody-bg: #ffffff;
+$color-table-calm-tbody-bg2: lighten($color-table-calm-thead-bg, 55%);
+
+$color-icon-trash: #aa0000;

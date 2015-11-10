@@ -44,12 +44,25 @@
 }
 
 .module-user-list {
-
-    .md-usl-table {
-        width: 100%;
+    .m-usl-hidden-cell {
+        display: none;
     }
 
-    .md-usl-table td, th {
-        border: 1px solid #f0f0f0;
+    .m-usl-trash-icon {
+        color: $color-icon-trash;
+        font-size: 20px;
+        cursor: pointer;
+    }
+}
+
+.module-user-creator {
+
+    .m-usc-label {
+        display: none;
+    }
+
+    .m-usc-input {
+        width: 120px;
+        margin-right: 10px;
     }
 }
