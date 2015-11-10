@@ -10,7 +10,7 @@ var isLoggedIn = (request, response, next) => {
     if (request.isAuthenticated())
         return next();
 
-    response.sendStatus(401);
+    response.redirect(baseRoute + "/login");
 };
 
 var redirectIfLoggedIn = (uri) => (request, response, next) => {

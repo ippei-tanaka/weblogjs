@@ -47,6 +47,8 @@ define([
             render: function () {
                 return (
                     <div className="module-user-list">
+                        <h2 className="m-usl-title">User List</h2>
+
                         <table className="m-usl-table">
                             <thead>
                             <tr>
@@ -81,7 +83,7 @@ define([
                         <th>{this.props.number}</th>
                         <td>{this.props.user.display_name}</td>
                         <td>{this.props.user.email}</td>
-                        <td><i className="fa fa-trash-o m-usl-trash-icon" onClick={this.onTrashIconClicked}></i></td>
+                        <td className="m-usl-center"><i className="fa fa-trash-o m-usl-trash-icon" onClick={this.onTrashIconClicked}></i></td>
                         <td className="m-usl-hidden-cell">{created}</td>
                         <td className="m-usl-hidden-cell">{updated}</td>
                     </tr>
@@ -100,11 +102,10 @@ define([
                     .then(function () {
                         EventManager.fire('user-deleted');
                     }.bind(this))
+
                     .fail(function (xhr, status, err) {
                         console.error(url, status, err.toString());
                     }.bind(this));
-
-                return;
             }
 
         });

@@ -144,7 +144,7 @@ var removeById = (Model, id) => new Promise((resolve, reject) => {
     Model.remove({_id: id})
         .exec((err) => {
             if (err) return reject(err);
-            resolve();
+            resolve({});
         });
 });
 

@@ -44,8 +44,22 @@
 }
 
 .module-user-list {
+
+    .m-usl-title {
+        font-size: $font-size-sub-header;
+        margin-bottom: 20px;
+    }
+
+    .m-usl-table {
+        width: 100%;
+    }
+
     .m-usl-hidden-cell {
         display: none;
+    }
+
+    .m-usl-center {
+        text-align: center;
     }
 
     .m-usl-trash-icon {
@@ -57,12 +71,24 @@
 
 .module-user-creator {
 
+    .m-usc-title {
+        font-size: $font-size-sub-header;
+        margin-bottom: 20px;
+    }
+
+    .m-usc-field-container {
+        margin-bottom: 20px;
+    }
+
     .m-usc-label {
         display: none;
     }
 
     .m-usc-input {
-        width: 120px;
-        margin-right: 10px;
+        width: 100%;
+    }
+
+    .m-usc-error {
+        color: $color-error-message;
     }
 }
