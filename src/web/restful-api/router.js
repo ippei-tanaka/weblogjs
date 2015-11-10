@@ -22,7 +22,8 @@ var response = (callback) => {
             response.type('json').status(200).json(json);
         };
         var error = (json, code) => {
-            response.type('json').status(code || 500).json(json);
+            // TODO: change HTTP code based on the type of the error
+            response.type('json').status(code || 400).json(json);
         };
         callback(ok, error, request, response);
     }

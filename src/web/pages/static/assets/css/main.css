@@ -196,17 +196,36 @@ table tbody tr {
   .module-login-form .m-lgf-checkbox-label {
     cursor: pointer; }
 
+.module-user-list .m-usl-title {
+  font-size: 26px;
+  margin-bottom: 20px; }
+
+.module-user-list .m-usl-table {
+  width: 100%; }
+
 .module-user-list .m-usl-hidden-cell {
   display: none; }
+
+.module-user-list .m-usl-center {
+  text-align: center; }
 
 .module-user-list .m-usl-trash-icon {
   color: #aa0000;
   font-size: 20px;
   cursor: pointer; }
 
+.module-user-creator .m-usc-title {
+  font-size: 26px;
+  margin-bottom: 20px; }
+
+.module-user-creator .m-usc-field-container {
+  margin-bottom: 20px; }
+
 .module-user-creator .m-usc-label {
   display: none; }
 
 .module-user-creator .m-usc-input {
-  width: 120px;
-  margin-right: 10px; }
+  width: 100%; }
+
+.module-user-creator .m-usc-error {
+  color: #ff0000; }
