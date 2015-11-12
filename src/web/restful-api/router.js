@@ -43,6 +43,13 @@ var redirectIfLoggedIn = (uri) => (request, response, next) => {
     response.redirect(baseRoute + uri);
 };
 
+var redirectIfNotLoggedIn = (uri) => (request, response, next) => {
+    if (request.isAuthenticated())
+        return next();
+
+    response.redirect(baseRoute + uri);
+};
+
 
 //-------------------------------------------------------
 // Home
@@ -63,9 +70,9 @@ routes.post('/login', redirectIfLoggedIn('/'), localAuth, response((ok) => {
 //-------------------------------------------------------
 // Logout
 
-routes.get('/logout', response((ok, error, request, response) => {
+routes.get('/logout', redirectIfNotLoggedIn('/'), response((ok, error, request) => {
     request.logout();
-    response.redirect(baseRoute + "/");
+    ok({});
 }));
 
 

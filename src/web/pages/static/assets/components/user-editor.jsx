@@ -3,16 +3,16 @@
 define([
         'react',
         'react-dom',
-        'event-manager',
+        'global-events',
         'jquery'],
     function (React,
               ReactDom,
-              EventManager,
+              GlobalEvents,
               $) {
 
         var url = "/api/v1/users";
 
-        var UserCreator = React.createClass({
+        var UserEditor = React.createClass({
 
             onSubmit: function (e) {
                 e.preventDefault();
@@ -41,7 +41,7 @@ define([
                         this.refs.password.value = "";
                         this.refs.display_name.value = "";
 
-                        EventManager.fire('user-created');
+                        GlobalEvents.userCreated.fire();
                     }.bind(this))
 
                     .fail(function (xhr) {
@@ -49,14 +49,20 @@ define([
                             errors: xhr.responseJSON.errors
                         });
                     }.bind(this));
-
-                return;
             },
 
             getInitialState: function () {
                 return {
                     errors: {}
                 };
+            },
+
+            componentDidMount: function () {
+                if (this.props.user) {
+                    this.refs.email.value = this.props.user.email;
+                    this.refs.password.value = this.props.user.password;
+                    this.refs.display_name.value = this.props.user.display_name;
+                }
             },
 
             render: function () {
@@ -95,7 +101,7 @@ define([
                         </div>
 
                         <div className="m-usc-field-container">
-                            <button type="submit">Create</button>
+                            <button type="submit">{ this.props.mode === 'add' ? 'Create' : 'Edit' }</button>
                         </div>
 
                     </form>
@@ -104,8 +110,11 @@ define([
         });
 
         return {
-            render: function (container) {
-                ReactDom.render(<UserCreator />, container);
+            render: function (mode, user, container) {
+                while (container.firstChild) {
+                    container.removeChild(container.firstChild);
+                }
+                ReactDom.render(<UserEditor mode={mode} user={user} />, container);
             }
         };
 
