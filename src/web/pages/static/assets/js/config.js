@@ -1,3 +1,5 @@
+"use strict";
+
 requirejs.config({
     baseUrl: "/assets/",
 
@@ -13,7 +15,8 @@ requirejs.config({
         "JSXTransformer": "../vendors/JSXTransformer",
         "react": "../vendors/react-with-addons.min",
         "react-dom": "../vendors/react-dom.min",
-        "event-manager": "modules/event-manager",
+        "global-events": "modules/global-events",
+        "event": "modules/event",
         "moment": "../vendors/moment"
     }
 });

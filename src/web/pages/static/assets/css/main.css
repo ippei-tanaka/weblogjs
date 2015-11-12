@@ -175,13 +175,16 @@ table tbody tr {
   position: relative;
   font-family: "Lato", sans-serif; }
 
+.module-login-page {
+  width: 100%;
+  height: 100%; }
+
 .module-login-form {
   width: 100%;
   height: 100%;
   position: relative;
   background-color: #f0f0f0; }
   .module-login-form .m-lgf-wrapper {
-    width: 400px;
     margin: 0 auto;
     padding: 50px 30px; }
   .module-login-form .m-lgf-title {
@@ -192,9 +195,11 @@ table tbody tr {
   .module-login-form .m-lgf-label {
     display: none; }
   .module-login-form .m-lgf-input {
-    width: 200px; }
-  .module-login-form .m-lgf-checkbox-label {
-    cursor: pointer; }
+    width: 100%; }
+  .module-login-form .m-lgf-error-container {
+    margin-bottom: 20px; }
+  .module-login-form .m-lgf-error {
+    color: #ff0000; }
 
 .module-user-list .m-usl-title {
   font-size: 26px;
@@ -209,7 +214,20 @@ table tbody tr {
 .module-user-list .m-usl-center {
   text-align: center; }
 
-.module-user-list .m-usl-trash-icon {
+.module-user-list .m-usl-add-icon {
+  color: #3c9d0f;
+  font-size: 20px; }
+
+.module-user-list .m-usl-add-button {
+  cursor: pointer;
+  color: #3c9d0f; }
+
+.module-user-list .m-usl-edit-icon {
+  color: #3c9d0f;
+  font-size: 20px;
+  cursor: pointer; }
+
+.module-user-list .m-usl-delete-icon {
   color: #aa0000;
   font-size: 20px;
   cursor: pointer; }
@@ -220,9 +238,6 @@ table tbody tr {
 
 .module-user-creator .m-usc-field-container {
   margin-bottom: 20px; }
-
-.module-user-creator .m-usc-label {
-  display: none; }
 
 .module-user-creator .m-usc-input {
   width: 100%; }

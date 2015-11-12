@@ -20,7 +20,12 @@ var redirectIfLoggedIn = (uri) => (request, response, next) => {
     response.redirect(baseRoute + uri);
 };
 
+var redirectIfNotLoggedIn = (uri) => (request, response, next) => {
+    if (request.isAuthenticated())
+        return next();
 
+    response.redirect(baseRoute + uri);
+};
 
 routes.get('/', isLoggedIn, (request, response) => {
     response.render('admin/home');
@@ -31,12 +36,12 @@ routes.get('/login', redirectIfLoggedIn('/'), (request, response) => {
 });
 
 routes.post('/login', redirectIfLoggedIn('/'), localAuth, (request, response) => {
-    response.redirect(baseRoute);
+    response.type('json').status(200).json({});
 });
 
-routes.get('/logout', (request, response) => {
+routes.get('/logout', redirectIfNotLoggedIn('/login'), (request, response) => {
     request.logout();
-    response.redirect(baseRoute + "/");
+    response.redirect(baseRoute + '/login');
 });
 
 module.exports = {
