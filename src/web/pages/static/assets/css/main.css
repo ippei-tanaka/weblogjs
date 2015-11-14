@@ -70,6 +70,7 @@ input[type="password"] {
   display: inline-block;
   padding: 6px 10px;
   border: 1px solid #cccccc;
+  background-color: #ffffff;
   -webkit-box-sizing: border-box;
   -khtml-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -88,6 +89,10 @@ input[type="password"] {
   -ms-outline-radius: 7px;
   -o-outline-radius: 7px;
   outline-radius: 7px; }
+  input[disabled][type="text"],
+  input[disabled][type="email"],
+  input[disabled][type="password"] {
+    background-color: #f0f0f0; }
 
 /*----------------------------
  Button

@@ -20,9 +20,16 @@ body {
     display: inline-block;
     padding: 6px 10px;
     border: 1px solid $color-border-plain;
+    background-color: $color-text-input-bg;
+
     @include box-sizing();
     @include border-radius(7px);
     @include outline-radius(7px);
+
+
+    &[disabled] {
+        background-color: $color-text-input-bg-disabled;
+    }
 }
 
 input[type="text"],

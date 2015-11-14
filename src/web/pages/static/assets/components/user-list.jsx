@@ -2,13 +2,11 @@
 
 define([
         'react',
-        'react-dom',
         'moment',
         'global-events',
         'event',
         'jquery'],
     function (React,
-              ReactDom,
               Moment,
               GlobalEvents,
               Event,
@@ -25,6 +23,10 @@ define([
             },
 
             componentDidMount: function () {
+                this.events.addButtonClicked.on(this.props.addButtonClicked);
+                this.events.editButtonClicked.on(this.props.editButtonClicked);
+                this.events.deleteButtonClicked.on(this.props.deleteButtonClicked);
+
                 GlobalEvents.userCreated.on(this.retrieveDataAndUpdateList.bind(this));
                 GlobalEvents.userUpdated.on(this.retrieveDataAndUpdateList.bind(this));
                 GlobalEvents.userDeleted.on(this.retrieveDataAndUpdateList.bind(this));
@@ -67,8 +69,8 @@ define([
                             </thead>
                             <tbody>
                             {this.state.users.map(function (user, index) {
-                                return <UserListItem key={user._id} user={user} number={index+1}/>;
-                            })}
+                                return <UserListItem key={user._id} user={user} events={this.events} number={index+1}/>;
+                            }.bind(this))}
                             </tbody>
                         </table>
 
@@ -81,9 +83,14 @@ define([
 
             onAddButtonClicked: function (e) {
                 e.preventDefault();
-                exports.onAddButtonClicked.fire();
-            }
+                this.events.addButtonClicked.fire();
+            },
 
+            events: {
+                addButtonClicked: new Event(),
+                editButtonClicked: new Event(),
+                deleteButtonClicked: new Event()
+            }
         });
 
         var UserListItem = React.createClass({
@@ -108,9 +115,10 @@ define([
 
             onDeleteButtonClicked: function (e) {
                 e.preventDefault();
-                exports.onDeleteButtonClicked.fire(this.props.user);
+                this.props.events.deleteButtonClicked.fire(this.props.user);
 
-                /*
+                // TODO: Move the code for deleting a user to another component.
+                //---
                 var message = 'Do you want to delete "' + this.props.user.display_name + '"?';
 
                 if (confirm(message)) {
@@ -128,28 +136,16 @@ define([
                             console.error(url, status, err.toString());
                         }.bind(this));
                 }
-                */
+                //---
             },
 
             onEditButtonClicked: function (e) {
                 e.preventDefault();
-                exports.onEditButtonClicked.fire(this.props.user);
+                this.props.events.editButtonClicked.fire(this.props.user);
             }
 
         });
 
-
-        var exports = {
-
-            onAddButtonClicked: new Event(),
-            onEditButtonClicked: new Event(),
-            onDeleteButtonClicked: new Event(),
-
-            render: function (container) {
-                ReactDom.render(<UserList />, container);
-            }
-        };
-
-        return exports;
+        return UserList;
     });
 
