@@ -52,11 +52,23 @@ var findById = modelManager.findById.bind({}, User, null);
  * @returns {Promise}
  */
 var updateById = (id, userInfo) => {
-    return modelManager.updateById(User, id, {
-        email: userInfo.email,
-        password: userInfo.password,
-        display_name: userInfo.display_name
-    });
+
+    var obj = {};
+
+    if (userInfo.email) {
+        obj.email = userInfo.email;
+    }
+
+    // TODO: add password confirmation
+    if (userInfo.password) {
+        obj.password = userInfo.password;
+    }
+
+    if (userInfo.display_name) {
+        obj.display_name = userInfo.display_name;
+    }
+
+    return modelManager.updateById(User, id, obj);
 };
 
 
