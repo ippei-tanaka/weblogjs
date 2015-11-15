@@ -2,11 +2,9 @@
 
 define([
         'react',
-        'react-dom',
         'jquery',
         'jsx!components/input-field'],
     function (React,
-              ReactDom,
               $,
               InputField) {
 
@@ -118,10 +116,6 @@ define([
             }
         });
 
-        return {
-            render: function (container) {
-                ReactDom.render(<LoginForm />, container);
-            }
-        };
+        return LoginForm;
 
     });

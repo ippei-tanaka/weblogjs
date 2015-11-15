@@ -38,6 +38,94 @@ define([
 
         var UserEditor = React.createClass({
 
+            getInitialState: function () {
+                return {
+                    errors: {
+                        email: undefined,
+                        password: undefined,
+                        display_name: undefined
+                    },
+                    user: {
+                        email: "",
+                        password: "",
+                        display_name: ""
+                    }
+                };
+            },
+
+            getDefaultProps: function () {
+                return {
+                    mode: "", // 'add' or 'edit'
+                    user: {
+                        _id: "",
+                        email: "",
+                        password: "",
+                        display_name: ""
+                    }
+                };
+            },
+
+            componentWillMount: function () {
+                this._setUserState(this.getInitialState().user, this.props.user);
+            },
+
+            render: function () {
+
+                var emailField = inputFactory({
+                    id: "UserManagerEmailInput",
+                    type: "email",
+                    initialValue: this.props.user.email,
+                    error: this.state.errors.email,
+                    onChange: function (e) {
+                        this._setUserState(this.state.user, {email: e.target.value});
+                    }.bind(this),
+                    attributes: {
+                        disabled: this._returnByMode(false, true)
+                    },
+                    label: "Email address"
+                });
+
+                var passwordField = inputFactory({
+                    id: "UserManagerPasswordInput",
+                    type: "password",
+                    initialValue: this.props.user.password,
+                    error: this.state.errors.password,
+                    onChange: function (e) {
+                        this._setUserState(this.state.user, {password: e.target.value});
+                    }.bind(this),
+                    label: "Password"
+                });
+
+                var displayNameField = inputFactory({
+                    id: "UserManagerDisplayNameInput",
+                    type: "text",
+                    initialValue: this.props.user.display_name,
+                    error: this.state.errors.display_name,
+                    onChange: function (e) {
+                        this._setUserState(this.state.user, {display_name: e.target.value});
+                    }.bind(this),
+                    label: "Display Name"
+                });
+
+                return (
+                    <form className="module-user-creator" onSubmit={this._onSubmit}>
+
+                        <h2 className="m-usc-title">Create a new user</h2>
+
+                        {emailField}
+
+                        {this._returnByMode(passwordField, null)}
+
+                        {displayNameField}
+
+                        <div className="m-usc-field-container">
+                            <button type="submit">{this._returnByMode("Create", "Edit")}</button>
+                        </div>
+
+                    </form>
+                );
+            },
+
             _onSubmit: function (e) {
                 e.preventDefault();
 
@@ -70,37 +158,6 @@ define([
                     }.bind(this));
             },
 
-            getInitialState: function () {
-                return {
-                    errors: {
-                        email: undefined,
-                        password: undefined,
-                        display_name: undefined
-                    },
-                    user: {
-                        email: "",
-                        password: "",
-                        display_name: ""
-                    }
-                };
-            },
-
-            getDefaultProps: function () {
-                return {
-                    mode: "", // 'add' or 'edit'
-                    user: {
-                        _id: "",
-                        email: "",
-                        password: "",
-                        display_name: ""
-                    }
-                };
-            },
-
-            componentWillMount: function () {
-                this._setUserState(this.getInitialState().user, this.props.user);
-            },
-
             _setUserState: function (defaultUser, user) {
                 this.setState({
                     user: $.extend(defaultUser, flatten(user))
@@ -109,64 +166,8 @@ define([
 
             _returnByMode: function (forAddMode, forEditMode) {
                 return this.props.mode === 'add' ? forAddMode : forEditMode;
-            },
-
-            render: function () {
-
-                var emailField = inputFactory({
-                    id: "UserManagerEmailInput",
-                    type: "email",
-                    initialValue: this.state.user.email,
-                    error: this.state.errors.email,
-                    onChange: function (e) {
-                        this._setUserState(this.state.user, {email: e.target.value});
-                    }.bind(this),
-                    attributes: {
-                        disabled: this._returnByMode(false, true)
-                    },
-                    label: "Email address"
-                });
-
-                var passwordField = inputFactory({
-                    id: "UserManagerPasswordInput",
-                    type: "password",
-                    initialValue: this.state.user.password,
-                    error: this.state.errors.password,
-                    onChange: function (e) {
-                        this._setUserState(this.state.user, {password: e.target.value});
-                    }.bind(this),
-                    label: "Password"
-                });
-
-                var displayNameField = inputFactory({
-                    id: "UserManagerDisplayNameInput",
-                    type: "text",
-                    initialValue: this.state.user.display_name,
-                    error: this.state.errors.display_name,
-                    onChange: function (e) {
-                        this._setUserState(this.state.user, {display_name: e.target.value});
-                    }.bind(this),
-                    label: "Display Name"
-                });
-
-                return (
-                    <form className="module-user-creator" onSubmit={this._onSubmit}>
-
-                        <h2 className="m-usc-title">Create a new user</h2>
-
-                        {emailField}
-
-                        {this._returnByMode(passwordField, null)}
-
-                        {displayNameField}
-
-                        <div className="m-usc-field-container">
-                            <button type="submit">{this._returnByMode("Create", "Edit")}</button>
-                        </div>
-
-                    </form>
-                );
             }
+
         });
 
         return UserEditor;

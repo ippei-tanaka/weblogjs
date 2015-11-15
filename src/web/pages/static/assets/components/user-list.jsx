@@ -27,13 +27,20 @@ define([
                 this.events.editButtonClicked.on(this.props.editButtonClicked);
                 this.events.deleteButtonClicked.on(this.props.deleteButtonClicked);
 
-                GlobalEvents.userCreated.on(this.retrieveDataAndUpdateList.bind(this));
-                GlobalEvents.userUpdated.on(this.retrieveDataAndUpdateList.bind(this));
-                GlobalEvents.userDeleted.on(this.retrieveDataAndUpdateList.bind(this));
-                this.retrieveDataAndUpdateList();
+                GlobalEvents.userCreated.on(this._retrieveDataAndUpdateList);
+                GlobalEvents.userUpdated.on(this._retrieveDataAndUpdateList);
+                GlobalEvents.userDeleted.on(this._retrieveDataAndUpdateList);
+
+                this._retrieveDataAndUpdateList();
             },
 
-            retrieveDataAndUpdateList: function () {
+            componentWillUnmount: function () {
+                GlobalEvents.userCreated.off(this._retrieveDataAndUpdateList);
+                GlobalEvents.userUpdated.off(this._retrieveDataAndUpdateList);
+                GlobalEvents.userDeleted.off(this._retrieveDataAndUpdateList);
+            },
+
+            _retrieveDataAndUpdateList: function () {
                 $.ajax({
                     url: url,
                     dataType: 'json',
