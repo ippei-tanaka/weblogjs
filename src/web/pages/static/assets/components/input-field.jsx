@@ -8,16 +8,6 @@ define([
 
         var InputField = React.createClass({
 
-            // TODO check if it is working.
-            propTypes: {
-                initialValue: React.PropTypes.string,
-                error: React.PropTypes.objectOf(React.PropTypes.string),
-                onChange: React.PropTypes.func,
-                classNames: React.PropTypes.objectOf(React.PropTypes.string),
-                attributes: React.PropTypes.objectOf([React.PropTypes.string, React.PropTypes.boolean]),
-                label: React.PropTypes.string
-            },
-
             getInitialState: function () {
                 return {
                     error: "",
@@ -27,9 +17,10 @@ define([
 
             getDefaultProps: function () {
                 return {
-                    initialValue: "",
-
+                    id: "",
+                    type: "",
                     label: "",
+                    initialValue: "",
 
                     onChange: function () {
                     },
@@ -45,55 +36,61 @@ define([
                         error: ""
                     },
 
-                    attributes: {
-                        id: "",
-                        type: "",
-                        disabled: false
-                    }
+                    attributes: {}
                 };
             },
 
-            componentDidMount: function () {
+            componentWillMount: function () {
                 this.setState({
                     value: this.props.initialValue,
                     error: this.props.error
                 });
             },
 
-            componentWillReceiveProps: function (newProps) {
+            _onChange: function (e) {
+                if (this.props.onChange.call(null, e) === false) {
+                    e.preventDefault();
+                    return;
+                }
+
                 this.setState({
-                    value: newProps.initialValue,
-                    error: newProps.error
+                    value: e.target.value
                 });
             },
 
-            _onChange: function (e) {
-                var value = e.target.value;
+            _createInputElement () {
+                var props = {
+                    type: this.props.type,
+                    className: this.props.classNames.input,
+                    id: this.props.id,
+                    value: this.state.value,
+                    onChange: this._onChange
+                };
 
-                this.setState({
-                    value: value
-                });
+                if (typeof this.props.attributes === "object"
+                    && this.props.attributes) {
+                    Object.keys(this.props.attributes).forEach(function (key) {
+                        props[key] = this.props.attributes[key];
+                    }.bind(this));
+                }
 
-                this.props.onChange(value);
+                return React.createElement('input', props);
             },
 
             render: function () {
+
+                var input = this._createInputElement();
+
                 return (
                     <div className={this.props.classNames.container}>
                         <label className={this.props.classNames.label}
-                               htmlFor={this.props.attributes.id}>{this.props.label}</label>
+                               htmlFor={this.props.id}>{this.props.label}</label>
 
-                        <input type={this.props.attributes.type}
-                               className={this.props.classNames.input}
-                               id={this.props.attributes.id}
-                               value={this.state.value}
-                               onChange={this._onChange}
-                               disabled={this.props.attributes.disabled}/>
+                        {input}
 
                         { this.state.error
                             ? (<span className={this.props.classNames.error}>{this.state.error.message}</span>)
                             : null }
-
                     </div>
                 );
             }
