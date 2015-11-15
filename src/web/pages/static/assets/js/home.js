@@ -15,8 +15,18 @@ requirejs([
             return React.createElement.bind(null, type);
         };
 
+        var empty = function () {
+            while (this.childElementCount > 0) {
+                this.removeChild(this.childNodes[0]);
+            }
+        };
+
         var render = function (reactElement, containerName) {
-            ReactDom.render(reactElement, document.querySelector("[data-react='" + containerName + "']"));
+            var container = document.querySelector("[data-react='" + containerName + "']");
+
+            empty.call(container);
+
+            ReactDom.render(reactElement, container);
         };
 
         var userEditorFactory = factory(UserEditor);
@@ -24,6 +34,7 @@ requirejs([
         var userListFactory = factory(UserList);
 
         var userList = userListFactory({
+
             addButtonClicked: function () {
                 render(userEditorFactory({mode: "add"}), 'user-editor');
             },
@@ -38,18 +49,5 @@ requirejs([
         });
 
         render(userList, 'user-list');
-
-
-
-        /*
-
-         UserList.onEditButtonClicked.on(function (user) {
-         UserEditor.render("edit", user, document.querySelector("[data-react='user-editor']"));
-         });
-
-         UserList.onDeleteButtonClicked.on(function (user) {
-         //UserEditor.render("delete", user, document.querySelector("[data-react='user-editor']"));
-         });
-         */
 
     });

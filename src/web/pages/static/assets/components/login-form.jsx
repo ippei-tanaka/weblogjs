@@ -3,10 +3,12 @@
 define([
         'react',
         'react-dom',
-        'jquery'],
+        'jquery',
+        'jsx!components/input-field'],
     function (React,
               ReactDom,
-              $) {
+              $,
+              InputField) {
 
         var loginUrl = "/admin/login";
         var successUrl = "/admin/";
@@ -16,8 +18,8 @@ define([
             onSubmit: function (e) {
                 e.preventDefault();
 
-                var email = this.refs.email.value.trim();
-                var password = this.refs.password.value.trim();
+                var email = this.state.email.trim();
+                var password = this.state.password.trim();
 
                 $.ajax({
                     url: loginUrl,
@@ -42,29 +44,63 @@ define([
 
             getInitialState: function () {
                 return {
-                    error: false
+                    error: false,
+                    email: "",
+                    password: ""
                 };
             },
 
             render: function () {
+
+                var emailField = React.createElement(InputField, {
+                    id: "LoginFormInputEmail",
+                    type: "email",
+                    label: "Email",
+                    classNames: {
+                        container: "m-lgf-field-container",
+                        label: "m-lgf-label",
+                        input: "m-lgf-input"
+                    },
+                    attributes: {
+                        required: true,
+                        autofocus: true,
+                        placeholder: "Email"
+                    },
+                    onChange: function (e) {
+                        this.setState({
+                            email: e.target.value
+                        });
+                    }.bind(this)
+                });
+
+                var passwordField = React.createElement(InputField, {
+                    id: "LoginFormInputPassword",
+                    type: "password",
+                    label: "Password",
+                    classNames: {
+                        container: "m-lgf-field-container",
+                        label: "m-lgf-label",
+                        input: "m-lgf-input"
+                    },
+                    attributes: {
+                        required: true,
+                        placeholder: "Password"
+                    },
+                    onChange: function (e) {
+                        this.setState({
+                            password: e.target.value
+                        });
+                    }.bind(this)
+                });
+
                 return (
                     <form className="module-login-form" method="post" onSubmit={this.onSubmit}>
                         <div className="m-lgf-wrapper">
                             <h1 className="m-lgf-title">WeblogJS Admin Site</h1>
 
-                            <div className="m-lgf-field-container">
-                                <label for="inputEmail3" className="m-lgf-label">Email</label>
-                                <input type="email" className="m-lgf-input" id="inputEmail" placeholder="Email"
-                                       name="email" ref="email" required
-                                       autofocus/>
-                            </div>
+                            {emailField}
 
-                            <div className="m-lgf-field-container">
-                                <label for="inputPassword3" className="m-lgf-label">Password</label>
-                                <input type="password" className="m-lgf-input" id="inputPassword"
-                                       placeholder="Password" name="password" ref="password"
-                                       required/>
-                            </div>
+                            {passwordField}
 
                             { this.state.error
                                 ? (

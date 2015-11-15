@@ -24,6 +24,18 @@ define([
             return newObj;
         };
 
+        var inputFactory = function (props) {
+            var defaultProps = {
+                classNames: {
+                    container: "m-usc-field-container",
+                    label: "m-usc-label",
+                    input: "m-usc-input",
+                    error: "m-usc-error"
+                }
+            };
+            return React.createElement(InputField, $.extend(defaultProps, props));
+        };
+
         var UserEditor = React.createClass({
 
             _onSubmit: function (e) {
@@ -85,12 +97,8 @@ define([
                 };
             },
 
-            componentDidMount: function () {
+            componentWillMount: function () {
                 this._setUserState(this.getInitialState().user, this.props.user);
-            },
-
-            componentWillReceiveProps: function (newProps) {
-                this._setUserState(this.getInitialState().user, newProps.user);
             },
 
             _setUserState: function (defaultUser, user) {
@@ -105,55 +113,39 @@ define([
 
             render: function () {
 
-                var factory = function (props) {
-                    var defaultProps = {
-                        classNames: {
-                            container: "m-usc-field-container",
-                            label: "m-usc-label",
-                            input: "m-usc-input",
-                            error: "m-usc-error"
-                        }
-                    };
-                    return React.createElement(InputField, $.extend(defaultProps, props));
-                };
-
-                var emailField = factory({
-                    error: this.state.errors.email,
+                var emailField = inputFactory({
+                    id: "UserManagerEmailInput",
+                    type: "email",
                     initialValue: this.state.user.email,
-                    onChange: function (value) {
-                        this._setUserState(this.state.user, {email: value});
+                    error: this.state.errors.email,
+                    onChange: function (e) {
+                        this._setUserState(this.state.user, {email: e.target.value});
                     }.bind(this),
                     attributes: {
-                        id: "UserManagerEmailInput",
-                        type: "email",
                         disabled: this._returnByMode(false, true)
                     },
                     label: "Email address"
                 });
 
-                var passwordField = factory({
-                    error: this.state.errors.password,
+                var passwordField = inputFactory({
+                    id: "UserManagerPasswordInput",
+                    type: "password",
                     initialValue: this.state.user.password,
-                    onChange: function (value) {
-                        this._setUserState(this.state.user, {password: value});
+                    error: this.state.errors.password,
+                    onChange: function (e) {
+                        this._setUserState(this.state.user, {password: e.target.value});
                     }.bind(this),
-                    attributes: {
-                        id: "UserManagerPasswordInput",
-                        type: "password"
-                    },
                     label: "Password"
                 });
 
-                var displayNameField = factory({
-                    error: this.state.errors.display_name,
+                var displayNameField = inputFactory({
+                    id: "UserManagerDisplayNameInput",
+                    type: "text",
                     initialValue: this.state.user.display_name,
-                    onChange: function (value) {
-                        this._setUserState(this.state.user, {display_name: value});
+                    error: this.state.errors.display_name,
+                    onChange: function (e) {
+                        this._setUserState(this.state.user, {display_name: e.target.value});
                     }.bind(this),
-                    attributes: {
-                        id: "UserManagerDisplayNameInput",
-                        type: "text"
-                    },
                     label: "Display Name"
                 });
 
