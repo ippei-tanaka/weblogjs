@@ -1,10 +1,17 @@
 "use strict";
 
 requirejs([
+        'react',
+        'react-dom',
         'jsx!components/login-form'
     ],
     function (
+        React,
+        ReactDom,
         LoginForm
     ) {
-        LoginForm.render(document.querySelector("[data-react='login-form']"));
+        ReactDom.render(
+            React.createElement(LoginForm),
+            document.querySelector("[data-react='login-form']")
+        );
     });

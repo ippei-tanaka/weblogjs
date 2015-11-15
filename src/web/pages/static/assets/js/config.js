@@ -13,10 +13,11 @@ requirejs.config({
         "jsx": "../vendors/jsx",
         "text": "../vendors/text",
         "JSXTransformer": "../vendors/JSXTransformer",
-        "react": "../vendors/react-with-addons.min",
+        "react": "../vendors/react-with-addons",
         "react-dom": "../vendors/react-dom.min",
         "global-events": "modules/global-events",
         "event": "modules/event",
+        "router": "modules/router",
         "moment": "../vendors/moment"
     }
 });

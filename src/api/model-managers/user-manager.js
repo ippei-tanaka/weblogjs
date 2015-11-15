@@ -55,16 +55,16 @@ var updateById = (id, userInfo) => {
 
     var obj = {};
 
-    if (userInfo.email) {
+    if (typeof userInfo.email === "string") {
         obj.email = userInfo.email;
     }
 
     // TODO: add password confirmation
-    if (userInfo.password) {
+    if (typeof userInfo.password === "string") {
         obj.password = userInfo.password;
     }
 
-    if (userInfo.display_name) {
+    if (typeof userInfo.display_name === "string") {
         obj.display_name = userInfo.display_name;
     }
 

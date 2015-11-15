@@ -47,6 +47,12 @@ define([
                 });
             },
 
+            componentWillReceiveProps: function (newProps) {
+                this.setState({
+                    error: newProps.error
+                });
+            },
+
             _onChange: function (e) {
                 if (this.props.onChange.call(null, e) === false) {
                     e.preventDefault();
