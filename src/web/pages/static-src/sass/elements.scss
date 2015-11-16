@@ -3,12 +3,10 @@
 
 html,
 body {
-    width: 100%;
-    height: 100%;
     position: relative;
     font-family: $font-family-default;
     font-size: $font-size-base;
-    color: $font-color-default;
+    color: $color-default-font;
 }
 
 /*----------------------------
@@ -36,37 +34,6 @@ input[type="text"],
 input[type="email"],
 input[type="password"] {
     @extend %text-input;
-}
-
-/*----------------------------
- Button
-----------------------------*/
-%button {
-    font-size: $font-size-base;
-    font-family: $font-family-lato;
-    display: inline-block;
-    padding: 8px 20px;
-    border: 0;
-    color: $color-btn-calm-text;
-    cursor: pointer;
-    @include background-gradient(
-            $color-btn-calm-bg-start,
-            $color-btn-calm-bg-end);
-    @include box-sizing();
-    @include border-radius(20px);
-    @include outline-radius(20px);
-
-    &:hover {
-        @include background-gradient(
-                $color-btn-calm-hover-bg-start,
-                $color-btn-calm-hover-bg-end);
-    }
-}
-
-button,
-[type="submit"],
-[type="reset"] {
-    @extend %button;
 }
 
 

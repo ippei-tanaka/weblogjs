@@ -6,21 +6,18 @@ requirejs([
         'router',
         'jsx!components/navigation',
         'jsx!components/user-list',
-        'jsx!components/user-editor'
+        'jsx!components/user-editor',
+        'jsx!components/popup'
     ],
     function (React,
               ReactDom,
               Router,
               Navigation,
               UserList,
-              UserEditor) {
+              UserEditor,
+              PopUp) {
 
         var empty = function (element) {
-            /*
-            while (element.childElementCount > 0) {
-                element.removeChild(element.childNodes[0]);
-            }
-            */
             ReactDom.unmountComponentAtNode(element);
         };
 
@@ -36,13 +33,56 @@ requirejs([
         var userList = React.createElement(UserList, {
 
             addButtonClicked: function () {
-                var userEditor = React.createElement(UserEditor, {mode: "add"});
-                render(userEditor, reactSelector('user-editor'));
+                var container = reactSelector('user-editor');
+
+                var userEditor = React.createElement(
+                    UserEditor,
+                    {
+                        mode: "add",
+                        onComplete: function () {
+                            empty(container);
+                        }
+                    }
+                );
+
+                var popup = React.createElement(
+                    PopUp,
+                    {
+                        onClosed: function () {
+                            empty(container);
+                        },
+                        content: userEditor
+                    }
+                );
+
+                render(popup, container);
             },
 
             editButtonClicked: function (user) {
-                var userEditor = React.createElement(UserEditor, {mode: "edit", user: user});
-                render(userEditor, reactSelector('user-editor'));
+                var container = reactSelector('user-editor');
+
+                var userEditor = React.createElement(
+                    UserEditor,
+                    {
+                        mode: "edit",
+                        user: user,
+                        onComplete: function () {
+                            empty(container);
+                        }
+                    }
+                );
+
+                var popup = React.createElement(
+                    PopUp,
+                    {
+                        onClosed: function () {
+                            empty(container);
+                        },
+                        content: userEditor
+                    }
+                );
+
+                render(popup, container);
             },
 
             deleteButtonClicked: function () {

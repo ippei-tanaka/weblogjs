@@ -52,8 +52,6 @@ table {
 ------------------------------------------------------------- */
 html,
 body {
-  width: 100%;
-  height: 100%;
   position: relative;
   font-family: Helvetica, sans-serif;
   font-size: 16px;
@@ -95,11 +93,38 @@ input[type="password"] {
     background-color: #f0f0f0; }
 
 /*----------------------------
+ Table
+----------------------------*/
+table td, table th {
+  padding: 10px;
+  border: 1px solid #cccccc; }
+
+table thead tr {
+  background-color: #2a6aa6;
+  color: #ffffff; }
+
+table tbody tr {
+  background-color: #ffffff; }
+  table tbody tr:nth-child(2n) {
+    background-color: #eef4fb; }
+
+/* -------------------------------------------------------------
+  Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
+  By: Matthieu Aussaguel, http://www.mynameismatthieu.com, @matthieu_tweets
+
+  List of CSS3 Sass Mixins File to be @imported and @included as you need
+
+  The purpose of this library is to facilitate the use of CSS3 on different browsers avoiding HARD TO READ and NEVER
+  ENDING css files
+
+  note: All CSS3 Properties are being supported by Safari 5
+  more info: http://www.findmebyip.com/litmus/#css3-properties
+
+------------------------------------------------------------- */
+/*----------------------------
  Button
 ----------------------------*/
-button,
-[type="submit"],
-[type="reset"] {
+.module-button {
   font-size: 16px;
   font-family: "Lato", sans-serif;
   display: inline-block;
@@ -133,9 +158,7 @@ button,
   -ms-outline-radius: 20px;
   -o-outline-radius: 20px;
   outline-radius: 20px; }
-  button:hover,
-  [type="submit"]:hover,
-  [type="reset"]:hover {
+  .module-button:hover {
     background-color: #64a0d8;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#64a0d8), to(#88b6e1));
     background-image: -webkit-linear-gradient(top, #64a0d8, #88b6e1);
@@ -145,45 +168,30 @@ button,
     background-image: linear-gradient(top, #64a0d8, #88b6e1);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#64a0d8', endColorStr='#88b6e1'); }
 
+.module-button.m-btn-clear {
+  padding: 0;
+  color: #000000;
+  background-color: rgba(255, 255, 255, 0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0)));
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+  background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+  background-image: linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='rgba(255, 255, 255, 0)', endColorStr='rgba(255, 255, 255, 0)'); }
+
 /*----------------------------
- Table
+ Container
 ----------------------------*/
-table td, table th {
-  padding: 10px;
-  border: 1px solid #cccccc; }
-
-table thead tr {
-  background-color: #2a6aa6;
-  color: #ffffff; }
-
-table tbody tr {
-  background-color: #ffffff; }
-  table tbody tr:nth-child(2n) {
-    background-color: #eef4fb; }
-
-/* -------------------------------------------------------------
-  Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
-  By: Matthieu Aussaguel, http://www.mynameismatthieu.com, @matthieu_tweets
-
-  List of CSS3 Sass Mixins File to be @imported and @included as you need
-
-  The purpose of this library is to facilitate the use of CSS3 on different browsers avoiding HARD TO READ and NEVER
-  ENDING css files
-
-  note: All CSS3 Properties are being supported by Safari 5
-  more info: http://www.findmebyip.com/litmus/#css3-properties
-
-------------------------------------------------------------- */
 .module-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
   font-family: "Lato", sans-serif; }
 
-.module-login-page {
-  width: 100%;
-  height: 100%; }
-
+/*----------------------------
+ Login Page
+----------------------------*/
+/*----------------------------
+ Login Form
+----------------------------*/
 .module-login-form {
   width: 100%;
   height: 100%;
@@ -206,46 +214,99 @@ table tbody tr {
   .module-login-form .m-lgf-error {
     color: #ff0000; }
 
-.module-user-list .m-usl-title {
-  font-size: 26px;
-  margin-bottom: 20px; }
+/*----------------------------
+ User List
+----------------------------*/
+.module-user-list {
+  width: 100%;
+  overflow: auto; }
+  .module-user-list .m-usl-title {
+    font-size: 26px;
+    margin-bottom: 20px; }
+  .module-user-list .m-usl-table {
+    width: 100%; }
+  .module-user-list .m-usl-hidden-cell {
+    display: none; }
+  .module-user-list .m-usl-center {
+    text-align: center; }
+  .module-user-list .m-usl-add-icon {
+    color: #3c9d0f;
+    font-size: 20px; }
+  .module-user-list .m-usl-add-button {
+    cursor: pointer;
+    color: #3c9d0f;
+    margin: 10px 0; }
+  .module-user-list .m-usl-edit-icon {
+    color: #3c9d0f;
+    font-size: 20px;
+    cursor: pointer; }
+  .module-user-list .m-usl-delete-icon {
+    color: #aa0000;
+    font-size: 20px;
+    cursor: pointer; }
 
-.module-user-list .m-usl-table {
-  width: 100%; }
-
-.module-user-list .m-usl-hidden-cell {
-  display: none; }
-
-.module-user-list .m-usl-center {
-  text-align: center; }
-
-.module-user-list .m-usl-add-icon {
-  color: #3c9d0f;
-  font-size: 20px; }
-
-.module-user-list .m-usl-add-button {
-  cursor: pointer;
-  color: #3c9d0f; }
-
-.module-user-list .m-usl-edit-icon {
-  color: #3c9d0f;
-  font-size: 20px;
-  cursor: pointer; }
-
-.module-user-list .m-usl-delete-icon {
-  color: #aa0000;
-  font-size: 20px;
-  cursor: pointer; }
-
+/*----------------------------
+ User Editor
+----------------------------*/
 .module-user-creator .m-usc-title {
   font-size: 26px;
   margin-bottom: 20px; }
 
 .module-user-creator .m-usc-field-container {
-  margin-bottom: 20px; }
+  margin-top: 20px; }
 
 .module-user-creator .m-usc-input {
   width: 100%; }
 
 .module-user-creator .m-usc-error {
   color: #ff0000; }
+
+/*----------------------------
+ Popup
+----------------------------*/
+.module-popup {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0; }
+  .module-popup .m-ppp-background {
+    position: absolute;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5); }
+  .module-popup .m-ppp-content-frame {
+    width: 500px;
+    position: relative;
+    z-index: 10;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    padding: 30px;
+    margin: 30px auto;
+    background-color: #ffffff; }
+    @media (max-width: 499px) {
+      .module-popup .m-ppp-content-frame {
+        width: 90%; } }
+  .module-popup .m-ppp-close-button {
+    position: absolute;
+    right: 17px;
+    top: 13px; }
+  .module-popup .m-ppp-close-icon {
+    font-size: 20px;
+    color: #2a6aa6; }
+  .module-popup .m-ppp-content-container {
+    width: 100%;
+    overflow: auto; }

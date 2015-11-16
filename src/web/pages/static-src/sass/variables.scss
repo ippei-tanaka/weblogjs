@@ -2,7 +2,7 @@
 
 $font-family-default: Helvetica, sans-serif;
 $font-family-lato: 'Lato', sans-serif;
-$font-color-default: #000000;
+$color-default-font: #000000;
 
 $font-size-base: 16px;
 $font-size-header: 38px;
@@ -28,4 +28,9 @@ $color-table-calm-tbody-bg2: lighten($color-table-calm-thead-bg, 55%);
 $color-icon-add: #3c9d0f;
 $color-icon-edit: #3c9d0f;
 $color-icon-delete: #aa0000;
+$color-icon-close: #2a6aa6;
+
 $color-error-message: #ff0000;
+
+$color-popup-background: rgba(0, 0, 0, 0.5);
+$color-popup-content-background: #ffffff;

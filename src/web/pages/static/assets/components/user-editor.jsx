@@ -74,7 +74,7 @@ define([
                 var emailField = inputFactory({
                     id: "UserManagerEmailInput",
                     type: "email",
-                    initialValue: this.props.user.email,
+                    initialValue: this.state.user.email,
                     error: this.state.errors.email,
                     onChange: function (e) {
                         this._setUserState(this.state.user, {email: e.target.value});
@@ -88,7 +88,7 @@ define([
                 var passwordField = inputFactory({
                     id: "UserManagerPasswordInput",
                     type: "password",
-                    initialValue: this.props.user.password,
+                    initialValue: this.state.user.password,
                     error: this.state.errors.password,
                     onChange: function (e) {
                         this._setUserState(this.state.user, {password: e.target.value});
@@ -99,7 +99,7 @@ define([
                 var displayNameField = inputFactory({
                     id: "UserManagerDisplayNameInput",
                     type: "text",
-                    initialValue: this.props.user.display_name,
+                    initialValue: this.state.user.display_name,
                     error: this.state.errors.display_name,
                     onChange: function (e) {
                         this._setUserState(this.state.user, {display_name: e.target.value});
@@ -119,7 +119,7 @@ define([
                         {displayNameField}
 
                         <div className="m-usc-field-container">
-                            <button type="submit">{this._returnByMode("Create", "Edit")}</button>
+                            <button className="module-button" type="submit">{this._returnByMode("Create", "Edit")}</button>
                         </div>
 
                     </form>
@@ -148,7 +148,14 @@ define([
                 })
                     .then(function () {
                         this.setState(this.getInitialState());
-                        GlobalEvents.userCreated.fire();
+
+                        if (this.props.mode === 'add') {
+                            GlobalEvents.userCreated.fire();
+                        } else {
+                            GlobalEvents.userUpdated.fire();
+                        }
+
+                        this.props.onComplete();
                     }.bind(this))
 
                     .fail(function (xhr) {

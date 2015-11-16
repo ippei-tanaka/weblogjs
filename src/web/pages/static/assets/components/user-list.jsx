@@ -82,7 +82,7 @@ define([
                         </table>
 
                         <div>
-                            <a className="m-usl-add-button" onClick={this.onAddButtonClicked}><i className="fa fa-plus-square-o m-usl-add-icon"></i> Add</a>
+                            <button className="module-button m-btn-clear m-usl-add-button" onClick={this.onAddButtonClicked}><i className="fa fa-plus-square-o m-usl-add-icon"></i> Add</button>
                         </div>
                     </div>
                 );
@@ -112,8 +112,8 @@ define([
                         <th>{this.props.number}</th>
                         <td>{this.props.user.display_name}</td>
                         <td>{this.props.user.email}</td>
-                        <td className="m-usl-center"><i title="Edit" className="fa fa-pencil-square-o m-usl-edit-icon" onClick={this.onEditButtonClicked}></i></td>
-                        <td className="m-usl-center"><i title="Delete" className="fa fa-trash-o m-usl-delete-icon" onClick={this.onDeleteButtonClicked}></i></td>
+                        <td className="m-usl-center"><button className="module-button m-btn-clear" onClick={this.onEditButtonClicked}><i title="Edit" className="fa fa-pencil-square-o m-usl-edit-icon"></i></button></td>
+                        <td className="m-usl-center"><button className="module-button m-btn-clear" onClick={this.onDeleteButtonClicked}><i title="Delete" className="fa fa-trash-o m-usl-delete-icon"></i></button></td>
                         <td className="m-usl-hidden-cell">{created}</td>
                         <td className="m-usl-hidden-cell">{updated}</td>
                     </tr>
