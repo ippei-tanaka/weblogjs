@@ -1,17 +1,57 @@
 @import "mixins";
 @import "variables";
 
+/*----------------------------
+ Button
+----------------------------*/
+.module-button {
+    font-size: $font-size-base;
+    font-family: $font-family-lato;
+    display: inline-block;
+    padding: 8px 20px;
+    border: 0;
+    color: $color-btn-calm-text;
+    cursor: pointer;
+    @include background-gradient(
+            $color-btn-calm-bg-start,
+            $color-btn-calm-bg-end);
+    @include box-sizing();
+    @include border-radius(20px);
+    @include outline-radius(20px);
+
+    &:hover {
+        @include background-gradient(
+                $color-btn-calm-hover-bg-start,
+                $color-btn-calm-hover-bg-end);
+    }
+}
+
+.module-button.m-btn-clear {
+    padding: 0;
+    color: $color-default-font;
+    @include background-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0))
+}
+
+/*----------------------------
+ Container
+----------------------------*/
+
 .module-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
     font-family: $font-family-lato;
 }
 
+/*----------------------------
+ Login Page
+----------------------------*/
+
 .module-login-page {
-    width: 100%;
-    height: 100%;
+    //width: 100%;
+    //height: 100%;
 }
+
+/*----------------------------
+ Login Form
+----------------------------*/
 
 .module-login-form {
     width: 100%;
@@ -51,7 +91,13 @@
 
 }
 
+/*----------------------------
+ User List
+----------------------------*/
+
 .module-user-list {
+    width: 100%;
+    overflow: auto;
 
     .m-usl-title {
         font-size: $font-size-sub-header;
@@ -78,6 +124,7 @@
     .m-usl-add-button {
         cursor: pointer;
         color: $color-icon-add;
+        margin: 10px 0;
     }
 
     .m-usl-edit-icon {
@@ -93,6 +140,11 @@
     }
 }
 
+
+/*----------------------------
+ User Editor
+----------------------------*/
+
 .module-user-creator {
 
     .m-usc-title {
@@ -101,7 +153,7 @@
     }
 
     .m-usc-field-container {
-        margin-bottom: 20px;
+        margin-top: 20px;
     }
 
     .m-usc-label {
@@ -117,6 +169,58 @@
     }
 }
 
-.module-navigation {
 
+/*----------------------------
+ Popup
+----------------------------*/
+
+.module-popup {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+
+    .m-ppp-background {
+        position: absolute;
+        z-index: 1;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background-color: $color-popup-background;
+    }
+
+    .m-ppp-content-frame {
+        $frame-max-width: 500px;
+        width: $frame-max-width;
+        position: relative;
+        z-index: 10;
+        @include box-sizing();
+        @include border-radius(10px);
+        padding: 30px;
+        margin: 30px auto;
+        background-color: $color-popup-content-background;
+
+        @media (max-width: #{$frame-max-width - 1px}) {
+            width: 90%;
+        }
+    }
+
+    .m-ppp-close-button {
+        position: absolute;
+        right: 17px;
+        top: 13px;
+    }
+
+    .m-ppp-close-icon {
+        font-size: 20px;
+        color: $color-icon-close;
+    }
+
+    .m-ppp-content-container {
+        width: 100%;
+        //height: 200px;
+        overflow: auto;
+    }
 }
