@@ -3,8 +3,8 @@
 define([
         'react',
         'moment',
-        'global-events',
-        'event',
+        'services/global-events',
+        'services/event',
         'jquery'],
     function (React,
               Moment,
@@ -123,27 +123,6 @@ define([
             onDeleteButtonClicked: function (e) {
                 e.preventDefault();
                 this.props.events.deleteButtonClicked.fire(this.props.user);
-
-                // TODO: Move the code for deleting a user to another component.
-                //---
-                var message = 'Do you want to delete "' + this.props.user.display_name + '"?';
-
-                if (confirm(message)) {
-                    $.ajax({
-                        url: url + "/" + this.props.user._id,
-                        dataType: 'json',
-                        cache: false,
-                        method: 'delete'
-                    })
-                        .then(function () {
-                            GlobalEvents.userDeleted.fire();
-                        }.bind(this))
-
-                        .fail(function (xhr, status, err) {
-                            console.error(url, status, err.toString());
-                        }.bind(this));
-                }
-                //---
             },
 
             onEditButtonClicked: function (e) {

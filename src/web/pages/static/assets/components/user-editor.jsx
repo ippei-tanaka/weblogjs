@@ -2,13 +2,16 @@
 
 define([
         'react',
-        'global-events',
+        'services/global-events',
         'jquery',
-        'jsx!components/input-field'],
+        'jsx!components/input-field',
+        'jsx!components/confirmation'
+    ],
     function (React,
               GlobalEvents,
               $,
-              InputField) {
+              InputField,
+              Confirmation) {
 
         var url = "/api/v1/users";
 
@@ -55,12 +58,14 @@ define([
 
             getDefaultProps: function () {
                 return {
-                    mode: "", // 'add' or 'edit'
+                    mode: "", // 'add', 'edit' or 'del'
                     user: {
                         _id: "",
                         email: "",
                         password: "",
                         display_name: ""
+                    },
+                    onComplete: function () {
                     }
                 };
             },
@@ -70,6 +75,14 @@ define([
             },
 
             render: function () {
+                return this._chooseByMode({
+                    add: this._renderForm,
+                    edit: this._renderForm,
+                    del: this._renderConfirmation
+                })();
+            },
+
+            _renderForm: function () {
 
                 var emailField = inputFactory({
                     id: "UserManagerEmailInput",
@@ -80,7 +93,8 @@ define([
                         this._setUserState(this.state.user, {email: e.target.value});
                     }.bind(this),
                     attributes: {
-                        disabled: this._returnByMode(false, true)
+                        disabled: this._chooseByMode({add: false, edit: true}),
+                        ref: this._chooseByMode({add: this._autoFocus, edit: null})
                     },
                     label: "Email address"
                 });
@@ -96,6 +110,8 @@ define([
                     label: "Password"
                 });
 
+                passwordField = this._chooseByMode({add: passwordField, edit: null});
+
                 var displayNameField = inputFactory({
                     id: "UserManagerDisplayNameInput",
                     type: "text",
@@ -104,65 +120,131 @@ define([
                     onChange: function (e) {
                         this._setUserState(this.state.user, {display_name: e.target.value});
                     }.bind(this),
+                    attributes: {
+                        ref: this._chooseByMode({add: null, edit: this._autoFocus})
+                    },
                     label: "Display Name"
                 });
 
+                var title = this._chooseByMode({add: "Create a new user", edit: "Edit the user"});
+
+                var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
+
                 return (
                     <form className="module-user-editor" onSubmit={this._onSubmit}>
-
-                        <h2 className="m-ued-title">{this._returnByMode("Create a new user", "Edit the user")}</h2>
-
+                        <h2 className="m-ued-title">{title}</h2>
                         {emailField}
-
-                        {this._returnByMode(passwordField, null)}
-
+                        {passwordField}
                         {displayNameField}
-
                         <div className="m-ued-field-container">
-                            <button className="module-button" type="submit">{this._returnByMode("Create", "Edit")}</button>
+                            <button className="module-button"
+                                    type="submit">{buttonLabel}</button>
                         </div>
-
                     </form>
+                );
+            },
+
+            _renderConfirmation: function () {
+                return (
+                    <Confirmation
+                        mode="choose"
+                        onApproved={this._onDeleteApproved}
+                        onCanceled={this._onDeleteCanceled}
+                        >
+                        Do you want to delete "{this.state.user.display_name}"?
+                    </Confirmation>
                 );
             },
 
             _onSubmit: function (e) {
                 e.preventDefault();
 
-                var data = this._returnByMode(
-                    {
-                        email: this.state.user.email.trim(),
-                        password: this.state.user.password.trim(),
-                        display_name: this.state.user.display_name.trim()
-                    },
-                    {
-                        display_name: this.state.user.display_name.trim()
-                    });
+                var ajaxFunc = this._chooseByMode({
+                    add: this._createUser,
+                    edit: this._updateUser
+                });
 
-                $.ajax({
-                    url: this._returnByMode(url, url + '/' + this.props.user._id),
-                    dataType: 'json',
-                    cache: false,
-                    method: this._returnByMode('post', 'put'),
-                    data: data
-                })
+                ajaxFunc()
                     .then(function () {
                         this.setState(this.getInitialState());
-
-                        if (this.props.mode === 'add') {
-                            GlobalEvents.userCreated.fire();
-                        } else {
-                            GlobalEvents.userUpdated.fire();
-                        }
-
                         this.props.onComplete();
                     }.bind(this))
-
                     .fail(function (xhr) {
                         this.setState({
                             errors: xhr.responseJSON.errors
                         });
                     }.bind(this));
+            },
+
+            _onDeleteApproved: function () {
+                this._deleteUser().then(function () {
+                    this.props.onComplete();
+                }.bind(this)).fail(function (xhr) {
+                    console.error(xhr.responseJSON.errors);
+                });
+            },
+
+            _onDeleteCanceled: function () {
+                this.props.onComplete();
+            },
+
+            _createUser: function () {
+
+                var data = {
+                    email: this.state.user.email.trim(),
+                    password: this.state.user.password.trim(),
+                    display_name: this.state.user.display_name.trim()
+                };
+
+                return this._sendHttpRequest(url, 'post', data)
+                    .then(function () {
+                        GlobalEvents.userCreated.fire();
+                    });
+            },
+
+            _autoFocus: function (input) {
+                if (input != null) {
+                    input.focus();
+                }
+            },
+
+            _updateUser: function () {
+
+                var ajaxUrl = url + '/' + this.props.user._id;
+
+                var data = {
+                    display_name: this.state.user.display_name.trim()
+                };
+
+                return this._sendHttpRequest(ajaxUrl, 'put', data)
+                    .then(function () {
+                        GlobalEvents.userUpdated.fire();
+                    });
+            },
+
+            _deleteUser: function () {
+                var ajaxUrl = url + '/' + this.props.user._id;
+
+                return this._sendHttpRequest(ajaxUrl, 'delete')
+                    .then(function () {
+                        GlobalEvents.userDeleted.fire();
+                    });
+            },
+
+
+            _sendHttpRequest: function (url, method, data) {
+                var options = {
+                    url: url,
+                    dataType: 'json',
+                    cache: false,
+                    method: method
+                };
+
+                if (data) {
+                    options.data = data;
+                }
+
+                return $.ajax(options);
             },
 
             _setUserState: function (defaultUser, user) {
@@ -171,10 +253,17 @@ define([
                 });
             },
 
-            _returnByMode: function (forAddMode, forEditMode) {
-                return this.props.mode === 'add' ? forAddMode : forEditMode;
+            _chooseByMode: function (options) {
+                if (this.props.mode === 'add') {
+                    return options.add;
+                } else if (this.props.mode === 'edit') {
+                    return options.edit;
+                } else if (this.props.mode === 'del') {
+                    return options.del;
+                } else {
+                    throw new Error('Mode should have been selected.');
+                }
             }
-
         });
 
         return UserEditor;
