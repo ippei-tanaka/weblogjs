@@ -54,9 +54,6 @@
 ----------------------------*/
 
 .module-login-form {
-    width: 100%;
-    height: 100%;
-    position: relative;
     background-color: $color-bg-plain;
 
     .m-lgf-wrapper {
@@ -145,26 +142,26 @@
  User Editor
 ----------------------------*/
 
-.module-user-creator {
+.module-user-editor {
 
-    .m-usc-title {
+    .m-ued-title {
         font-size: $font-size-sub-header;
         margin-bottom: 20px;
     }
 
-    .m-usc-field-container {
+    .m-ued-field-container {
         margin-top: 20px;
     }
 
-    .m-usc-label {
+    .m-ued-label {
         //display: none;
     }
 
-    .m-usc-input {
+    .m-ued-input {
         width: 100%;
     }
 
-    .m-usc-error {
+    .m-ued-error {
         color: $color-error-message;
     }
 }
@@ -175,7 +172,7 @@
 ----------------------------*/
 
 .module-popup {
-    position: absolute;
+    position: fixed;
     height: 100%;
     width: 100%;
     top: 0;
@@ -191,7 +188,21 @@
         background-color: $color-popup-background;
     }
 
-    .m-ppp-content-frame {
+    .m-ppp-wrapper1 {
+        display: table;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+    }
+
+    .m-ppp-wrapper2 {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    .m-ppp-frame {
         $frame-max-width: 500px;
         width: $frame-max-width;
         position: relative;
