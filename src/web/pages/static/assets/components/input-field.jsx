@@ -1,10 +1,8 @@
 "use strict";
 
 define([
-        'react',
-        'jquery'],
-    function (React,
-              $) {
+        'react'],
+    function (React) {
 
         var InputField = React.createClass({
 
