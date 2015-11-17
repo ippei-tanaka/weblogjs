@@ -13,21 +13,19 @@ define([
               InputField,
               Confirmation) {
 
-        var url = "/api/v1/users";
+        var url = "/api/v1/categories";
 
-        var UserEditor = React.createClass({
+        var CategoryEditor = React.createClass({
 
             getInitialState: function () {
                 return {
                     errors: {
-                        email: undefined,
-                        password: undefined,
-                        display_name: undefined
+                        name: undefined,
+                        slug: undefined
                     },
-                    user: {
-                        email: "",
-                        password: "",
-                        display_name: ""
+                    category: {
+                        name: "",
+                        slug: ""
                     }
                 };
             },
@@ -35,11 +33,10 @@ define([
             getDefaultProps: function () {
                 return {
                     mode: "", // 'add', 'edit' or 'del'
-                    user: {
+                    category: {
                         _id: "",
-                        email: "",
-                        password: "",
-                        display_name: ""
+                        name: "",
+                        slug: ""
                     },
                     onComplete: function () {
                     }
@@ -47,7 +44,7 @@ define([
             },
 
             componentWillMount: function () {
-                this._setUserState(this.getInitialState().user, this.props.user);
+                this._setUserState(this.getInitialState().category, this.props.category);
             },
 
             render: function () {
@@ -60,59 +57,44 @@ define([
 
             _renderForm: function () {
 
-                var emailField = this._inputFactory({
-                    id: "UserManagerEmailInput",
-                    type: "email",
-                    initialValue: this.state.user.email,
-                    error: this.state.errors.email,
-                    onChange: function (e) {
-                        this._setUserState(this.state.user, {email: e.target.value});
-                    }.bind(this),
-                    attributes: {
-                        disabled: this._chooseByMode({add: false, edit: true}),
-                        ref: this._chooseByMode({add: this._autoFocus, edit: null})
-                    },
-                    label: "Email address"
-                });
-
-                var passwordField = this._inputFactory({
-                    id: "UserManagerPasswordInput",
-                    type: "password",
-                    initialValue: this.state.user.password,
-                    error: this.state.errors.password,
-                    onChange: function (e) {
-                        this._setUserState(this.state.user, {password: e.target.value});
-                    }.bind(this),
-                    label: "Password"
-                });
-
-                passwordField = this._chooseByMode({add: passwordField, edit: null});
-
-                var displayNameField = this._inputFactory({
-                    id: "UserManagerDisplayNameInput",
+                var nameField = this._inputFactory({
+                    id: "CategoryEditorNameInput",
                     type: "text",
-                    initialValue: this.state.user.display_name,
-                    error: this.state.errors.display_name,
+                    initialValue: this.state.category.name,
+                    error: this.state.errors.name,
                     onChange: function (e) {
-                        this._setUserState(this.state.user, {display_name: e.target.value});
+                        this._setUserState(this.state.category, {name: e.target.value});
                     }.bind(this),
                     attributes: {
-                        ref: this._chooseByMode({add: null, edit: this._autoFocus})
+                        ref: this._autoFocus
                     },
-                    label: "Display Name"
+                    label: "Category Name"
                 });
 
-                var title = this._chooseByMode({add: "Create a new user", edit: "Edit the user"});
+                var slugField = this._inputFactory({
+                    id: "CategoryEditorSlugInput",
+                    type: "text",
+                    initialValue: this.state.category.slug,
+                    error: this.state.errors.slug,
+                    onChange: function (e) {
+                        this._setUserState(this.state.category, {slug: e.target.value});
+                    }.bind(this),
+                    attributes: {
+                        ref: this._autoFocus
+                    },
+                    label: "Slug"
+                });
+
+                var title = this._chooseByMode({add: "Create a new category", edit: "Edit the category"});
 
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
 
                 return (
-                    <form className="module-user-editor" onSubmit={this._onSubmit}>
-                        <h2 className="m-ued-title">{title}</h2>
-                        {emailField}
-                        {passwordField}
-                        {displayNameField}
-                        <div className="m-ued-field-container">
+                    <form className="module-category-editor" onSubmit={this._onSubmit}>
+                        <h2 className="m-cge-title">{title}</h2>
+                        {nameField}
+                        {slugField}
+                        <div className="m-cge-field-container">
                             <button className="module-button"
                                     type="submit">{buttonLabel}</button>
                         </div>
@@ -127,7 +109,7 @@ define([
                         onApproved={this._onDeleteApproved}
                         onCanceled={this._onDeleteCanceled}
                         >
-                        Do you want to delete "{this.state.user.display_name}"?
+                        Do you want to delete "{this.state.category.name}"?
                     </Confirmation>
                 );
             },
@@ -135,10 +117,10 @@ define([
             _inputFactory: function (props) {
                 var defaultProps = {
                     classNames: {
-                        container: "m-ued-field-container",
-                        label: "m-ued-label",
-                        input: "m-ued-input",
-                        error: "m-ued-error"
+                        container: "m-cge-field-container",
+                        label: "m-cge-label",
+                        input: "m-cge-input",
+                        error: "m-cge-error"
                     }
                 };
                 return React.createElement(InputField, $.extend(defaultProps, props));
@@ -179,37 +161,37 @@ define([
             _createUser: function () {
 
                 var data = {
-                    email: this.state.user.email.trim(),
-                    password: this.state.user.password.trim(),
-                    display_name: this.state.user.display_name.trim()
+                    name: this.state.category.name.trim(),
+                    slug: this.state.category.slug.trim()
                 };
 
                 return this._sendHttpRequest(url, 'post', data)
                     .then(function () {
-                        GlobalEvents.userCreated.fire();
+                        GlobalEvents.categoryCreated.fire();
                     });
             },
 
             _updateUser: function () {
 
-                var ajaxUrl = url + '/' + this.props.user._id;
+                var ajaxUrl = url + '/' + this.props.category._id;
 
                 var data = {
-                    display_name: this.state.user.display_name.trim()
+                    name: this.state.category.name.trim(),
+                    slug: this.state.category.slug.trim()
                 };
 
                 return this._sendHttpRequest(ajaxUrl, 'put', data)
                     .then(function () {
-                        GlobalEvents.userUpdated.fire();
+                        GlobalEvents.categoryUpdated.fire();
                     });
             },
 
             _deleteUser: function () {
-                var ajaxUrl = url + '/' + this.props.user._id;
+                var ajaxUrl = url + '/' + this.props.category._id;
 
                 return this._sendHttpRequest(ajaxUrl, 'delete')
                     .then(function () {
-                        GlobalEvents.userDeleted.fire();
+                        GlobalEvents.categoryDeleted.fire();
                     });
             },
 
@@ -234,22 +216,10 @@ define([
                 return $.ajax(options);
             },
 
-            _setUserState: function (defaultUser, user) {
+            _setUserState: function (defaultUser, category) {
                 this.setState({
-                    user: $.extend(defaultUser, this._flatten(user))
+                    category: $.extend(defaultUser, this._flatten(category))
                 });
-            },
-
-            _flatten: function (obj) {
-                var newObj = {};
-
-                Object.keys(obj).forEach(function (key) {
-                    if (typeof obj[key] !== 'undefined') {
-                        newObj[key] = obj[key];
-                    }
-                });
-
-                return newObj;
             },
 
             _chooseByMode: function (options) {
@@ -262,9 +232,21 @@ define([
                 } else {
                     throw new Error('Mode should have been selected.');
                 }
+            },
+
+            _flatten: function (obj) {
+                var newObj = {};
+
+                Object.keys(obj).forEach(function (key) {
+                    if (typeof obj[key] !== 'undefined') {
+                        newObj[key] = obj[key];
+                    }
+                });
+
+                return newObj;
             }
         });
 
-        return UserEditor;
+        return CategoryEditor;
 
     });

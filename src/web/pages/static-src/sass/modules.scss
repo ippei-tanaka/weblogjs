@@ -180,6 +180,85 @@
 
 
 /*----------------------------
+ Category List
+----------------------------*/
+
+.module-category-list {
+    width: 100%;
+    overflow: auto;
+
+    .m-cgl-title {
+        font-size: $font-size-sub-header;
+        margin-bottom: 20px;
+    }
+
+    .m-cgl-table {
+        width: 100%;
+    }
+
+    .m-cgl-hidden-cell {
+        display: none;
+    }
+
+    .m-cgl-center {
+        text-align: center;
+    }
+
+    .m-cgl-add-icon {
+        color: $color-icon-add;
+        font-size: 20px;
+    }
+
+    .m-cgl-add-button {
+        cursor: pointer;
+        color: $color-icon-add;
+        margin: 10px 0;
+    }
+
+    .m-cgl-edit-icon {
+        color: $color-icon-edit;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .m-cgl-delete-icon {
+        color: $color-icon-delete;
+        font-size: 20px;
+        cursor: pointer;
+    }
+}
+
+
+/*----------------------------
+ Category Editor
+----------------------------*/
+
+.module-category-editor {
+
+    .m-cge-title {
+        font-size: $font-size-sub-header;
+        margin-bottom: 20px;
+    }
+
+    .m-cge-field-container {
+        margin-top: 20px;
+    }
+
+    .m-cge-label {
+        //display: none;
+    }
+
+    .m-cge-input {
+        width: 100%;
+    }
+
+    .m-cge-error {
+        color: $color-error-message;
+    }
+}
+
+
+/*----------------------------
  Popup
 ----------------------------*/
 

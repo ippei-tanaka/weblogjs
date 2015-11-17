@@ -4,12 +4,14 @@ requirejs([
         'services/router',
         'services/react-component-mounter',
         'jsx!components/navigation',
+        'controllers/category-controller',
         'controllers/user-controller',
         'controllers/home-controller'
     ],
     function (Router,
               ReactComponentMounter,
               Navigation,
+              CategoryController,
               UserController,
               HomeController) {
 
@@ -34,6 +36,10 @@ requirejs([
 
         Router.addRoute("/users", function () {
             UserController.showUserList();
+        });
+
+        Router.addRoute("/categories", function () {
+            CategoryController.showCategoryList();
         });
 
         Router.setDefaultRouteCallback(function () {

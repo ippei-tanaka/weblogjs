@@ -1,13 +1,20 @@
 "use strict";
 
 define([
-        'controllers/user-controller'
+        'services/react-component-mounter'
     ],
-    function (UserController) {
+    function (Mounter) {
 
         return {
+
             showDashBoard: function () {
-                UserController.clean();
+                Mounter.unmountComponentsAt(
+                    Mounter.select('main-content-container')
+                );
+
+                Mounter.unmountComponentsAt(
+                    Mounter.select('popup-container')
+                );
             }
         }
     });

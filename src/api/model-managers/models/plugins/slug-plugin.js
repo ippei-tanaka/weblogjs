@@ -51,6 +51,8 @@ var slugPlugin = (schema, options) => {
                 .exec()
                 .then(function (_docs) {
 
+                    // TODO: Fix the behaviour and make tests for it
+
                     var slugNameWithBiggestNum,
                         currentSlugNumber,
                         newSlugNumber;
