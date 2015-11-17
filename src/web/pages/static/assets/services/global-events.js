@@ -1,6 +1,6 @@
 "use strict";
 
-define(['event'], function (Event) {
+define(['services/event'], function (Event) {
 
     return {
         userCreated: new Event(),

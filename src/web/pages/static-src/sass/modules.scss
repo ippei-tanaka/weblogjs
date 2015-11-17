@@ -32,6 +32,18 @@
     @include background-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0))
 }
 
+.module-button.m-btn-alert {
+    @include background-gradient(
+            $color-btn-alert-bg-start,
+            $color-btn-alert-bg-end);
+
+    &:hover {
+        @include background-gradient(
+                $color-btn-alert-hover-bg-start,
+                $color-btn-alert-hover-bg-end);
+    }
+}
+
 /*----------------------------
  Container
 ----------------------------*/
@@ -234,4 +246,32 @@
         //height: 200px;
         overflow: auto;
     }
+}
+
+
+/*----------------------------
+ Confirmation
+----------------------------*/
+
+.module-confirmation {
+
+    .m-cfm-message {
+        font-size: $font-size-confirmation-message;
+        margin-bottom: 40px;
+    }
+
+    .m-cfm-button-list {
+        display: block;
+        text-align: center;
+        padding-bottom: 5px;
+    }
+
+    .m-cfm-button-list-item {
+        display: inline-block;
+    }
+
+    .m-cfm-button-list-item:last-child {
+        margin-left: 20px;
+    }
+
 }

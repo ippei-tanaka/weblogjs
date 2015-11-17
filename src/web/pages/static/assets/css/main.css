@@ -50,6 +50,33 @@ table {
   more info: http://www.findmebyip.com/litmus/#css3-properties
 
 ------------------------------------------------------------- */
+/*----------------------------
+ Base
+----------------------------*/
+/*----------------------------
+ Headers
+----------------------------*/
+/*----------------------------
+ Button
+----------------------------*/
+/*----------------------------
+ Login Form
+----------------------------*/
+/*----------------------------
+ Input
+----------------------------*/
+/*----------------------------
+ Table
+----------------------------*/
+/*----------------------------
+ Icons
+----------------------------*/
+/*----------------------------
+ Popup
+----------------------------*/
+/*----------------------------
+ Confirmation
+----------------------------*/
 html,
 body {
   position: relative;
@@ -122,6 +149,33 @@ table tbody tr {
 
 ------------------------------------------------------------- */
 /*----------------------------
+ Base
+----------------------------*/
+/*----------------------------
+ Headers
+----------------------------*/
+/*----------------------------
+ Button
+----------------------------*/
+/*----------------------------
+ Login Form
+----------------------------*/
+/*----------------------------
+ Input
+----------------------------*/
+/*----------------------------
+ Table
+----------------------------*/
+/*----------------------------
+ Icons
+----------------------------*/
+/*----------------------------
+ Popup
+----------------------------*/
+/*----------------------------
+ Confirmation
+----------------------------*/
+/*----------------------------
  Button
 ----------------------------*/
 .module-button {
@@ -179,6 +233,25 @@ table tbody tr {
   background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
   background-image: linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
   filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='rgba(255, 255, 255, 0)', endColorStr='rgba(255, 255, 255, 0)'); }
+
+.module-button.m-btn-alert {
+  background-color: #820300;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#820300), to(#ca0005));
+  background-image: -webkit-linear-gradient(top, #820300, #ca0005);
+  background-image: -moz-linear-gradient(top, #820300, #ca0005);
+  background-image: -ms-linear-gradient(top, #820300, #ca0005);
+  background-image: -o-linear-gradient(top, #820300, #ca0005);
+  background-image: linear-gradient(top, #820300, #ca0005);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#820300', endColorStr='#ca0005'); }
+  .module-button.m-btn-alert:hover {
+    background-color: #ff211c;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ff211c), to(#ff6468));
+    background-image: -webkit-linear-gradient(top, #ff211c, #ff6468);
+    background-image: -moz-linear-gradient(top, #ff211c, #ff6468);
+    background-image: -ms-linear-gradient(top, #ff211c, #ff6468);
+    background-image: -o-linear-gradient(top, #ff211c, #ff6468);
+    background-image: linear-gradient(top, #ff211c, #ff6468);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#ff211c', endColorStr='#ff6468'); }
 
 /*----------------------------
  Container
@@ -317,3 +390,21 @@ table tbody tr {
   .module-popup .m-ppp-content-container {
     width: 100%;
     overflow: auto; }
+
+/*----------------------------
+ Confirmation
+----------------------------*/
+.module-confirmation .m-cfm-message {
+  font-size: 20px;
+  margin-bottom: 40px; }
+
+.module-confirmation .m-cfm-button-list {
+  display: block;
+  text-align: center;
+  padding-bottom: 5px; }
+
+.module-confirmation .m-cfm-button-list-item {
+  display: inline-block; }
+
+.module-confirmation .m-cfm-button-list-item:last-child {
+  margin-left: 20px; }

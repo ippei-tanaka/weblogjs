@@ -33,6 +33,7 @@ define([
                             <li className="m-nvg-list-item"><a className="m-nvg-link" href={hrefs.logout}>Log out</a></li>
                             <li className="m-nvg-list-item"><a className="m-nvg-link" href={hrefs.dashboard}>Dashboard</a></li>
                             <li className="m-nvg-list-item"><a className="m-nvg-link" href={hrefs.users}>Users</a></li>
+                            <li className="m-nvg-list-item"><a className="m-nvg-link" href={hrefs.categories}>Categories</a></li>
                             <li className="m-nvg-list-item"><a className="m-nvg-link" href={hrefs.posts}>Posts</a></li>
                         </ul>
                     </nav>

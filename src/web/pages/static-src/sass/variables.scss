@@ -1,30 +1,60 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:400,900);
 
+
+/*----------------------------
+ Base
+----------------------------*/
 $font-family-default: Helvetica, sans-serif;
 $font-family-lato: 'Lato', sans-serif;
 $color-default-font: #000000;
-
 $font-size-base: 16px;
+
+
+/*----------------------------
+ Headers
+----------------------------*/
 $font-size-header: 38px;
 $font-size-sub-header: 26px;
 
+
+/*----------------------------
+ Button
+----------------------------*/
 $color-btn-calm-text: #ffffff;
 $color-btn-calm-bg-start: #215382;
 $color-btn-calm-bg-end: #2a6aa6;
 $color-btn-calm-hover-bg-start: lighten($color-btn-calm-bg-start, 30%);
 $color-btn-calm-hover-bg-end: lighten($color-btn-calm-bg-end, 30%);
+$color-btn-alert-bg-start: #820300;
+$color-btn-alert-bg-end: #ca0005;
+$color-btn-alert-hover-bg-start: lighten($color-btn-alert-bg-start, 30%);
+$color-btn-alert-hover-bg-end: lighten($color-btn-alert-bg-end, 30%);
 
+/*----------------------------
+ Login Form
+----------------------------*/
 $color-bg-plain: #f0f0f0;
-$color-border-plain: #cccccc;
 
+/*----------------------------
+ Input
+----------------------------*/
+$color-border-plain: #cccccc;
 $color-text-input-bg: #ffffff;
 $color-text-input-bg-disabled: #f0f0f0;
 
+
+/*----------------------------
+ Table
+----------------------------*/
+$color-table-border-plain: #cccccc;
 $color-table-calm-thead-bg: #2a6aa6;
 $color-table-calm-thead-text: #ffffff;
 $color-table-calm-tbody-bg: #ffffff;
 $color-table-calm-tbody-bg2: lighten($color-table-calm-thead-bg, 55%);
 
+/*----------------------------
+ Icons
+----------------------------*/
 $color-icon-add: #3c9d0f;
 $color-icon-edit: #3c9d0f;
 $color-icon-delete: #aa0000;
@@ -32,5 +62,14 @@ $color-icon-close: #2a6aa6;
 
 $color-error-message: #ff0000;
 
+/*----------------------------
+ Popup
+----------------------------*/
 $color-popup-background: rgba(0, 0, 0, 0.5);
 $color-popup-content-background: #ffffff;
+
+/*----------------------------
+ Confirmation
+----------------------------*/
+$font-size-confirmation-message: 20px;
+$font-size-confirmation-okay-button: 20px;
