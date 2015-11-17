@@ -110,7 +110,7 @@ define([
                 return (
                     <form className="module-user-creator" onSubmit={this._onSubmit}>
 
-                        <h2 className="m-usc-title">Create a new user</h2>
+                        <h2 className="m-usc-title">{this._returnByMode("Create a new user", "Edit the user")}</h2>
 
                         {emailField}
 

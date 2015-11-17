@@ -9,6 +9,8 @@ define([
         var PopUp = React.createClass({
 
             componentDidMount: function () {
+
+                // TODO: move this to global-events.js
                 $(window).on('resize', this._updateSize);
                 this._updateSize();
             },
@@ -34,6 +36,7 @@ define([
             },
 
             _updateSize: function () {
+                // TODO: create a utility module for measuring heights or etc.
                 var $this = $(ReactDom.findDOMNode(this));
                 var $document = $(document);
                 $this.height(($document.height()));
@@ -50,6 +53,7 @@ define([
             },
 
             _close: function () {
+                // TODO: User event.js
                 this.props.onClosed.call(null);
             }
 

@@ -19,6 +19,7 @@ define([
                 var email = this.state.email.trim();
                 var password = this.state.password.trim();
 
+                // TODO: create a utility module for ajax
                 $.ajax({
                     url: loginUrl,
                     dataType: 'json',
