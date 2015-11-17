@@ -332,6 +332,53 @@ table tbody tr {
   color: #ff0000; }
 
 /*----------------------------
+ Category List
+----------------------------*/
+.module-category-list {
+  width: 100%;
+  overflow: auto; }
+  .module-category-list .m-cgl-title {
+    font-size: 26px;
+    margin-bottom: 20px; }
+  .module-category-list .m-cgl-table {
+    width: 100%; }
+  .module-category-list .m-cgl-hidden-cell {
+    display: none; }
+  .module-category-list .m-cgl-center {
+    text-align: center; }
+  .module-category-list .m-cgl-add-icon {
+    color: #3c9d0f;
+    font-size: 20px; }
+  .module-category-list .m-cgl-add-button {
+    cursor: pointer;
+    color: #3c9d0f;
+    margin: 10px 0; }
+  .module-category-list .m-cgl-edit-icon {
+    color: #3c9d0f;
+    font-size: 20px;
+    cursor: pointer; }
+  .module-category-list .m-cgl-delete-icon {
+    color: #aa0000;
+    font-size: 20px;
+    cursor: pointer; }
+
+/*----------------------------
+ Category Editor
+----------------------------*/
+.module-category-editor .m-cge-title {
+  font-size: 26px;
+  margin-bottom: 20px; }
+
+.module-category-editor .m-cge-field-container {
+  margin-top: 20px; }
+
+.module-category-editor .m-cge-input {
+  width: 100%; }
+
+.module-category-editor .m-cge-error {
+  color: #ff0000; }
+
+/*----------------------------
  Popup
 ----------------------------*/
 .module-popup {

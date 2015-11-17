@@ -1,18 +1,18 @@
 "use strict";
 
 define([
-        'jsx!components/user-list',
-        'jsx!components/user-editor',
+        'jsx!components/category-list',
+        'jsx!components/category-editor',
         'jsx!components/popup',
         'services/react-component-mounter'
     ],
-    function (UserList,
-              UserEditor,
+    function (CategoryList,
+              CategoryEditor,
               PopUp,
               Mounter) {
 
 
-        var userEditorMounter = new Mounter(UserEditor);
+        var categoryEditorMounter = new Mounter(CategoryEditor);
 
 
         var popupMounter = new Mounter(PopUp, 'popup-container');
@@ -24,43 +24,43 @@ define([
         };
 
 
-        var userListMounter = new Mounter(
-            UserList,
+        var categoryListMounter = new Mounter(
+            CategoryList,
             'main-content-container',
             {
                 addButtonClicked: function () {
-                    userEditorMounter.props = {
+                    categoryEditorMounter.props = {
                         mode: "add",
-                        user: {},
+                        category: {},
                         onComplete: function () {
                             this.unmount();
                         }.bind(popupMounter)
                     };
-                    popupMounter.children = userEditorMounter.build();
+                    popupMounter.children = categoryEditorMounter.build();
                     popupMounter.mount();
                 },
 
-                editButtonClicked: function (user) {
-                    userEditorMounter.props = {
+                editButtonClicked: function (category) {
+                    categoryEditorMounter.props = {
                         mode: "edit",
-                        user: user,
+                        category: category,
                         onComplete: function () {
                             this.unmount();
                         }.bind(popupMounter)
                     };
-                    popupMounter.children = userEditorMounter.build();
+                    popupMounter.children = categoryEditorMounter.build();
                     popupMounter.mount();
                 },
 
-                deleteButtonClicked: function (user) {
-                    userEditorMounter.props = {
+                deleteButtonClicked: function (category) {
+                    categoryEditorMounter.props = {
                         mode: "del",
-                        user: user,
+                        category: category,
                         onComplete: function () {
                             this.unmount();
                         }.bind(popupMounter)
                     };
-                    popupMounter.children = userEditorMounter.build();
+                    popupMounter.children = categoryEditorMounter.build();
                     popupMounter.mount();
                 }
             }
@@ -68,8 +68,8 @@ define([
 
 
         return {
-            showUserList: function () {
-                userListMounter.mount();
+            showCategoryList: function () {
+                categoryListMounter.mount();
             }
         };
     });
