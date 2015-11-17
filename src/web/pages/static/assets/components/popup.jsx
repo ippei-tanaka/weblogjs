@@ -11,23 +11,28 @@ define([
             componentDidMount: function () {
 
                 // TODO: move this to global-events.js
-                $(window).on('resize', this._updateSize);
-                this._updateSize();
+                //$(window).on('resize', this._updateSize);
+                //this._updateSize();
             },
 
             componentWillUnmount: function () {
-                $(window).off('resize', this._updateSize);
+                //$(window).off('resize', this._updateSize);
             },
 
             render: function () {
                 return (
                     <div className="module-popup">
-                        <div className="m-ppp-content-frame">
-                            <button className="module-button m-btn-clear m-ppp-close-button"
-                                    onClick={this._onClickCloseButton}><i className="fa fa-times m-ppp-close-icon"></i>
-                            </button>
-                            <div data-react="content-container" className="m-ppp-content-container">
-                                {this.props.content}
+                        <div className="m-ppp-wrapper1">
+                            <div className="m-ppp-wrapper2">
+                                <div className="m-ppp-frame">
+                                    <button className="module-button m-btn-clear m-ppp-close-button"
+                                            onClick={this._onClickCloseButton}><i
+                                        className="fa fa-times m-ppp-close-icon"></i>
+                                    </button>
+                                    <div data-react="content-container" className="m-ppp-content-container">
+                                        {this.props.content}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className="m-ppp-background" onClick={this._onClickBackground}></div>

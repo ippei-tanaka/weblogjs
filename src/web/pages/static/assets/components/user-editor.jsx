@@ -27,10 +27,10 @@ define([
         var inputFactory = function (props) {
             var defaultProps = {
                 classNames: {
-                    container: "m-usc-field-container",
-                    label: "m-usc-label",
-                    input: "m-usc-input",
-                    error: "m-usc-error"
+                    container: "m-ued-field-container",
+                    label: "m-ued-label",
+                    input: "m-ued-input",
+                    error: "m-ued-error"
                 }
             };
             return React.createElement(InputField, $.extend(defaultProps, props));
@@ -108,9 +108,9 @@ define([
                 });
 
                 return (
-                    <form className="module-user-creator" onSubmit={this._onSubmit}>
+                    <form className="module-user-editor" onSubmit={this._onSubmit}>
 
-                        <h2 className="m-usc-title">{this._returnByMode("Create a new user", "Edit the user")}</h2>
+                        <h2 className="m-ued-title">{this._returnByMode("Create a new user", "Edit the user")}</h2>
 
                         {emailField}
 
@@ -118,7 +118,7 @@ define([
 
                         {displayNameField}
 
-                        <div className="m-usc-field-container">
+                        <div className="m-ued-field-container">
                             <button className="module-button" type="submit">{this._returnByMode("Create", "Edit")}</button>
                         </div>
 
