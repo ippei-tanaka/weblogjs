@@ -61,6 +61,7 @@ var PostSchema = new mongoose.Schema({
 
     "author": {
         type: mongoose.Schema.Types.ObjectId,
+        required: 'An author is required.',
         ref: 'User'
     },
 
@@ -74,8 +75,9 @@ var PostSchema = new mongoose.Schema({
         validate: tagValidator
     }],
 
-    "publish-date": {
-        type: Date
+    "publish_date": {
+        type: Date,
+        required: 'A publish date is required.'
     },
 
     "created": {

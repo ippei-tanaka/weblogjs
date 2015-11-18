@@ -259,6 +259,85 @@
 
 
 /*----------------------------
+ Post List
+----------------------------*/
+
+.module-post-list {
+    width: 100%;
+    overflow: auto;
+
+    .m-psl-title {
+        font-size: $font-size-sub-header;
+        margin-bottom: 20px;
+    }
+
+    .m-psl-table {
+        width: 100%;
+    }
+
+    .m-psl-hidden-cell {
+        display: none;
+    }
+
+    .m-psl-center {
+        text-align: center;
+    }
+
+    .m-psl-add-icon {
+        color: $color-icon-add;
+        font-size: 20px;
+    }
+
+    .m-psl-add-button {
+        cursor: pointer;
+        color: $color-icon-add;
+        margin: 10px 0;
+    }
+
+    .m-psl-edit-icon {
+        color: $color-icon-edit;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .m-psl-delete-icon {
+        color: $color-icon-delete;
+        font-size: 20px;
+        cursor: pointer;
+    }
+}
+
+
+/*----------------------------
+ Post Editor
+----------------------------*/
+
+.module-post-editor {
+
+    .m-pse-title {
+        font-size: $font-size-sub-header;
+        margin-bottom: 20px;
+    }
+
+    .m-pse-field-container {
+        margin-top: 20px;
+    }
+
+    .m-pse-label {
+        //display: none;
+    }
+
+    .m-pse-input {
+        width: 100%;
+    }
+
+    .m-pse-error {
+        color: $color-error-message;
+    }
+}
+
+
+/*----------------------------
  Popup
 ----------------------------*/
 

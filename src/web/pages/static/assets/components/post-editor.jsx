@@ -5,27 +5,39 @@ define([
         'services/global-events',
         'jquery',
         'jsx!components/input-field',
+        'jsx!components/textarea-field',
         'jsx!components/confirmation'
     ],
     function (React,
               GlobalEvents,
               $,
               InputField,
+              TextareaField,
               Confirmation) {
 
-        var url = "/api/v1/categories";
+        var url = "/api/v1/posts";
 
-        var CategoryEditor = React.createClass({
+        var PostEditor = React.createClass({
 
             getInitialState: function () {
                 return {
                     errors: {
-                        name: undefined,
-                        slug: undefined
+                        title: undefined,
+                        content: undefined,
+                        slug: undefined,
+                        author: undefined,
+                        category: undefined,
+                        tags: undefined,
+                        publish_date: undefined
                     },
-                    category: {
-                        name: "",
-                        slug: ""
+                    post: {
+                        title: "",
+                        content: "",
+                        slug: "",
+                        author: null,
+                        category: null,
+                        tags: [],
+                        publish_date: new Date()
                     }
                 };
             },
@@ -33,10 +45,15 @@ define([
             getDefaultProps: function () {
                 return {
                     mode: "", // 'add', 'edit' or 'del'
-                    category: {
+                    post: {
                         _id: "",
-                        name: "",
-                        slug: ""
+                        title: "",
+                        content: "",
+                        slug: "",
+                        author: null,
+                        category: null,
+                        tags: [],
+                        publish_date: new Date()
                     },
                     onComplete: function () {
                     }
@@ -44,7 +61,7 @@ define([
             },
 
             componentWillMount: function () {
-                this._setCategoryState(this.getInitialState().category, this.props.category);
+                this._setPostState(this.getInitialState().post, this.props.post);
             },
 
             render: function () {
@@ -57,41 +74,65 @@ define([
 
             _renderForm: function () {
 
-                var nameField = this._inputFactory({
-                    id: "CategoryEditorNameInput",
+                var titleField = this._formElementFactory(InputField, {
+                    id: "PostEditorTitleInput",
                     type: "text",
-                    initialValue: this.state.category.name,
-                    error: this.state.errors.name,
+                    initialValue: this.state.post.title,
+                    error: this.state.errors.title,
                     onChange: function (e) {
-                        this._setCategoryState(this.state.category, {name: e.target.value});
+                        this._setPostState(this.state.post, {title: e.target.value});
                     }.bind(this),
                     attributes: {
                         ref: this._autoFocus
                     },
-                    label: "Category Name"
+                    label: "Title"
                 });
 
-                var slugField = this._inputFactory({
-                    id: "CategoryEditorSlugInput",
+                var contentField = this._formElementFactory(TextareaField, {
+                    id: "PostEditorContentInput",
+                    initialValue: this.state.post.content,
+                    error: this.state.errors.content,
+                    onChange: function (e) {
+                        this._setPostState(this.state.post, {content: e.target.value});
+                    }.bind(this),
+                    label: "Content"
+                });
+
+                var slugField = this._formElementFactory(InputField, {
+                    id: "PostEditorSlugInput",
                     type: "text",
-                    initialValue: this.state.category.slug,
+                    initialValue: this.state.post.slug,
                     error: this.state.errors.slug,
                     onChange: function (e) {
-                        this._setCategoryState(this.state.category, {slug: e.target.value});
+                        this._setPostState(this.state.post, {slug: e.target.value});
                     }.bind(this),
                     label: "Slug"
                 });
 
-                var title = this._chooseByMode({add: "Create a new category", edit: "Edit the category"});
+                var publishDateField = this._formElementFactory(InputField, {
+                    id: "PostEditorSlugInput",
+                    type: "date",
+                    initialValue: this.state.post.publish_date,
+                    error: this.state.errors.publish_date,
+                    onChange: function (e) {
+                        var string = e.target.value;
+                        this._setPostState(this.state.post, {publish_date: new Date(string)});
+                    }.bind(this),
+                    label: "Publish Date"
+                });
+
+                var title = this._chooseByMode({add: "Post", edit: "Edit the post"});
 
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
 
                 return (
-                    <form className="module-category-editor" onSubmit={this._onSubmit}>
-                        <h2 className="m-cge-title">{title}</h2>
-                        {nameField}
+                    <form className="module-post-editor" onSubmit={this._onSubmit}>
+                        <h2 className="m-pse-title">{title}</h2>
+                        {titleField}
+                        {contentField}
                         {slugField}
-                        <div className="m-cge-field-container">
+                        {publishDateField}
+                        <div className="m-pse-field-container">
                             <button className="module-button"
                                     type="submit">{buttonLabel}</button>
                         </div>
@@ -106,29 +147,29 @@ define([
                         onApproved={this._onDeleteApproved}
                         onCanceled={this._onDeleteCanceled}
                         >
-                        Do you want to delete "{this.state.category.name}"?
+                        Do you want to delete "{this.state.post.title}"?
                     </Confirmation>
                 );
             },
 
-            _inputFactory: function (props) {
+            _formElementFactory: function (reactClass, props) {
                 var defaultProps = {
                     classNames: {
-                        container: "m-cge-field-container",
-                        label: "m-cge-label",
-                        input: "m-cge-input",
-                        error: "m-cge-error"
+                        container: "m-pse-field-container",
+                        label: "m-pse-label",
+                        input: "m-pse-input",
+                        error: "m-pse-error"
                     }
                 };
-                return React.createElement(InputField, $.extend(defaultProps, props));
+                return React.createElement(reactClass, $.extend(defaultProps, props));
             },
 
             _onSubmit: function (e) {
                 e.preventDefault();
 
                 var ajaxFunc = this._chooseByMode({
-                    add: this._createCategory,
-                    edit: this._updateCategory
+                    add: this._createPost,
+                    edit: this._updatePost
                 });
 
                 ajaxFunc()
@@ -144,7 +185,7 @@ define([
             },
 
             _onDeleteApproved: function () {
-                this._deleteCategory().then(function () {
+                this._deletePost().then(function () {
                     this.props.onComplete();
                 }.bind(this)).fail(function (xhr) {
                     console.error(xhr.responseJSON.errors);
@@ -155,41 +196,44 @@ define([
                 this.props.onComplete();
             },
 
-            _createCategory: function () {
+            _createPost: function () {
 
-                var data = {
-                    name: this.state.category.name.trim(),
-                    slug: this.state.category.slug.trim()
-                };
+                var data = this._buildDataForHttpRequest();
 
                 return this._sendHttpRequest(url, 'post', data)
                     .then(function () {
-                        GlobalEvents.categoryCreated.fire();
+                        GlobalEvents.postCreated.fire();
                     });
             },
 
-            _updateCategory: function () {
+            _updatePost: function () {
 
-                var ajaxUrl = url + '/' + this.props.category._id;
+                var ajaxUrl = url + '/' + this.props.post._id;
 
-                var data = {
-                    name: this.state.category.name.trim(),
-                    slug: this.state.category.slug.trim()
-                };
+                var data = this._buildDataForHttpRequest();
 
                 return this._sendHttpRequest(ajaxUrl, 'put', data)
                     .then(function () {
-                        GlobalEvents.categoryUpdated.fire();
+                        GlobalEvents.postUpdated.fire();
                     });
             },
 
-            _deleteCategory: function () {
-                var ajaxUrl = url + '/' + this.props.category._id;
+            _deletePost: function () {
+                var ajaxUrl = url + '/' + this.props.post._id;
 
                 return this._sendHttpRequest(ajaxUrl, 'delete')
                     .then(function () {
-                        GlobalEvents.categoryDeleted.fire();
+                        GlobalEvents.postDeleted.fire();
                     });
+            },
+
+            _buildDataForHttpRequest: function () {
+                return {
+                    title: this.state.post.title.trim(),
+                    content: this.state.post.content.trim(),
+                    publish_date:  this.state.post.publish_date,
+                    slug: this.state.post.slug.trim()
+                }
             },
 
             _autoFocus: function (input) {
@@ -213,9 +257,9 @@ define([
                 return $.ajax(options);
             },
 
-            _setCategoryState: function (defaultCategory, category) {
+            _setPostState: function (defaultPost, post) {
                 this.setState({
-                    category: $.extend(defaultCategory, this._flatten(category))
+                    post: $.extend(defaultPost, this._flatten(post))
                 });
             },
 
@@ -244,6 +288,6 @@ define([
             }
         });
 
-        return CategoryEditor;
+        return PostEditor;
 
     });
