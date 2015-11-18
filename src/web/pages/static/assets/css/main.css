@@ -379,6 +379,53 @@ table tbody tr {
   color: #ff0000; }
 
 /*----------------------------
+ Post List
+----------------------------*/
+.module-post-list {
+  width: 100%;
+  overflow: auto; }
+  .module-post-list .m-psl-title {
+    font-size: 26px;
+    margin-bottom: 20px; }
+  .module-post-list .m-psl-table {
+    width: 100%; }
+  .module-post-list .m-psl-hidden-cell {
+    display: none; }
+  .module-post-list .m-psl-center {
+    text-align: center; }
+  .module-post-list .m-psl-add-icon {
+    color: #3c9d0f;
+    font-size: 20px; }
+  .module-post-list .m-psl-add-button {
+    cursor: pointer;
+    color: #3c9d0f;
+    margin: 10px 0; }
+  .module-post-list .m-psl-edit-icon {
+    color: #3c9d0f;
+    font-size: 20px;
+    cursor: pointer; }
+  .module-post-list .m-psl-delete-icon {
+    color: #aa0000;
+    font-size: 20px;
+    cursor: pointer; }
+
+/*----------------------------
+ Post Editor
+----------------------------*/
+.module-post-editor .m-pse-title {
+  font-size: 26px;
+  margin-bottom: 20px; }
+
+.module-post-editor .m-pse-field-container {
+  margin-top: 20px; }
+
+.module-post-editor .m-pse-input {
+  width: 100%; }
+
+.module-post-editor .m-pse-error {
+  color: #ff0000; }
+
+/*----------------------------
  Popup
 ----------------------------*/
 .module-popup {

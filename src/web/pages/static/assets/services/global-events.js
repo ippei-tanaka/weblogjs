@@ -8,6 +8,9 @@ define(['services/event'], function (Event) {
         userDeleted: new Event(),
         categoryCreated: new Event(),
         categoryUpdated: new Event(),
-        categoryDeleted: new Event()
+        categoryDeleted: new Event(),
+        postCreated: new Event(),
+        postUpdated: new Event(),
+        postDeleted: new Event()
     };
 });

@@ -4,23 +4,25 @@ requirejs([
         'services/router',
         'services/react-component-mounter',
         'jsx!components/navigation',
-        'controllers/category-controller',
+        'controllers/home-controller',
         'controllers/user-controller',
-        'controllers/home-controller'
+        'controllers/category-controller',
+        'controllers/post-controller'
     ],
     function (Router,
               ReactComponentMounter,
               Navigation,
-              CategoryController,
+              HomeController,
               UserController,
-              HomeController) {
+              CategoryController,
+              PostController) {
 
         var navigationMounter = new ReactComponentMounter(
             Navigation,
             'navigation',
             {
                 hrefs: {
-                    logout: "/admin/logout",
+                    logout: "/admin/logout#",
                     dashboard: "#/",
                     users: "#/users",
                     categories: "#/categories",
@@ -40,6 +42,10 @@ requirejs([
 
         Router.addRoute("/categories", function () {
             CategoryController.showCategoryList();
+        });
+
+        Router.addRoute("/posts", function () {
+            PostController.showPostList();
         });
 
         Router.setDefaultRouteCallback(function () {
