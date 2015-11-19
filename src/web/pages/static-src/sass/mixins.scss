@@ -407,3 +407,20 @@
 @mixin animation($str) {
   @include css3-prefix('animation', $str);
 }
+
+
+/// Media Query for phones
+$device-desktop-width: 700px;
+
+@mixin media-phone {
+  @media (max-width: #{$device-desktop-width - 1px}) {
+    @content;
+  }
+}
+
+/// Media Query for desktops
+@mixin media-desktop {
+  @media (min-width: #{$device-desktop-width}) {
+    @content;
+  }
+}

@@ -32,7 +32,7 @@ var create = (postInfo) => {
 /**
  * @returns {Promise}
  */
-var getList = modelManager.getList.bind({}, Post, null);
+var getList = modelManager.getList.bind({}, Post, ['author', 'category']);
 
 
 /**

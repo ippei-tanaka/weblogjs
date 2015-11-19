@@ -69,6 +69,7 @@ define([
 
         return {
             showCategoryList: function () {
+                popupMounter.unmount();
                 categoryListMounter.mount();
             }
         };

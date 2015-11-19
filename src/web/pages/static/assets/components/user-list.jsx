@@ -16,6 +16,19 @@ define([
 
         var UserList = React.createClass({
 
+            statics: {
+                getUsers: function () {
+                    return $.ajax({
+                        url: url,
+                        dataType: 'json',
+                        cache: false
+                    })
+                        .then(function (data) {
+                            return data.items;
+                        });
+                }
+            },
+
             getInitialState: function () {
                 return {
                     users: []
@@ -41,14 +54,10 @@ define([
             },
 
             _retrieveDataAndUpdateList: function () {
-                $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    cache: false
-                })
+                this.constructor.getUsers()
                     .then(function (data) {
                         this.setState({
-                            users: data.items
+                            users: data
                         });
                     }.bind(this))
 

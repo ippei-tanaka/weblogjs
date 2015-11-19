@@ -16,6 +16,19 @@ define([
 
         var CategoryList = React.createClass({
 
+            statics: {
+                getCategories: function () {
+                    return $.ajax({
+                        url: url,
+                        dataType: 'json',
+                        cache: false
+                    })
+                        .then(function (data) {
+                            return data.items;
+                        });
+                }
+            },
+
             getInitialState: function () {
                 return {
                     categories: []
@@ -41,14 +54,10 @@ define([
             },
 
             _retrieveDataAndUpdateList: function () {
-                $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    cache: false
-                })
+                this.constructor.getCategories()
                     .then(function (data) {
                         this.setState({
-                            categories: data.items
+                            categories: data
                         });
                     }.bind(this))
 
@@ -76,13 +85,17 @@ define([
                             </thead>
                             <tbody>
                             {this.state.categories.map(function (category, index) {
-                                return <CategoryListItem key={category._id} category={category} events={this.events} number={index+1}/>;
+                                return <CategoryListItem key={category._id} category={category} events={this.events}
+                                                         number={index+1}/>;
                             }.bind(this))}
                             </tbody>
                         </table>
 
                         <div>
-                            <button className="module-button m-btn-clear m-cgl-add-button" onClick={this.onAddButtonClicked}><i className="fa fa-plus-square-o m-cgl-add-icon"></i> Add</button>
+                            <button className="module-button m-btn-clear m-cgl-add-button"
+                                    onClick={this.onAddButtonClicked}><i
+                                className="fa fa-plus-square-o m-cgl-add-icon"></i> Add
+                            </button>
                         </div>
                     </div>
                 );
@@ -112,8 +125,14 @@ define([
                         <th>{this.props.number}</th>
                         <td>{this.props.category.name}</td>
                         <td>{this.props.category.slug}</td>
-                        <td className="m-cgl-center"><button className="module-button m-btn-clear" onClick={this.onEditButtonClicked}><i title="Edit" className="fa fa-pencil-square-o m-cgl-edit-icon"></i></button></td>
-                        <td className="m-cgl-center"><button className="module-button m-btn-clear" onClick={this.onDeleteButtonClicked}><i title="Delete" className="fa fa-trash-o m-cgl-delete-icon"></i></button></td>
+                        <td className="m-cgl-center">
+                            <button className="module-button m-btn-clear" onClick={this.onEditButtonClicked}><i
+                                title="Edit" className="fa fa-pencil-square-o m-cgl-edit-icon"></i></button>
+                        </td>
+                        <td className="m-cgl-center">
+                            <button className="module-button m-btn-clear" onClick={this.onDeleteButtonClicked}><i
+                                title="Delete" className="fa fa-trash-o m-cgl-delete-icon"></i></button>
+                        </td>
                         <td className="m-cgl-hidden-cell">{created}</td>
                         <td className="m-cgl-hidden-cell">{updated}</td>
                     </tr>

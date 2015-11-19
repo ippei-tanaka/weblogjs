@@ -29,10 +29,13 @@
 .module-button.m-btn-clear {
     padding: 0;
     color: $color-default-font;
+    @include border-radius(0);
     @include background-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0))
 }
 
 .module-button.m-btn-alert {
+    color: $color-btn-alert-text;
+
     @include background-gradient(
             $color-btn-alert-bg-start,
             $color-btn-alert-bg-end);
@@ -44,11 +47,28 @@
     }
 }
 
+.module-button.m-btn-plain {
+    color: $color-btn-plain-text;
+
+    @include background-gradient(
+            $color-btn-plain-bg-start,
+            $color-btn-plain-bg-end);
+
+    &:hover {
+        @include background-gradient(
+                $color-btn-plain-hover-bg-start,
+                $color-btn-plain-hover-bg-end);
+    }
+}
+
+
 /*----------------------------
  Container
 ----------------------------*/
 
 .module-container {
+    width: 100%;
+    height: 100%;
     font-family: $font-family-lato;
 }
 
@@ -57,8 +77,53 @@
 ----------------------------*/
 
 .module-login-page {
-    //width: 100%;
-    //height: 100%;
+    width: 100%;
+    height: 100%;
+}
+
+/*----------------------------
+ Home Page
+----------------------------*/
+
+.module-home-page {
+    width: 100%;
+    height: 100%;
+
+    .m-hmp-menu-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 150px;
+        height: 100%;
+
+        @include media-phone {
+            width: 100%;
+            height: 40px;
+        }
+    }
+
+    .m-hmp-content-container1 {
+        background-color: $color-homepage-bg-plain;
+        width: 100%;
+        height: 100%;
+        padding-left: 150px;
+        @include box-sizing();
+
+        @include media-phone {
+            padding-left: 0;
+            padding-top: 40px;
+        }
+    }
+
+    .m-hmp-content-container2 {
+        width: auto;
+        height: 100%;
+        overflow: auto;
+        @include box-sizing();
+
+        padding: 30px 40px;
+    }
+
 }
 
 /*----------------------------
@@ -66,15 +131,29 @@
 ----------------------------*/
 
 .module-login-form {
-    background-color: $color-bg-plain;
+    width: 100%;
+    height: 100%;
+    background-color: $color-login-form-bg;
+    display: flex;
+    align-items: center;
 
     .m-lgf-wrapper {
+        $wrapper-max-width: 500px;
         margin: 0 auto;
-        padding: 50px 30px;
+        padding: 40px;
+        background-color: $color-login-form-pane-bg;
+        width: $wrapper-max-width;
+        @include border-radius(10px);
+        @include box-sizing();
+
+        @media (max-width: #{$wrapper-max-width - 1px}) {
+            width: 90%;
+        }
     }
 
     .m-lgf-title {
         font-size: $font-size-header;
+        color: $color-login-form-title;
         margin-bottom: 30px;
     }
 
@@ -101,12 +180,72 @@
 }
 
 /*----------------------------
+ Navigation
+----------------------------*/
+
+.module-navigation {
+    width: 100%;
+    height: 100%;
+    background-color: $color-navigation-bg;
+
+    .m-nvg-button {
+        color: $color-navigation-link-text;
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+        text-decoration: none;
+        @include box-sizing();
+
+        background-color: $color-navigation-item-bg;
+        border-bottom: 1px solid $color-navigation-item-border;
+
+        &:hover,
+        &:focus {
+            background-color: $color-navigation-item-hover-bg;
+        }
+
+        @include media-phone {
+            height: 100%;
+        }
+    }
+
+    .m-nvg-toggle {
+        display: none;
+
+        @include media-phone {
+            display: block;
+        }
+    }
+
+    .m-nvg-menu {
+        display: block;
+
+        @include media-phone {
+            display: none;
+
+            &.m-nvg-mobile-menu-show {
+                display: block;
+            }
+        }
+    }
+
+    .m-nvg-icon {
+        color: $color-navigation-icon;
+        display: inline-block;
+        margin-right: 8px;
+        width: 20px;
+        text-align: center;
+    }
+
+}
+
+/*----------------------------
  User List
 ----------------------------*/
 
 .module-user-list {
-    width: 100%;
-    overflow: auto;
+    //width: 100%;
+    //overflow: auto;
 
     .m-usl-title {
         font-size: $font-size-sub-header;
@@ -114,7 +253,7 @@
     }
 
     .m-usl-table {
-        width: 100%;
+        //width: 100%;
     }
 
     .m-usl-hidden-cell {
@@ -149,7 +288,6 @@
     }
 }
 
-
 /*----------------------------
  User Editor
 ----------------------------*/
@@ -178,14 +316,13 @@
     }
 }
 
-
 /*----------------------------
  Category List
 ----------------------------*/
 
 .module-category-list {
-    width: 100%;
-    overflow: auto;
+    //width: 100%;
+    //overflow: auto;
 
     .m-cgl-title {
         font-size: $font-size-sub-header;
@@ -193,7 +330,7 @@
     }
 
     .m-cgl-table {
-        width: 100%;
+        //width: 100%;
     }
 
     .m-cgl-hidden-cell {
@@ -228,7 +365,6 @@
     }
 }
 
-
 /*----------------------------
  Category Editor
 ----------------------------*/
@@ -257,14 +393,13 @@
     }
 }
 
-
 /*----------------------------
  Post List
 ----------------------------*/
 
 .module-post-list {
-    width: 100%;
-    overflow: auto;
+    //width: 100%;
+    //overflow: auto;
 
     .m-psl-title {
         font-size: $font-size-sub-header;
@@ -272,7 +407,7 @@
     }
 
     .m-psl-table {
-        width: 100%;
+        //width: 100%;
     }
 
     .m-psl-hidden-cell {
@@ -307,7 +442,6 @@
     }
 }
 
-
 /*----------------------------
  Post Editor
 ----------------------------*/
@@ -335,7 +469,6 @@
         color: $color-error-message;
     }
 }
-
 
 /*----------------------------
  Popup
@@ -373,8 +506,7 @@
     }
 
     .m-ppp-frame {
-        $frame-max-width: 500px;
-        width: $frame-max-width;
+        width: $popup-frame-max-width;
         position: relative;
         z-index: 10;
         @include box-sizing();
@@ -383,7 +515,7 @@
         margin: 30px auto;
         background-color: $color-popup-content-background;
 
-        @media (max-width: #{$frame-max-width - 1px}) {
+        @media (max-width: #{$popup-frame-max-width - 1px}) {
             width: 90%;
         }
     }
@@ -405,7 +537,6 @@
         overflow: auto;
     }
 }
-
 
 /*----------------------------
  Confirmation
@@ -433,3 +564,4 @@
     }
 
 }
+

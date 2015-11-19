@@ -109,7 +109,7 @@ define([
                                 : null }
 
                             <div className="m-lgf-field-container">
-                                <button className="module-button" type="submit">Sign in</button>
+                                <button className="module-button m-btn-plain" type="submit">Sign in</button>
                             </div>
                         </div>
                     </form>
