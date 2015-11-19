@@ -8,6 +8,7 @@ $font-family-default: Helvetica, sans-serif;
 $font-family-lato: 'Lato', sans-serif;
 $color-default-font: #000000;
 $font-size-base: 16px;
+$device-pc-min-width: 700px;
 
 
 /*----------------------------
@@ -25,15 +26,23 @@ $color-btn-calm-bg-start: #215382;
 $color-btn-calm-bg-end: #2a6aa6;
 $color-btn-calm-hover-bg-start: lighten($color-btn-calm-bg-start, 30%);
 $color-btn-calm-hover-bg-end: lighten($color-btn-calm-bg-end, 30%);
-$color-btn-alert-bg-start: #820300;
-$color-btn-alert-bg-end: #ca0005;
+$color-btn-alert-text: #ffffff;
+$color-btn-alert-bg-start: #862524;
+$color-btn-alert-bg-end: #af2f2e;
 $color-btn-alert-hover-bg-start: lighten($color-btn-alert-bg-start, 30%);
 $color-btn-alert-hover-bg-end: lighten($color-btn-alert-bg-end, 30%);
+$color-btn-plain-text: #333;
+$color-btn-plain-bg-start: #f9f9f9;
+$color-btn-plain-bg-end: #ccc;
+$color-btn-plain-hover-bg-start: lighten($color-btn-plain-bg-start, 30%);
+$color-btn-plain-hover-bg-end: lighten($color-btn-plain-bg-end, 30%);
 
 /*----------------------------
  Login Form
 ----------------------------*/
-$color-bg-plain: #f0f0f0;
+$color-login-form-bg: #215382;
+$color-login-form-pane-bg: lighten(#215382, 5%);
+$color-login-form-title: #ffffff;
 
 /*----------------------------
  Input
@@ -42,6 +51,21 @@ $color-border-plain: #cccccc;
 $color-text-input-bg: #ffffff;
 $color-text-input-bg-disabled: #f0f0f0;
 
+
+/*----------------------------
+ Homepage
+----------------------------*/
+$color-homepage-bg-plain: #f0f0f0;
+
+/*----------------------------
+ Navigation
+----------------------------*/
+$color-navigation-bg: #1e4c77;
+$color-navigation-item-bg: lighten($color-navigation-bg, 0%);
+$color-navigation-item-hover-bg: lighten($color-navigation-bg, 20%);
+$color-navigation-item-border: lighten($color-navigation-bg, 30%);
+$color-navigation-link-text: #ffffff;
+$color-navigation-icon: lighten($color-navigation-bg, 50%);
 
 /*----------------------------
  Table
@@ -67,6 +91,7 @@ $color-error-message: #ff0000;
 ----------------------------*/
 $color-popup-background: rgba(0, 0, 0, 0.5);
 $color-popup-content-background: #ffffff;
+$popup-frame-max-width: 500px;
 
 /*----------------------------
  Confirmation

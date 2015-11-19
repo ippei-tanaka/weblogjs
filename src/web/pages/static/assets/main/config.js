@@ -15,6 +15,7 @@ requirejs.config({
         "JSXTransformer": "../vendors/JSXTransformer",
         "react": "../vendors/react-with-addons",
         "react-dom": "../vendors/react-dom.min",
+        "classnames": "../vendors/classnames",
         "moment": "../vendors/moment"
     }
 });

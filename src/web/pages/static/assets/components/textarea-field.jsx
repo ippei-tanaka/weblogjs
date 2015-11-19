@@ -29,7 +29,7 @@ define([
                     classNames: {
                         container: "",
                         label: "",
-                        input: "",
+                        textarea: "",
                         error: ""
                     },
 
@@ -63,7 +63,7 @@ define([
 
             _createTextAreaElement () {
                 var props = {
-                    className: this.props.classNames.input,
+                    className: this.props.classNames.textarea,
                     id: this.props.id,
                     value: this.state.value,
                     onChange: this._onChange

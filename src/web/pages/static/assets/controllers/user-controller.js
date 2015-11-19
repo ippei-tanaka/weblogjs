@@ -69,6 +69,7 @@ define([
 
         return {
             showUserList: function () {
+                popupMounter.unmount();
                 userListMounter.mount();
             }
         };

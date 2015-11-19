@@ -6,14 +6,18 @@ define([
         'jquery',
         'jsx!components/input-field',
         'jsx!components/textarea-field',
-        'jsx!components/confirmation'
+        'jsx!components/confirmation',
+        'jsx!components/user-list',
+        'jsx!components/category-list'
     ],
     function (React,
               GlobalEvents,
               $,
               InputField,
               TextareaField,
-              Confirmation) {
+              Confirmation,
+              UserList,
+              CategoryList) {
 
         var url = "/api/v1/posts";
 
@@ -38,7 +42,8 @@ define([
                         category: null,
                         tags: [],
                         publish_date: new Date()
-                    }
+                    },
+                    categories: []
                 };
             },
 
@@ -62,6 +67,12 @@ define([
 
             componentWillMount: function () {
                 this._setPostState(this.getInitialState().post, this.props.post);
+
+                CategoryList.getCategories().then(function (categories) {
+                    this.setState({
+                        categories: categories
+                    });
+                }.bind(this));
             },
 
             render: function () {
@@ -131,6 +142,11 @@ define([
                         {titleField}
                         {contentField}
                         {slugField}
+                        <select onChange={function (e) { this._setPostState(this.state.post, {category: e.target.value}); }.bind(this)}>
+                            {this.state.categories.map(function (category, index) {
+                                return <option selected={this.state.post.category._id === category._id} key={category._id} value={category._id}>{category.name}</option>;
+                            }.bind(this))}
+                        </select>
                         {publishDateField}
                         <div className="m-pse-field-container">
                             <button className="module-button"
@@ -158,6 +174,7 @@ define([
                         container: "m-pse-field-container",
                         label: "m-pse-label",
                         input: "m-pse-input",
+                        textarea: "m-pse-textarea",
                         error: "m-pse-error"
                     }
                 };
@@ -231,7 +248,8 @@ define([
                 return {
                     title: this.state.post.title.trim(),
                     content: this.state.post.content.trim(),
-                    publish_date:  this.state.post.publish_date,
+                    category: this.state.post.category,
+                    publish_date: this.state.post.publish_date,
                     slug: this.state.post.slug.trim()
                 }
             },
