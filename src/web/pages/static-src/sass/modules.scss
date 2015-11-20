@@ -88,6 +88,7 @@
 .module-home-page {
     width: 100%;
     height: 100%;
+    $header-height-phone: 45px;
 
     .m-hmp-menu-container {
         position: fixed;
@@ -95,10 +96,11 @@
         left: 0;
         width: 150px;
         height: 100%;
+        z-index: 1000;
 
         @include media-phone {
             width: 100%;
-            height: 40px;
+            height: $header-height-phone;
         }
     }
 
@@ -111,7 +113,7 @@
 
         @include media-phone {
             padding-left: 0;
-            padding-top: 40px;
+            padding-top: $header-height-phone;
         }
     }
 
@@ -122,6 +124,10 @@
         @include box-sizing();
 
         padding: 30px 40px;
+
+        @include media-phone {
+            padding: 20px 10px;
+        }
     }
 
 }
@@ -138,15 +144,14 @@
     align-items: center;
 
     .m-lgf-wrapper {
-        $wrapper-max-width: 500px;
         margin: 0 auto;
         padding: 40px;
         background-color: $color-login-form-pane-bg;
-        width: $wrapper-max-width;
+        width: $login-form-wrapper-max-width;
         @include border-radius(10px);
         @include box-sizing();
 
-        @media (max-width: #{$wrapper-max-width - 1px}) {
+        @media (max-width: #{$login-form-wrapper-max-width - 1px}) {
             width: 90%;
         }
     }
@@ -240,51 +245,69 @@
 }
 
 /*----------------------------
- User List
+ Data List
 ----------------------------*/
 
-.module-user-list {
-    //width: 100%;
-    //overflow: auto;
+.module-data-list {
 
-    .m-usl-title {
+    .m-dtl-title {
         font-size: $font-size-sub-header;
         margin-bottom: 20px;
     }
 
-    .m-usl-table {
+    .m-dtl-table {
         //width: 100%;
     }
 
-    .m-usl-hidden-cell {
+    .m-dtl-hidden-cell {
         display: none;
     }
 
-    .m-usl-center {
-        text-align: center;
+    .m-dtl-no-wrap {
+        white-space: nowrap;
     }
 
-    .m-usl-add-icon {
+    .m-dtl-button-list{
+        display: inline-block;
+        margin: 0 7px;
+    }
+
+    .m-dtl-button-list-item {
+        display: inline-block;
+        margin-right: 18px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    .m-dtl-add-icon {
         color: $color-icon-add;
-        font-size: 20px;
+        font-size: 25px;
+        vertical-align: middle;
+        margin-right: 3px;
     }
 
-    .m-usl-add-button {
+    .m-dtl-add-button {
         cursor: pointer;
         color: $color-icon-add;
         margin: 10px 0;
     }
 
-    .m-usl-edit-icon {
+    .m-dtl-edit-icon {
         color: $color-icon-edit;
-        font-size: 20px;
+        font-size: 25px;
         cursor: pointer;
     }
 
-    .m-usl-delete-icon {
+    .m-dtl-delete-icon {
         color: $color-icon-delete;
-        font-size: 20px;
+        font-size: 25px;
         cursor: pointer;
+    }
+
+    .m-dtl-none {
+        color: $color-unimportant;
     }
 }
 
@@ -317,55 +340,6 @@
 }
 
 /*----------------------------
- Category List
-----------------------------*/
-
-.module-category-list {
-    //width: 100%;
-    //overflow: auto;
-
-    .m-cgl-title {
-        font-size: $font-size-sub-header;
-        margin-bottom: 20px;
-    }
-
-    .m-cgl-table {
-        //width: 100%;
-    }
-
-    .m-cgl-hidden-cell {
-        display: none;
-    }
-
-    .m-cgl-center {
-        text-align: center;
-    }
-
-    .m-cgl-add-icon {
-        color: $color-icon-add;
-        font-size: 20px;
-    }
-
-    .m-cgl-add-button {
-        cursor: pointer;
-        color: $color-icon-add;
-        margin: 10px 0;
-    }
-
-    .m-cgl-edit-icon {
-        color: $color-icon-edit;
-        font-size: 20px;
-        cursor: pointer;
-    }
-
-    .m-cgl-delete-icon {
-        color: $color-icon-delete;
-        font-size: 20px;
-        cursor: pointer;
-    }
-}
-
-/*----------------------------
  Category Editor
 ----------------------------*/
 
@@ -394,55 +368,6 @@
 }
 
 /*----------------------------
- Post List
-----------------------------*/
-
-.module-post-list {
-    //width: 100%;
-    //overflow: auto;
-
-    .m-psl-title {
-        font-size: $font-size-sub-header;
-        margin-bottom: 20px;
-    }
-
-    .m-psl-table {
-        //width: 100%;
-    }
-
-    .m-psl-hidden-cell {
-        display: none;
-    }
-
-    .m-psl-center {
-        text-align: center;
-    }
-
-    .m-psl-add-icon {
-        color: $color-icon-add;
-        font-size: 20px;
-    }
-
-    .m-psl-add-button {
-        cursor: pointer;
-        color: $color-icon-add;
-        margin: 10px 0;
-    }
-
-    .m-psl-edit-icon {
-        color: $color-icon-edit;
-        font-size: 20px;
-        cursor: pointer;
-    }
-
-    .m-psl-delete-icon {
-        color: $color-icon-delete;
-        font-size: 20px;
-        cursor: pointer;
-    }
-}
-
-/*----------------------------
  Post Editor
 ----------------------------*/
 
@@ -462,7 +387,7 @@
     }
 
     .m-pse-input {
-        width: 100%;
+        //width: 100%;
     }
 
     .m-pse-error {

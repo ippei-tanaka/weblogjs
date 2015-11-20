@@ -46,6 +46,7 @@ input[type="password"] {
     td, th {
         padding: 10px;
         border: 1px solid $color-table-border-plain;
+        vertical-align: middle;
     }
 
     thead tr {
@@ -58,6 +59,57 @@ input[type="password"] {
 
         &:nth-child(2n) {
             background-color: $color-table-calm-tbody-bg2;
+        }
+    }
+
+    @include media-phone {
+        width: 100%;
+
+        thead {
+            display: none;
+        }
+
+        tbody, tr, th, td {
+            display: block;
+        }
+
+        th, td {
+            border: 0;
+            border-bottom: 1px dotted $color-table-border-plain;
+            padding: 13px 5px;
+
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+
+        tbody tr {
+            margin-bottom: 30px;
+            width: 100%;
+            border: 1px solid $color-table-border-plain;
+            @include box-sizing();
+            padding: 0 10px;
+
+            &:nth-child(2n) {
+                background-color: $color-table-calm-tbody-bg;
+            }
+        }
+
+        tbody td:before {
+            content: attr(data-label);
+            display: block;
+            color: $color-table-calm-th-text-mobile;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        tbody td {
+            display: block;
+            position: relative;
+
+            &:nth-child(2n) {
+                //background-color: $color-table-calm-tbody-bg2;
+            }
         }
     }
 }

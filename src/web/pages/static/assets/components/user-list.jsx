@@ -68,19 +68,26 @@ define([
 
             render: function () {
                 return (
-                    <div className="module-user-list">
-                        <h2 className="m-usl-title">User List</h2>
-
-                        <table className="m-usl-table">
+                    <div className="module-data-list">
+                        <h2 className="m-dtl-title">User List</h2>
+                        <div>
+                            <button className="module-button m-btn-clear m-dtl-add-button"
+                                    onClick={this.onAddButtonClicked}
+                                    title="Add"
+                                >
+                                <i  className="fa fa-plus-square-o m-dtl-add-icon"></i>
+                                Add
+                            </button>
+                        </div>
+                        <table className="m-dtl-table">
                             <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Created</th>
+                                <th>Updated</th>
                                 <th></th>
-                                <th></th>
-                                <th className="m-usl-hidden-cell">Created</th>
-                                <th className="m-usl-hidden-cell">Updated</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -89,10 +96,6 @@ define([
                             }.bind(this))}
                             </tbody>
                         </table>
-
-                        <div>
-                            <button className="module-button m-btn-clear m-usl-add-button" onClick={this.onAddButtonClicked}><i className="fa fa-plus-square-o m-usl-add-icon"></i> Add</button>
-                        </div>
                     </div>
                 );
             },
@@ -118,13 +121,21 @@ define([
 
                 return (
                     <tr>
-                        <th>{this.props.number}</th>
-                        <td>{this.props.user.display_name}</td>
-                        <td>{this.props.user.email}</td>
-                        <td className="m-usl-center"><button className="module-button m-btn-clear" onClick={this.onEditButtonClicked}><i title="Edit" className="fa fa-pencil-square-o m-usl-edit-icon"></i></button></td>
-                        <td className="m-usl-center"><button className="module-button m-btn-clear" onClick={this.onDeleteButtonClicked}><i title="Delete" className="fa fa-trash-o m-usl-delete-icon"></i></button></td>
-                        <td className="m-usl-hidden-cell">{created}</td>
-                        <td className="m-usl-hidden-cell">{updated}</td>
+                        <td data-label="No.">{this.props.number}</td>
+                        <td data-label="Display Name">{this.props.user.display_name}</td>
+                        <td data-label="Email">{this.props.user.email}</td>
+                        <td data-label="Created">{created}</td>
+                        <td data-label="Updated">{updated}</td>
+                        <td className="m-dtl-no-wrap">
+                            <ul className="m-dtl-button-list">
+                                <li className="m-dtl-button-list-item">
+                                    <button className="module-button m-btn-clear" onClick={this.onEditButtonClicked}><i title="Edit" className="fa fa-pencil-square-o m-dtl-edit-icon"></i></button>
+                                </li>
+                                <li className="m-dtl-button-list-item">
+                                    <button className="module-button m-btn-clear" onClick={this.onDeleteButtonClicked}><i title="Delete" className="fa fa-trash-o m-dtl-delete-icon"></i></button>
+                                </li>
+                            </ul>
+                        </td>
                     </tr>
                 );
             },

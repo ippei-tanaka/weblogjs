@@ -8,8 +8,7 @@ $font-family-default: Helvetica, sans-serif;
 $font-family-lato: 'Lato', sans-serif;
 $color-default-font: #000000;
 $font-size-base: 16px;
-$device-pc-min-width: 700px;
-
+$device-desktop-width: 700px;
 
 /*----------------------------
  Headers
@@ -43,6 +42,7 @@ $color-btn-plain-hover-bg-end: lighten($color-btn-plain-bg-end, 30%);
 $color-login-form-bg: #215382;
 $color-login-form-pane-bg: lighten(#215382, 5%);
 $color-login-form-title: #ffffff;
+$login-form-wrapper-max-width: 500px;
 
 /*----------------------------
  Input
@@ -71,20 +71,25 @@ $color-navigation-icon: lighten($color-navigation-bg, 50%);
  Table
 ----------------------------*/
 $color-table-border-plain: #cccccc;
-$color-table-calm-thead-bg: #2a6aa6;
+$color-table-calm-thead-bg: #1e4c77;
 $color-table-calm-thead-text: #ffffff;
 $color-table-calm-tbody-bg: #ffffff;
-$color-table-calm-tbody-bg2: lighten($color-table-calm-thead-bg, 55%);
+$color-table-calm-tbody-bg2: lighten($color-table-calm-thead-bg, 65%);
+$color-table-calm-th-text-mobile: #1e4c77;
 
 /*----------------------------
  Icons
 ----------------------------*/
-$color-icon-add: #3c9d0f;
-$color-icon-edit: #3c9d0f;
+$color-icon-add: #0f70bd;
+$color-icon-edit: #0f70bd;
 $color-icon-delete: #aa0000;
-$color-icon-close: #2a6aa6;
+$color-icon-close: #0f5fa6;
 
+/*----------------------------
+ Text
+----------------------------*/
 $color-error-message: #ff0000;
+$color-unimportant: #999;
 
 /*----------------------------
  Popup
