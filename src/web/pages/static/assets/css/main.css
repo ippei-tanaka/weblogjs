@@ -621,48 +621,19 @@ table tbody tr {
   color: #999; }
 
 /*----------------------------
- User Editor
+ Data Editor
 ----------------------------*/
-.module-user-editor .m-ued-title {
+.module-data-editor .m-dte-title {
   font-size: 26px;
   margin-bottom: 20px; }
 
-.module-user-editor .m-ued-field-container {
+.module-data-editor .m-dte-field-container {
   margin-top: 20px; }
 
-.module-user-editor .m-ued-input {
+.module-data-editor .m-dte-input {
   width: 100%; }
 
-.module-user-editor .m-ued-error {
-  color: #ff0000; }
-
-/*----------------------------
- Category Editor
-----------------------------*/
-.module-category-editor .m-cge-title {
-  font-size: 26px;
-  margin-bottom: 20px; }
-
-.module-category-editor .m-cge-field-container {
-  margin-top: 20px; }
-
-.module-category-editor .m-cge-input {
-  width: 100%; }
-
-.module-category-editor .m-cge-error {
-  color: #ff0000; }
-
-/*----------------------------
- Post Editor
-----------------------------*/
-.module-post-editor .m-pse-title {
-  font-size: 26px;
-  margin-bottom: 20px; }
-
-.module-post-editor .m-pse-field-container {
-  margin-top: 20px; }
-
-.module-post-editor .m-pse-error {
+.module-data-editor .m-dte-error {
   color: #ff0000; }
 
 /*----------------------------

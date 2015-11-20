@@ -137,8 +137,8 @@ define([
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
 
                 return (
-                    <form className="module-post-editor" onSubmit={this._onSubmit}>
-                        <h2 className="m-pse-title">{title}</h2>
+                    <form className="module-data-editor" onSubmit={this._onSubmit}>
+                        <h2 className="m-dte-title">{title}</h2>
                         {titleField}
                         {contentField}
                         {slugField}
@@ -148,7 +148,7 @@ define([
                             }.bind(this))}
                         </select>
                         {publishDateField}
-                        <div className="m-pse-field-container">
+                        <div className="m-dte-field-container">
                             <button className="module-button"
                                     type="submit">{buttonLabel}</button>
                         </div>
@@ -171,11 +171,11 @@ define([
             _formElementFactory: function (reactClass, props) {
                 var defaultProps = {
                     classNames: {
-                        container: "m-pse-field-container",
-                        label: "m-pse-label",
-                        input: "m-pse-input",
-                        textarea: "m-pse-textarea",
-                        error: "m-pse-error"
+                        container: "m-dte-field-container",
+                        label: "m-dte-label",
+                        input: "m-dte-input",
+                        textarea: "m-dte-textarea",
+                        error: "m-dte-error"
                     }
                 };
                 return React.createElement(reactClass, $.extend(defaultProps, props));

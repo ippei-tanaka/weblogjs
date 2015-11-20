@@ -87,11 +87,11 @@ define([
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
 
                 return (
-                    <form className="module-category-editor" onSubmit={this._onSubmit}>
-                        <h2 className="m-cge-title">{title}</h2>
+                    <form className="module-data-editor" onSubmit={this._onSubmit}>
+                        <h2 className="m-dte-title">{title}</h2>
                         {nameField}
                         {slugField}
-                        <div className="m-cge-field-container">
+                        <div className="m-dte-field-container">
                             <button className="module-button"
                                     type="submit">{buttonLabel}</button>
                         </div>
@@ -114,10 +114,10 @@ define([
             _inputFactory: function (props) {
                 var defaultProps = {
                     classNames: {
-                        container: "m-cge-field-container",
-                        label: "m-cge-label",
-                        input: "m-cge-input",
-                        error: "m-cge-error"
+                        container: "m-dte-field-container",
+                        label: "m-dte-label",
+                        input: "m-dte-input",
+                        error: "m-dte-error"
                     }
                 };
                 return React.createElement(InputField, $.extend(defaultProps, props));
