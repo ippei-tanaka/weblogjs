@@ -321,88 +321,33 @@
 }
 
 /*----------------------------
- User Editor
+ Data Editor
 ----------------------------*/
 
-.module-user-editor {
+.module-data-editor {
 
-    .m-ued-title {
+    .m-dte-title {
         font-size: $font-size-sub-header;
         margin-bottom: 20px;
     }
 
-    .m-ued-field-container {
+    .m-dte-field-container {
         margin-top: 20px;
     }
 
-    .m-ued-label {
+    .m-dte-label {
         //display: none;
     }
 
-    .m-ued-input {
+    .m-dte-input {
         width: 100%;
     }
 
-    .m-ued-error {
+    .m-dte-error {
         color: $color-error-message;
     }
 }
 
-/*----------------------------
- Category Editor
-----------------------------*/
-
-.module-category-editor {
-
-    .m-cge-title {
-        font-size: $font-size-sub-header;
-        margin-bottom: 20px;
-    }
-
-    .m-cge-field-container {
-        margin-top: 20px;
-    }
-
-    .m-cge-label {
-        //display: none;
-    }
-
-    .m-cge-input {
-        width: 100%;
-    }
-
-    .m-cge-error {
-        color: $color-error-message;
-    }
-}
-
-/*----------------------------
- Post Editor
-----------------------------*/
-
-.module-post-editor {
-
-    .m-pse-title {
-        font-size: $font-size-sub-header;
-        margin-bottom: 20px;
-    }
-
-    .m-pse-field-container {
-        margin-top: 20px;
-    }
-
-    .m-pse-label {
-        //display: none;
-    }
-
-    .m-pse-input {
-        //width: 100%;
-    }
-
-    .m-pse-error {
-        color: $color-error-message;
-    }
-}
 
 /*----------------------------
  Popup
