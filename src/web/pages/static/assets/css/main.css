@@ -53,7 +53,10 @@ table {
 
 ------------------------------------------------------------- */
 /*----------------------------
- Base
+ Font Base
+----------------------------*/
+/*----------------------------
+ Media Query
 ----------------------------*/
 /*----------------------------
  Headers
@@ -89,7 +92,10 @@ table {
  Confirmation
 ----------------------------*/
 /*----------------------------
- Base
+ Font Base
+----------------------------*/
+/*----------------------------
+ Media Query
 ----------------------------*/
 /*----------------------------
  Headers
@@ -138,6 +144,7 @@ body {
 ----------------------------*/
 input[type="text"],
 input[type="email"],
+input[type="date"],
 input[type="password"] {
   font-size: 16px;
   font-family: "Lato", sans-serif;
@@ -165,7 +172,39 @@ input[type="password"] {
   outline-radius: 7px; }
   input[disabled][type="text"],
   input[disabled][type="email"],
+  input[disabled][type="date"],
   input[disabled][type="password"] {
+    background-color: #f0f0f0; }
+
+/*----------------------------
+ Textarea
+----------------------------*/
+textarea {
+  font-size: 16px;
+  font-family: "Lato", sans-serif;
+  display: inline-block;
+  padding: 6px 10px;
+  border: 1px solid #cccccc;
+  background-color: #ffffff;
+  -webkit-box-sizing: border-box;
+  -khtml-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-border-radius: 7px;
+  -khtml-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -ms-border-radius: 7px;
+  -o-border-radius: 7px;
+  border-radius: 7px;
+  -webkit-outline-radius: 7px;
+  -khtml-outline-radius: 7px;
+  -moz-outline-radius: 7px;
+  -ms-outline-radius: 7px;
+  -o-outline-radius: 7px;
+  outline-radius: 7px; }
+  textarea[disabled] {
     background-color: #f0f0f0; }
 
 /*----------------------------
@@ -199,7 +238,7 @@ table tbody tr {
       table th:last-child, table td:last-child {
         border-bottom: 0; }
     table tbody tr {
-      margin-bottom: 30px;
+      margin-bottom: 50px;
       width: 100%;
       border: 1px solid #cccccc;
       -webkit-box-sizing: border-box;
@@ -214,7 +253,7 @@ table tbody tr {
     table tbody td:before {
       content: attr(data-label);
       display: block;
-      color: #1e4c77;
+      color: #0f70bd;
       font-weight: bold;
       margin-bottom: 4px; }
     table tbody td {
@@ -235,7 +274,10 @@ table tbody tr {
 
 ------------------------------------------------------------- */
 /*----------------------------
- Base
+ Font Base
+----------------------------*/
+/*----------------------------
+ Media Query
 ----------------------------*/
 /*----------------------------
  Headers
@@ -271,7 +313,10 @@ table tbody tr {
  Confirmation
 ----------------------------*/
 /*----------------------------
- Base
+ Font Base
+----------------------------*/
+/*----------------------------
+ Media Query
 ----------------------------*/
 /*----------------------------
  Headers
@@ -630,8 +675,17 @@ table tbody tr {
 .module-data-editor .m-dte-field-container {
   margin-top: 20px; }
 
+.module-data-editor .m-dte-label {
+  margin-bottom: 3px;
+  display: block; }
+
 .module-data-editor .m-dte-input {
-  width: 100%; }
+  width: 100%;
+  display: block; }
+
+.module-data-editor .m-dte-textarea {
+  width: 100%;
+  height: 3em; }
 
 .module-data-editor .m-dte-error {
   color: #ff0000; }

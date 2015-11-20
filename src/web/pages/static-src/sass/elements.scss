@@ -34,10 +34,36 @@ body {
 
 input[type="text"],
 input[type="email"],
+input[type="date"],
 input[type="password"] {
     @extend %text-input;
 }
 
+
+
+/*----------------------------
+ Textarea
+----------------------------*/
+%textarea {
+    font-size: $font-size-base;
+    font-family: $font-family-lato;
+    display: inline-block;
+    padding: 6px 10px;
+    border: 1px solid $color-border-plain;
+    background-color: $color-text-input-bg;
+
+    @include box-sizing();
+    @include border-radius(7px);
+    @include outline-radius(7px);
+
+    &[disabled] {
+        background-color: $color-text-input-bg-disabled;
+    }
+}
+
+textarea {
+    @extend %textarea;
+}
 
 /*----------------------------
  Table
@@ -84,7 +110,7 @@ input[type="password"] {
         }
 
         tbody tr {
-            margin-bottom: 30px;
+            margin-bottom: 50px;
             width: 100%;
             border: 1px solid $color-table-border-plain;
             @include box-sizing();
@@ -98,7 +124,7 @@ input[type="password"] {
         tbody td:before {
             content: attr(data-label);
             display: block;
-            color: $color-table-calm-th-text-mobile;
+            color: $color-sub-heading;
             font-weight: bold;
             margin-bottom: 4px;
         }
@@ -106,10 +132,6 @@ input[type="password"] {
         tbody td {
             display: block;
             position: relative;
-
-            &:nth-child(2n) {
-                //background-color: $color-table-calm-tbody-bg2;
-            }
         }
     }
 }

@@ -2,12 +2,15 @@
 
 
 /*----------------------------
- Base
+ Font Base
 ----------------------------*/
 $font-family-default: Helvetica, sans-serif;
 $font-family-lato: 'Lato', sans-serif;
-$color-default-font: #000000;
 $font-size-base: 16px;
+
+/*----------------------------
+ Media Query
+----------------------------*/
 $device-desktop-width: 700px;
 
 /*----------------------------
@@ -15,7 +18,6 @@ $device-desktop-width: 700px;
 ----------------------------*/
 $font-size-header: 38px;
 $font-size-sub-header: 26px;
-
 
 /*----------------------------
  Button
@@ -51,7 +53,6 @@ $color-border-plain: #cccccc;
 $color-text-input-bg: #ffffff;
 $color-text-input-bg-disabled: #f0f0f0;
 
-
 /*----------------------------
  Homepage
 ----------------------------*/
@@ -75,7 +76,6 @@ $color-table-calm-thead-bg: #1e4c77;
 $color-table-calm-thead-text: #ffffff;
 $color-table-calm-tbody-bg: #ffffff;
 $color-table-calm-tbody-bg2: lighten($color-table-calm-thead-bg, 65%);
-$color-table-calm-th-text-mobile: #1e4c77;
 
 /*----------------------------
  Icons
@@ -88,8 +88,10 @@ $color-icon-close: #0f5fa6;
 /*----------------------------
  Text
 ----------------------------*/
+$color-default-font: #000000;
 $color-error-message: #ff0000;
 $color-unimportant: #999;
+$color-sub-heading: #0f70bd;
 
 /*----------------------------
  Popup

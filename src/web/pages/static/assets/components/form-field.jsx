@@ -1,10 +1,11 @@
 "use strict";
 
 define([
-        'react'],
-    function (React) {
+        'react',
+        'jquery'],
+    function (React, $) {
 
-        var InputField = React.createClass({
+        var FormField = React.createClass({
 
             getInitialState: function () {
                 return {
@@ -30,7 +31,7 @@ define([
                     classNames: {
                         container: "",
                         label: "",
-                        input: "",
+                        field: "",
                         error: ""
                     },
 
@@ -51,6 +52,24 @@ define([
                 });
             },
 
+            render: function () {
+
+                var field = this._createFormFieldElement();
+
+                return (
+                    <div className={this.props.classNames.container}>
+                        <label className={this.props.classNames.label}
+                               htmlFor={this.props.id}>{this.props.label}</label>
+
+                        {field}
+
+                        { this.state.error
+                            ? (<span className={this.props.classNames.error}>{this.state.error.message}</span>)
+                            : null }
+                    </div>
+                );
+            },
+
             _onChange: function (e) {
                 if (this.props.onChange.call(null, e) === false) {
                     e.preventDefault();
@@ -62,44 +81,36 @@ define([
                 });
             },
 
-            _createInputElement () {
+            _createFormFieldElement () {
                 var props = {
-                    type: this.props.type,
-                    className: this.props.classNames.input,
+                    className: this.props.classNames.field,
                     id: this.props.id,
                     value: this.state.value,
                     onChange: this._onChange
                 };
 
-                if (typeof this.props.attributes === "object"
-                    && this.props.attributes) {
-                    Object.keys(this.props.attributes).forEach(function (key) {
-                        props[key] = this.props.attributes[key];
-                    }.bind(this));
+                var elementName = "";
+
+                switch (this.props.type) {
+                    case "text":
+                    case "email":
+                    case "password":
+                    case "date":
+                        props.type = this.props.type;
+                        elementName = "input";
+                        break;
+                    case "textarea":
+                        elementName = "textarea";
+                        break;
                 }
 
-                return React.createElement('input', props);
-            },
+                props = $.extend(props, this.props.attributes);
 
-            render: function () {
-
-                var input = this._createInputElement();
-
-                return (
-                    <div className={this.props.classNames.container}>
-                        <label className={this.props.classNames.label}
-                               htmlFor={this.props.id}>{this.props.label}</label>
-
-                        {input}
-
-                        { this.state.error
-                            ? (<span className={this.props.classNames.error}>{this.state.error.message}</span>)
-                            : null }
-                    </div>
-                );
+                return React.createElement(elementName, props);
             }
+
         });
 
-        return InputField;
+        return FormField;
 
     });
