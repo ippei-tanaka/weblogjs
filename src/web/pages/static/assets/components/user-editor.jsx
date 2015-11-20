@@ -4,13 +4,13 @@ define([
         'react',
         'services/global-events',
         'jquery',
-        'jsx!components/input-field',
+        'jsx!components/form-field',
         'jsx!components/confirmation'
     ],
     function (React,
               GlobalEvents,
               $,
-              InputField,
+              FormField,
               Confirmation) {
 
         var url = "/api/v1/users";
@@ -137,11 +137,11 @@ define([
                     classNames: {
                         container: "m-dte-field-container",
                         label: "m-dte-label",
-                        input: "m-dte-input",
+                        field: "m-dte-input",
                         error: "m-dte-error"
                     }
                 };
-                return React.createElement(InputField, $.extend(defaultProps, props));
+                return React.createElement(FormField, $.extend(defaultProps, props));
             },
 
             _onSubmit: function (e) {

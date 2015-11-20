@@ -4,7 +4,7 @@ define([
         'react',
         'services/global-events',
         'jquery',
-        'jsx!components/input-field',
+        'jsx!components/form-field',
         'jsx!components/confirmation'
     ],
     function (React,
@@ -116,7 +116,7 @@ define([
                     classNames: {
                         container: "m-dte-field-container",
                         label: "m-dte-label",
-                        input: "m-dte-input",
+                        field: "m-dte-input",
                         error: "m-dte-error"
                     }
                 };

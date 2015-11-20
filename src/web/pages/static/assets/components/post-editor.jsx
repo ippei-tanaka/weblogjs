@@ -4,8 +4,7 @@ define([
         'react',
         'services/global-events',
         'jquery',
-        'jsx!components/input-field',
-        'jsx!components/textarea-field',
+        'jsx!components/form-field',
         'jsx!components/confirmation',
         'jsx!components/user-list',
         'jsx!components/category-list'
@@ -13,8 +12,7 @@ define([
     function (React,
               GlobalEvents,
               $,
-              InputField,
-              TextareaField,
+              FormField,
               Confirmation,
               UserList,
               CategoryList) {
@@ -85,7 +83,7 @@ define([
 
             _renderForm: function () {
 
-                var titleField = this._formElementFactory(InputField, {
+                var titleField = this._formElementFactory({
                     id: "PostEditorTitleInput",
                     type: "text",
                     initialValue: this.state.post.title,
@@ -96,20 +94,27 @@ define([
                     attributes: {
                         ref: this._autoFocus
                     },
+                    classNames: {
+                        field: "m-dte-input"
+                    },
                     label: "Title"
                 });
 
-                var contentField = this._formElementFactory(TextareaField, {
+                var contentField = this._formElementFactory({
                     id: "PostEditorContentInput",
+                    type: "textarea",
                     initialValue: this.state.post.content,
                     error: this.state.errors.content,
                     onChange: function (e) {
                         this._setPostState(this.state.post, {content: e.target.value});
                     }.bind(this),
+                    classNames: {
+                        field: "m-dte-textarea"
+                    },
                     label: "Content"
                 });
 
-                var slugField = this._formElementFactory(InputField, {
+                var slugField = this._formElementFactory({
                     id: "PostEditorSlugInput",
                     type: "text",
                     initialValue: this.state.post.slug,
@@ -117,10 +122,13 @@ define([
                     onChange: function (e) {
                         this._setPostState(this.state.post, {slug: e.target.value});
                     }.bind(this),
+                    classNames: {
+                        field: "m-dte-input"
+                    },
                     label: "Slug"
                 });
 
-                var publishDateField = this._formElementFactory(InputField, {
+                var publishDateField = this._formElementFactory({
                     id: "PostEditorSlugInput",
                     type: "date",
                     initialValue: this.state.post.publish_date,
@@ -129,6 +137,9 @@ define([
                         var string = e.target.value;
                         this._setPostState(this.state.post, {publish_date: new Date(string)});
                     }.bind(this),
+                    classNames: {
+                        field: "m-dte-input"
+                    },
                     label: "Publish Date"
                 });
 
@@ -136,15 +147,19 @@ define([
 
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
 
+                var categoryId = this.state.post.category ? this.state.post.category._id : null;
+
                 return (
                     <form className="module-data-editor" onSubmit={this._onSubmit}>
                         <h2 className="m-dte-title">{title}</h2>
                         {titleField}
                         {contentField}
                         {slugField}
-                        <select onChange={function (e) { this._setPostState(this.state.post, {category: e.target.value}); }.bind(this)}>
+                        <select
+                            onChange={this._onChangeCategory}
+                            defaultValue={categoryId}>
                             {this.state.categories.map(function (category, index) {
-                                return <option selected={this.state.post.category._id === category._id} key={category._id} value={category._id}>{category.name}</option>;
+                                return <option key={category._id} value={category._id}>{category.name}</option>;
                             }.bind(this))}
                         </select>
                         {publishDateField}
@@ -168,17 +183,16 @@ define([
                 );
             },
 
-            _formElementFactory: function (reactClass, props) {
+            _formElementFactory: function (props) {
                 var defaultProps = {
                     classNames: {
                         container: "m-dte-field-container",
                         label: "m-dte-label",
-                        input: "m-dte-input",
-                        textarea: "m-dte-textarea",
                         error: "m-dte-error"
                     }
                 };
-                return React.createElement(reactClass, $.extend(defaultProps, props));
+
+                return React.createElement(FormField, $.extend(true, defaultProps, props));
             },
 
             _onSubmit: function (e) {
@@ -199,6 +213,10 @@ define([
                             errors: xhr.responseJSON.errors
                         });
                     }.bind(this));
+            },
+
+            _onChangeCategory: function (e) {
+                this._setPostState(this.state.post, {category: e.target.value});
             },
 
             _onDeleteApproved: function () {
