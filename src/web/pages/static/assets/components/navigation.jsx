@@ -59,6 +59,7 @@ define([
                 return (
                     <nav className="module-navigation">
                         <button onFocus={this._onToggleFocused}
+                                onClick={this._onToggleClicked}
                                 onBlur={this._onToggleBlurred}
                                 data-react="navigation-toggle"
                                 className="module-button m-btn-clear m-nvg-button m-nvg-toggle">
@@ -87,34 +88,45 @@ define([
             },
 
             _onToggleFocused: function () {
-                this.setState({
-                    mobileMenu: true
-                });
+                this._throttleMobileMenuValue(true);
+            },
+
+            _onToggleClicked: function (e) {
+                e.target.focus();
             },
 
             _onToggleBlurred: function () {
-                this.setState({
-                    mobileMenu: false
-                });
+                this._throttleMobileMenuValue(false);
             },
 
-            _onLinkFocused: function () {
-                this.setState({
-                    mobileMenu: true
-                });
+            _onLinkFocused: function (e) {
+                this._throttleMobileMenuValue(true);
             },
 
             _onLinkBlurred: function () {
-                this.setState({
-                    mobileMenu: false
-                });
+                this._throttleMobileMenuValue(false);
             },
 
             _onLinkClicked: function () {
-                this.setState({
-                    mobileMenu: false
-                });
-            }
+                this._throttleMobileMenuValue(false);
+            },
+
+            _throttleMobileMenuValue: function (value) {
+                this._mobileMenuValue = value;
+
+                if (this._mobileMenuTimer) {
+                    window.clearTimeout(this._mobileMenuTimer);
+                }
+
+                this._mobileMenuTimer = window.setTimeout(function () {
+                    this.setState({
+                        mobileMenu: this._mobileMenuValue
+                    });
+                }.bind(this), 10);
+            },
+            _mobileMenuTimer: null,
+            _mobileMenuValue: null
+
         });
 
         return Navigation;
