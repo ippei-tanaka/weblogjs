@@ -675,19 +675,24 @@ table tbody tr {
 .module-data-editor .m-dte-field-container {
   margin-top: 20px; }
 
-.module-data-editor .m-dte-label {
+/*----------------------------
+ Form Field
+----------------------------*/
+.module-form-field .m-frf-label {
   margin-bottom: 3px;
   display: block; }
 
-.module-data-editor .m-dte-input {
+.module-form-field .m-frf-text,
+.module-form-field .m-frf-email,
+.module-form-field .m-frf-password {
   width: 100%;
   display: block; }
 
-.module-data-editor .m-dte-textarea {
+.module-form-field .m-frf-textarea {
   width: 100%;
   height: 3em; }
 
-.module-data-editor .m-dte-error {
+.module-form-field .m-frf-error {
   color: #ff0000; }
 
 /*----------------------------

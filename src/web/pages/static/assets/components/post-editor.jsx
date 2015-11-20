@@ -4,7 +4,7 @@ define([
         'react',
         'services/global-events',
         'jquery',
-        'jsx!components/form-field',
+        'jsx!components/form-field1',
         'jsx!components/confirmation',
         'jsx!components/user-list',
         'jsx!components/category-list'
@@ -83,21 +83,21 @@ define([
 
             _renderForm: function () {
 
-                var titleField = this._formElementFactory({
-                    id: "PostEditorTitleInput",
-                    type: "text",
-                    initialValue: this.state.post.title,
-                    error: this.state.errors.title,
-                    onChange: function (e) {
-                        this._setPostState(this.state.post, {title: e.target.value});
-                    }.bind(this),
-                    attributes: {
-                        ref: this._autoFocus
+                var titleField = React.createElement(FormField, {
+                    field: {
+                        type: "text",
+                        value: this.state.post.title,
+                        onChange: function (value) {
+                            this._setPostState(this.state.post, {title: value});
+                        }.bind(this),
+                        autoFocus: true
                     },
-                    classNames: {
-                        field: "m-dte-input"
+                    label: {
+                        children: "Title"
                     },
-                    label: "Title"
+                    error: {
+                        children: this.state.errors.title ? this.state.errors.title.message : ""
+                    }
                 });
 
                 var contentField = this._formElementFactory({
@@ -128,6 +128,30 @@ define([
                     label: "Slug"
                 });
 
+                var categoryField = React.createElement(FormField, {
+                    field: {
+                        type: "select",
+                        value: this.state.post.category ? this.state.post.category._id : null,
+                        onChange: function (value) {
+                            this._setPostState(this.state.post, {category: value});
+                        }.bind(this),
+                        children: this.state.categories.map(function (category) {
+                            return {
+                                key: category._id,
+                                value: category._id,
+                                label: category.name
+                            }
+                        })
+                    },
+                    label: {
+                        children: "Category"
+                    },
+                    error: {
+                        children: this.state.errors.category ? this.state.errors.category.message : ""
+                    }
+                });
+
+
                 var publishDateField = this._formElementFactory({
                     id: "PostEditorSlugInput",
                     type: "date",
@@ -147,21 +171,13 @@ define([
 
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
 
-                var categoryId = this.state.post.category ? this.state.post.category._id : null;
-
                 return (
                     <form className="module-data-editor" onSubmit={this._onSubmit}>
                         <h2 className="m-dte-title">{title}</h2>
                         {titleField}
                         {contentField}
                         {slugField}
-                        <select
-                            onChange={this._onChangeCategory}
-                            defaultValue={categoryId}>
-                            {this.state.categories.map(function (category, index) {
-                                return <option key={category._id} value={category._id}>{category.name}</option>;
-                            }.bind(this))}
-                        </select>
+                        {categoryField}
                         {publishDateField}
                         <div className="m-dte-field-container">
                             <button className="module-button"
@@ -215,10 +231,6 @@ define([
                     }.bind(this));
             },
 
-            _onChangeCategory: function (e) {
-                this._setPostState(this.state.post, {category: e.target.value});
-            },
-
             _onDeleteApproved: function () {
                 this._deletePost().then(function () {
                     this.props.onComplete();
@@ -269,12 +281,6 @@ define([
                     category: this.state.post.category,
                     publish_date: this.state.post.publish_date,
                     slug: this.state.post.slug.trim()
-                }
-            },
-
-            _autoFocus: function (input) {
-                if (input != null) {
-                    input.focus();
                 }
             },
 

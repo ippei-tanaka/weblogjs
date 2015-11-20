@@ -334,23 +334,33 @@
     .m-dte-field-container {
         margin-top: 20px;
     }
+}
 
-    .m-dte-label {
+
+/*----------------------------
+ Form Field
+----------------------------*/
+
+.module-form-field {
+    .m-frf-label {
         margin-bottom: 3px;
         display: block;
     }
 
-    .m-dte-input {
+    .m-frf-text,
+    .m-frf-email,
+    .m-frf-password
+    {
         width: 100%;
         display: block;
     }
 
-    .m-dte-textarea {
+    .m-frf-textarea {
         width: 100%;
         height: 3em;
     }
 
-    .m-dte-error {
+    .m-frf-error {
         color: $color-error-message;
     }
 }
