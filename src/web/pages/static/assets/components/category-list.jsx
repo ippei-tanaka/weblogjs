@@ -68,19 +68,26 @@ define([
 
             render: function () {
                 return (
-                    <div className="module-category-list">
-                        <h2 className="m-cgl-title">Category List</h2>
-
-                        <table className="m-cgl-table">
+                    <div className="module-data-list">
+                        <h2 className="m-dtl-title">Category List</h2>
+                        <div>
+                            <button className="module-button m-btn-clear m-dtl-add-button"
+                                    onClick={this.onAddButtonClicked}
+                                    title="Add"
+                                >
+                                <i  className="fa fa-plus-square-o m-dtl-add-icon"></i>
+                                Add
+                            </button>
+                        </div>
+                        <table className="m-dtl-table">
                             <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Slug</th>
+                                <th>Created</th>
+                                <th>Updated</th>
                                 <th></th>
-                                <th></th>
-                                <th className="m-cgl-hidden-cell">Created</th>
-                                <th className="m-cgl-hidden-cell">Updated</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -91,12 +98,6 @@ define([
                             </tbody>
                         </table>
 
-                        <div>
-                            <button className="module-button m-btn-clear m-cgl-add-button"
-                                    onClick={this.onAddButtonClicked}><i
-                                className="fa fa-plus-square-o m-cgl-add-icon"></i> Add
-                            </button>
-                        </div>
                     </div>
                 );
             },
@@ -122,19 +123,27 @@ define([
 
                 return (
                     <tr>
-                        <th>{this.props.number}</th>
-                        <td>{this.props.category.name}</td>
-                        <td>{this.props.category.slug}</td>
-                        <td className="m-cgl-center">
-                            <button className="module-button m-btn-clear" onClick={this.onEditButtonClicked}><i
-                                title="Edit" className="fa fa-pencil-square-o m-cgl-edit-icon"></i></button>
+                        <td data-label="No.">{this.props.number}</td>
+                        <td data-label="Name">{this.props.category.name}</td>
+                        <td data-label="Slug">{this.props.category.slug}</td>
+                        <td data-label="Created">{created}</td>
+                        <td data-label="Updated">{updated}</td>
+                        <td className="m-dtl-no-wrap">
+                            <ul className="m-dtl-button-list">
+                                <li className="m-dtl-button-list-item">
+                                    <button className="module-button m-btn-clear"
+                                            onClick={this.onEditButtonClicked}>
+                                        <i title="Edit" className="fa fa-pencil-square-o m-dtl-edit-icon"></i>
+                                    </button>
+                                </li>
+                                <li className="m-dtl-button-list-item">
+                                    <button className="module-button m-btn-clear"
+                                            onClick={this.onDeleteButtonClicked}>
+                                        <i title="Delete" className="fa fa-trash-o m-dtl-delete-icon"></i>
+                                    </button>
+                                </li>
+                            </ul>
                         </td>
-                        <td className="m-cgl-center">
-                            <button className="module-button m-btn-clear" onClick={this.onDeleteButtonClicked}><i
-                                title="Delete" className="fa fa-trash-o m-cgl-delete-icon"></i></button>
-                        </td>
-                        <td className="m-cgl-hidden-cell">{created}</td>
-                        <td className="m-cgl-hidden-cell">{updated}</td>
                     </tr>
                 );
             },

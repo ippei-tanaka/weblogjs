@@ -69,14 +69,20 @@ define([
 
             render: function () {
                 return (
-                    <div className="module-post-list">
-                        <h2 className="m-psl-title">Post List</h2>
-
-                        <table className="m-psl-table">
+                    <div className="module-data-list">
+                        <h2 className="m-dtl-title">Post List</h2>
+                        <div>
+                            <button className="module-button m-btn-clear m-dtl-add-button"
+                                    onClick={this.onAddButtonClicked}
+                                    title="Add"
+                                >
+                                <i  className="fa fa-plus-square-o m-dtl-add-icon"></i>
+                                Add
+                            </button>
+                        </div>
+                        <table className="m-dtl-table">
                             <thead>
                             <tr>
-                                <th></th>
-                                <th></th>
                                 <th>#</th>
                                 <th>Title</th>
                                 <th>Content</th>
@@ -85,8 +91,9 @@ define([
                                 <th>Category</th>
                                 <th>Tags</th>
                                 <th>Publish Date</th>
-                                <th className="m-psl-hidden-cell">Created</th>
-                                <th className="m-psl-hidden-cell">Updated</th>
+                                <th>Created</th>
+                                <th>Updated</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -96,13 +103,6 @@ define([
                             }.bind(this))}
                             </tbody>
                         </table>
-
-                        <div>
-                            <button className="module-button m-btn-clear m-psl-add-button"
-                                    onClick={this.onAddButtonClicked}><i
-                                className="fa fa-plus-square-o m-psl-add-icon"></i> Add
-                            </button>
-                        </div>
                     </div>
                 );
             },
@@ -123,32 +123,42 @@ define([
 
             render: function () {
 
+                var none = <span className="m-dtl-none">(None)</span>;
                 var created = Moment(this.props.post.created).format("YYYY-MM-DD HH:mm Z");
                 var updated = Moment(this.props.post.updated).format("YYYY-MM-DD HH:mm Z");
                 var publish = Moment(this.props.post.publish_date).format("YYYY-MM-DD HH:mm Z");
-                var author = this.props.post.author ? (this.props.post.author.display_name || "") : "";
-                var category = this.props.post.category ? (this.props.post.category.name || "") : "";
+                var author = this.props.post.author ? (this.props.post.author.display_name || none) : none;
+                var category = this.props.post.category ? (this.props.post.category.name || none) : none;
+                var tags = this.props.post.tags && this.props.post.tags.length > 0 ? this.props.post.tags.join(', ') : none;
 
                 return (
                     <tr>
-                        <td className="m-psl-center">
-                            <button className="module-button m-btn-clear" onClick={this.onEditButtonClicked}><i
-                                title="Edit" className="fa fa-pencil-square-o m-psl-edit-icon"></i></button>
+                        <td data-label="No.">{this.props.number}</td>
+                        <td data-label="Title">{this.props.post.title}</td>
+                        <td data-label="Content">{this.props.post.content}</td>
+                        <td data-label="Slug">{this.props.post.slug}</td>
+                        <td data-label="Author">{author}</td>
+                        <td data-label="Category">{category}</td>
+                        <td data-label="Tags">{tags}</td>
+                        <td data-label="Publish Date">{publish}</td>
+                        <td data-label="Created Date">{created}</td>
+                        <td data-label="Updated Date">{updated}</td>
+                        <td className="m-dtl-no-wrap">
+                            <ul className="m-dtl-button-list">
+                                <li className="m-dtl-button-list-item">
+                                    <button className="module-button m-btn-clear"
+                                            onClick={this.onEditButtonClicked}>
+                                        <i title="Edit" className="fa fa-pencil-square-o m-dtl-edit-icon"></i>
+                                    </button>
+                                </li>
+                                <li className="m-dtl-button-list-item">
+                                    <button className="module-button m-btn-clear"
+                                            onClick={this.onDeleteButtonClicked}>
+                                        <i title="Delete" className="fa fa-trash-o m-dtl-delete-icon"></i>
+                                    </button>
+                                </li>
+                            </ul>
                         </td>
-                        <td className="m-psl-center">
-                            <button className="module-button m-btn-clear" onClick={this.onDeleteButtonClicked}><i
-                                title="Delete" className="fa fa-trash-o m-psl-delete-icon"></i></button>
-                        </td>
-                        <td>{this.props.number}</td>
-                        <td>{this.props.post.title}</td>
-                        <td>{this.props.post.content}</td>
-                        <td>{this.props.post.slug}</td>
-                        <td>{author}</td>
-                        <td>{category}</td>
-                        <td>{this.props.post.tags}</td>
-                        <td>{publish}</td>
-                        <td className="m-psl-hidden-cell">{created}</td>
-                        <td className="m-psl-hidden-cell">{updated}</td>
                     </tr>
                 );
             },
