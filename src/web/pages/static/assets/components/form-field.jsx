@@ -5,11 +5,27 @@ define([
         'jquery'],
     function (React, $) {
 
+        var Select = React.createClass({
+            render: function () {
+                return (
+                    <select
+                        id={this.props.id}
+                        onChange={this.props.onChange}
+                        defaultValue={this.props.initialValue}
+                        className={this.props.classNames.field}
+                        >
+                        {this.props.choices.map(function (choice) {
+                            return <option key={choice.key} value={choice.value}>{choice.label}</option>;
+                        })}
+                    </select>
+                );
+            }
+        });
+
         var FormField = React.createClass({
 
             getInitialState: function () {
                 return {
-                    error: "",
                     value: ""
                 };
             },
@@ -20,9 +36,9 @@ define([
                     type: "",
                     label: "",
                     initialValue: "",
+                    choices: [],
 
-                    onChange: function () {
-                    },
+                    onChange: function () {},
 
                     error: {
                         message: ""
@@ -41,31 +57,32 @@ define([
 
             componentWillMount: function () {
                 this.setState({
-                    value: this.props.initialValue,
-                    error: this.props.error
-                });
-            },
-
-            componentWillReceiveProps: function (newProps) {
-                this.setState({
-                    error: newProps.error
+                    value: this.props.initialValue
                 });
             },
 
             render: function () {
-
                 var field = this._createFormFieldElement();
+                var error = this.props.error;
 
                 return (
                     <div className={this.props.classNames.container}>
-                        <label className={this.props.classNames.label}
-                               htmlFor={this.props.id}>{this.props.label}</label>
+
+                        { this.props.label ? (
+                            <label className={this.props.classNames.label}
+                                   htmlFor={this.props.id}>
+                                {this.props.label}
+                            </label>
+                        ) : null }
 
                         {field}
 
-                        { this.state.error
-                            ? (<span className={this.props.classNames.error}>{this.state.error.message}</span>)
-                            : null }
+                        { error && error.message ? (
+                            <span className={this.props.classNames.error}>
+                                {error.message}
+                            </span>
+                        ) : null }
+
                     </div>
                 );
             },
@@ -82,6 +99,7 @@ define([
             },
 
             _createFormFieldElement () {
+
                 var props = {
                     className: this.props.classNames.field,
                     id: this.props.id,
@@ -89,24 +107,24 @@ define([
                     onChange: this._onChange
                 };
 
-                var elementName = "";
+                props = $.extend(props, this.props.attributes);
 
                 switch (this.props.type) {
                     case "text":
                     case "email":
                     case "password":
                     case "date":
+                    default:
                         props.type = this.props.type;
-                        elementName = "input";
+                        return React.createElement("input", props);
                         break;
                     case "textarea":
-                        elementName = "textarea";
+                        return React.createElement("textarea", props);
+                        break;
+                    case "select":
+                        return React.createElement(Select, this.props);
                         break;
                 }
-
-                props = $.extend(props, this.props.attributes);
-
-                return React.createElement(elementName, props);
             }
 
         });
