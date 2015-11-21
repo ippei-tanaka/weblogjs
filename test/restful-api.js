@@ -106,6 +106,20 @@ describe('Restful API', () => {
                 });
         });
 
+        it('should return a user, "me"', (done) => {
+            httpRequest.get(`${BASE_URL}/users/me`)
+                .then((user) => {
+                    expect(user["_id"]).to.be.string;
+                    expect(user["email"]).to.equal(admin["email"]);
+                    expect(user).to.not.have.property('password');
+                    done();
+                })
+                .catch((err) => {
+                    console.error(err);
+                    done(new Error());
+                });
+        });
+
         it('should update a user', (done) => {
             var testUserUpdated = Object.assign({}, testUser);
             testUserUpdated.display_name = "Yamako Tanaka";
@@ -340,6 +354,11 @@ describe('Restful API', () => {
             httpRequest.post(`${BASE_URL}/categories`, testCategory)
                 .then((_category) => {
                     category = _category;
+                    return httpRequest.get(`${BASE_URL}/users/me`);
+                })
+                .then((_user) => {
+                    testPost1.author = _user._id;
+                    testPost2.author = _user._id;
                     return httpRequest.post(`${BASE_URL}/posts`, testPost1);
                 })
                 .then((post) => {
@@ -379,7 +398,7 @@ describe('Restful API', () => {
                     done();
                 })
                 .catch((err) => {
-                    console.error(err);
+                    //console.error(err);
                     done(new Error());
                 });
         });
