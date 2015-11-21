@@ -208,6 +208,27 @@ textarea {
     background-color: #f0f0f0; }
 
 /*----------------------------
+ Textarea
+----------------------------*/
+select {
+  font-size: 16px;
+  font-family: "Lato", sans-serif;
+  display: inline-block;
+  height: 2em;
+  border: 1px solid #cccccc;
+  background-color: #ffffff;
+  -webkit-box-sizing: border-box;
+  -khtml-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box; }
+  select option {
+    min-height: 2em; }
+  select[disabled] {
+    background-color: #f0f0f0; }
+
+/*----------------------------
  Table
 ----------------------------*/
 table td, table th {
@@ -255,10 +276,18 @@ table tbody tr {
       display: block;
       color: #0f70bd;
       font-weight: bold;
-      margin-bottom: 4px; }
+      margin-bottom: 4px;
+      float: left;
+      clear: both; }
+    table tbody td.element-table-wrap:before {
+      float: none;
+      clear: none; }
     table tbody td {
+      text-align: right;
       display: block;
-      position: relative; } }
+      position: relative; }
+    table tbody td.element-table-wrap {
+      text-align: left; } }
 
 /* -------------------------------------------------------------
   Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
@@ -487,7 +516,7 @@ table tbody tr {
     position: fixed;
     top: 0;
     left: 0;
-    width: 150px;
+    width: 185px;
     height: 100%;
     z-index: 500; }
     @media (max-width: 699px) {
@@ -500,7 +529,7 @@ table tbody tr {
     background-color: #f0f0f0;
     width: 100%;
     height: 100%;
-    padding-left: 150px;
+    padding-left: 185px;
     -webkit-box-sizing: border-box;
     -khtml-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -537,7 +566,8 @@ table tbody tr {
   height: 100%;
   background-color: #215382;
   display: flex;
-  align-items: center; }
+  align-items: center;
+  color: #ffffff; }
   .module-login-form .m-lgf-wrapper {
     margin: 0 auto;
     padding: 40px;
@@ -558,20 +588,8 @@ table tbody tr {
     @media (max-width: 499px) {
       .module-login-form .m-lgf-wrapper {
         width: 90%; } }
-  .module-login-form .m-lgf-title {
-    font-size: 38px;
-    color: #ffffff;
-    margin-bottom: 30px; }
-  .module-login-form .m-lgf-field-container {
-    margin-bottom: 20px; }
-  .module-login-form .m-lgf-label {
-    display: none; }
-  .module-login-form .m-lgf-input {
-    width: 100%; }
-  .module-login-form .m-lgf-error-container {
-    margin-bottom: 20px; }
   .module-login-form .m-lgf-error {
-    color: #ff0000; }
+    color: #f07776; }
 
 /*----------------------------
  Navigation
@@ -583,7 +601,7 @@ table tbody tr {
   .module-navigation .m-nvg-button {
     color: #ffffff;
     width: 100%;
-    padding: 10px;
+    padding: 17px 14px;
     text-align: left;
     text-decoration: none;
     -webkit-box-sizing: border-box;
@@ -600,7 +618,8 @@ table tbody tr {
       .module-navigation .m-nvg-button {
         height: 100%; } }
   .module-navigation .m-nvg-toggle {
-    display: none; }
+    display: none;
+    padding: 0 14px; }
     @media (max-width: 699px) {
       .module-navigation .m-nvg-toggle {
         display: block; } }
@@ -690,7 +709,7 @@ table tbody tr {
 
 .module-form-field .m-frf-textarea {
   width: 100%;
-  height: 3em; }
+  height: 4em; }
 
 .module-form-field .m-frf-error {
   color: #ff0000; }

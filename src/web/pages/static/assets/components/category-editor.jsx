@@ -10,7 +10,7 @@ define([
     function (React,
               GlobalEvents,
               $,
-              InputField,
+              FormField,
               Confirmation) {
 
         var url = "/api/v1/categories";
@@ -57,29 +57,37 @@ define([
 
             _renderForm: function () {
 
-                var nameField = this._inputFactory({
-                    id: "CategoryEditorNameInput",
-                    type: "text",
-                    initialValue: this.state.category.name,
-                    error: this.state.errors.name,
-                    onChange: function (e) {
-                        this._setCategoryState(this.state.category, {name: e.target.value});
-                    }.bind(this),
-                    attributes: {
-                        ref: this._autoFocus
+                var nameField = React.createElement(FormField, {
+                    field: {
+                        type: "text",
+                        value: this.state.category.name,
+                        onChange: function (value) {
+                            this._setPostState(this.state.category, {name: value});
+                        }.bind(this),
+                        autoFocus: true
                     },
-                    label: "Category Name"
+                    label: {
+                        children: "Category Name"
+                    },
+                    error: {
+                        children: this.state.errors.name ? this.state.errors.name.message : ""
+                    }
                 });
 
-                var slugField = this._inputFactory({
-                    id: "CategoryEditorSlugInput",
-                    type: "text",
-                    initialValue: this.state.category.slug,
-                    error: this.state.errors.slug,
-                    onChange: function (e) {
-                        this._setCategoryState(this.state.category, {slug: e.target.value});
-                    }.bind(this),
-                    label: "Slug"
+                var slugField = React.createElement(FormField, {
+                    field: {
+                        type: "text",
+                        value: this.state.category.slug,
+                        onChange: function (value) {
+                            this._setPostState(this.state.category, {slug: value});
+                        }.bind(this)
+                    },
+                    label: {
+                        children: "Slug"
+                    },
+                    error: {
+                        children: this.state.errors.slug ? this.state.errors.slug.message : ""
+                    }
                 });
 
                 var title = this._chooseByMode({add: "Create a new category", edit: "Edit the category"});
@@ -89,8 +97,12 @@ define([
                 return (
                     <form className="module-data-editor" onSubmit={this._onSubmit}>
                         <h2 className="m-dte-title">{title}</h2>
-                        {nameField}
-                        {slugField}
+                        <div className="m-dte-field-container">
+                            {nameField}
+                        </div>
+                        <div className="m-dte-field-container">
+                            {slugField}
+                        </div>
                         <div className="m-dte-field-container">
                             <button className="module-button"
                                     type="submit">{buttonLabel}</button>

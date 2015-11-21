@@ -27,6 +27,17 @@ define([
                         .then(function (data) {
                             return data.items;
                         });
+                },
+
+                getPost: function (id) {
+                    return $.ajax({
+                        url: url + "/" + id,
+                        dataType: 'json',
+                        cache: false
+                    })
+                        .then(function (data) {
+                            return data;
+                        });
                 }
             },
 
@@ -134,8 +145,8 @@ define([
                 return (
                     <tr>
                         <td data-label="No.">{this.props.number}</td>
-                        <td data-label="Title">{this.props.post.title}</td>
-                        <td data-label="Content">{this.props.post.content}</td>
+                        <td data-label="Title" className="element-table-wrap">{this.props.post.title}</td>
+                        <td data-label="Content" className="element-table-wrap">{this.props.post.content}</td>
                         <td data-label="Slug">{this.props.post.slug}</td>
                         <td data-label="Author">{author}</td>
                         <td data-label="Category">{category}</td>

@@ -4,7 +4,7 @@ define([
         'react',
         'services/global-events',
         'jquery',
-        'jsx!components/form-field1',
+        'jsx!components/form-field',
         'jsx!components/confirmation',
         'jsx!components/user-list',
         'jsx!components/category-list'
@@ -41,7 +41,8 @@ define([
                         tags: [],
                         publish_date: new Date()
                     },
-                    categories: []
+                    categories: [],
+                    authors: []
                 };
             },
 
@@ -69,6 +70,12 @@ define([
                 CategoryList.getCategories().then(function (categories) {
                     this.setState({
                         categories: categories
+                    });
+                }.bind(this));
+
+                UserList.getUsers().then(function (users) {
+                    this.setState({
+                        authors: users
                     });
                 }.bind(this));
             },
@@ -100,32 +107,60 @@ define([
                     }
                 });
 
-                var contentField = this._formElementFactory({
-                    id: "PostEditorContentInput",
-                    type: "textarea",
-                    initialValue: this.state.post.content,
-                    error: this.state.errors.content,
-                    onChange: function (e) {
-                        this._setPostState(this.state.post, {content: e.target.value});
-                    }.bind(this),
-                    classNames: {
-                        field: "m-dte-textarea"
+                var contentField = React.createElement(FormField, {
+                    field: {
+                        type: "textarea",
+                        value: this.state.post.content,
+                        onChange: function (value) {
+                            this._setPostState(this.state.post, {content: value});
+                        }.bind(this)
                     },
-                    label: "Content"
+                    label: {
+                        children: "Content"
+                    },
+                    error: {
+                        children: this.state.errors.content ? this.state.errors.content.message : ""
+                    }
                 });
 
-                var slugField = this._formElementFactory({
-                    id: "PostEditorSlugInput",
-                    type: "text",
-                    initialValue: this.state.post.slug,
-                    error: this.state.errors.slug,
-                    onChange: function (e) {
-                        this._setPostState(this.state.post, {slug: e.target.value});
-                    }.bind(this),
-                    classNames: {
-                        field: "m-dte-input"
+                var slugField = React.createElement(FormField, {
+                    field: {
+                        type: "text",
+                        value: this.state.post.slug,
+                        onChange: function (value) {
+                            this._setPostState(this.state.post, {slug: value});
+                        }.bind(this)
                     },
-                    label: "Slug"
+                    label: {
+                        children: "Slug"
+                    },
+                    error: {
+                        children: this.state.errors.slug ? this.state.errors.slug.message : ""
+                    }
+                });
+
+                var authorField = React.createElement(FormField, {
+                    field: {
+                        type: "select",
+                        value: this.state.post.author ? this.state.post.author._id : null,
+                        onChange: function (value) {
+                            var author = this.state.authors.find(function (a) { return a._id === value; });
+                            this._setPostState(this.state.post, {author: author});
+                        }.bind(this),
+                        children: this._addEmptySelectOption(this.state.authors.map(function (author) {
+                            return {
+                                key: author._id,
+                                value: author._id,
+                                label: author.display_name
+                            }
+                        }))
+                    },
+                    label: {
+                        children: "Author"
+                    },
+                    error: {
+                        children: this.state.errors.author ? this.state.errors.author.message : ""
+                    }
                 });
 
                 var categoryField = React.createElement(FormField, {
@@ -133,15 +168,16 @@ define([
                         type: "select",
                         value: this.state.post.category ? this.state.post.category._id : null,
                         onChange: function (value) {
-                            this._setPostState(this.state.post, {category: value});
+                            var category = this.state.categories.find(function (a) { return a._id === value; });
+                            this._setPostState(this.state.post, {category: category});
                         }.bind(this),
-                        children: this.state.categories.map(function (category) {
+                        children: this._addEmptySelectOption(this.state.categories.map(function (category) {
                             return {
                                 key: category._id,
                                 value: category._id,
                                 label: category.name
                             }
-                        })
+                        }))
                     },
                     label: {
                         children: "Category"
@@ -151,34 +187,47 @@ define([
                     }
                 });
 
-
-                var publishDateField = this._formElementFactory({
-                    id: "PostEditorSlugInput",
-                    type: "date",
-                    initialValue: this.state.post.publish_date,
-                    error: this.state.errors.publish_date,
-                    onChange: function (e) {
-                        var string = e.target.value;
-                        this._setPostState(this.state.post, {publish_date: new Date(string)});
-                    }.bind(this),
-                    classNames: {
-                        field: "m-dte-input"
+                var publishDateField = React.createElement(FormField, {
+                    field: {
+                        type: "date",
+                        value: this.state.post.publish_date,
+                        onChange: function (value) {
+                            this._setPostState(this.state.post, {publish_date: value});
+                        }.bind(this)
                     },
-                    label: "Publish Date"
+                    label: {
+                        children: "Publish Date"
+                    },
+                    error: {
+                        children: this.state.errors.publish_date ? this.state.errors.publish_date.message : ""
+                    }
                 });
 
-                var title = this._chooseByMode({add: "Post", edit: "Edit the post"});
+                var title = this._chooseByMode({add: "Add Post", edit: "Edit the Post"});
 
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
 
                 return (
                     <form className="module-data-editor" onSubmit={this._onSubmit}>
                         <h2 className="m-dte-title">{title}</h2>
-                        {titleField}
-                        {contentField}
-                        {slugField}
-                        {categoryField}
-                        {publishDateField}
+                        <div className="m-dte-field-container">
+                            {titleField}
+                        </div>
+                        <div className="m-dte-field-container">
+                            {contentField}
+                        </div>
+                        <div className="m-dte-field-container">
+                            {slugField}
+                        </div>
+                        <div className="m-dte-field-container">
+                            {authorField}
+                        </div>
+                        <div className="m-dte-field-container">
+                            {categoryField}
+                        </div>
+                        <div className="m-dte-field-container">
+                            {publishDateField}
+                        </div>
                         <div className="m-dte-field-container">
                             <button className="module-button"
                                     type="submit">{buttonLabel}</button>
@@ -197,18 +246,6 @@ define([
                         Do you want to delete "{this.state.post.title}"?
                     </Confirmation>
                 );
-            },
-
-            _formElementFactory: function (props) {
-                var defaultProps = {
-                    classNames: {
-                        container: "m-dte-field-container",
-                        label: "m-dte-label",
-                        error: "m-dte-error"
-                    }
-                };
-
-                return React.createElement(FormField, $.extend(true, defaultProps, props));
             },
 
             _onSubmit: function (e) {
@@ -278,7 +315,8 @@ define([
                 return {
                     title: this.state.post.title.trim(),
                     content: this.state.post.content.trim(),
-                    category: this.state.post.category,
+                    category: this.state.post.category ? this.state.post.category._id : "",
+                    author: this.state.post.author ? this.state.post.author._id : "",
                     publish_date: this.state.post.publish_date,
                     slug: this.state.post.slug.trim()
                 }
@@ -327,6 +365,16 @@ define([
                 });
 
                 return newObj;
+            },
+
+            _addEmptySelectOption: function (array) {
+                array = array || [];
+                array.unshift({
+                    key: "---------",
+                    value: "",
+                    label: "None"
+                });
+                return array;
             }
         });
 

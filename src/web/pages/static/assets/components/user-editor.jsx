@@ -60,46 +60,55 @@ define([
 
             _renderForm: function () {
 
-                var emailField = this._inputFactory({
-                    id: "UserManagerEmailInput",
-                    type: "email",
-                    initialValue: this.state.user.email,
-                    error: this.state.errors.email,
-                    onChange: function (e) {
-                        this._setUserState(this.state.user, {email: e.target.value});
-                    }.bind(this),
-                    attributes: {
-                        disabled: this._chooseByMode({add: false, edit: true}),
-                        ref: this._chooseByMode({add: this._autoFocus, edit: null})
+                var emailField = React.createElement(FormField, {
+                    field: {
+                        type: "email",
+                        value: this.state.user.email,
+                        onChange: function (value) {
+                            this._setPostState(this.state.user, {email: value});
+                        }.bind(this),
+                        autoFocus: true
                     },
-                    label: "Email address"
+                    label: {
+                        children: "Email Address"
+                    },
+                    error: {
+                        children: this.state.errors.email ? this.state.errors.email.message : ""
+                    }
                 });
 
-                var passwordField = this._inputFactory({
-                    id: "UserManagerPasswordInput",
-                    type: "password",
-                    initialValue: this.state.user.password,
-                    error: this.state.errors.password,
-                    onChange: function (e) {
-                        this._setUserState(this.state.user, {password: e.target.value});
-                    }.bind(this),
-                    label: "Password"
+                var passwordField = React.createElement(FormField, {
+                    field: {
+                        type: "password",
+                        value: this.state.user.password,
+                        onChange: function (value) {
+                            this._setPostState(this.state.user, {password: value});
+                        }.bind(this)
+                    },
+                    label: {
+                        children: "Password"
+                    },
+                    error: {
+                        children: this.state.errors.password ? this.state.errors.password.message : ""
+                    }
                 });
 
                 passwordField = this._chooseByMode({add: passwordField, edit: null});
 
-                var displayNameField = this._inputFactory({
-                    id: "UserManagerDisplayNameInput",
-                    type: "text",
-                    initialValue: this.state.user.display_name,
-                    error: this.state.errors.display_name,
-                    onChange: function (e) {
-                        this._setUserState(this.state.user, {display_name: e.target.value});
-                    }.bind(this),
-                    attributes: {
-                        ref: this._chooseByMode({add: null, edit: this._autoFocus})
+                var displayNameField = React.createElement(FormField, {
+                    field: {
+                        type: "text",
+                        value: this.state.user.display_name,
+                        onChange: function (value) {
+                            this._setPostState(this.state.user, {display_name: value});
+                        }.bind(this)
                     },
-                    label: "Display Name"
+                    label: {
+                        children: "Display Name"
+                    },
+                    error: {
+                        children: this.state.errors.display_name ? this.state.errors.display_name.message : ""
+                    }
                 });
 
                 var title = this._chooseByMode({add: "Create a new user", edit: "Edit the user"});
@@ -109,9 +118,15 @@ define([
                 return (
                     <form className="module-data-editor" onSubmit={this._onSubmit}>
                         <h2 className="m-dte-title">{title}</h2>
-                        {emailField}
-                        {passwordField}
-                        {displayNameField}
+                        <div className="m-dte-field-container">
+                            {emailField}
+                        </div>
+                        <div className="m-dte-field-container">
+                            {passwordField}
+                        </div>
+                        <div className="m-dte-field-container">
+                            {displayNameField}
+                        </div>
                         <div className="m-dte-field-container">
                             <button className="module-button"
                                     type="submit">{buttonLabel}</button>

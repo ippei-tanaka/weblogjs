@@ -89,19 +89,20 @@
 .module-home-page {
     width: 100%;
     height: 100%;
-    $header-height-phone: 45px;
+    $header-height: 45px;
+    $sidebar-width: 185px;
 
     .m-hmp-menu-container {
         position: fixed;
         top: 0;
         left: 0;
-        width: 150px;
+        width: $sidebar-width;
         height: 100%;
         z-index: 500;
 
         @include media-phone {
             width: 100%;
-            height: $header-height-phone;
+            height: $header-height;
         }
     }
 
@@ -112,12 +113,12 @@
         background-color: $color-homepage-bg-plain;
         width: 100%;
         height: 100%;
-        padding-left: 150px;
+        padding-left: $sidebar-width;
         @include box-sizing();
 
         @include media-phone {
             padding-left: 0;
-            padding-top: $header-height-phone;
+            padding-top: $header-height;
         }
     }
 
@@ -151,6 +152,7 @@
     background-color: $color-login-form-bg;
     display: flex;
     align-items: center;
+    color: $color-login-form-title;
 
     .m-lgf-wrapper {
         margin: 0 auto;
@@ -165,32 +167,9 @@
         }
     }
 
-    .m-lgf-title {
-        font-size: $font-size-header;
-        color: $color-login-form-title;
-        margin-bottom: 30px;
-    }
-
-    .m-lgf-field-container {
-        margin-bottom: 20px;
-    }
-
-    .m-lgf-label {
-        display: none;
-    }
-
-    .m-lgf-input {
-        width: 100%;
-    }
-
-    .m-lgf-error-container {
-        margin-bottom: 20px;
-    }
-
     .m-lgf-error {
-        color: $color-error-message;
+        color: $color-login-form-error-message;
     }
-
 }
 
 /*----------------------------
@@ -205,7 +184,7 @@
     .m-nvg-button {
         color: $color-navigation-link-text;
         width: 100%;
-        padding: 10px;
+        padding: 17px 14px;
         text-align: left;
         text-decoration: none;
         @include box-sizing();
@@ -225,6 +204,7 @@
 
     .m-nvg-toggle {
         display: none;
+        padding: 0 14px;
 
         @include media-phone {
             display: block;
@@ -357,7 +337,12 @@
 
     .m-frf-textarea {
         width: 100%;
-        height: 3em;
+        height: 4em;
+    }
+
+
+    .m-frf-select {
+        //width: 100%;
     }
 
     .m-frf-error {

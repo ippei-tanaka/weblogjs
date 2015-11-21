@@ -4,16 +4,17 @@ define([
         'jsx!components/post-list',
         'jsx!components/post-editor',
         'jsx!components/popup',
-        'services/react-component-mounter'
+        'services/react-component-mounter',
+        'services/event'
     ],
     function (PostList,
               PostEditor,
               PopUp,
-              Mounter) {
+              Mounter,
+              Event) {
 
 
-        var postEditorMounter = new Mounter(PostEditor);
-
+        var postEditorMounter = new Mounter(PostEditor, 'main-content-container');
 
         var popupMounter = new Mounter(PopUp, 'popup-container');
 
@@ -23,33 +24,16 @@ define([
             }.bind(popupMounter)
         };
 
-
         var postListMounter = new Mounter(
             PostList,
             'main-content-container',
             {
                 addButtonClicked: function () {
-                    postEditorMounter.props = {
-                        mode: "add",
-                        post: {},
-                        onComplete: function () {
-                            this.unmount();
-                        }.bind(popupMounter)
-                    };
-                    popupMounter.children = postEditorMounter.build();
-                    popupMounter.mount();
+                    exports.onClickAddButton.fire();
                 },
 
                 editButtonClicked: function (post) {
-                    postEditorMounter.props = {
-                        mode: "edit",
-                        post: post,
-                        onComplete: function () {
-                            this.unmount();
-                        }.bind(popupMounter)
-                    };
-                    popupMounter.children = postEditorMounter.build();
-                    popupMounter.mount();
+                    exports.onClickEditButton.fire(post);
                 },
 
                 deleteButtonClicked: function (post) {
@@ -58,6 +42,7 @@ define([
                         post: post,
                         onComplete: function () {
                             this.unmount();
+                            exports.onCompleteDeleting.fire();
                         }.bind(popupMounter)
                     };
                     popupMounter.children = postEditorMounter.build();
@@ -66,11 +51,44 @@ define([
             }
         );
 
-
-        return {
-            showPostList: function () {
-                popupMounter.unmount();
-                postListMounter.mount();
-            }
+        var showPostEditorWithAddMode = function () {
+            postEditorMounter.props = {
+                mode: "add",
+                post: {},
+                onComplete: function () {
+                    this.unmount();
+                    exports.onCompleteAdding.fire();
+                }.bind(postEditorMounter)
+            };
+            postEditorMounter.mount();
         };
+
+        var showPostEditorWithEditMode = function (id) {
+            PostList.getPost(id).then(function (post) {
+                postEditorMounter.props = {
+                    mode: "edit",
+                    post: post,
+                    onComplete: function () {
+                        this.unmount();
+                        exports.onCompleteEditing.fire();
+                    }.bind(postEditorMounter)
+                };
+                postEditorMounter.mount();
+            });
+        };
+
+        var exports = {
+            showPostList: function () {
+                postListMounter.mount();
+            },
+            onClickAddButton: new Event(),
+            onClickEditButton: new Event(),
+            onCompleteAdding: new Event(),
+            onCompleteEditing: new Event(),
+            onCompleteDeleting: new Event(),
+            showPostEditorWithAddMode: showPostEditorWithAddMode,
+            showPostEditorWithEditMode: showPostEditorWithEditMode
+        };
+
+        return exports;
     });
