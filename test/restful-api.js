@@ -174,11 +174,7 @@ describe('Restful API', () => {
     describe('/categories', () => {
 
         it('should create a new category', (done) => {
-            var categoryWithoutSlug = {
-                name: testCategory.name
-            };
-
-            httpRequest.post(`${BASE_URL}/categories`, categoryWithoutSlug)
+            httpRequest.post(`${BASE_URL}/categories`, testCategory)
                 .then((category) => {
                     expect(category._id).to.be.string;
                     expect(category.name).to.equal(testCategory.name);
@@ -192,46 +188,27 @@ describe('Restful API', () => {
         });
 
         it('should create a new category even when the name is duplicated', (done) => {
-            var categoryWithoutSlug = {
-                name: testCategory.name
+
+            var cat1 = {
+                name: 'Category Name',
+                slug: 'cat-name-_'
             };
 
-            httpRequest.post(`${BASE_URL}/categories`, categoryWithoutSlug)
+            var cat2 = {
+                name: 'Category Name',
+                slug: '!@%name-_'
+            };
+
+            httpRequest.post(`${BASE_URL}/categories`, cat1)
                 .then((category) => {
                     expect(category._id).to.be.string;
-                    expect(category.name).to.equal(testCategory.name);
-                    expect(category.slug).to.equal(testCategory.slug);
-                    return httpRequest.post(`${BASE_URL}/categories`, categoryWithoutSlug)
+                    expect(category.name).to.equal(cat1.name);
+                    expect(category.slug).to.equal(cat1.slug);
+                    return httpRequest.post(`${BASE_URL}/categories`, cat2)
                 })
                 .then((category) => {
-                    expect(category.name).to.equal(testCategory.name);
-                    expect(category.slug).to.equal(testCategory.slug + "-2");
-                    return httpRequest.post(`${BASE_URL}/categories`, categoryWithoutSlug)
-                })
-                .then((category) => {
-                    expect(category.name).to.equal(testCategory.name);
-                    expect(category.slug).to.equal(testCategory.slug + "-3");
-                    return httpRequest.post(`${BASE_URL}/categories`, {
-                        name: testCategory.name,
-                        "slug": testCategory.slug + "-2"
-                    })
-                })
-                .then((category) => {
-                    expect(category.name).to.equal(testCategory.name);
-                    expect(category.slug).to.equal(testCategory.slug + "-4");
-                    return httpRequest.post(`${BASE_URL}/categories`, {
-                        name: testCategory.name,
-                        "slug": testCategory.slug + "-02"
-                    })
-                })
-                .then((category) => {
-                    expect(category.name).to.equal(testCategory.name);
-                    expect(category.slug).to.equal(testCategory.slug + "-02");
-                    return httpRequest.post(`${BASE_URL}/categories`, categoryWithoutSlug)
-                })
-                .then((category) => {
-                    expect(category.name).to.equal(testCategory.name);
-                    expect(category.slug).to.equal(testCategory.slug + "-5");
+                    expect(category.name).to.equal(cat2.name);
+                    expect(category.slug).to.equal(cat2.slug);
                     done();
                 })
                 .catch((err) => {
@@ -240,13 +217,57 @@ describe('Restful API', () => {
                 });
         });
 
-        it('should return a list of categories', (done) => {
-            httpRequest.post(`${BASE_URL}/categories`, testCategory)
-                .then(() => {
-                    return httpRequest.post(`${BASE_URL}/categories`, testCategory)
+        it('should not create a new category when the slug is duplicated', (done) => {
+
+            var cat1 = {
+                name: 'Category Name',
+                slug: 'my0slug1'
+            };
+
+            var cat2 = {
+                name: 'Rondom Name',
+                slug: 'my0slug1'
+            };
+
+            httpRequest.post(`${BASE_URL}/categories`, cat1)
+                .then((category) => {
+                    expect(category._id).to.be.string;
+                    expect(category.name).to.equal(cat1.name);
+                    expect(category.slug).to.equal(cat1.slug);
+                    return httpRequest.post(`${BASE_URL}/categories`, cat2)
                 })
                 .then(() => {
-                    return httpRequest.post(`${BASE_URL}/categories`, testCategory)
+                    done(new Error());
+                })
+                .catch(() => {
+                    done();
+                });
+        });
+
+        it('should return a list of categories', (done) => {
+
+            var cat1 = {
+                name: 'Category Name',
+                slug: 'my0slug1'
+            };
+
+            var cat2 = {
+                name: 'Rondom Name',
+                slug: 'dsf324'
+            };
+
+            var cat3 = {
+                name: 'AS Name',
+                slug: 'gdfsg'
+            };
+
+
+            httpRequest.post(`${BASE_URL}/categories`, cat1)
+                .then(() => {
+                    return httpRequest.post(`${BASE_URL}/categories`, cat2)
+                })
+                .then(() => {
+                    return httpRequest.post(`${BASE_URL}/categories`, cat3)
                 })
                 .then(() => {
                     return httpRequest.get(`${BASE_URL}/categories`)
@@ -308,9 +329,20 @@ describe('Restful API', () => {
         });
 
         it('should delete a category', (done) => {
-            httpRequest.post(`${BASE_URL}/categories`, testCategory)
+
+            var cat1 = {
+                name: 'Category Name',
+                slug: 'my0slug1'
+            };
+
+            var cat2 = {
+                name: 'Rondom Name',
+                slug: 'dsf324'
+            };
+
+            httpRequest.post(`${BASE_URL}/categories`, cat1)
                 .then(() => {
-                    return httpRequest.post(`${BASE_URL}/categories`, testCategory)
+                    return httpRequest.post(`${BASE_URL}/categories`, cat2)
                 })
                 .then(() => {
                     return httpRequest.get(`${BASE_URL}/categories`)
@@ -335,21 +367,23 @@ describe('Restful API', () => {
 
     describe('/posts', () => {
 
-        var testPost1 = {
-            "title": " ## My Post Title! ",
-            "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
-            "category": testCategory.slug,
-            "tags": ["tag1", "tag2"]
-        };
-
-        var testPost2 = {
-            "title": "It is - the  title 1 --- ",
-            "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
-            "category": undefined
-        };
-
         it('should create a new post', (done) => {
             var category;
+
+            var testPost1 = {
+                "title": " ## My Post Title! ",
+                "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
+                "category": testCategory.slug,
+                "slug": "testtset",
+                "tags": ["tag1", "tag2"]
+            };
+
+            var testPost2 = {
+                "title": "It is - the  title 1 --- ",
+                "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
+                "slug": "3fasd3ea",
+                "category": undefined
+            };
 
             httpRequest.post(`${BASE_URL}/categories`, testCategory)
                 .then((_category) => {
@@ -364,46 +398,66 @@ describe('Restful API', () => {
                 .then((post) => {
                     expect(post._id).to.be.string;
                     expect(post.title).to.equal(testPost1.title);
-                    expect(post.slug).to.equal("my-post-title");
+                    expect(post.slug).to.equal(testPost1.slug);
                     expect(post.content).to.equal(testPost1.content);
                     expect(post.tags).to.include("tag1");
                     expect(post.tags).to.include("tag2");
-                    return httpRequest.post(`${BASE_URL}/posts`, testPost1);
-                })
-                .then((post) => {
-                    expect(post._id).to.be.string;
-                    expect(post.title).to.equal(testPost1.title);
-                    expect(post.slug).to.equal("my-post-title-2");
-                    expect(post.content).to.equal(testPost1.content);
-                    expect(post.tags).to.include("tag1");
-                    expect(post.tags).to.include("tag2");
-
-                    testPost2.category = category._id;
-
                     return httpRequest.post(`${BASE_URL}/posts`, testPost2);
                 })
                 .then((post) => {
                     expect(post._id).to.be.string;
                     expect(post.title).to.equal(testPost2.title);
-                    expect(post.slug).to.equal("it-is-the-title-1");
-                    expect(post.content).to.equal(testPost2.content);
-
-                    return httpRequest.post(`${BASE_URL}/posts`, testPost2);
-                })
-                .then((post) => {
-                    expect(post._id).to.be.string;
-                    expect(post.title).to.equal(testPost2.title);
-                    expect(post.slug).to.equal("it-is-the-title-2");
+                    expect(post.slug).to.equal(testPost2.slug);
                     expect(post.content).to.equal(testPost2.content);
                     done();
                 })
                 .catch((err) => {
-                    //console.error(err);
+                    console.error(err);
                     done(new Error());
                 });
         });
+        /*
+        it('should update a post', (done) => {
+            var category;
 
-        // TODO Add tests for /posts
+            var testPost = {
+                "title": " ## My Post Title! ",
+                "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
+                "category": testCategory.slug,
+                "tags": ["tag1", "tag2"]
+            };
+
+            httpRequest.post(`${BASE_URL}/categories`, testCategory)
+                .then((_category) => {
+                    category = _category;
+                    return httpRequest.get(`${BASE_URL}/users/me`);
+                })
+                .then((_user) => {
+                    testPost.author = _user._id;
+                    return httpRequest.post(`${BASE_URL}/posts`, testPost);
+                })
+                .then((post) => {
+                    var update = {
+                        "title" : "A B C D E"
+                    };
+                    return httpRequest.put(`${BASE_URL}/posts/${post._id}`, update);
+                })
+                .then((post) => {
+                    expect(post._id).to.be.string;
+                    expect(post.title).to.equal("A B C D E");
+                    expect(post.slug).to.equal("my-post-title");
+                    expect(post.content).to.equal(testPost.content);
+                    expect(post.tags).to.include("tag1");
+                    expect(post.tags).to.include("tag2");
+                    testPost.category = category._id;
+                    done();
+                })
+                .catch((err) => {
+                    console.error(err);
+                    done(new Error());
+                });
+        });
+        */
 
     });
 });
