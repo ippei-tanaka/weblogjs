@@ -29,6 +29,12 @@ define([
                 });
             },
 
+            componentWillReceiveProps: function (newProps) {
+                this.setState({
+                    value: newProps.value
+                });
+            },
+
             render: function () {
 
                 var props = $.extend({}, this.props);
