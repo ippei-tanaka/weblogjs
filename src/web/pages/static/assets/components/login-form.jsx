@@ -3,10 +3,10 @@
 define([
         'react',
         'jquery',
-        'jsx!components/input-field'],
+        'jsx!components/form-field'],
     function (React,
               $,
-              InputField) {
+              FormField) {
 
         var loginUrl = "/admin/login";
         var successUrl = "/admin/";
@@ -51,65 +51,50 @@ define([
 
             render: function () {
 
-                var emailField = React.createElement(InputField, {
-                    id: "LoginFormInputEmail",
-                    type: "email",
-                    label: "Email",
-                    classNames: {
-                        container: "m-lgf-field-container",
-                        label: "m-lgf-label",
-                        input: "m-lgf-input"
-                    },
-                    attributes: {
-                        required: true,
-                        autofocus: true,
-                        placeholder: "Email"
-                    },
-                    onChange: function (e) {
-                        this.setState({
-                            email: e.target.value
-                        });
-                    }.bind(this)
+                var emailField = React.createElement(FormField, {
+                    field: {
+                        type: "email",
+                        value: this.state.email,
+                        onChange: function (value) {
+                            this.setState({ email: value });
+                        }.bind(this),
+                        autoFocus: true,
+                        placeholder: "Email Address"
+                    }
                 });
 
-                var passwordField = React.createElement(InputField, {
-                    id: "LoginFormInputPassword",
-                    type: "password",
-                    label: "Password",
-                    classNames: {
-                        container: "m-lgf-field-container",
-                        label: "m-lgf-label",
-                        input: "m-lgf-input"
-                    },
-                    attributes: {
-                        required: true,
+                var passwordField = React.createElement(FormField, {
+                    field: {
+                        type: "password",
+                        value: this.state.password,
+                        onChange: function (value) {
+                            this.setState({ password: value });
+                        }.bind(this),
                         placeholder: "Password"
-                    },
-                    onChange: function (e) {
-                        this.setState({
-                            password: e.target.value
-                        });
-                    }.bind(this)
+                    }
                 });
 
                 return (
                     <form className="module-login-form" method="post" onSubmit={this.onSubmit}>
                         <div className="m-lgf-wrapper">
-                            <h1 className="m-lgf-title">WeblogJS Admin Site</h1>
+                            <div className="module-data-editor">
+                                <h1 className="m-dte-title">WeblogJS Admin Site</h1>
+                                <div className="m-dte-field-container">
+                                    {emailField}
+                                </div>
+                                <div className="m-dte-field-container">
+                                    {passwordField}
+                                </div>
+                                { this.state.error
+                                    ? (
+                                    <div className="m-dte-field-container">
+                                        <span className="m-lgf-error">The email or password is incorrect.</span>
+                                    </div>)
+                                    : null }
 
-                            {emailField}
-
-                            {passwordField}
-
-                            { this.state.error
-                                ? (
-                                <div className="m-lgf-error-container">
-                                    <span className="m-lgf-error">The email or password is incorrect.</span>
-                                </div>)
-                                : null }
-
-                            <div className="m-lgf-field-container">
-                                <button className="module-button m-btn-plain" type="submit">Sign in</button>
+                                <div className="m-dte-field-container">
+                                    <button className="module-button m-btn-plain" type="submit">Sign in</button>
+                                </div>
                             </div>
                         </div>
                     </form>

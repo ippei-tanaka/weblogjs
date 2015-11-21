@@ -88,6 +88,12 @@ routes.get('/users', isLoggedIn, response((ok, error, request) => {
         .catch(error);
 }));
 
+routes.get('/users/me', isLoggedIn, response((ok, error, request) => {
+    userManager.findById(request.user._id)
+        .then(ok)
+        .catch(error);
+}));
+
 routes.get('/users/:id', isLoggedIn, response((ok, error, request) => {
     userManager.findById(request.params.id)
         .then(ok)
@@ -116,8 +122,11 @@ routes.delete('/users/:id', isLoggedIn, response((ok, error, request) => {
 //-------------------------------------------------------
 // Category
 
-routes.get('/categories', isLoggedIn, response((ok, error) => {
-    categoryManager.getList()
+routes.get('/categories', isLoggedIn, response((ok, error, request) => {
+    var urlParts = url.parse(request.url, true),
+        query = urlParts.query;
+
+    categoryManager.getList(query)
         .then(ok)
         .catch(error);
 }));
@@ -166,9 +175,7 @@ routes.get('/posts/:id', isLoggedIn, response((ok, error, request) => {
 }));
 
 routes.post('/posts', isLoggedIn, response((ok, error, request) => {
-    var post = Object.assign(request.body, {author: request.user._id});
-
-    postManager.create(post)
+    postManager.create(request.body)
         .then(ok)
         .catch(error);
 }));

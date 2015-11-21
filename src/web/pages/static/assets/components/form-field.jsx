@@ -5,24 +5,17 @@ define([
         'jquery'],
     function (React, $) {
 
-        var Select = React.createClass({
-            render: function () {
-                return (
-                    <select
-                        id={this.props.id}
-                        onChange={this.props.onChange}
-                        defaultValue={this.props.initialValue}
-                        className={this.props.classNames.field}
-                        >
-                        {this.props.choices.map(function (choice) {
-                            return <option key={choice.key} value={choice.value}>{choice.label}</option>;
-                        })}
-                    </select>
-                );
-            }
-        });
-
-        var FormField = React.createClass({
+        var Field = React.createClass({
+            getDefaultProps: function () {
+                return {
+                    id: "",
+                    type: "text",
+                    className: "",
+                    baseClassName: "m-frf-",
+                    value: "",
+                    onChange: function () {}
+                };
+            },
 
             getInitialState: function () {
                 return {
@@ -30,103 +23,127 @@ define([
                 };
             },
 
-            getDefaultProps: function () {
-                return {
-                    id: "",
-                    type: "",
-                    label: "",
-                    initialValue: "",
-                    choices: [],
-
-                    onChange: function () {},
-
-                    error: {
-                        message: ""
-                    },
-
-                    classNames: {
-                        container: "",
-                        label: "",
-                        field: "",
-                        error: ""
-                    },
-
-                    attributes: {}
-                };
-            },
-
             componentWillMount: function () {
                 this.setState({
-                    value: this.props.initialValue
+                    value: this.props.value
                 });
             },
 
             render: function () {
-                var field = this._createFormFieldElement();
-                var error = this.props.error;
 
-                return (
-                    <div className={this.props.classNames.container}>
+                var props = $.extend({}, this.props);
 
-                        { this.props.label ? (
-                            <label className={this.props.classNames.label}
-                                   htmlFor={this.props.id}>
-                                {this.props.label}
-                            </label>
-                        ) : null }
+                //
+                delete props.children;
 
-                        {field}
+                //
+                props.className = props.className || props.baseClassName + props.type;
+                delete props.baseClassName;
 
-                        { error && error.message ? (
-                            <span className={this.props.classNames.error}>
-                                {error.message}
-                            </span>
-                        ) : null }
+                //
+                props.value = this.state.value;
+                props.onChange = this._onChange;
 
-                    </div>
-                );
+                if (props.type === "textarea") {
+                    return React.createElement("textarea", props);
+                } else if (props.type === "select") {
+                    var options = this.props.children.map(function (child) {
+                        return React.createElement("option", child);
+                    });
+                    return React.createElement("select", props, options);
+                } else {
+                    return React.createElement("input", props);
+                }
             },
 
             _onChange: function (e) {
-                if (this.props.onChange.call(null, e) === false) {
+                var value = e.target.value;
+
+                if (this.props.onChange(value) === false) {
                     e.preventDefault();
                     return;
                 }
 
                 this.setState({
-                    value: e.target.value
+                    value: value
                 });
-            },
-
-            _createFormFieldElement () {
-
-                var props = {
-                    className: this.props.classNames.field,
-                    id: this.props.id,
-                    value: this.state.value,
-                    onChange: this._onChange
-                };
-
-                props = $.extend(props, this.props.attributes);
-
-                switch (this.props.type) {
-                    case "text":
-                    case "email":
-                    case "password":
-                    case "date":
-                    default:
-                        props.type = this.props.type;
-                        return React.createElement("input", props);
-                        break;
-                    case "textarea":
-                        return React.createElement("textarea", props);
-                        break;
-                    case "select":
-                        return React.createElement(Select, this.props);
-                        break;
-                }
             }
 
+        });
+
+        var Label = React.createClass({
+            getDefaultProps: function () {
+                return {
+                    id: "",
+                    className: "m-frf-label"
+                };
+            },
+
+            render: function () {
+                return (
+                    <label className={this.props.className}
+                           htmlFor={this.props.id}>
+                        {this.props.children}
+                    </label>
+                );
+            }
+        });
+
+        var Error = React.createClass({
+            getDefaultProps: function () {
+                return {
+                    className: "m-frf-error"
+                };
+            },
+
+            render: function () {
+                return (
+                    <span className={this.props.className}>
+                        {this.props.children}
+                    </span>
+                );
+            }
+        });
+
+        var FormField = React.createClass({
+            getDefaultProps: function () {
+                return {
+                    containerClassName: "module-form-field",
+                    field: {},
+                    label: {},
+                    error: {}
+                };
+            },
+
+            render: function () {
+                var id = this.props.field.id || this._generateId();
+                var fieldProps = $.extend(this.props.field, { id: id });
+                var labelProps = $.extend(this.props.label, { id: id });
+
+                var field = React.createElement(Field, fieldProps);
+                var label = React.createElement(Label, labelProps);
+                var error = React.createElement(Error, this.props.error);
+
+                return (
+                    <div className={this.props.containerClassName}>
+                        { label }
+                        { field }
+                        { error }
+                    </div>
+                );
+            },
+
+            _generateId: function () {
+                var id = "FormField";
+                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                var length = 12;
+
+                for( var i=0; i < length; i++ ) {
+                    id += possible.charAt(Math.floor(Math.random() * possible.length));
+                }
+
+                return id;
+            }
         });
 
         return FormField;

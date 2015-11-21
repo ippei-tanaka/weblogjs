@@ -1,0 +1,11 @@
+{
+    "database_name": "weblogjs",
+    "database_host": "localhost",
+    "database_port": 27017,
+    "web_server_port": 8080,
+    "web_server_host": "0.0.0.0",
+    "admin_email": "t@ttt.com",
+    "admin_password": "tttttttt",
+    "api_version": 1,
+    "session_secret": "keyboard cat"
+}
