@@ -2,6 +2,7 @@
 
 
 var categoryManager = require('./category-manager');
+var userManager = require('./user-manager');
 var modelManager = require('./model-manager');
 var Post = require('./models/post');
 var errors = require('../errors/index');
@@ -78,23 +79,34 @@ var removeById = modelManager.removeById.bind({}, Post);
  */
 var createOrUpdate = (postInfo, workerFunction) => new Promise((resolve, reject) => {
 
-    var promise,
-        categoryValue = String(postInfo.category);
+    var categoryPromise,
+        categoryValue = String(postInfo.category),
+        authorPromise,
+        authorValue = String(postInfo.author);
 
-    if (!postInfo.category) {
-        promise = Promise.resolve(null);
-    } else if (checkForHexRegExp.test(categoryValue)) {
-        promise = categoryManager.findById(categoryValue);
-    } else {
-        promise = categoryManager.findBySlug(categoryValue);
+    if (checkForHexRegExp.test(categoryValue)) {
+        categoryPromise = categoryManager.findById(categoryValue);
+    } else if (postInfo.category) {
+        categoryPromise = categoryManager.findBySlug(categoryValue);
+    }  else {
+        categoryPromise = Promise.resolve(null);
     }
 
-    promise
-        .then((category) => {
+    if (checkForHexRegExp.test(authorValue)) {
+        authorPromise = userManager.findById(authorValue);
+    } else {
+        authorPromise = Promise.resolve(null);
+    }
+
+    Promise.all([categoryPromise, authorPromise])
+        .then((promised) => {
+            var category = promised[0];
+            var author = promised[1];
+
             workerFunction({
                 title: postInfo.title,
                 content: postInfo.content,
-                author: postInfo.author,
+                author:  author ? author.id : undefined,
                 category: category ? category.id : undefined,
                 slug: postInfo.slug,
                 publish_date: new Date(postInfo.publish_date),
