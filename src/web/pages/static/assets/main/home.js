@@ -32,8 +32,55 @@ requirejs([
 
         navigationMounter.mount();
 
+        //--------------------------------
+        // Callbacks on Controllers
+        //--------------------------------
 
-        // Callbacks on list pages
+        // UserController
+
+        UserController.onClickAddButton.on(function () {
+            Router.changeHash("/users/new");
+        });
+
+        UserController.onClickEditButton.on(function (user) {
+            Router.changeHash("/users/" + user._id);
+        });
+
+        UserController.onCompleteAdding.on(function () {
+            Router.changeHash("/users");
+        });
+
+        UserController.onCompleteEditing.on(function () {
+            Router.changeHash("/users");
+        });
+
+        UserController.onCompleteDeleting.on(function () {
+            Router.changeHash("/users");
+        });
+
+        // CategoryController
+
+        CategoryController.onClickAddButton.on(function () {
+            Router.changeHash("/categories/new");
+        });
+
+        CategoryController.onClickEditButton.on(function (category) {
+            Router.changeHash("/categories/" + category._id);
+        });
+
+        CategoryController.onCompleteAdding.on(function () {
+            Router.changeHash("/categories");
+        });
+
+        CategoryController.onCompleteEditing.on(function () {
+            Router.changeHash("/categories");
+        });
+
+        CategoryController.onCompleteDeleting.on(function () {
+            Router.changeHash("/categories");
+        });
+
+        // PostController
 
         PostController.onClickAddButton.on(function () {
             Router.changeHash("/posts/new");
@@ -44,31 +91,57 @@ requirejs([
         });
 
         PostController.onCompleteAdding.on(function () {
-            Router.changeHash("/posts/");
+            Router.changeHash("/posts");
         });
 
         PostController.onCompleteEditing.on(function () {
-            Router.changeHash("/posts/");
+            Router.changeHash("/posts");
         });
 
         PostController.onCompleteDeleting.on(function () {
-            Router.changeHash("/posts/");
+            Router.changeHash("/posts");
         });
 
 
+        //--------------------------------
         // Setting up the router
+        //--------------------------------
+
+        // Home
 
         Router.addRoute("/", function () {
             HomeController.showDashBoard();
         });
 
+        // Users
+
         Router.addRoute("/users", function () {
             UserController.showUserList();
         });
 
+        Router.addRoute("/users/new", function () {
+            UserController.showUserEditorWithAddMode();
+        });
+
+        Router.addRoute("/users/:id", function (id) {
+            UserController.showUserEditorWithEditMode(id);
+        });
+
+        // Categories
+
         Router.addRoute("/categories", function () {
             CategoryController.showCategoryList();
         });
+
+        Router.addRoute("/categories/new", function () {
+            CategoryController.showCategoryEditorWithAddMode();
+        });
+
+        Router.addRoute("/categories/:id", function (id) {
+            CategoryController.showCategoryEditorWithEditMode(id);
+        });
+
+        // Posts
 
         Router.addRoute("/posts", function () {
             PostController.showPostList();
@@ -81,6 +154,8 @@ requirejs([
         Router.addRoute("/posts/:id", function (id) {
             PostController.showPostEditorWithEditMode(id);
         });
+
+        // Default
 
         Router.setDefaultRouteCallback(function () {
             Router.changeHash("/");

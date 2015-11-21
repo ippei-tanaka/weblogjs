@@ -65,7 +65,7 @@ define([
                         type: "email",
                         value: this.state.user.email,
                         onChange: function (value) {
-                            this._setPostState(this.state.user, {email: value});
+                            this._setUserState(this.state.user, {email: value});
                         }.bind(this),
                         autoFocus: true
                     },
@@ -82,7 +82,7 @@ define([
                         type: "password",
                         value: this.state.user.password,
                         onChange: function (value) {
-                            this._setPostState(this.state.user, {password: value});
+                            this._setUserState(this.state.user, {password: value});
                         }.bind(this)
                     },
                     label: {
@@ -100,7 +100,7 @@ define([
                         type: "text",
                         value: this.state.user.display_name,
                         onChange: function (value) {
-                            this._setPostState(this.state.user, {display_name: value});
+                            this._setUserState(this.state.user, {display_name: value});
                         }.bind(this)
                     },
                     label: {
@@ -226,12 +226,6 @@ define([
                     .then(function () {
                         GlobalEvents.userDeleted.fire();
                     });
-            },
-
-            _autoFocus: function (input) {
-                if (input != null) {
-                    input.focus();
-                }
             },
 
             _sendHttpRequest: function (url, method, data) {

@@ -62,7 +62,7 @@ define([
                         type: "text",
                         value: this.state.category.name,
                         onChange: function (value) {
-                            this._setPostState(this.state.category, {name: value});
+                            this._setCategoryState(this.state.category, {name: value});
                         }.bind(this),
                         autoFocus: true
                     },
@@ -79,7 +79,7 @@ define([
                         type: "text",
                         value: this.state.category.slug,
                         onChange: function (value) {
-                            this._setPostState(this.state.category, {slug: value});
+                            this._setCategoryState(this.state.category, {slug: value});
                         }.bind(this)
                     },
                     label: {
@@ -202,12 +202,6 @@ define([
                     .then(function () {
                         GlobalEvents.categoryDeleted.fire();
                     });
-            },
-
-            _autoFocus: function (input) {
-                if (input != null) {
-                    input.focus();
-                }
             },
 
             _sendHttpRequest: function (url, method, data) {

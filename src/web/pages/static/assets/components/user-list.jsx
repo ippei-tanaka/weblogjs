@@ -26,6 +26,17 @@ define([
                         .then(function (data) {
                             return data.items;
                         });
+                },
+
+                getUser: function (id) {
+                    return $.ajax({
+                        url: url + "/" + id,
+                        dataType: 'json',
+                        cache: false
+                    })
+                        .then(function (data) {
+                            return data;
+                        });
                 }
             },
 
