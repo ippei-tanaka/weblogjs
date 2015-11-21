@@ -14,7 +14,8 @@ define([
               Event) {
 
 
-        var postEditorMounter = new Mounter(PostEditor, 'main-content-container');
+        var postEditorMounter = new Mounter(
+            PostEditor, 'main-content-container');
 
         var popupMounter = new Mounter(PopUp, 'popup-container');
 
