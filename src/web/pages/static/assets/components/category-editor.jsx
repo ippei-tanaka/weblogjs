@@ -3,12 +3,14 @@
 define([
         'react',
         'services/global-events',
+        'services/string-formatter',
         'jquery',
         'jsx!components/form-field',
         'jsx!components/confirmation'
     ],
     function (React,
               GlobalEvents,
+              StringFormatter,
               $,
               FormField,
               Confirmation) {
@@ -169,10 +171,7 @@ define([
 
             _createCategory: function () {
 
-                var data = {
-                    name: this.state.category.name.trim(),
-                    slug: this.state.category.slug.trim()
-                };
+                var data = this._buildDataForHttpRequest();
 
                 return this._sendHttpRequest(url, 'post', data)
                     .then(function () {
@@ -184,10 +183,7 @@ define([
 
                 var ajaxUrl = url + '/' + this.props.category._id;
 
-                var data = {
-                    name: this.state.category.name.trim(),
-                    slug: this.state.category.slug.trim()
-                };
+                var data = this._buildDataForHttpRequest();
 
                 return this._sendHttpRequest(ajaxUrl, 'put', data)
                     .then(function () {
@@ -217,6 +213,21 @@ define([
                 }
 
                 return $.ajax(options);
+            },
+
+            _buildDataForHttpRequest: function () {
+
+                var data = {
+                    name: this.state.category.name.trim(),
+                    slug: this.state.category.slug.trim()
+                };
+
+                if(data.slug === "") {
+                    data.slug = StringFormatter.slugfy(data.name);
+                    this._setCategoryState(this.state.category, {slug: data.slug});
+                }
+
+                return data;
             },
 
             _setCategoryState: function (defaultCategory, category) {

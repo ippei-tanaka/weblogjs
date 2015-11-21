@@ -3,6 +3,7 @@
 define([
         'react',
         'services/global-events',
+        'services/string-formatter',
         'jquery',
         'jsx!components/form-field',
         'jsx!components/confirmation',
@@ -11,6 +12,7 @@ define([
     ],
     function (React,
               GlobalEvents,
+              StringFormatter,
               $,
               FormField,
               Confirmation,
@@ -312,14 +314,21 @@ define([
             },
 
             _buildDataForHttpRequest: function () {
-                return {
+                var data = {
                     title: this.state.post.title.trim(),
                     content: this.state.post.content.trim(),
                     category: this.state.post.category ? this.state.post.category._id : "",
                     author: this.state.post.author ? this.state.post.author._id : "",
                     publish_date: this.state.post.publish_date,
                     slug: this.state.post.slug.trim()
+                };
+
+                if(data.slug === "") {
+                    data.slug = StringFormatter.slugfy(data.title);
+                    this._setPostState(this.state.post, {slug: data.slug});
                 }
+
+                return data;
             },
 
             _sendHttpRequest: function (url, method, data) {
