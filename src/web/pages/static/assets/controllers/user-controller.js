@@ -40,16 +40,7 @@ define([
                 },
 
                 deleteButtonClicked: function (user) {
-                    userEditorMounter.props = {
-                        mode: "del",
-                        user: user,
-                        onComplete: function () {
-                            this.unmount();
-                            exports.onCompleteDeleting.fire();
-                        }.bind(popupMounter)
-                    };
-                    popupMounter.children = userEditorMounter.build();
-                    popupMounter.mount();
+                    showUserEditorWitDeleteMode(user._id);
                 }
             }
         );
@@ -58,7 +49,7 @@ define([
         var showUserEditorWithAddMode = function () {
             userEditorMounter.props = {
                 mode: "add",
-                user: {},
+                userId: null,
                 onComplete: function () {
                     this.unmount();
                     exports.onCompleteAdding.fire();
@@ -68,17 +59,28 @@ define([
         };
 
         var showUserEditorWithEditMode = function (id) {
-            UserList.getUser(id).then(function (user) {
-                userEditorMounter.props = {
-                    mode: "edit",
-                    user: user,
-                    onComplete: function () {
-                        this.unmount();
-                        exports.onCompleteEditing.fire();
-                    }.bind(userEditorMounter)
-                };
-                userEditorMounter.mount();
-            });
+            userEditorMounter.props = {
+                mode: "edit",
+                userId: id,
+                onComplete: function () {
+                    this.unmount();
+                    exports.onCompleteEditing.fire();
+                }.bind(userEditorMounter)
+            };
+            userEditorMounter.mount();
+        };
+
+        var showUserEditorWitDeleteMode = function (id) {
+            userEditorMounter.props = {
+                mode: "del",
+                userId: id,
+                onComplete: function () {
+                    this.unmount();
+                    exports.onCompleteDeleting.fire();
+                }.bind(popupMounter)
+            };
+            popupMounter.children = userEditorMounter.build();
+            popupMounter.mount();
         };
 
         var exports = {

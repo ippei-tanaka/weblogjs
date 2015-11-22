@@ -4,12 +4,14 @@ define([
         'react',
         'services/global-events',
         'jquery',
+        'jsx!components/user-list',
         'jsx!components/form-field',
         'jsx!components/confirmation'
     ],
     function (React,
               GlobalEvents,
               $,
+              UserList,
               FormField,
               Confirmation) {
 
@@ -35,19 +37,18 @@ define([
             getDefaultProps: function () {
                 return {
                     mode: "", // 'add', 'edit' or 'del'
-                    user: {
-                        _id: "",
-                        email: "",
-                        password: "",
-                        display_name: ""
-                    },
+                    userId: "",
                     onComplete: function () {
                     }
                 };
             },
 
             componentWillMount: function () {
-                this._setUserState(this.getInitialState().user, this.props.user);
+                if (this.props.mode === "edit") {
+                    UserList.getUser(this.props.userId).then(function (user) {
+                        this._setUserState(this.getInitialState().user, user);
+                    }.bind(this));
+                }
             },
 
             render: function () {
@@ -67,7 +68,11 @@ define([
                         onChange: function (value) {
                             this._setUserState(this.state.user, {email: value});
                         }.bind(this),
-                        autoFocus: true
+                        autoFocus: true,
+                        disabled: this._chooseByMode({
+                            add: false,
+                            edit: true
+                        })
                     },
                     label: {
                         children: "Email Address"
@@ -147,18 +152,6 @@ define([
                 );
             },
 
-            _inputFactory: function (props) {
-                var defaultProps = {
-                    classNames: {
-                        container: "m-dte-field-container",
-                        label: "m-dte-label",
-                        field: "m-dte-input",
-                        error: "m-dte-error"
-                    }
-                };
-                return React.createElement(FormField, $.extend(defaultProps, props));
-            },
-
             _onSubmit: function (e) {
                 e.preventDefault();
 
@@ -207,7 +200,7 @@ define([
 
             _updateUser: function () {
 
-                var ajaxUrl = url + '/' + this.props.user._id;
+                var ajaxUrl = url + '/' + this.props.userId;
 
                 var data = {
                     display_name: this.state.user.display_name.trim()
@@ -220,7 +213,7 @@ define([
             },
 
             _deleteUser: function () {
-                var ajaxUrl = url + '/' + this.props.user._id;
+                var ajaxUrl = url + '/' + this.props.userId;
 
                 return this._sendHttpRequest(ajaxUrl, 'delete')
                     .then(function () {

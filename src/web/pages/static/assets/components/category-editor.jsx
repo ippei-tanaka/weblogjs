@@ -5,6 +5,7 @@ define([
         'services/global-events',
         'services/string-formatter',
         'jquery',
+        'jsx!components/category-list',
         'jsx!components/form-field',
         'jsx!components/confirmation'
     ],
@@ -12,6 +13,7 @@ define([
               GlobalEvents,
               StringFormatter,
               $,
+              CategoryList,
               FormField,
               Confirmation) {
 
@@ -35,18 +37,18 @@ define([
             getDefaultProps: function () {
                 return {
                     mode: "", // 'add', 'edit' or 'del'
-                    category: {
-                        _id: "",
-                        name: "",
-                        slug: ""
-                    },
+                    categoryId: "",
                     onComplete: function () {
                     }
                 };
             },
 
             componentWillMount: function () {
-                this._setCategoryState(this.getInitialState().category, this.props.category);
+                if (this.props.mode === "edit") {
+                    CategoryList.getCategory(this.props.categoryId).then(function (category) {
+                        this._setCategoryState(this.getInitialState().category, category);
+                    }.bind(this));
+                }
             },
 
             render: function () {
@@ -125,18 +127,6 @@ define([
                 );
             },
 
-            _inputFactory: function (props) {
-                var defaultProps = {
-                    classNames: {
-                        container: "m-dte-field-container",
-                        label: "m-dte-label",
-                        field: "m-dte-input",
-                        error: "m-dte-error"
-                    }
-                };
-                return React.createElement(InputField, $.extend(defaultProps, props));
-            },
-
             _onSubmit: function (e) {
                 e.preventDefault();
 
@@ -181,7 +171,7 @@ define([
 
             _updateCategory: function () {
 
-                var ajaxUrl = url + '/' + this.props.category._id;
+                var ajaxUrl = url + '/' + this.props.categoryId;
 
                 var data = this._buildDataForHttpRequest();
 
@@ -192,7 +182,7 @@ define([
             },
 
             _deleteCategory: function () {
-                var ajaxUrl = url + '/' + this.props.category._id;
+                var ajaxUrl = url + '/' + this.props.categoryId;
 
                 return this._sendHttpRequest(ajaxUrl, 'delete')
                     .then(function () {
