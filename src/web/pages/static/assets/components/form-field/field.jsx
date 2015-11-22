@@ -4,9 +4,10 @@ define([
         'react',
         'moment',
         'jquery',
-        'jsx!components/form-field/datetime'
+        'jsx!components/form-field/datetime',
+        'jsx!components/form-field/tag-list'
     ],
-    function (React, moment, $, Datetime) {
+    function (React, moment, $, Datetime, TagList) {
 
         var Field = React.createClass({
             getDefaultProps: function () {
@@ -56,13 +57,15 @@ define([
                     return this._createSelect(props);
                 } else if (props.type === "datetime") {
                     return this._createDateTime(props);
+                } else if (props.type === "tag-list") {
+                    return this._createTagList(props);
                 } else {
                     return this._createInput(props);
                 }
             },
 
             _createTextArea: function (props) {
-                props.onChange = this._onChange;
+                props.onChange = this._onChangeElementValue;
                 return React.createElement("textarea", props);
             },
 
@@ -73,24 +76,27 @@ define([
 
                 delete props.children;
 
-                props.onChange = this._onChange;
+                props.onChange = this._onChangeElementValue;
 
                 return React.createElement("select", props, options);
             },
 
             _createDateTime: function (props) {
-                props.onChange = function (value) {
-                    this.props.onChange(value);
-                }.bind(this);
+                props.onChange = this._onChangeDirectValue;
                 return React.createElement(Datetime, props);
             },
 
+            _createTagList: function (props) {
+                props.onChange = this._onChangeDirectValue;
+                return React.createElement(TagList, props);
+            },
+
             _createInput: function (props) {
-                props.onChange = this._onChange;
+                props.onChange = this._onChangeElementValue;
                 return React.createElement("input", props);
             },
 
-            _onChange: function (e) {
+            _onChangeElementValue: function (e) {
                 var value = e.target.value;
 
                 if (this.props.onChange(value) === false) {
@@ -101,6 +107,10 @@ define([
                 this.setState({
                     value: value
                 });
+            },
+
+            _onChangeDirectValue: function (value) {
+                this.props.onChange(value);
             }
 
         });

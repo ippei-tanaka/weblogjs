@@ -189,6 +189,22 @@ define([
                     }
                 });
 
+                var tagListField = React.createElement(FormField, {
+                    field: {
+                        type: "tag-list",
+                        value: this.state.post.tags,
+                        onChange: function (value) {
+                            this._setPostState(this.state.post, {tags: value});
+                        }.bind(this)
+                    },
+                    label: {
+                        children: "Tags"
+                    },
+                    error: {
+                        children: this.state.errors.tags ? this.state.errors.tags.message : ""
+                    }
+                });
+
                 var publishDateField = React.createElement(FormField, {
                     field: {
                         type: "datetime",
@@ -226,6 +242,9 @@ define([
                         </div>
                         <div className="m-dte-field-container">
                             {categoryField}
+                        </div>
+                        <div className="m-dte-field-container">
+                            {tagListField}
                         </div>
                         <div className="m-dte-field-container">
                             {publishDateField}
@@ -319,6 +338,7 @@ define([
                     content: this.state.post.content.trim(),
                     category: this.state.post.category ? this.state.post.category._id : "",
                     author: this.state.post.author ? this.state.post.author._id : "",
+                    tags: this.state.post.tags,
                     publish_date: this.state.post.publish_date,
                     slug: this.state.post.slug.trim()
                 };
@@ -336,7 +356,8 @@ define([
                     url: url,
                     dataType: 'json',
                     cache: false,
-                    method: method
+                    method: method,
+                    traditional: true
                 };
 
                 if (data) {

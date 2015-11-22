@@ -71,6 +71,9 @@ table {
  Input
 ----------------------------*/
 /*----------------------------
+ Tag List
+----------------------------*/
+/*----------------------------
  Homepage
 ----------------------------*/
 /*----------------------------
@@ -111,6 +114,9 @@ table {
 ----------------------------*/
 /*----------------------------
  Input
+----------------------------*/
+/*----------------------------
+ Tag List
 ----------------------------*/
 /*----------------------------
  Homepage
@@ -187,7 +193,7 @@ input[type="password"] {
     background-color: #f0f0f0; }
 
 /*----------------------------
- Textarea
+ Datetime
 ----------------------------*/
 .element-datetime-field .e-dtf-field-set {
   background-color: #e0e0e0;
@@ -222,6 +228,78 @@ input[type="password"] {
 
 .element-datetime-field .e-dtf-select {
   display: block; }
+
+/*----------------------------
+ Tag List
+----------------------------*/
+.element-tag-list-field .e-tgl-new-tag-list {
+  margin: 14px 0 10px; }
+
+.element-tag-list-field .e-tgl-new-tag-list-item {
+  display: inline-block;
+  margin-right: 7px;
+  margin-bottom: 7px;
+  background-color: #0e5fa4;
+  color: #ffffff;
+  font-size: 12px;
+  padding: 2px 5px 4px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-radius: 6px; }
+
+.element-tag-list-field .e-tgl-tag-name {
+  padding: 0 6px 2px 2px;
+  vertical-align: middle;
+  display: inline-block; }
+
+.element-tag-list-field .e-tgl-no-tags-message {
+  font-size: 12px;
+  color: #777;
+  margin: 12px 0 14px;
+  display: inline-block;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px; }
+
+.element-tag-list-field .e-tgl-delete-icon {
+  color: #ffffff;
+  display: inline-block;
+  font-size: 12px;
+  vertical-align: middle; }
+  .element-tag-list-field .e-tgl-delete-icon:hover {
+    filter: alpha(opacity=50);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    -webkit-opacity: 0.5;
+    -khtml-opacity: 0.5;
+    -moz-opacity: 0.5;
+    -ms-opacity: 0.5;
+    -o-opacity: 0.5;
+    opacity: 0.5; }
+
+.element-tag-list-field .e-tgl-add-icon {
+  color: #0f70bd;
+  font-size: 22px; }
+  .element-tag-list-field .e-tgl-add-icon:hover {
+    filter: alpha(opacity=50);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    -webkit-opacity: 0.5;
+    -khtml-opacity: 0.5;
+    -moz-opacity: 0.5;
+    -ms-opacity: 0.5;
+    -o-opacity: 0.5;
+    opacity: 0.5; }
+
+.element-tag-list-field .e-tgl-add-button-container {
+  margin-left: 7px;
+  padding-top: 4px;
+  display: inline-block;
+  vertical-align: top; }
 
 /*----------------------------
  Textarea
@@ -368,6 +446,9 @@ table tbody tr {
  Input
 ----------------------------*/
 /*----------------------------
+ Tag List
+----------------------------*/
+/*----------------------------
  Homepage
 ----------------------------*/
 /*----------------------------
@@ -408,6 +489,9 @@ table tbody tr {
 ----------------------------*/
 /*----------------------------
  Input
+----------------------------*/
+/*----------------------------
+ Tag List
 ----------------------------*/
 /*----------------------------
  Homepage
