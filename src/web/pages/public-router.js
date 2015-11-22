@@ -4,21 +4,23 @@
 var routes = require('express').Router();
 var url = require('url');
 var baseRoute = '/';
+var api = require('../../api');
+var userManager = api.userManager;
+var categoryManager = api.categoryManager;
+var postManager = api.postManager;
 
 
 // Home
-
 routes.get('/',  (request, response) => {
-    response.render('admin/home');
-    response.render('public-master', {
-        head: {
-            title: 'page title'
-        },
-        content: {
-            title: 'post title',
-            description: 'description'
-        }
-    });
+    postManager.getList()
+        .then((posts) => {
+            response.render('public/home', {
+                postList: posts.items
+            });
+        })
+        .catch(() => {
+            response.status(500).send('Problems have occurred.');
+        });
 });
 
 

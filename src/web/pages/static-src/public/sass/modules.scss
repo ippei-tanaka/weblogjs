@@ -1,0 +1,108 @@
+@import "mixins";
+@import "variables";
+
+
+/*----------------------------
+ Article
+----------------------------*/
+.module-header {
+    font-family: 'Signika', sans-serif;
+    font-size: 55px;
+    border-bottom: 1px solid #cccccc;
+    padding: 130px 40px 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+
+/*----------------------------
+ Post List
+----------------------------*/
+.module-post-list {
+    .m-psl-post-section {
+        border-bottom: 1px solid #cccccc;
+        padding: 45px 40px 25px;
+    }
+}
+
+
+/*----------------------------
+ Post
+----------------------------*/
+.module-post {
+    font-family: 'Quattrocento', serif;
+
+    .m-pst-title {
+        font-size: 36px;
+        margin-bottom: 20px;
+    }
+
+    .m-pst-date {
+        font-size: 15px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .m-pst-author {
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .m-pst-category {
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .m-pst-tag-container {
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .m-pst-tags {
+        display: inline-block;
+    }
+
+    .m-pst-tag {
+        display: inline-block;
+        &:after {
+            content: ", ";
+        }
+        &:last-child:after {
+            content: '';
+        }
+    }
+
+    .m-pst-content {
+        margin-top: 40px;
+        margin-bottom: 30px;
+    }
+}
+
+/*----------------------------
+ Article
+----------------------------*/
+.module-article {
+    font-size: 18px;
+    line-height: 1.5em;
+
+    h1 {
+        font-size: 35px;
+    }
+
+    h2 {
+        font-size: 30px;
+    }
+
+    h3 {
+        font-size: 27px;
+    }
+
+    h4 {
+        font-size: 24px;
+    }
+
+    h5, h6 {
+        font-size: 20px;
+    }
+
+}
