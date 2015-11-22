@@ -43,7 +43,7 @@ input[type="password"] {
 
 
 /*----------------------------
- Textarea
+ Datetime
 ----------------------------*/
 .element-datetime-field {
 
@@ -84,6 +84,75 @@ input[type="password"] {
     }
 }
 
+
+/*----------------------------
+ Tag List
+----------------------------*/
+.element-tag-list-field {
+
+    .e-tgl-new-tag-list-container {
+    }
+
+    .e-tgl-new-tag-list {
+        margin: 14px 0 10px;
+    }
+
+    .e-tgl-new-tag-list-item {
+        display: inline-block;
+        margin-right: 7px;
+        margin-bottom: 7px;
+        background-color: $color-tag-list-item-bg;
+        color: $color-tag-list-item-text;
+        font-size: $font-size-unimportant;
+        padding: 2px 5px 4px;
+        @include border-radius(6px);
+    }
+
+    .e-tgl-tag-name {
+        padding: 0 6px 2px 2px;
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+    .e-tgl-no-tags-message {
+        font-size: $font-size-unimportant;
+        //background-color: $color-background-unimportant;
+        color: $color-unimportant;
+        //padding: 10px;
+        margin: 12px 0 14px;
+        display: inline-block;
+        @include border-radius(5px);
+    }
+
+    .e-tgl-delete-icon {
+        color: $color-tag-list-close-button;
+        display: inline-block;
+        font-size: 12px;
+        vertical-align: middle;
+
+        &:hover {
+            @include opacity(0.5);
+        }
+    }
+
+    .e-tgl-add-icon {
+        color: $color-icon-add;
+        font-size: 22px;
+
+        &:hover {
+            @include opacity(0.5);
+        }
+    }
+
+    .e-tgl-add-button-container {
+        margin-left: 7px;
+        padding-top: 4px;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+
+}
 
 /*----------------------------
  Textarea
