@@ -45,8 +45,8 @@ define([
                             <label className="e-dtf-select-container">
                                 <select className="e-dtf-select" value={this.state.month}
                                         onChange={this._onChange('month')}>
-                                    {this._range(1, 12, function (i) {
-                                        return <option value={i} key={i}>{i}</option>
+                                    {this._listOfMonths.map(function (name, index) {
+                                        return <option value={index + 1} key={index + 1}>{name}</option>
                                     })}
                                 </select>
                                 <small className="e-dtf-label">Month</small>
@@ -162,6 +162,21 @@ define([
                 }
                 return results;
             },
+
+            _listOfMonths: [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ],
 
             _listOfOffsets: [
                 "-12:00",

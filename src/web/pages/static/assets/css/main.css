@@ -200,6 +200,7 @@ input[type="password"] {
   padding: 5px 6px;
   display: inline-block;
   margin-right: 10px;
+  margin-bottom: 5px;
   -webkit-border-radius: 5px;
   -khtml-border-radius: 5px;
   -moz-border-radius: 5px;
