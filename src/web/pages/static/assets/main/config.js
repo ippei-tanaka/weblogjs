@@ -16,6 +16,10 @@ requirejs.config({
         "react": "../vendors/react-with-addons",
         "react-dom": "../vendors/react-dom.min",
         "classnames": "../vendors/classnames",
-        "moment": "../vendors/moment"
-    }
+        "moment": "../vendors/moment",
+        "moment-timezone": "../vendors/moment-timezone-with-data",
+        "datetimepicker": "../vendors/jquery.datetimepicker/jquery.datetimepicker.min"
+    },
+
+    packages: ["components/form-field"]
 });

@@ -35,8 +35,53 @@ body {
 input[type="text"],
 input[type="email"],
 input[type="date"],
+input[type="datetime"],
+input[type="number"],
 input[type="password"] {
     @extend %text-input;
+}
+
+
+/*----------------------------
+ Textarea
+----------------------------*/
+.element-datetime-field {
+
+    .e-dtf-field-set {
+        background-color: $color-background-unimportant;
+        padding: 5px 6px;
+        display: inline-block;
+        margin-right: 10px;
+        @include border-radius(5px);
+    }
+
+    .e-dtf-select-container {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    .e-dtf-label {
+        display: inline-block;
+        color: $color-unimportant;
+        font-size: $font-size-unimportant;
+        margin-top: 3px;
+        margin-left: 1px;
+    }
+
+    .e-dtf-separator {
+        vertical-align: top;
+        display: inline-block;
+        margin: 7px 5px 0 0;
+    }
+
+    .e-dtf-select {
+        display: block;
+    }
 }
 
 

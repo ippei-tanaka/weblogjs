@@ -27,11 +27,13 @@ $color-btn-calm-bg-start: #215382;
 $color-btn-calm-bg-end: #2a6aa6;
 $color-btn-calm-hover-bg-start: lighten($color-btn-calm-bg-start, 30%);
 $color-btn-calm-hover-bg-end: lighten($color-btn-calm-bg-end, 30%);
+
 $color-btn-alert-text: #ffffff;
 $color-btn-alert-bg-start: #862524;
 $color-btn-alert-bg-end: #af2f2e;
 $color-btn-alert-hover-bg-start: lighten($color-btn-alert-bg-start, 30%);
 $color-btn-alert-hover-bg-end: lighten($color-btn-alert-bg-end, 30%);
+
 $color-btn-plain-text: #333;
 $color-btn-plain-bg-start: #f9f9f9;
 $color-btn-plain-bg-end: #ccc;
@@ -92,7 +94,14 @@ $color-icon-close: #0f5fa6;
 $color-default-font: #000000;
 $color-error-message: #ff0000;
 $color-unimportant: #999;
+$font-size-unimportant: 12px;
 $color-sub-heading: #0f70bd;
+
+/*----------------------------
+ Background
+----------------------------*/
+$color-background-unimportant: #e0e0e0;
+
 
 /*----------------------------
  Popup
