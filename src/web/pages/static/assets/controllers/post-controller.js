@@ -4,20 +4,34 @@ define([
         'jsx!components/post-list',
         'jsx!components/post-editor',
         'jsx!components/popup',
+        'jsx!components/location-bar',
         'services/react-component-mounter',
         'services/event'
     ],
     function (PostList,
               PostEditor,
               PopUp,
+              LocationBar,
               Mounter,
               Event) {
 
 
-        var postEditorMounter = new Mounter(
+        var postEditorMounter;
+        var popupMounter;
+        var locationBarMounter;
+        var postListMounter;
+        var showPostList;
+        var showPostEditorWithAddMode;
+        var showPostEditorWithEditMode;
+        var showPostEditorWithDeleteMode;
+        var buildLocations;
+        var exports;
+
+
+        postEditorMounter = new Mounter(
             PostEditor, 'main-content-container');
 
-        var popupMounter = new Mounter(PopUp, 'popup-container');
+        popupMounter = new Mounter(PopUp, 'popup-container');
 
         popupMounter.props = {
             onClosed: function () {
@@ -25,7 +39,9 @@ define([
             }.bind(popupMounter)
         };
 
-        var postListMounter = new Mounter(
+        locationBarMounter = new Mounter(LocationBar, 'location-bar-container');
+
+        postListMounter = new Mounter(
             PostList,
             'main-content-container',
             {
@@ -43,7 +59,42 @@ define([
             }
         );
 
-        var showPostEditorWithAddMode = function () {
+        buildLocations = function (options) {
+            var ret;
+
+            options = options || {};
+
+            ret = [
+                {
+                    label: "Home"
+                },
+                {
+                    label: "Post List",
+                    link: !!options.hasEditor,
+                    onClick: function () {
+                        exports.onClickListLocation.fire();
+                    }
+                },
+                {
+                    label: "Post Editor",
+                    enabled: !!options.hasEditor
+                }
+            ];
+
+            return ret;
+        };
+
+        showPostList = function () {
+            popupMounter.unmount();
+            postListMounter.mount();
+
+            locationBarMounter.props = {
+                locations: buildLocations()
+            };
+            locationBarMounter.mount();
+        };
+
+        showPostEditorWithAddMode = function () {
             postEditorMounter.props = {
                 mode: "add",
                 postId: null,
@@ -53,9 +104,14 @@ define([
                 }.bind(postEditorMounter)
             };
             postEditorMounter.mount();
+
+            locationBarMounter.props = {
+                locations: buildLocations({hasEditor: true})
+            };
+            locationBarMounter.mount();
         };
 
-        var showPostEditorWithEditMode = function (id) {
+        showPostEditorWithEditMode = function (id) {
             postEditorMounter.props = {
                 mode: "edit",
                 postId: id,
@@ -65,9 +121,14 @@ define([
                 }.bind(postEditorMounter)
             };
             postEditorMounter.mount();
+
+            locationBarMounter.props = {
+                locations: buildLocations({hasEditor: true})
+            };
+            locationBarMounter.mount();
         };
 
-        var showPostEditorWithDeleteMode = function (id) {
+        showPostEditorWithDeleteMode = function (id) {
             postEditorMounter.props = {
                 mode: "del",
                 postId: id,
@@ -80,15 +141,14 @@ define([
             popupMounter.mount();
         };
 
-        var exports = {
-            showPostList: function () {
-                postListMounter.mount();
-            },
+        exports = {
+            showPostList: showPostList,
             onClickAddButton: new Event(),
             onClickEditButton: new Event(),
             onCompleteAdding: new Event(),
             onCompleteEditing: new Event(),
             onCompleteDeleting: new Event(),
+            onClickListLocation: new Event(),
             showPostEditorWithAddMode: showPostEditorWithAddMode,
             showPostEditorWithEditMode: showPostEditorWithEditMode
         };

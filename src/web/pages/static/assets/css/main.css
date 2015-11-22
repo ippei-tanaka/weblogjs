@@ -692,6 +692,8 @@ table tbody tr {
     @media (max-width: 699px) {
       .module-home-page .m-hmp-content-container2 {
         padding: 20px 10px; } }
+  .module-home-page .m-hmp-location-bar-container {
+    margin-bottom: 26px; }
   .module-home-page .m-hmp-popup-container {
     position: relative;
     z-index: 10000; }
@@ -774,6 +776,32 @@ table tbody tr {
     margin-right: 8px;
     width: 20px;
     text-align: center; }
+
+/*----------------------------
+ Location Bar
+----------------------------*/
+.module-location-bar .m-lcb-list-item {
+  display: inline-block;
+  margin-right: 6px;
+  color: #777;
+  font-size: 12px; }
+  .module-location-bar .m-lcb-list-item:after {
+    content: " > ";
+    vertical-align: middle; }
+  .module-location-bar .m-lcb-list-item:last-child:after {
+    content: ""; }
+
+.module-location-bar .m-lcb-link {
+  display: inline-block;
+  margin-right: 4px;
+  color: #777;
+  font-size: 12px; }
+
+.module-location-bar .m-lcb-label {
+  display: inline-block;
+  margin-right: 4px;
+  color: #777;
+  font-size: 12px; }
 
 /*----------------------------
  Data List

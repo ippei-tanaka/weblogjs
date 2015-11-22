@@ -4,21 +4,36 @@ define([
         'jsx!components/user-list',
         'jsx!components/user-editor',
         'jsx!components/popup',
+        'jsx!components/location-bar',
         'services/react-component-mounter',
         'services/event'
     ],
     function (UserList,
               UserEditor,
               PopUp,
+              LocationBar,
               Mounter,
               Event) {
 
 
-        var userEditorMounter = new Mounter(
+        var userEditorMounter;
+        var popupMounter;
+        var locationBarMounter;
+        var userListMounter;
+        var buildLocations;
+        var showUserList;
+        var showUserEditorWithAddMode;
+        var showUserEditorWithEditMode;
+        var showUserEditorWitDeleteMode;
+        var exports;
+
+
+        userEditorMounter = new Mounter(
             UserEditor, 'main-content-container');
 
+        locationBarMounter = new Mounter(LocationBar, 'location-bar-container');
 
-        var popupMounter = new Mounter(PopUp, 'popup-container');
+        popupMounter = new Mounter(PopUp, 'popup-container');
 
         popupMounter.props = {
             onClosed: function () {
@@ -26,8 +41,7 @@ define([
             }.bind(popupMounter)
         };
 
-
-        var userListMounter = new Mounter(
+        userListMounter = new Mounter(
             UserList,
             'main-content-container',
             {
@@ -45,8 +59,42 @@ define([
             }
         );
 
+        buildLocations = function (options) {
+            var ret;
 
-        var showUserEditorWithAddMode = function () {
+            options = options || {};
+
+            ret = [
+                {
+                    label: "Home"
+                },
+                {
+                    label: "User List",
+                    link: !!options.hasEditor,
+                    onClick: function () {
+                        exports.onClickListLocation.fire();
+                    }
+                },
+                {
+                    label: "User Editor",
+                    enabled: !!options.hasEditor
+                }
+            ];
+
+            return ret;
+        };
+
+        showUserList = function () {
+            popupMounter.unmount();
+            userListMounter.mount();
+
+            locationBarMounter.props = {
+                locations: buildLocations()
+            };
+            locationBarMounter.mount();
+        };
+
+        showUserEditorWithAddMode = function () {
             userEditorMounter.props = {
                 mode: "add",
                 userId: null,
@@ -56,9 +104,14 @@ define([
                 }.bind(userEditorMounter)
             };
             userEditorMounter.mount();
+
+            locationBarMounter.props = {
+                locations: buildLocations({hasEditor: true})
+            };
+            locationBarMounter.mount();
         };
 
-        var showUserEditorWithEditMode = function (id) {
+        showUserEditorWithEditMode = function (id) {
             userEditorMounter.props = {
                 mode: "edit",
                 userId: id,
@@ -68,9 +121,14 @@ define([
                 }.bind(userEditorMounter)
             };
             userEditorMounter.mount();
+
+            locationBarMounter.props = {
+                locations: buildLocations({hasEditor: true})
+            };
+            locationBarMounter.mount();
         };
 
-        var showUserEditorWitDeleteMode = function (id) {
+        showUserEditorWitDeleteMode = function (id) {
             userEditorMounter.props = {
                 mode: "del",
                 userId: id,
@@ -83,13 +141,11 @@ define([
             popupMounter.mount();
         };
 
-        var exports = {
-            showUserList: function () {
-                popupMounter.unmount();
-                userListMounter.mount();
-            },
+        exports = {
+            showUserList:showUserList,
             onClickAddButton: new Event(),
             onClickEditButton: new Event(),
+            onClickListLocation: new Event(),
             onCompleteAdding: new Event(),
             onCompleteEditing: new Event(),
             onCompleteDeleting: new Event(),
