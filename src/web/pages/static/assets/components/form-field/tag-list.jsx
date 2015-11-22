@@ -14,6 +14,7 @@ define([
 
             getDefaultProps: function () {
                 return {
+                    id: "",
                     className: "",
                     value: "",
                     onChange: function () {
@@ -65,7 +66,11 @@ define([
 
                         </div>
                         <div className="e-tgl-new-tag-input-container">
-                            <input type="text" placeholder="Add a new tag" ref="newTag" onKeyDown={this._onKeyDowned}/>
+                            <input type="text"
+                                   placeholder="Add a new tag"
+                                   ref="newTag"
+                                   id={this.props.id}
+                                   onKeyDown={this._onKeyDowned} />
                             <div className="e-tgl-add-button-container">
                                 <button className="module-button m-btn-clear"
                                         onClick={this._onAddButtonClicked}>

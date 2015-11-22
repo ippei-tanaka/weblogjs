@@ -38,16 +38,7 @@ define([
                 },
 
                 deleteButtonClicked: function (post) {
-                    postEditorMounter.props = {
-                        mode: "del",
-                        post: post,
-                        onComplete: function () {
-                            this.unmount();
-                            exports.onCompleteDeleting.fire();
-                        }.bind(popupMounter)
-                    };
-                    popupMounter.children = postEditorMounter.build();
-                    popupMounter.mount();
+                    showPostEditorWithDeleteMode(post._id);
                 }
             }
         );
@@ -55,7 +46,7 @@ define([
         var showPostEditorWithAddMode = function () {
             postEditorMounter.props = {
                 mode: "add",
-                post: {},
+                postId: null,
                 onComplete: function () {
                     this.unmount();
                     exports.onCompleteAdding.fire();
@@ -65,17 +56,28 @@ define([
         };
 
         var showPostEditorWithEditMode = function (id) {
-            PostList.getPost(id).then(function (post) {
-                postEditorMounter.props = {
-                    mode: "edit",
-                    post: post,
-                    onComplete: function () {
-                        this.unmount();
-                        exports.onCompleteEditing.fire();
-                    }.bind(postEditorMounter)
-                };
-                postEditorMounter.mount();
-            });
+            postEditorMounter.props = {
+                mode: "edit",
+                postId: id,
+                onComplete: function () {
+                    this.unmount();
+                    exports.onCompleteEditing.fire();
+                }.bind(postEditorMounter)
+            };
+            postEditorMounter.mount();
+        };
+
+        var showPostEditorWithDeleteMode = function (id) {
+            postEditorMounter.props = {
+                mode: "del",
+                postId: id,
+                onComplete: function () {
+                    this.unmount();
+                    exports.onCompleteDeleting.fire();
+                }.bind(popupMounter)
+            };
+            popupMounter.children = postEditorMounter.build();
+            popupMounter.mount();
         };
 
         var exports = {
