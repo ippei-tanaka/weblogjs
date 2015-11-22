@@ -80,7 +80,7 @@ define([
             render: function () {
                 return (
                     <div className="module-data-list">
-                        <h2 className="m-dtl-title">Category List</h2>
+                        <h2 className="m-dtl-title">Categories</h2>
                         <div>
                             <button className="module-button m-btn-clear m-dtl-add-button"
                                     onClick={this.onAddButtonClicked}

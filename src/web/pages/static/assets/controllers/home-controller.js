@@ -1,16 +1,17 @@
 "use strict";
 
 define([
-        'services/react-component-mounter'
+        'services/react-component-mounter',
+        'jsx!components/dashboard'
     ],
-    function (Mounter) {
+    function (Mounter, Dashboard) {
 
         return {
 
             showDashBoard: function () {
-                Mounter.unmountComponentsAt(
-                    Mounter.select('main-content-container')
-                );
+                var dashboardMounter = new Mounter(Dashboard, 'main-content-container');
+
+                dashboardMounter.mount();
 
                 Mounter.unmountComponentsAt(
                     Mounter.select('popup-container')
