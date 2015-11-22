@@ -18,25 +18,36 @@ define([
 
             statics: {
                 getUsers: function () {
-                    return $.ajax({
-                        url: url,
-                        dataType: 'json',
-                        cache: false
-                    })
+                    return this
+                        .ajaxRequest(url)
                         .then(function (data) {
                             return data.items;
                         });
                 },
 
                 getUser: function (id) {
-                    return $.ajax({
-                        url: url + "/" + id,
-                        dataType: 'json',
-                        cache: false
-                    })
+                    return this
+                        .ajaxRequest(url + "/" + id)
                         .then(function (data) {
                             return data;
                         });
+                },
+
+                // TODO: is it supposed to be here?
+                getMe: function () {
+                    return this
+                        .ajaxRequest(url + "/me")
+                        .then(function (data) {
+                            return data;
+                        });
+                },
+
+                ajaxRequest: function (ajaxUrl) {
+                    return $.ajax({
+                        url: ajaxUrl,
+                        dataType: 'json',
+                        cache: false
+                    });
                 }
             },
 
@@ -80,7 +91,7 @@ define([
             render: function () {
                 return (
                     <div className="module-data-list">
-                        <h2 className="m-dtl-title">User List</h2>
+                        <h2 className="m-dtl-title">Users</h2>
                         <div>
                             <button className="module-button m-btn-clear m-dtl-add-button"
                                     onClick={this.onAddButtonClicked}

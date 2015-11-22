@@ -92,7 +92,7 @@ define([
                     }
                 });
 
-                var title = this._chooseByMode({add: "Create a new category", edit: "Edit the category"});
+                var title = this._chooseByMode({add: "Create a New Category", edit: "Edit the Category"});
 
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
 

@@ -111,7 +111,7 @@ define([
                     }
                 });
 
-                var title = this._chooseByMode({add: "Create a new user", edit: "Edit the user"});
+                var title = this._chooseByMode({add: "Create a New User", edit: "Edit the User"});
 
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
 

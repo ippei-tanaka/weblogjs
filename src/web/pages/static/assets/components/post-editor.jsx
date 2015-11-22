@@ -221,7 +221,7 @@ define([
                     }
                 });
 
-                var title = this._chooseByMode({add: "Add Post", edit: "Edit the Post"});
+                var title = this._chooseByMode({add: "Create a New Post", edit: "Edit the Post"});
 
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
 
