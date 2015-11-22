@@ -16,13 +16,19 @@ gulp.task('test', () => {
         });
 });
 
-gulp.task('sass', function () {
-    gulp.src(WEB_STATIC_SRC_DIR + '/sass/**/main.scss')
+gulp.task('public-sass', function () {
+    gulp.src(WEB_STATIC_SRC_DIR + '/public/sass/**/main.scss')
         .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest(WEB_STATIC_DIR + '/assets/css'));
+        .pipe(gulp.dest(WEB_STATIC_DIR + '/public/assets/css'));
+});
+
+gulp.task('admin-sass', function () {
+    gulp.src(WEB_STATIC_SRC_DIR + '/admin/sass/**/main.scss')
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest(WEB_STATIC_DIR + '/admin/assets/css'));
 });
 
 gulp.task('sass:watch', function () {
-    gulp.watch(WEB_STATIC_SRC_DIR + '/sass/**/*.scss', ['sass']);
+    gulp.watch(WEB_STATIC_SRC_DIR + '/**/*.scss', ['public-sass', 'admin-sass']);
 });
 

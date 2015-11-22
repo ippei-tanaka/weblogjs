@@ -1,7 +1,7 @@
 "use strict";
 
 requirejs.config({
-    baseUrl: "/assets/",
+    baseUrl: "/admin/assets/",
 
     jsx: {
         fileExtension: '.jsx'
