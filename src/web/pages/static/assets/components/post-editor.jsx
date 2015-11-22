@@ -7,6 +7,7 @@ define([
         'jquery',
         'jsx!components/form-field',
         'jsx!components/confirmation',
+        'jsx!components/post-list',
         'jsx!components/user-list',
         'jsx!components/category-list'
     ],
@@ -16,6 +17,7 @@ define([
               $,
               FormField,
               Confirmation,
+              PostList,
               UserList,
               CategoryList) {
 
@@ -41,7 +43,7 @@ define([
                         author: null,
                         category: null,
                         tags: [],
-                        publish_date: null
+                        publish_date: new Date()
                     },
                     categories: [],
                     authors: []
@@ -51,23 +53,15 @@ define([
             getDefaultProps: function () {
                 return {
                     mode: "", // 'add', 'edit' or 'del'
-                    post: {
-                        _id: "",
-                        title: "",
-                        content: "",
-                        slug: "",
-                        author: null,
-                        category: null,
-                        tags: [],
-                        publish_date: null
-                    },
-                    onComplete: function () {
-                    }
+                    postId: "",
+                    onComplete: function () {}
                 };
             },
 
             componentWillMount: function () {
-                this._setPostState(this.getInitialState().post, this.props.post);
+                PostList.getPost(this.props.postId).then(function (post) {
+                    this._setPostState(this.getInitialState().post, post);
+                }.bind(this));
 
                 CategoryList.getCategories().then(function (categories) {
                     this.setState({
@@ -79,6 +73,12 @@ define([
                     this.setState({
                         authors: users
                     });
+                }.bind(this));
+
+                UserList.getMe().then(function (me) {
+                    if (!this.state.post.author) {
+                        this._setPostState(this.state.post, {author: me});
+                    }
                 }.bind(this));
             },
 
@@ -313,7 +313,7 @@ define([
 
             _updatePost: function () {
 
-                var ajaxUrl = url + '/' + this.props.post._id;
+                var ajaxUrl = url + '/' + this.props.postId;
 
                 var data = this._buildDataForHttpRequest();
 
@@ -324,7 +324,7 @@ define([
             },
 
             _deletePost: function () {
-                var ajaxUrl = url + '/' + this.props.post._id;
+                var ajaxUrl = url + '/' + this.props.postId;
 
                 return this._sendHttpRequest(ajaxUrl, 'delete')
                     .then(function () {

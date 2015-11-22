@@ -31,11 +31,11 @@ define([
             },
 
             componentWillMount: function () {
-                this._setDateTimeState(this.props.value || new Date());
+                this._setDateTimeState(this.props.value);
             },
 
             componentWillReceiveProps: function (newProps) {
-                this._setDateTimeState(newProps.value || new Date());
+                this._setDateTimeState(newProps.value);
             },
 
             render: function () {
@@ -44,6 +44,7 @@ define([
                         <fieldset className="e-dtf-field-set">
                             <label className="e-dtf-select-container">
                                 <select className="e-dtf-select" value={this.state.month}
+                                        id={this.props.id}
                                         onChange={this._onChange('month')}>
                                     {this._listOfMonths.map(function (name, index) {
                                         return <option value={index + 1} key={index + 1}>{name}</option>
@@ -65,7 +66,7 @@ define([
                             <label className="e-dtf-select-container">
                                 <select className="e-dtf-select" value={this.state.year}
                                         onChange={this._onChange('year')}>
-                                    {this._range(1980, 2100, function (i) {
+                                    {this._range(1970, 2100, function (i) {
                                         return <option value={i} key={i}>{i}</option>
                                     })}
                                 </select>
