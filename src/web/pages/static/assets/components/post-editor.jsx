@@ -59,9 +59,11 @@ define([
             },
 
             componentWillMount: function () {
-                PostList.getPost(this.props.postId).then(function (post) {
-                    this._setPostState(this.getInitialState().post, post);
-                }.bind(this));
+                if (this.props.mode === "edit") {
+                    PostList.getPost(this.props.postId).then(function (post) {
+                        this._setPostState(this.getInitialState().post, post);
+                    }.bind(this));
+                }
 
                 CategoryList.getCategories().then(function (categories) {
                     this.setState({

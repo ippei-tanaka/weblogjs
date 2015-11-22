@@ -38,16 +38,7 @@ define([
                 },
 
                 deleteButtonClicked: function (category) {
-                    categoryEditorMounter.props = {
-                        mode: "del",
-                        category: category,
-                        onComplete: function () {
-                            this.unmount();
-                            exports.onCompleteDeleting.fire();
-                        }.bind(popupMounter)
-                    };
-                    popupMounter.children = categoryEditorMounter.build();
-                    popupMounter.mount();
+                    showCategoryEditorWithDeleteMode(category._id);
                 }
             }
         );
@@ -55,7 +46,7 @@ define([
         var showCategoryEditorWithAddMode = function () {
             categoryEditorMounter.props = {
                 mode: "add",
-                category: {},
+                categoryId: null,
                 onComplete: function () {
                     this.unmount();
                     exports.onCompleteAdding.fire();
@@ -65,17 +56,28 @@ define([
         };
 
         var showCategoryEditorWithEditMode = function (id) {
-            CategoryList.getCategory(id).then(function (category) {
-                categoryEditorMounter.props = {
-                    mode: "edit",
-                    category: category,
-                    onComplete: function () {
-                        this.unmount();
-                        exports.onCompleteEditing.fire();
-                    }.bind(categoryEditorMounter)
-                };
-                categoryEditorMounter.mount();
-            });
+            categoryEditorMounter.props = {
+                mode: "edit",
+                categoryId: id,
+                onComplete: function () {
+                    this.unmount();
+                    exports.onCompleteEditing.fire();
+                }.bind(categoryEditorMounter)
+            };
+            categoryEditorMounter.mount();
+        };
+
+        var showCategoryEditorWithDeleteMode = function (id) {
+            categoryEditorMounter.props = {
+                mode: "del",
+                categoryId: id,
+                onComplete: function () {
+                    this.unmount();
+                    exports.onCompleteDeleting.fire();
+                }.bind(popupMounter)
+            };
+            popupMounter.children = categoryEditorMounter.build();
+            popupMounter.mount();
         };
 
         var exports = {
