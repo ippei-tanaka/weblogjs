@@ -52,6 +52,7 @@ input[type="password"] {
         padding: 5px 6px;
         display: inline-block;
         margin-right: 10px;
+        margin-bottom: 5px;
         @include border-radius(5px);
     }
 
@@ -90,9 +91,6 @@ input[type="password"] {
 ----------------------------*/
 .element-tag-list-field {
 
-    .e-tgl-new-tag-list-container {
-    }
-
     .e-tgl-new-tag-list {
         margin: 14px 0 10px;
     }
@@ -116,9 +114,7 @@ input[type="password"] {
 
     .e-tgl-no-tags-message {
         font-size: $font-size-unimportant;
-        //background-color: $color-background-unimportant;
         color: $color-unimportant;
-        //padding: 10px;
         margin: 12px 0 14px;
         display: inline-block;
         @include border-radius(5px);
@@ -150,8 +146,6 @@ input[type="password"] {
         display: inline-block;
         vertical-align: top;
     }
-
-
 }
 
 /*----------------------------
