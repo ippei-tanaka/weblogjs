@@ -1,6 +1,13 @@
 {{!< ../../layouts/default}}
 
+{{#contentFor "page-title"}}WeblogJS Admin Login{{/contentFor}}
+
+{{#contentFor "page-styles"}}
+    {{> admin/common-styles}}
+{{/contentFor}}
+
 {{#contentFor "page-scripts"}}
+    {{> admin/common-scripts}}
     <script src="/assets/main/login.js"></script>
 {{/contentFor}}
 

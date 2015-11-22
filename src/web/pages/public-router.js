@@ -9,6 +9,7 @@ var baseRoute = '/';
 // Home
 
 routes.get('/',  (request, response) => {
+    response.render('admin/home');
     response.render('public-master', {
         head: {
             title: 'page title'
