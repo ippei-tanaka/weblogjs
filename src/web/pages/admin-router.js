@@ -2,7 +2,6 @@
 
 
 var routes = require('express').Router();
-var url = require('url');
 var localAuth = require('../passport-manager').localAuth;
 var baseRoute = '/admin';
 

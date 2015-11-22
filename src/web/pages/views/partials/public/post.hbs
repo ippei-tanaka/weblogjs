@@ -1,0 +1,28 @@
+<div class="module-post">
+
+    <h2 class="m-pst-title">{{title}}</h2>
+
+    <date class="m-pst-date">{{publish_date}}</date>
+
+    <div class="m-pst-author">author: {{author.display_name}}</div>
+
+    {{#if category.name}}
+    <div class="m-pst-category">category: {{category.name}}</div>
+    {{/if}}
+
+    {{#if tags}}
+        <div class="m-pst-tag-container">
+            tags:
+            <ul class="m-pst-tags">
+                {{#each tags}}
+                    <li class="m-pst-tag">{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    {{/if}}
+
+    <div class="m-pst-content">
+        <article class="module-article">{{{content}}}</article>
+    </div>
+
+</div>

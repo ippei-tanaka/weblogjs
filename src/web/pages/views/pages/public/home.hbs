@@ -1,0 +1,21 @@
+{{!< ../../layouts/default}}
+
+{{#contentFor "page-title"}}WeblogJS Blog{{/contentFor}}
+
+{{#contentFor "page-styles"}}
+    {{> public/common-styles}}
+{{/contentFor}}
+
+{{#contentFor "page-scripts"}}
+    {{> public/common-scripts}}
+{{/contentFor}}
+
+<div class="module-home-page">
+    <header class="module-header">
+        <h1 class="m-hdr-title">Ippei Tanaka</h1>
+    </header>
+
+    <div>
+        {{> public/post-list}}
+    </div>
+</div>
