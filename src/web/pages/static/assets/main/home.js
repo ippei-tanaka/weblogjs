@@ -17,7 +17,9 @@ requirejs([
               CategoryController,
               PostController) {
 
-        var navigationMounter = new ReactComponentMounter(
+        var navigationMounter;
+
+        navigationMounter = new ReactComponentMounter(
             Navigation,
             'navigation',
             {
@@ -58,6 +60,10 @@ requirejs([
             Router.changeHash("/users");
         });
 
+        UserController.onClickListLocation.on(function () {
+            Router.changeHash("/users");
+        });
+
         // CategoryController
 
         CategoryController.onClickAddButton.on(function () {
@@ -80,6 +86,10 @@ requirejs([
             Router.changeHash("/categories");
         });
 
+        CategoryController.onClickListLocation.on(function () {
+            Router.changeHash("/categories");
+        });
+
         // PostController
 
         PostController.onClickAddButton.on(function () {
@@ -99,6 +109,10 @@ requirejs([
         });
 
         PostController.onCompleteDeleting.on(function () {
+            Router.changeHash("/posts");
+        });
+
+        PostController.onClickListLocation.on(function () {
             Router.changeHash("/posts");
         });
 

@@ -9,12 +9,14 @@ define([
         return {
 
             showDashBoard: function () {
-                var dashboardMounter = new Mounter(Dashboard, 'main-content-container');
-
-                dashboardMounter.mount();
+                new Mounter(Dashboard, 'main-content-container').mount();
 
                 Mounter.unmountComponentsAt(
                     Mounter.select('popup-container')
+                );
+
+                Mounter.unmountComponentsAt(
+                    Mounter.select('location-bar-container')
                 );
             }
         }

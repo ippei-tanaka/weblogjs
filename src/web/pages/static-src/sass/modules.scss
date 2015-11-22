@@ -135,6 +135,10 @@
         }
     }
 
+    .m-hmp-location-bar-container {
+        margin-bottom: 26px;
+    }
+
     .m-hmp-popup-container {
         position: relative;
         z-index: 10000;
@@ -232,6 +236,47 @@
     }
 
 }
+
+
+/*----------------------------
+ Location Bar
+----------------------------*/
+
+.module-location-bar {
+
+    .m-lcb-list {
+    }
+
+    .m-lcb-list-item {
+        display: inline-block;
+        margin-right: 6px;
+        color: $color-unimportant;
+        font-size: $font-size-unimportant;
+
+        &:after {
+            content: " > ";
+            vertical-align: middle;
+        }
+        &:last-child:after {
+            content: "";
+        }
+    }
+
+    .m-lcb-link {
+        display: inline-block;
+        margin-right: 4px;
+        color: $color-unimportant;
+        font-size: $font-size-unimportant;
+    }
+
+    .m-lcb-label {
+        display: inline-block;
+        margin-right: 4px;
+        color: $color-unimportant;
+        font-size: $font-size-unimportant;
+    }
+}
+
 
 /*----------------------------
  Data List
@@ -451,4 +496,3 @@
     }
 
 }
-

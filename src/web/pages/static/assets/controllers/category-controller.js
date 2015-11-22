@@ -4,20 +4,36 @@ define([
         'jsx!components/category-list',
         'jsx!components/category-editor',
         'jsx!components/popup',
+        'jsx!components/location-bar',
         'services/react-component-mounter',
         'services/event'
     ],
     function (CategoryList,
               CategoryEditor,
               PopUp,
+              LocationBar,
               Mounter,
               Event) {
 
 
-        var categoryEditorMounter = new Mounter(
-            CategoryEditor,  'main-content-container');
+        var categoryEditorMounter;
+        var popupMounter;
+        var locationBarMounter;
+        var categoryListMounter;
+        var showCategoryList;
+        var showCategoryEditorWithAddMode;
+        var showCategoryEditorWithEditMode;
+        var showCategoryEditorWithDeleteMode;
+        var buildLocations;
+        var exports;
 
-        var popupMounter = new Mounter(PopUp, 'popup-container');
+
+        categoryEditorMounter = new Mounter(
+            CategoryEditor, 'main-content-container');
+
+        popupMounter = new Mounter(PopUp, 'popup-container');
+
+        locationBarMounter = new Mounter(LocationBar, 'location-bar-container');
 
         popupMounter.props = {
             onClosed: function () {
@@ -25,7 +41,7 @@ define([
             }.bind(popupMounter)
         };
 
-        var categoryListMounter = new Mounter(
+        categoryListMounter = new Mounter(
             CategoryList,
             'main-content-container',
             {
@@ -43,7 +59,42 @@ define([
             }
         );
 
-        var showCategoryEditorWithAddMode = function () {
+        buildLocations = function (options) {
+            var ret;
+
+            options = options || {};
+
+            ret = [
+                {
+                    label: "Home"
+                },
+                {
+                    label: "Category List",
+                    link: !!options.hasEditor,
+                    onClick: function () {
+                        exports.onClickListLocation.fire();
+                    }
+                },
+                {
+                    label: "Category Editor",
+                    enabled: !!options.hasEditor
+                }
+            ];
+
+            return ret;
+        };
+
+        showCategoryList = function () {
+            popupMounter.unmount();
+            categoryListMounter.mount();
+
+            locationBarMounter.props = {
+                locations: buildLocations()
+            };
+            locationBarMounter.mount();
+        };
+
+        showCategoryEditorWithAddMode = function () {
             categoryEditorMounter.props = {
                 mode: "add",
                 categoryId: null,
@@ -53,9 +104,14 @@ define([
                 }.bind(categoryEditorMounter)
             };
             categoryEditorMounter.mount();
+
+            locationBarMounter.props = {
+                locations: buildLocations({hasEditor: true})
+            };
+            locationBarMounter.mount();
         };
 
-        var showCategoryEditorWithEditMode = function (id) {
+        showCategoryEditorWithEditMode = function (id) {
             categoryEditorMounter.props = {
                 mode: "edit",
                 categoryId: id,
@@ -65,9 +121,14 @@ define([
                 }.bind(categoryEditorMounter)
             };
             categoryEditorMounter.mount();
+
+            locationBarMounter.props = {
+                locations: buildLocations({hasEditor: true})
+            };
+            locationBarMounter.mount();
         };
 
-        var showCategoryEditorWithDeleteMode = function (id) {
+        showCategoryEditorWithDeleteMode = function (id) {
             categoryEditorMounter.props = {
                 mode: "del",
                 categoryId: id,
@@ -80,13 +141,11 @@ define([
             popupMounter.mount();
         };
 
-        var exports = {
-            showCategoryList: function () {
-                popupMounter.unmount();
-                categoryListMounter.mount();
-            },
+        exports = {
+            showCategoryList: showCategoryList,
             onClickAddButton: new Event(),
             onClickEditButton: new Event(),
+            onClickListLocation: new Event(),
             onCompleteAdding: new Event(),
             onCompleteEditing: new Event(),
             onCompleteDeleting: new Event(),
