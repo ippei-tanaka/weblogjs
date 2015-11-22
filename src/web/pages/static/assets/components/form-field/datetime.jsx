@@ -2,7 +2,7 @@
 
 define([
         'react',
-        'moment',
+        'moment-timezone',
         'classnames'
     ],
     function (React, moment, classnames) {
@@ -14,7 +14,6 @@ define([
                     id: "",
                     className: "",
                     value: "",
-                    offset: "", // (e.g) "-05:00"
                     onChange: function () {
                     }
                 };
@@ -26,7 +25,8 @@ define([
                     month: "",
                     date: "",
                     hour: "",
-                    minute: ""
+                    minute: "",
+                    utcOffset: ""
                 };
             },
 
@@ -65,7 +65,7 @@ define([
                             <label className="e-dtf-select-container">
                                 <select className="e-dtf-select" value={this.state.year}
                                         onChange={this._onChange('year')}>
-                                    {this._range(1900, 2200, function (i) {
+                                    {this._range(1980, 2100, function (i) {
                                         return <option value={i} key={i}>{i}</option>
                                     })}
                                 </select>
@@ -94,6 +94,19 @@ define([
                                 <small className="e-dtf-label">Minute</small>
                             </label>
                         </fieldset>
+
+                        <fieldset className="e-dtf-field-set">
+                            <label className="e-dtf-select-container">
+                                <select className="e-dtf-select"
+                                        value={this.state.utcOffset}
+                                        disabled="true">
+                                    {this._listOfOffsets.map(function (offset, index) {
+                                        return <option value={offset} key={index}>{offset}</option>
+                                    })}
+                                </select>
+                                <small className="e-dtf-label">UTC Offset</small>
+                            </label>
+                        </fieldset>
                     </div>
                 );
             },
@@ -103,11 +116,12 @@ define([
                 month: "M",
                 date: "D",
                 hour: "H",
-                minute: "m"
+                minute: "m",
+                utcOffset: "Z"
             },
 
             _setDateTimeState: function (dateTimeString) {
-                var thisMoment = moment(dateTimeString).second(0).utc().utcOffset(this.props.offset);
+                var thisMoment = moment(dateTimeString);
                 var newState = {};
 
                 Object.keys(this._formats).forEach(function (key) {
@@ -118,11 +132,15 @@ define([
             },
 
             _buildDateFromState: function () {
-                var thisMoment = moment().second(0);
 
-                Object.keys(this._formats).forEach(function (key) {
-                    thisMoment.set(key, this.state[key]);
-                }.bind(this));
+                var thisMoment = moment({
+                    year: this.state.year,
+                    month: this.state.month - 1,
+                    date: this.state.date,
+                    hour: this.state.hour,
+                    minute: this.state.minute,
+                    second: 0
+                });
 
                 return thisMoment.toDate();
             },
@@ -143,8 +161,50 @@ define([
                     results.push(func(i));
                 }
                 return results;
-            }
+            },
 
+            _listOfOffsets: [
+                "-12:00",
+                "-11:00",
+                "-10:00",
+                "-09:30",
+                "-09:00",
+                "-08:00",
+                "-07:00",
+                "-06:00",
+                "-05:00",
+                "-04:30",
+                "-04:00",
+                "-03:30",
+                "-03:00",
+                "-02:00",
+                "-01:00",
+                "+00:00",
+                "+01:00",
+                "+02:00",
+                "+03:00",
+                "+03:30",
+                "+04:00",
+                "+04:30",
+                "+05:00",
+                "+05:30",
+                "+05:45",
+                "+06:00",
+                "+06:30",
+                "+07:00",
+                "+08:00",
+                "+08:30",
+                "+08:45",
+                "+09:00",
+                "+09:30",
+                "+10:00",
+                "+10:30",
+                "+11:00",
+                "+12:00",
+                "+12:45",
+                "+13:00",
+                "+14:00"
+            ]
         });
 
         return Datetime;

@@ -195,8 +195,7 @@ define([
                         value: this.state.post.publish_date,
                         onChange: function (value) {
                             this._setPostState(this.state.post, {publish_date: value});
-                        }.bind(this),
-                        offset: "-05:00"
+                        }.bind(this)
                     },
                     label: {
                         children: "Publish Date"

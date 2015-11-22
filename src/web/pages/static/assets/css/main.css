@@ -210,7 +210,7 @@ input[type="password"] {
 
 .element-datetime-field .e-dtf-label {
   display: inline-block;
-  color: #999;
+  color: #777;
   font-size: 12px;
   margin-top: 3px;
   margin-left: 1px; }
@@ -735,7 +735,7 @@ table tbody tr {
   cursor: pointer; }
 
 .module-data-list .m-dtl-none {
-  color: #999; }
+  color: #777; }
 
 /*----------------------------
  Data Editor
