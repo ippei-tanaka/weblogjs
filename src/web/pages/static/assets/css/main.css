@@ -86,6 +86,9 @@ table {
  Text
 ----------------------------*/
 /*----------------------------
+ Background
+----------------------------*/
+/*----------------------------
  Popup
 ----------------------------*/
 /*----------------------------
@@ -125,6 +128,9 @@ table {
  Text
 ----------------------------*/
 /*----------------------------
+ Background
+----------------------------*/
+/*----------------------------
  Popup
 ----------------------------*/
 /*----------------------------
@@ -145,6 +151,8 @@ body {
 input[type="text"],
 input[type="email"],
 input[type="date"],
+input[type="datetime"],
+input[type="number"],
 input[type="password"] {
   font-size: 16px;
   font-family: "Lato", sans-serif;
@@ -173,8 +181,47 @@ input[type="password"] {
   input[disabled][type="text"],
   input[disabled][type="email"],
   input[disabled][type="date"],
+  input[disabled][type="datetime"],
+  input[disabled][type="number"],
   input[disabled][type="password"] {
     background-color: #f0f0f0; }
+
+/*----------------------------
+ Textarea
+----------------------------*/
+.element-datetime-field .e-dtf-field-set {
+  background-color: #e0e0e0;
+  padding: 5px 6px;
+  display: inline-block;
+  margin-right: 10px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px; }
+
+.element-datetime-field .e-dtf-select-container {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px; }
+  .element-datetime-field .e-dtf-select-container:last-child {
+    margin-right: 0; }
+
+.element-datetime-field .e-dtf-label {
+  display: inline-block;
+  color: #999;
+  font-size: 12px;
+  margin-top: 3px;
+  margin-left: 1px; }
+
+.element-datetime-field .e-dtf-separator {
+  vertical-align: top;
+  display: inline-block;
+  margin: 7px 5px 0 0; }
+
+.element-datetime-field .e-dtf-select {
+  display: block; }
 
 /*----------------------------
  Textarea
@@ -336,6 +383,9 @@ table tbody tr {
  Text
 ----------------------------*/
 /*----------------------------
+ Background
+----------------------------*/
+/*----------------------------
  Popup
 ----------------------------*/
 /*----------------------------
@@ -373,6 +423,9 @@ table tbody tr {
 ----------------------------*/
 /*----------------------------
  Text
+----------------------------*/
+/*----------------------------
+ Background
 ----------------------------*/
 /*----------------------------
  Popup
@@ -689,16 +742,16 @@ table tbody tr {
 ----------------------------*/
 .module-data-editor .m-dte-title {
   font-size: 26px;
-  margin-bottom: 20px; }
+  margin-bottom: 30px; }
 
 .module-data-editor .m-dte-field-container {
-  margin-top: 20px; }
+  margin-top: 30px; }
 
 /*----------------------------
  Form Field
 ----------------------------*/
 .module-form-field .m-frf-label {
-  margin-bottom: 3px;
+  margin-bottom: 5px;
   display: block; }
 
 .module-form-field .m-frf-text,
@@ -709,10 +762,18 @@ table tbody tr {
 
 .module-form-field .m-frf-textarea {
   width: 100%;
-  height: 4em; }
+  height: 10em; }
+
+.module-form-field .m-frf-select {
+  display: block; }
+
+.module-form-field .m-frf-datetime {
+  display: block; }
 
 .module-form-field .m-frf-error {
-  color: #ff0000; }
+  margin-top: 4px;
+  color: #ff0000;
+  display: block; }
 
 /*----------------------------
  Popup

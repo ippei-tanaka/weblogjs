@@ -41,7 +41,7 @@ define([
                         author: null,
                         category: null,
                         tags: [],
-                        publish_date: new Date()
+                        publish_date: null
                     },
                     categories: [],
                     authors: []
@@ -59,7 +59,7 @@ define([
                         author: null,
                         category: null,
                         tags: [],
-                        publish_date: new Date()
+                        publish_date: null
                     },
                     onComplete: function () {
                     }
@@ -191,11 +191,12 @@ define([
 
                 var publishDateField = React.createElement(FormField, {
                     field: {
-                        type: "date",
+                        type: "datetime",
                         value: this.state.post.publish_date,
                         onChange: function (value) {
                             this._setPostState(this.state.post, {publish_date: value});
-                        }.bind(this)
+                        }.bind(this),
+                        offset: "-05:00"
                     },
                     label: {
                         children: "Publish Date"

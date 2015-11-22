@@ -308,11 +308,11 @@
 
     .m-dte-title {
         font-size: $font-size-sub-header;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
     }
 
     .m-dte-field-container {
-        margin-top: 20px;
+        margin-top: 30px;
     }
 }
 
@@ -323,7 +323,7 @@
 
 .module-form-field {
     .m-frf-label {
-        margin-bottom: 3px;
+        margin-bottom: 5px;
         display: block;
     }
 
@@ -337,16 +337,22 @@
 
     .m-frf-textarea {
         width: 100%;
-        height: 4em;
+        height: 10em;
     }
 
 
     .m-frf-select {
-        //width: 100%;
+        display: block;
+    }
+
+    .m-frf-datetime {
+        display: block;
     }
 
     .m-frf-error {
+        margin-top: 4px;
         color: $color-error-message;
+        display: block;
     }
 }
 
