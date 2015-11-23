@@ -78,6 +78,9 @@ table {
 /*----------------------------
  Button
 ----------------------------*/
+body {
+  font-family: 'Libre Baskerville', serif; }
+
 /* -------------------------------------------------------------
   Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
   By: Matthieu Aussaguel, http://www.mynameismatthieu.com, @matthieu_tweets
@@ -116,11 +119,10 @@ table {
  Button
 ----------------------------*/
 /*----------------------------
- Article
+ Header
 ----------------------------*/
 .module-header {
-  font-family: 'Signika', sans-serif;
-  font-size: 55px;
+  font-size: 53px;
   border-bottom: 1px solid #cccccc;
   padding: 130px 40px 40px;
   position: relative;
@@ -130,17 +132,17 @@ table {
  Post List
 ----------------------------*/
 .module-post-list .m-psl-post-section {
-  border-bottom: 1px solid #cccccc;
-  padding: 45px 40px 25px; }
+  border-bottom: 1px solid #cccccc; }
 
 /*----------------------------
  Post
 ----------------------------*/
 .module-post {
-  font-family: 'Quattrocento', serif; }
+  font-family: 'Quattrocento', serif;
+  padding: 45px 40px 50px; }
   .module-post .m-pst-title {
     font-size: 36px;
-    margin-bottom: 20px; }
+    margin-bottom: 44px; }
   .module-post .m-pst-date {
     font-size: 15px;
     margin-bottom: 10px;
@@ -163,8 +165,7 @@ table {
     .module-post .m-pst-tag:last-child:after {
       content: ''; }
   .module-post .m-pst-content {
-    margin-top: 40px;
-    margin-bottom: 30px; }
+    margin-top: 40px; }
 
 /*----------------------------
  Article
