@@ -371,18 +371,29 @@ describe('Restful API', () => {
             var category;
 
             var testPost1 = {
-                "title": " ## My Post Title! ",
+                "title": "b ## My Post Title! ",
                 "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
                 "category": testCategory.slug,
                 "slug": "testtset",
+                "publish_date": new Date("2011-1-11 11:11:11"),
                 "tags": ["tag1", "tag2"]
             };
 
             var testPost2 = {
-                "title": "It is - the  title 1 --- ",
+                "title": "a It is - the  title 1 --- ",
                 "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
                 "slug": "3fasd3ea",
+                "publish_date": new Date("2020-2-22 22:22:22"),
                 "category": undefined
+            };
+
+            var testPost3 = {
+                "title": "c It is - the  title 2 --- ",
+                "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
+                "slug": "dsfsdfsd",
+                "category": testCategory.slug,
+                "publish_date": new Date("1990-9-19 9:00:00"),
+                "tags": ["tag1"]
             };
 
             httpRequest.post(`${BASE_URL}/categories`, testCategory)
@@ -393,6 +404,7 @@ describe('Restful API', () => {
                 .then((_user) => {
                     testPost1.author = _user._id;
                     testPost2.author = _user._id;
+                    testPost3.author = _user._id;
                     return httpRequest.post(`${BASE_URL}/posts`, testPost1);
                 })
                 .then((post) => {
@@ -409,6 +421,39 @@ describe('Restful API', () => {
                     expect(post.title).to.equal(testPost2.title);
                     expect(post.slug).to.equal(testPost2.slug);
                     expect(post.content).to.equal(testPost2.content);
+                    return httpRequest.post(`${BASE_URL}/posts`, testPost3);
+                })
+                .then(function () {
+                    return httpRequest.get(`${BASE_URL}/posts?sort=title+asc`);
+                })
+                .then(function (data) {
+                    var titles = data.items.map(function (post) {
+                        return post.title;
+                    });
+                    expect(titles[0]).to.equal(testPost2.title);
+                    expect(titles[1]).to.equal(testPost1.title);
+                    expect(titles[2]).to.equal(testPost3.title);
+                    return httpRequest.get(`${BASE_URL}/posts?sort=publish_date+asc`);
+                })
+                .then(function (data) {
+                    var publish_dates = data.items.map(function (post) {
+                        return post.publish_date;
+                    });
+                    expect(new Date(publish_dates[0]).getTime()).to.equal(testPost3.publish_date.getTime());
+                    expect(new Date(publish_dates[1]).getTime()).to.equal(testPost1.publish_date.getTime());
+                    expect(new Date(publish_dates[2]).getTime()).to.equal(testPost2.publish_date.getTime());
+                    return httpRequest.get(`${BASE_URL}/posts?limit=2`);
+                })
+                .then(function (data) {
+                    expect(data.items.length).to.equal(2);
+                    return httpRequest.get(`${BASE_URL}/posts?sort=publish_date+desc&offset=2&limit=1`);
+                })
+                .then(function (data) {
+                    var publish_dates = data.items.map(function (post) {
+                        return post.publish_date;
+                    });
+                    expect(data.items.length).to.equal(1);
+                    expect(new Date(data.items[0].publish_date).getTime()).to.equal(testPost3.publish_date.getTime());
                     done();
                 })
                 .catch((err) => {
@@ -416,48 +461,6 @@ describe('Restful API', () => {
                     done(new Error());
                 });
         });
-        /*
-        it('should update a post', (done) => {
-            var category;
-
-            var testPost = {
-                "title": " ## My Post Title! ",
-                "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
-                "category": testCategory.slug,
-                "tags": ["tag1", "tag2"]
-            };
-
-            httpRequest.post(`${BASE_URL}/categories`, testCategory)
-                .then((_category) => {
-                    category = _category;
-                    return httpRequest.get(`${BASE_URL}/users/me`);
-                })
-                .then((_user) => {
-                    testPost.author = _user._id;
-                    return httpRequest.post(`${BASE_URL}/posts`, testPost);
-                })
-                .then((post) => {
-                    var update = {
-                        "title" : "A B C D E"
-                    };
-                    return httpRequest.put(`${BASE_URL}/posts/${post._id}`, update);
-                })
-                .then((post) => {
-                    expect(post._id).to.be.string;
-                    expect(post.title).to.equal("A B C D E");
-                    expect(post.slug).to.equal("my-post-title");
-                    expect(post.content).to.equal(testPost.content);
-                    expect(post.tags).to.include("tag1");
-                    expect(post.tags).to.include("tag2");
-                    testPost.category = category._id;
-                    done();
-                })
-                .catch((err) => {
-                    console.error(err);
-                    done(new Error());
-                });
-        });
-        */
 
     });
 });

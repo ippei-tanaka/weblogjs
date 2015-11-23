@@ -25,6 +25,7 @@ var create = (Model, obj) => new Promise((resolve, reject) => {
  * @param {Object} [options]
  * @param {String} [options.sort] - info for sort. (e.g.) "author asc,datepublished desc"
  * @param {Number} [options.limit]
+ * @param {Number} [options.offset]
  * @returns {Promise}
  */
 var getList = (Model, populate, options) => new Promise((resolve, reject) => {
@@ -42,7 +43,7 @@ var getList = (Model, populate, options) => new Promise((resolve, reject) => {
     if (options.sort) {
 
         options.sort.split(',').forEach((info) => {
-            var arr = info.split(' '),
+            let arr = info.split(' '),
                 path,
                 direction = 0;
 
@@ -66,6 +67,20 @@ var getList = (Model, populate, options) => new Promise((resolve, reject) => {
         });
 
         query.sort(sortInfo);
+    }
+
+    if (options.limit) {
+        let limit = Number.parseInt(options.limit);
+        if (!isNaN(limit)) {
+            query.limit(limit);
+        }
+    }
+
+    if (options.offset) {
+        let offset = Number.parseInt(options.offset);
+        if (!isNaN(offset)) {
+            query.skip(offset);
+        }
     }
 
     query.exec((err, items) => {
