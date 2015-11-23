@@ -3,11 +3,10 @@
 
 
 /*----------------------------
- Article
+ Header
 ----------------------------*/
 .module-header {
-    font-family: 'Signika', sans-serif;
-    font-size: 55px;
+    font-size: 53px;
     border-bottom: 1px solid #cccccc;
     padding: 130px 40px 40px;
     position: relative;
@@ -21,7 +20,6 @@
 .module-post-list {
     .m-psl-post-section {
         border-bottom: 1px solid #cccccc;
-        padding: 45px 40px 25px;
     }
 }
 
@@ -31,10 +29,11 @@
 ----------------------------*/
 .module-post {
     font-family: 'Quattrocento', serif;
+    padding: 45px 40px 50px;
 
     .m-pst-title {
         font-size: 36px;
-        margin-bottom: 20px;
+        margin-bottom: 44px;
     }
 
     .m-pst-date {
@@ -74,9 +73,9 @@
 
     .m-pst-content {
         margin-top: 40px;
-        margin-bottom: 30px;
     }
 }
+
 
 /*----------------------------
  Article

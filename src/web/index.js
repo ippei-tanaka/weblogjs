@@ -37,6 +37,11 @@ expressApp.use(passport.session());
 // Restful API
 expressApp.use(restfulApiRouter.baseRoute, restfulApiRouter.routes);
 
+hbs.registerHelper('blog_content', function(text, options) {
+    var ret = text.replace(/\n/g, '<br />');
+    return new hbs.SafeString(ret);
+});
+
 // HandleBar Template Settings
 expressApp.engine('hbs', hbs.express4({
     partialsDir: __dirname + '/pages/views/partials'
