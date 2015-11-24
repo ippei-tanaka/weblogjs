@@ -446,12 +446,9 @@ describe('Restful API', () => {
                 })
                 .then(function (data) {
                     expect(data.items.length).to.equal(2);
-                    return httpRequest.get(`${BASE_URL}/posts?sort=publish_date+desc&offset=2&limit=1`);
+                    return httpRequest.get(`${BASE_URL}/posts?sort=publish_date+desc,title+asc&offset=2&limit=1`);
                 })
                 .then(function (data) {
-                    var publish_dates = data.items.map(function (post) {
-                        return post.publish_date;
-                    });
                     expect(data.items.length).to.equal(1);
                     expect(new Date(data.items[0].publish_date).getTime()).to.equal(testPost3.publish_date.getTime());
                     done();

@@ -11,10 +11,18 @@
 {{/contentFor}}
 
 <div class="module-home-page">
-    <header class="module-header">
-        <h1 class="m-hdr-title">Ippei Tanaka</h1>
+    <header class="m-hmp-header">
+        <h1>Ippei Tanaka</h1>
     </header>
-    <div>
-        {{> public/post-list}}
+    <div class="m-hmp-body">
+        <div class="m-hmp-main">
+            {{> public/post-list postList}}
+        </div>
+        <aside class="m-hmp-sidebar">
+            {{> public/category-list categoryList}}
+        </aside>
     </div>
+    <header class="m-hmp-footer">
+        <span>&copy;Ippei Tanaka</span>
+    </header>
 </div>

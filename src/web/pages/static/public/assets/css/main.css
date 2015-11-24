@@ -79,7 +79,9 @@ table {
  Button
 ----------------------------*/
 body {
-  font-family: 'Libre Baskerville', serif; }
+  font-family: 'Libre Baskerville', serif;
+  color: #000000;
+  font-size: 16px; }
 
 /* -------------------------------------------------------------
   Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
@@ -119,20 +121,54 @@ body {
  Button
 ----------------------------*/
 /*----------------------------
- Header
+ Home Page
 ----------------------------*/
-.module-header {
+.module-home-page .m-hmp-header {
   font-size: 53px;
   border-bottom: 1px solid #cccccc;
   padding: 130px 40px 40px;
   position: relative;
   overflow: hidden; }
 
+.module-home-page .m-hmp-body {
+  display: flex; }
+  @media (max-width: 699px) {
+    .module-home-page .m-hmp-body {
+      flex-wrap: wrap-reverse; } }
+
+.module-home-page .m-hmp-sidebar {
+  border-left: 1px solid #cccccc; }
+  @media (max-width: 699px) {
+    .module-home-page .m-hmp-sidebar {
+      width: 100%;
+      border-left: 0;
+      border-bottom: 1px solid #cccccc; } }
+
+.module-home-page .m-hmp-footer {
+  font-size: 14px;
+  border-top: 1px solid #cccccc;
+  padding: 40px 40px 40px; }
+
 /*----------------------------
  Post List
 ----------------------------*/
 .module-post-list .m-psl-post-section {
   border-bottom: 1px solid #cccccc; }
+  .module-post-list .m-psl-post-section:last-child {
+    border-bottom: 0; }
+
+/*----------------------------
+ Category List
+----------------------------*/
+.module-category-list {
+  font-family: 'Quattrocento', serif;
+  padding: 45px 40px 50px; }
+  .module-category-list .m-ctl-list-item {
+    margin-bottom: 10px; }
+    .module-category-list .m-ctl-list-item:last-child {
+      margin-bottom: 0; }
+  .module-category-list .m-ctl-link {
+    color: #000000; }
 
 /*----------------------------
  Post

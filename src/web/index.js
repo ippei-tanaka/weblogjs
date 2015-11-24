@@ -14,6 +14,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var hbs = require('express-hbs');
 var expressSession = require('express-session');
+var helpers = require('./pages/views/helpers');
 var webServer;
 
 
@@ -37,9 +38,12 @@ expressApp.use(passport.session());
 // Restful API
 expressApp.use(restfulApiRouter.baseRoute, restfulApiRouter.routes);
 
-hbs.registerHelper('blog_content', function(text, options) {
-    var ret = text.replace(/\n/g, '<br />');
-    return new hbs.SafeString(ret);
+// Set up helpers
+Object.keys(helpers).forEach(function (key) {
+    hbs.registerHelper(key, function () {
+        var str = helpers[key].apply(null, arguments);
+        return new hbs.SafeString(str);
+    });
 });
 
 // HandleBar Template Settings

@@ -44,6 +44,15 @@ var findById = modelManager.findById.bind({}, User, null);
 
 
 /**
+ * @param {string} email
+ * @returns {Promise}
+ */
+var findByEmail = (email) => {
+    return modelManager.findOneBy(User, "email", email);
+};
+
+
+/**
  * @param {string} id
  * @param {object} userInfo
  * @param {string} [userInfo.email] - The email of the user.
@@ -124,6 +133,7 @@ module.exports = {
     create,
     getList,
     findById,
+    findByEmail,
     updateById,
     isValid,
     removeById,
