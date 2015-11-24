@@ -3,14 +3,45 @@
 
 
 /*----------------------------
- Header
+ Home Page
 ----------------------------*/
-.module-header {
-    font-size: 53px;
-    border-bottom: 1px solid #cccccc;
-    padding: 130px 40px 40px;
-    position: relative;
-    overflow: hidden;
+.module-home-page {
+
+    .m-hmp-header {
+        font-size: 53px;
+        border-bottom: 1px solid #cccccc;
+        padding: 130px 40px 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .m-hmp-body {
+        display: flex;
+
+        @include media-phone {
+            flex-wrap: wrap-reverse;
+        }
+    }
+
+    .m-hmp-main {
+
+    }
+
+    .m-hmp-sidebar {
+        border-left: 1px solid #cccccc;
+
+        @include media-phone {
+            width: 100%;
+            border-left: 0;
+            border-bottom: 1px solid #cccccc;
+        }
+    }
+
+    .m-hmp-footer {
+        font-size: 14px;
+        border-top: 1px solid #cccccc;
+        padding: 40px 40px 40px;
+    }
 }
 
 
@@ -20,6 +51,34 @@
 .module-post-list {
     .m-psl-post-section {
         border-bottom: 1px solid #cccccc;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+}
+
+
+/*----------------------------
+ Category List
+----------------------------*/
+.module-category-list {
+    font-family: 'Quattrocento', serif;
+    padding: 45px 40px 50px;
+
+    .m-ctl-list {
+    }
+
+    .m-ctl-list-item {
+        margin-bottom: 10px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .m-ctl-link {
+        color: $color-default-font;
     }
 }
 

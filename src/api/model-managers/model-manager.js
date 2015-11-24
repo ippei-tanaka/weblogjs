@@ -22,16 +22,18 @@ var create = (Model, obj) => new Promise((resolve, reject) => {
 /**
  * @param {mongoose.Model} Model
  * @param {Array<String>} [populate]
- * @param {Object} [options]
- * @param {String} [options.sort] - info for sort. (e.g.) "author asc,datepublished desc"
- * @param {Number} [options.limit]
- * @param {Number} [options.offset]
+ * @param {Object} [queryOptions]
+ * @param {String} [queryOptions.sort] - info for sort. (e.g.) "author asc,datepublished desc"
+ * @param {Number} [queryOptions.limit]
+ * @param {Number} [queryOptions.offset]
+ * @param {String} [queryOptions.author]
+ * @param {Object} [queryOptions]
  * @returns {Promise}
  */
-var getList = (Model, populate, options) => new Promise((resolve, reject) => {
-    options = options || {};
+var getList = (Model, populate, queryOptions, conditions) => new Promise((resolve, reject) => {
+    queryOptions = queryOptions || {};
 
-    var query = Model.find({}),
+    var query = Model.find(conditions),
         sortInfo = {};
 
     if (Array.isArray(populate)) {
@@ -40,9 +42,9 @@ var getList = (Model, populate, options) => new Promise((resolve, reject) => {
         });
     }
 
-    if (options.sort) {
+    if (queryOptions.sort) {
 
-        options.sort.split(',').forEach((info) => {
+        queryOptions.sort.split(',').forEach((info) => {
             let arr = info.split(' '),
                 path,
                 direction = 0;
@@ -69,15 +71,15 @@ var getList = (Model, populate, options) => new Promise((resolve, reject) => {
         query.sort(sortInfo);
     }
 
-    if (options.limit) {
-        let limit = Number.parseInt(options.limit);
+    if (queryOptions.limit) {
+        let limit = Number.parseInt(queryOptions.limit);
         if (!isNaN(limit)) {
             query.limit(limit);
         }
     }
 
-    if (options.offset) {
-        let offset = Number.parseInt(options.offset);
+    if (queryOptions.offset) {
+        let offset = Number.parseInt(queryOptions.offset);
         if (!isNaN(offset)) {
             query.skip(offset);
         }
