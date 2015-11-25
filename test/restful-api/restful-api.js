@@ -1,9 +1,9 @@
 "use strict";
 
-var config = require('./config.json');
+var config = require('../config.json');
 var testData = require('./test-data.json');
-var weblogjs = require('../')(config);
-var httpRequest = require('./utils/http-request');
+var weblogjs = require('../../')(config);
+var httpRequest = require('../utils/http-request');
 var expect = require('chai').expect;
 
 var admin = Object.freeze(Object.assign({

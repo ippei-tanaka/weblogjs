@@ -1,19 +1,29 @@
+"use strict";
+
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var path = require('path');
 var sass = require('gulp-sass');
+var runSequence = require('run-sequence');
+
 
 const TEST_DIR = "./test";
 const WEB_STATIC_SRC_DIR = "./src/web/pages/static-src";
 const WEB_STATIC_DIR = "./src/web/pages/static";
 
 
-gulp.task('test', () => {
-    return gulp.src(path.resolve(TEST_DIR, '*.js'), {read: false})
-        .pipe(mocha({reporter: 'spec'}))
-        .once('end', () => {
-            process.exit();
-        });
+gulp.task('test:restful-api', () => {
+    return gulp.src(path.resolve(TEST_DIR, 'restful-api/*.js'), {read: false})
+        .pipe(mocha({reporter: 'spec'}));
+});
+
+gulp.task('test:model-managers', () => {
+    return gulp.src(path.resolve(TEST_DIR, 'model-managers/*.js'), {read: false})
+        .pipe(mocha({reporter: 'spec'}));
+});
+
+gulp.task('test', function (callback) {
+    runSequence('test:model-managers', 'test:restful-api', callback);
 });
 
 gulp.task('public-sass', function () {

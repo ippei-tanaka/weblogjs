@@ -5,7 +5,9 @@
   "main": "./src",
   "scripts": {
     "build": "./node_modules/.bin/gulp build",
-    "test": "./node_modules/.bin/gulp test"
+    "test": "./node_modules/.bin/gulp test",
+    "test-restful-api": "./node_modules/.bin/gulp test:restful-api",
+    "test-model-managers": "./node_modules/.bin/gulp test:model-managers"
   },
   "author": "",
   "license": "MIT",
@@ -17,7 +19,7 @@
     "gulp-mocha": "^2.1.3",
     "gulp-sass": "^2.1.0",
     "request": "^2.65.0",
-    "run-sequence": "^1.1.4",
+    "run-sequence": "^1.1.5",
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
