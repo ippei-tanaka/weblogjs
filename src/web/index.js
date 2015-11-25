@@ -57,8 +57,8 @@ expressApp.set('views', __dirname + '/pages/views/pages');
 expressApp.use(express.static(__dirname + '/pages/static'));
 
 // Web Pages
-expressApp.use(publicPageRouter.baseRoute, publicPageRouter.routes);
 expressApp.use(adminPageRouter.baseRoute, adminPageRouter.routes);
+expressApp.use(publicPageRouter.baseRoute, publicPageRouter.routes);
 
 /*
  // catch 404 and forward to error handler
