@@ -44,7 +44,7 @@ var getCategoryList = () => new Promise((resolve, reject) => {
                     count: categoryCount.count
                 }
             } else {
-                var category = allCategories.items.find((cat) => String(cat._id) === String(categoryCount._id));
+                var category = allCategories.find((cat) => String(cat._id) === String(categoryCount._id));
                 return {
                     name: category.name,
                     link: `/categories/${category.slug}`,
@@ -73,7 +73,7 @@ routes.get('/', (request, response) => {
         };
     }).then(function (value) {
         render.call(response, 'home', {
-            postList: value.posts.items,
+            postList: value.posts,
             categoryList: value.categoryList
         });
     }).catch((error) => {
@@ -106,7 +106,7 @@ routes.get('/categories/:slug/', (request, response) => {
         };
     }).then(function (value) {
         render.call(response, 'home', {
-            postList: value.posts.items,
+            postList: value.posts,
             categoryList: value.categoryList
         });
     }).catch((error) => {

@@ -87,9 +87,7 @@ var getList = (Model, populate, queryOptions, conditions) => new Promise((resolv
 
     query.exec((err, items) => {
         if (err) return reject(err);
-        resolve({
-            items: items
-        });
+        resolve(items);
     });
 });
 
