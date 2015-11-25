@@ -6,6 +6,7 @@ var userManager = require('./user-manager');
 var modelManager = require('./model-manager');
 var Post = require('./models/post');
 var errors = require('../errors/index');
+var co = require('co');
 
 // Regular expression that checks for hex value
 var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
@@ -73,53 +74,42 @@ var removeById = modelManager.removeById.bind({}, Post);
 
 
 /**
- * @param postInfo
- * @param workerFunction
+ * @param {object} postInfo
+ * @param {Function} createOrUpdate
  * @returns {Promise}
  */
-var createOrUpdate = (postInfo, workerFunction) => new Promise((resolve, reject) => {
+var createOrUpdate = (postInfo, createOrUpdate) => new Promise((resolve, reject) => {
 
-    var categoryPromise,
-        categoryValue = String(postInfo.category),
-        authorPromise,
-        authorValue = String(postInfo.author);
+    var categoryValue = String(postInfo.category),
+        authorValue = String(postInfo.author),
+        category = null,
+        author = null,
+        post;
 
-    if (checkForHexRegExp.test(categoryValue)) {
-        categoryPromise = categoryManager.findById(categoryValue);
-    } else if (postInfo.category) {
-        categoryPromise = categoryManager.findBySlug(categoryValue);
-    }  else {
-        categoryPromise = Promise.resolve(null);
-    }
+    co(function* () {
+        if (checkForHexRegExp.test(categoryValue)) {
+            category = yield categoryManager.findById(categoryValue);
+        } else if (postInfo.category) {
+            category = yield categoryManager.findBySlug(categoryValue);
+        }
 
-    if (checkForHexRegExp.test(authorValue)) {
-        authorPromise = userManager.findById(authorValue);
-    } else {
-        authorPromise = Promise.resolve(null);
-    }
+        if (checkForHexRegExp.test(authorValue)) {
+            author = yield userManager.findById(authorValue);
+        }
 
-    Promise.all([categoryPromise, authorPromise])
-        .then((promised) => {
-            var category = promised[0];
-            var author = promised[1];
+        post = yield createOrUpdate({
+            title: postInfo.title,
+            content: postInfo.content,
+            author:  author ? author.id : undefined,
+            category: category ? category.id : undefined,
+            slug: postInfo.slug,
+            publish_date: new Date(postInfo.publish_date),
+            tags: postInfo.tags
+        });
 
-            workerFunction({
-                title: postInfo.title,
-                content: postInfo.content,
-                author:  author ? author.id : undefined,
-                category: category ? category.id : undefined,
-                slug: postInfo.slug,
-                publish_date: new Date(postInfo.publish_date),
-                tags: postInfo.tags
-            })
-                .then((post) => {
-                    findById(post.id)
-                        .then(resolve)
-                        .catch(reject);
-                })
-                .catch(reject);
-        })
-        .catch(reject);
+        resolve(yield findById(post.id));
+
+    }).catch(reject);
 });
 
 
