@@ -46,7 +46,9 @@
         flex-wrap: wrap;
     }
 
-    .m-bll-main { }
+    .m-bll-main {
+        width: 100%;
+    }
 
     .m-bll-sidebar {
         border-left: 1px solid #cccccc;
@@ -90,6 +92,12 @@
     font-family: 'Quattrocento', serif;
     padding: 45px 40px 50px;
 
+    .m-ctl-title {
+        font-size: 18px;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+    }
+
     .m-ctl-list {
     }
 
@@ -103,6 +111,7 @@
 
     .m-ctl-link {
         color: $color-default-font;
+        white-space: nowrap;
     }
 }
 

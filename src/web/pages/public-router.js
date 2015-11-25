@@ -23,7 +23,6 @@ var render = function (view, data, status) {
     this.status(status).render(`public/${view}`, data);
 };
 
-
 var errorHandling = function (status) {
     if (status === 400) {
         render.call(this, 'error', {message: "The page that you're looking for doesn't exist."}, status);
@@ -31,6 +30,30 @@ var errorHandling = function (status) {
         render.call(this, 'error', {message: "Errors have occurred."}, status);
     }
 };
+
+var getCategoryList = () => new Promise((resolve, reject) => {
+    co(function* () {
+        var categoryCounts = yield postManager.countByCategories();
+        var allCategories = yield categoryManager.getList();
+
+        resolve(categoryCounts.map((categoryCount) => {
+            if (!categoryCount._id) {
+                return {
+                    name: "Uncategorized",
+                    link: "/categories/uncategorized",
+                    count: categoryCount.count
+                }
+            } else {
+                var category = allCategories.items.find((cat) => String(cat._id) === String(categoryCount._id));
+                return {
+                    name: category.name,
+                    link: `/categories/${category.slug}`,
+                    count: categoryCount.count
+                }
+            }
+        }));
+    }).catch(reject);
+});
 
 // Home
 routes.get('/', (request, response) => {
@@ -46,20 +69,15 @@ routes.get('/', (request, response) => {
     co(function* () {
         return {
             posts: yield postManager.getList(query),
-            categories: yield categoryManager.getList()
+            categoryList: yield getCategoryList()
         };
     }).then(function (value) {
-        var categoryList = value.categories.items.map(function (category) {
-            return {
-                name: category.name,
-                link: `/categories/${category.slug}`
-            };
-        });
         render.call(response, 'home', {
             postList: value.posts.items,
-            categoryList: categoryList
+            categoryList: value.categoryList
         });
-    }).catch(() => {
+    }).catch((error) => {
+        console.error(error);
         errorHandling.call(response, 500);
     });
 });
@@ -77,24 +95,22 @@ routes.get('/categories/:slug/', (request, response) => {
     };
     query = Object.assign(defaultQuery, query);
 
+    slug = slug === "uncategorized" ? null : slug;
+
     co(function* () {
         var category = yield categoryManager.findBySlug(slug);
+        var categoryId = category ? category._id : null;
         return {
-            posts: yield postManager.getList(query, {category: category._id}),
-            categories: yield categoryManager.getList()
+            posts: yield postManager.getList(query, {category: categoryId}),
+            categoryList: yield getCategoryList()
         };
     }).then(function (value) {
-        var categoryList = value.categories.items.map(function (category) {
-            return {
-                name: category.name,
-                link: `/categories/${category.slug}`
-            };
-        });
         render.call(response, 'home', {
             postList: value.posts.items,
-            categoryList: categoryList
+            categoryList: value.categoryList
         });
-    }).catch(() => {
+    }).catch((error) => {
+        console.error(error);
         errorHandling.call(response, 500);
     });
 });

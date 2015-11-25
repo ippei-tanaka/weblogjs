@@ -100,7 +100,7 @@ var createOrUpdate = (postInfo, createOrUpdate) => new Promise((resolve, reject)
         post = yield createOrUpdate({
             title: postInfo.title,
             content: postInfo.content,
-            author:  author ? author.id : undefined,
+            author: author ? author.id : undefined,
             category: category ? category.id : undefined,
             slug: postInfo.slug,
             publish_date: new Date(postInfo.publish_date),
@@ -113,10 +113,29 @@ var createOrUpdate = (postInfo, createOrUpdate) => new Promise((resolve, reject)
 });
 
 
+var countByCategories = () => new Promise((resolve, reject) => {
+
+    co(function* () {
+        var posts = yield Post.aggregate([
+            {
+                $group: {
+                    _id: "$category",
+                    count: { $sum: 1 }
+                }
+            }
+        ]).exec();
+
+        resolve(posts);
+    }).catch(reject);
+
+});
+
+
 module.exports = {
     create,
     getList,
     findById,
     updateById,
-    removeById
+    removeById,
+    countByCategories
 };
