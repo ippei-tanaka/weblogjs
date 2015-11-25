@@ -11,6 +11,27 @@ var categoryManager = api.categoryManager;
 var postManager = api.postManager;
 
 
+var render = function (view, data, status) {
+    var defaultData = {
+        homeUrl: "/"
+    };
+
+    data = Object.assign(defaultData, data);
+
+    status = status || 200;
+
+    this.status(status).render(`public/${view}`, data);
+};
+
+
+var errorHandling = function (status) {
+    if (status === 400) {
+        render.call(this, 'error', {message: "The page that you're looking for doesn't exist."}, status);
+    } else {
+        render.call(this, 'error', {message: "Errors have occurred."}, status);
+    }
+};
+
 // Home
 routes.get('/', (request, response) => {
     var urlParts = url.parse(request.url, true);
@@ -34,12 +55,12 @@ routes.get('/', (request, response) => {
                 link: `/categories/${category.slug}`
             };
         });
-        response.render('public/home', {
+        render.call(response, 'home', {
             postList: value.posts.items,
             categoryList: categoryList
         });
     }).catch(() => {
-        response.status(500).send('Problems have occurred.');
+        errorHandling.call(response, 500);
     });
 });
 
@@ -58,9 +79,6 @@ routes.get('/categories/:slug/', (request, response) => {
 
     co(function* () {
         var category = yield categoryManager.findBySlug(slug);
-
-        console.log(category);
-
         return {
             posts: yield postManager.getList(query, {category: category._id}),
             categories: yield categoryManager.getList()
@@ -72,13 +90,17 @@ routes.get('/categories/:slug/', (request, response) => {
                 link: `/categories/${category.slug}`
             };
         });
-        response.render('public/home', {
+        render.call(response, 'home', {
             postList: value.posts.items,
             categoryList: categoryList
         });
     }).catch(() => {
-        response.status(500).send('Problems have occurred.');
+        errorHandling.call(response, 500);
     });
+});
+
+routes.get("/*", (request, response) => {
+    errorHandling.call(response, 400);
 });
 
 

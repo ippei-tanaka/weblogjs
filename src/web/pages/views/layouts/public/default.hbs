@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{{block "page-title"}}}</title>
+    {{> public/common-styles}}
+    {{> public/common-scripts}}
+</head>
+<body>
+
+<div class="module-header-footer-layout">
+    <header class="m-hfl-header">
+        <h1><a class="m-hfl-header-link" href="{{homeUrl}}">Ippei Tanaka</a></h1>
+    </header>
+    <div class="m-hfl-body">
+        {{{body}}}
+    </div>
+    <header class="m-hfl-footer">
+        <span>&copy;Ippei Tanaka</span>
+    </header>
+</div>
+
+</body>
+</html>

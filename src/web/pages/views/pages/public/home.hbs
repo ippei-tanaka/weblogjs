@@ -1,28 +1,12 @@
-{{!< ../../layouts/default}}
+{{!< ../../layouts/public/default}}
 
 {{#contentFor "page-title"}}WeblogJS Blog{{/contentFor}}
 
-{{#contentFor "page-styles"}}
-    {{> public/common-styles}}
-{{/contentFor}}
-
-{{#contentFor "page-scripts"}}
-    {{> public/common-scripts}}
-{{/contentFor}}
-
-<div class="module-home-page">
-    <header class="m-hmp-header">
-        <h1>Ippei Tanaka</h1>
-    </header>
-    <div class="m-hmp-body">
-        <div class="m-hmp-main">
-            {{> public/post-list postList}}
-        </div>
-        <aside class="m-hmp-sidebar">
-            {{> public/category-list categoryList}}
-        </aside>
+<div class="module-blog-layout">
+    <div class="m-bll-main">
+        {{> public/post-list postList}}
     </div>
-    <header class="m-hmp-footer">
-        <span>&copy;Ippei Tanaka</span>
-    </header>
+    <aside class="m-bll-sidebar">
+        {{> public/category-list categoryList}}
+    </aside>
 </div>

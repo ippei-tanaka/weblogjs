@@ -3,45 +3,69 @@
 
 
 /*----------------------------
- Home Page
+ Header Footer Layout
 ----------------------------*/
-.module-home-page {
+.module-header-footer-layout {
 
-    .m-hmp-header {
-        font-size: 53px;
+    .m-hfl-header {
         border-bottom: 1px solid #cccccc;
         padding: 130px 40px 40px;
         position: relative;
         overflow: hidden;
     }
 
-    .m-hmp-body {
-        display: flex;
+    .m-hfl-header-link {
+        font-size: 53px;
+        color: $color-default-font;
+        text-decoration: none;
 
-        @include media-phone {
-            flex-wrap: wrap-reverse;
+        &:hover {
+            @include opacity(0.7);
         }
     }
 
-    .m-hmp-main {
+    .m-hfl-body {
 
     }
 
-    .m-hmp-sidebar {
+    .m-hfl-footer {
+        font-size: 14px;
+        border-top: 1px solid #cccccc;
+        padding: 40px 40px 40px;
+    }
+}
+
+
+/*----------------------------
+ Blog Layout
+----------------------------*/
+.module-blog-layout {
+    display: flex;
+
+    @include media-phone {
+        flex-wrap: wrap;
+    }
+
+    .m-bll-main { }
+
+    .m-bll-sidebar {
         border-left: 1px solid #cccccc;
 
         @include media-phone {
             width: 100%;
             border-left: 0;
-            border-bottom: 1px solid #cccccc;
+            border-top: 1px solid #cccccc;
         }
     }
+}
 
-    .m-hmp-footer {
-        font-size: 14px;
-        border-top: 1px solid #cccccc;
-        padding: 40px 40px 40px;
-    }
+
+/*----------------------------
+ Error Page
+----------------------------*/
+.module-error-page {
+    padding: 60px 40px;
+    font-size: 20px;
 }
 
 
