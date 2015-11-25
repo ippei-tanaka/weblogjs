@@ -1,8 +1,9 @@
 <div class="module-category-list">
+    <h3 class="m-ctl-title">Categories</h3>
     <ul class="m-ctl-list">
         {{#each this}}
             <li class="m-ctl-list-item">
-                <a class="m-ctl-link" href="{{link}}">{{name}}</a>
+                <a class="m-ctl-link" href="{{link}}">{{name}} ({{count}})</a>
             </li>
         {{/each}}
     </ul>
