@@ -84,7 +84,7 @@ routes.get('/users', isLoggedIn, response((ok, error, request) => {
         query = urlParts.query;
 
     userManager.getList(query)
-        .then(ok)
+        .then((data) => ok({ items: data }))
         .catch(error);
 }));
 
@@ -127,7 +127,7 @@ routes.get('/categories', isLoggedIn, response((ok, error, request) => {
         query = urlParts.query;
 
     categoryManager.getList(query)
-        .then(ok)
+        .then((data) => ok({ items: data }))
         .catch(error);
 }));
 
@@ -164,7 +164,7 @@ routes.get('/posts', isLoggedIn, response((ok, error, request) => {
         query = urlParts.query;
 
     postManager.getList(query)
-        .then(ok)
+        .then((data) => ok({ items: data }))
         .catch(error);
 }));
 

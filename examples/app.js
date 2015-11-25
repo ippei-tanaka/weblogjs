@@ -2,6 +2,9 @@
 
 var config = require('./config.json');
 var weblogjs = require('../')(config);
+var co = require('co');
 
-weblogjs.web.startServer()
-    .then(() => weblogjs.api.userManager.createAdminUser());
+co(function* () {
+    yield weblogjs.web.startServer();
+    yield weblogjs.api.userManager.createAdminUser();
+});
