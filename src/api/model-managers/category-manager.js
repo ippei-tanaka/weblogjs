@@ -3,31 +3,15 @@
 
 var Category = require('./models/category');
 var modelManager = require('./model-manager');
+var ___modelManager = require('./_model-manager');
 var errors = require('../errors/index');
+var exports = ___modelManager.applyTo(Category);
 
 
-/**
- * @param {object} categoryInfo - Information about the category.
- * @param {string} categoryInfo.name - The name of the category.
- * @param {string} [categoryInfo.slug] - The content of the category.
- * @returns {Promise}
- */
-var create = (categoryInfo) => {
-    return modelManager.create(Category, {
-        name: categoryInfo.name,
-        slug: categoryInfo.slug
-    });
-};
+var create = exports.create;
 
 
-/**
- * @param {object} [options]
- * @param {string} [options.sort] - info for sort. (e.g.) "author asc,datepublished desc"
- * @param {number} [options.limit]
- * @returns {Promise}
- */
-var getList = modelManager.getList.bind({}, Category, null);
-
+var getList = exports.getList;
 
 /**
  * @param {string} id
