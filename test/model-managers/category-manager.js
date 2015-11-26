@@ -83,7 +83,7 @@ describe('Category Manager', () => {
         })
     });
 
-    it('should return a category or categories', (done) => {
+    it('should return categories by conditions', (done) => {
         co(function* () {
             let category1 = yield weblogjs.api.categoryManager.create({
                 name: "This is a category 1",
@@ -131,19 +131,28 @@ describe('Category Manager', () => {
         })
     });
 
-    it('should update a category', (done) => {
+    it('should update categories', (done) => {
         co(function* () {
-            let category = yield weblogjs.api.categoryManager.create({
-                name: "This is a category",
-                slug: `this-is-a-category`
+
+            for (let i = 0; i < 3; i++) {
+                yield weblogjs.api.categoryManager.create({
+                    name: `# ${i}`,
+                    slug: `n-${i}`
+                });
+            }
+
+            yield weblogjs.api.categoryManager.update({}, {
+                name: "new category"
             });
 
-            let _categories = yield weblogjs.api.categoryManager.update({_id: category.id}, {
-                name: "This is a new category!"
+            let categories = yield weblogjs.api.categoryManager.find({}, {
+                sort: "slug asc"
             });
 
-            expect(_categories[0].name).to.equal("This is a new category!");
-            expect(_categories[0].slug).to.equal("this-is-a-category");
+            for (let i = 0; i < categories.length; i++) {
+                expect(categories[i].name).to.equal("new category");
+                expect(categories[i].slug).to.equal(`n-${i}`);
+            }
 
             done();
         }).catch((error) => {
@@ -151,4 +160,66 @@ describe('Category Manager', () => {
         })
     });
 
+    it('should update a category', (done) => {
+        co(function* () {
+
+            for (let i = 0; i < 3; i++) {
+                yield weblogjs.api.categoryManager.create({
+                    name: `# ${i}`,
+                    slug: `n-${i}`
+                });
+            }
+
+            let categories = yield weblogjs.api.categoryManager.find();
+
+            yield weblogjs.api.categoryManager.updateById(categories[2].id, {
+                slug: "n-9"
+            });
+
+            categories = yield weblogjs.api.categoryManager.find({}, {
+                sort: "slug desc"
+            });
+
+            expect(categories[0].name).to.equal("# 2");
+            expect(categories[0].slug).to.equal("n-9");
+
+            done();
+        }).catch((error) => {
+            console.error(error);
+        })
+    });
+
+    it('should remove a category or categories', (done) => {
+        co(function* () {
+
+            for (let i = 0; i < 10; i++) {
+                yield weblogjs.api.categoryManager.create({
+                    name: i < 3 ? "# 0-2" : "# 3-9",
+                    slug: `n-${i}`
+                });
+            }
+
+            let categories = yield weblogjs.api.categoryManager.find();
+
+            expect(categories.length).to.equal(10);
+
+            yield weblogjs.api.categoryManager.remove({
+                name: "# 0-2"
+            });
+
+            categories = yield weblogjs.api.categoryManager.find();
+
+            expect(categories.length).to.equal(7);
+
+            yield weblogjs.api.categoryManager.removeById(categories[0].id);
+
+            categories = yield weblogjs.api.categoryManager.find();
+
+            expect(categories.length).to.equal(6);
+
+            done();
+        }).catch((error) => {
+            console.error(error);
+        })
+    });
 });

@@ -5,100 +5,6 @@ var co = require('co');
 var errors = require('../errors/index');
 var methods = {};
 
-/**
- * @param {mongoose.Model} Model
- * @param {object} obj
- * @returns {Promise}
- */
-methods.create = (Model, obj) => new Promise((resolve, reject) => {
-    var doc = new Model(obj);
-
-    co(function* () {
-        yield doc.save();
-        let newDoc = yield Model.findById(doc.id);
-        resolve(newDoc);
-    }).catch(reject);
-});
-
-
-/**
- * @param {mongoose.Model} Model
- * @param {Object} [options]
- * @param {Array<String>} [options.populate]
- * @param {String} [options.sort] - info for sort. (e.g.) "author asc,datepublished desc"
- * @param {Number} [options.limit]
- * @param {Number} [options.offset]
- * @param {Object} [options.conditions]
- * @returns {Promise}
- */
-/*
- methods.getList = (Model, options) => new Promise((resolve, reject) => {
-
- options = Object.assign({
- sort: "",
- limit: 0,
- offset: 0,
- populate: [],
- conditions: {}
- }, options || {});
-
- let query = Model.find(options.conditions);
-
- if (options.populate) {
- options.populate.forEach((path) => {
- query.populate(path);
- });
- }
-
- if (options.sort) {
- let sortInfo = {};
-
- options.sort.split(',').forEach((info) => {
- let arr = info.split(' '),
- path,
- direction = 0;
-
- if (arr.length !== 2) {
- return;
- }
-
- path = arr[0];
-
- if (arr[1] === "asc") {
- direction = 1;
- } else if (arr[1] === "desc") {
- direction = -1;
- }
-
- if (direction === 0) {
- return;
- }
-
- sortInfo[path] = direction;
- });
-
- query.sort(sortInfo);
- }
-
- if (options.limit) {
- let limit = Number.parseInt(options.limit);
- if (!isNaN(limit)) {
- query.limit(limit);
- }
- }
-
- if (options.offset) {
- let offset = Number.parseInt(options.offset);
- if (!isNaN(offset)) {
- query.skip(offset);
- }
- }
-
- co(function* () {
- resolve(yield query.exec());
- }).catch(reject);
- });
- */
 
 /**
  * @typedef {Object} QueryOptions
@@ -169,7 +75,6 @@ var addQueryOptions = function (query, options) {
  * @returns {Object}
  */
 var populateFields = function (query, fields) {
-
     fields = fields || [];
 
     if (fields) {
@@ -177,9 +82,24 @@ var populateFields = function (query, fields) {
             query.populate(path);
         }
     }
-
     return query;
 };
+
+
+/**
+ * @param {mongoose.Model} Model
+ * @param {object} obj
+ * @returns {Promise}
+ */
+methods.create = (Model, obj) => new Promise((resolve, reject) => {
+    var doc = new Model(obj);
+
+    co(function* () {
+        yield doc.save();
+        let newDoc = yield Model.findById(doc.id);
+        resolve(newDoc);
+    }).catch(reject);
+});
 
 
 /**
@@ -207,13 +127,8 @@ methods.find = (Model, condition, queryOptions, populatedFields) => new Promise(
  * @returns {Promise}
  */
 methods.findOne = function (Model, condition, queryOptions, populatedFields) {
-    var self = this;
-    return new Promise((resolve, reject) => {
-        co(function* () {
-            var docs = yield self.find(Model, condition, queryOptions, populatedFields);
-            resolve(docs[0]);
-        }).catch(reject);
-    });
+    return this.find(Model, condition, queryOptions, populatedFields)
+        .then((data) => data ? data[0] : null);
 };
 
 
@@ -223,33 +138,8 @@ methods.findOne = function (Model, condition, queryOptions, populatedFields) {
  * @returns {Promise}
  */
 methods.findOneById = function (Model, id) {
-    var self = this;
-    return new Promise((resolve, reject) => {
-        co(function* () {
-            resolve(yield self.findOne(Model, {_id: id}));
-        }).catch(reject);
-    });
+    return this.findOne(Model, {_id: id});
 };
-
-
-/**
- * @param {mongoose.Model} Model
- * @param {string} id
- * @param {object} obj
- * @returns {Promise}
- */
-methods.updateById = (Model, id, obj) => new Promise((resolve, reject) => {
-    findById(Model, null, id).then((doc) => {
-        Object.keys(obj).forEach((key) => {
-            doc[key] = obj[key];
-        });
-
-        doc.save((err) => {
-            if (err) return reject(err);
-            resolve(doc);
-        });
-    }).catch(reject);
-});
 
 
 /**
@@ -258,24 +148,45 @@ methods.updateById = (Model, id, obj) => new Promise((resolve, reject) => {
  * @param {Object} newValues
  * @returns {Promise}
  */
-methods.update = (Model, condition, newValues) => new Promise((resolve, reject) => {
+methods.update = function (Model, condition, newValues) {
 
-    co(function* () {
+    var self = this;
 
-        var docs = yield Model.find(condition);
+    return this.find(Model, condition).then((docs) => {
+
         var keys = Object.keys(newValues);
 
-        for (let doc of docs) {
-            for (var key of keys) {
-                doc[key] = newValues[key];
+        return co(function* () {
+            for (let doc of docs) {
+                for (var key of keys) {
+                    doc[key] = newValues[key];
+                }
+                yield doc.save();
             }
-            yield doc.save();
-        }
+            return yield self.find(Model, condition);
+        });
+    });
+};
 
-        resolve(yield Model.find(condition));
 
-    }).catch(reject);
-});
+/**
+ * @param {mongoose.Model} Model
+ * @param {string} id
+ * @param {object} newValues
+ * @returns {Promise}
+ */
+methods.updateById = function (Model, id, newValues) {
+    return this.update(Model, {_id: id}, newValues)
+        .then((data) => data ? data[0] : null);
+};
+
+
+/**
+ * @param {mongoose.Model} Model
+ * @param {Object} condition
+ * @returns {Promise}
+ */
+methods.remove = (Model, condition) => Model.remove(condition);
 
 
 /**
@@ -283,13 +194,9 @@ methods.update = (Model, condition, newValues) => new Promise((resolve, reject) 
  * @param {string} id
  * @returns {Promise}
  */
-methods.removeById = (Model, id) => new Promise((resolve, reject) => {
-    Model.remove({_id: id})
-        .exec((err) => {
-            if (err) return reject(err);
-            resolve({});
-        });
-});
+methods.removeById = function (Model, id) {
+    return this.remove(Model, {_id: id});
+};
 
 
 module.exports = {
