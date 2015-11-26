@@ -30,6 +30,7 @@ describe('Restful API', () => {
     beforeEach(() => weblogjs.api.userManager.createAdminUser());
     beforeEach(() => httpRequest.post(`${BASE_URL}/login`, admin));
     afterEach(() => httpRequest.get(`${BASE_URL}/logout`));
+    after(clearDb);
     after(() => weblogjs.web.stopServer());
 
     describe('/users', () => {
