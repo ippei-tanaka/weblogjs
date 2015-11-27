@@ -50,6 +50,30 @@ var redirectIfNotLoggedIn = (uri) => (request, response, next) => {
     response.redirect(baseRoute + uri);
 };
 
+var queryParser = function (query) {
+
+    var ret = null;
+
+    if (!query) {
+        return ret;
+    }
+
+    ret = Object.assign({}, query);
+
+    if (query.sort) {
+        let sort = {};
+        for (let value of query.sort.split(/\s*,\s*/)) {
+            value = value.split(/\s+/);
+            let path = value[0];
+            let order = value[1];
+            sort[path] = order === '-1' || order === '1' ? order : 1;
+        }
+        ret.sort = sort;
+    }
+
+    return ret;
+};
+
 
 //-------------------------------------------------------
 // Home
@@ -83,7 +107,7 @@ routes.get('/users', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    userManager.find({}, query)
+    userManager.find({}, queryParser(query))
         .then((data) => ok({ items: data }))
         .catch(error);
 }));
@@ -101,7 +125,7 @@ routes.get('/users/:id', isLoggedIn, response((ok, error, request) => {
 }));
 
 routes.post('/users', isLoggedIn, response((ok, error, request) => {
-    userManager.create(request.body)
+    userManager.createRegularUser(request.body)
         .then(ok)
         .catch(error);
 }));
@@ -126,7 +150,7 @@ routes.get('/categories', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    categoryManager.find({}, query)
+    categoryManager.find({}, queryParser(query))
         .then((data) => ok({ items: data }))
         .catch(error);
 }));
@@ -163,7 +187,7 @@ routes.get('/posts', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    postManager.getList(query)
+    postManager.find({}, queryParser(query))
         .then((data) => ok({ items: data }))
         .catch(error);
 }));
