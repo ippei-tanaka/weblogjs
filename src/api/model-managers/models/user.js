@@ -80,11 +80,13 @@ UserSchema.plugin(
     });
 
 
-UserSchema.methods.verifyPassword = function (password, callback) {
-    bcrypt.compare(password, this.password, function (err, isMatch) {
-        if (err) return callback(err);
-        callback(null, isMatch);
-    });
+UserSchema.methods.verifyPassword = function (password) {
+    return new Promise(function (resolve, reject) {
+        bcrypt.compare(password, this.password, function (err, isMatch) {
+            if (err) return reject(err);
+            resolve(isMatch);
+        });
+    }.bind(this));
 };
 
 

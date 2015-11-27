@@ -8,10 +8,21 @@ var methods = {};
 
 /**
  * @typedef {Object} QueryOptions
- * @property {String} sort - info for sort. (e.g.) "author asc,datepublished desc"
- * @property {Number} limit
- * @property {Number} offset
+ * @property {Object} [sort]
+ * @property {Number} [limit]
+ * @property {Number} [offset]
+ * @property {Array<String>} [populate]
+ * @property {Array<String>} [select]
  */
+
+
+var defaultQueryOptions = Object.freeze({
+    sort: {},
+    limit: 0,
+    offset: 0,
+    populate: [],
+    select: []
+});
 
 
 /**
@@ -21,67 +32,22 @@ var methods = {};
  */
 var addQueryOptions = function (query, options) {
 
-    options = Object.assign({
-        sort: "",
-        limit: 0,
-        offset: 0
-    }, options || {});
+    options = Object.assign({}, defaultQueryOptions, options || {});
 
-    if (options.sort) {
-        let sortInfo = {};
-
-        for (let info of options.sort.split(',')) {
-            let arr = info.split(' '),
-                path,
-                direction = 0;
-
-            if (arr.length !== 2) {
-                break;
-            }
-
-            path = arr[0];
-
-            if (arr[1] === "asc") {
-                direction = 1;
-            } else if (arr[1] === "desc") {
-                direction = -1;
-            }
-
-            if (direction === 0) {
-                break;
-            }
-
-            sortInfo[path] = direction;
-        }
-
-        query.sort(sortInfo);
+    for (let path of options.select) {
+        query.select(path);
     }
 
-    if (options.limit) {
-        query.limit(options.limit);
+    for (let path of options.populate) {
+        query.populate(path);
     }
 
-    if (options.offset) {
-        query.skip(options.offset);
-    }
+    query.sort(options.sort);
 
-    return query;
-};
+    query.limit(options.limit);
 
+    query.skip(options.offset);
 
-/**
- * @param {Object} query
- * @param {Array<String>} fields
- * @returns {Object}
- */
-var populateFields = function (query, fields) {
-    fields = fields || [];
-
-    if (fields) {
-        for (let path of fields) {
-            query.populate(path);
-        }
-    }
     return query;
 };
 
@@ -101,33 +67,36 @@ methods.create = (Model, obj) => new Promise((resolve, reject) => {
     }).catch(reject);
 });
 
+methods.create = function (Model, obj) {
+    var doc = new Model(obj);
+
+    return co(function* () {
+        yield doc.save();
+        return yield this.findById(Model, doc.id);
+    }.bind(this));
+};
 
 /**
  * @param {mongoose.Model} Model
  * @param {Object} condition
  * @param {QueryOptions} [queryOptions]
- * @param {Array<String>} [populatedFields]
  * @returns {Promise}
  */
-methods.find = (Model, condition, queryOptions, populatedFields) => new Promise((resolve, reject) => {
-    co(function* () {
-        var query = Model.find(condition);
-        query = addQueryOptions(query, queryOptions);
-        query = populateFields(query, populatedFields);
-        resolve(yield query.exec());
-    }).catch(reject);
-});
+methods.find = function (Model, condition, queryOptions) {
+    var query = Model.find(condition);
+    query = addQueryOptions(query, queryOptions);
+    return query.exec();
+};
 
 
 /**
  * @param {mongoose.Model} Model
  * @param {Object} condition
  * @param {QueryOptions} [queryOptions]
- * @param {Array<String>} [populatedFields]
  * @returns {Promise}
  */
-methods.findOne = function (Model, condition, queryOptions, populatedFields) {
-    return this.find(Model, condition, queryOptions, populatedFields)
+methods.findOne = function (Model, condition, queryOptions) {
+    return this.find(Model, condition, queryOptions)
         .then((data) => data ? data[0] : null);
 };
 
@@ -137,7 +106,7 @@ methods.findOne = function (Model, condition, queryOptions, populatedFields) {
  * @param {string} id
  * @returns {Promise}
  */
-methods.findOneById = function (Model, id) {
+methods.findById = function (Model, id) {
     return this.findOne(Model, {_id: id});
 };
 
