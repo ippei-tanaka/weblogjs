@@ -374,7 +374,6 @@ describe('Restful API', () => {
             var testPost1 = {
                 "title": "b ## My Post Title! ",
                 "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
-                "category": testCategory.slug,
                 "slug": "testtset",
                 "publish_date": new Date("2011-1-11 11:11:11"),
                 "tags": ["tag1", "tag2"]
@@ -392,7 +391,6 @@ describe('Restful API', () => {
                 "title": "c It is - the  title 2 --- ",
                 "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
                 "slug": "dsfsdfsd",
-                "category": testCategory.slug,
                 "publish_date": new Date("1990-9-19 9:00:00"),
                 "tags": ["tag1"]
             };
@@ -400,6 +398,8 @@ describe('Restful API', () => {
             httpRequest.post(`${BASE_URL}/categories`, testCategory)
                 .then((_category) => {
                     category = _category;
+                    testPost1.category = _category._id;
+                    testPost3.category = _category._id;
                     return httpRequest.get(`${BASE_URL}/users/me`);
                 })
                 .then((_user) => {
@@ -425,7 +425,7 @@ describe('Restful API', () => {
                     return httpRequest.post(`${BASE_URL}/posts`, testPost3);
                 })
                 .then(function () {
-                    return httpRequest.get(`${BASE_URL}/posts?sort=title+asc`);
+                    return httpRequest.get(`${BASE_URL}/posts?sort=title`);
                 })
                 .then(function (data) {
                     var titles = data.items.map(function (post) {
@@ -434,7 +434,7 @@ describe('Restful API', () => {
                     expect(titles[0]).to.equal(testPost2.title);
                     expect(titles[1]).to.equal(testPost1.title);
                     expect(titles[2]).to.equal(testPost3.title);
-                    return httpRequest.get(`${BASE_URL}/posts?sort=publish_date+asc`);
+                    return httpRequest.get(`${BASE_URL}/posts?sort=publish_date`);
                 })
                 .then(function (data) {
                     var publish_dates = data.items.map(function (post) {
@@ -447,7 +447,7 @@ describe('Restful API', () => {
                 })
                 .then(function (data) {
                     expect(data.items.length).to.equal(2);
-                    return httpRequest.get(`${BASE_URL}/posts?sort=publish_date+desc,title+asc&offset=2&limit=1`);
+                    return httpRequest.get(`${BASE_URL}/posts?sort=publish_date+-1,title+1&offset=2&limit=1`);
                 })
                 .then(function (data) {
                     expect(data.items.length).to.equal(1);
