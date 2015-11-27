@@ -49,6 +49,7 @@ describe('Post Manager', () => {
             expect(String(post.author)).to.equal(author.id);
             expect(String(post.category)).to.equal(category.id);
             expect(post.slug).to.equal("my-slug");
+            expect(post.publish_date.getTime()).to.equal(now.getTime());
             expect(post.tags.length).to.equal(1);
             expect(post.tags[0]).to.equal("My Tag");
 

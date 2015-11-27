@@ -11,6 +11,7 @@ var postManager = api.postManager;
 var localAuth = require('../passport-manager').localAuth;
 var config = require('../../config-manager').load();
 var baseRoute = `/api/v${config.api_version}`;
+var co = require('co');
 
 
 //-------------------------------------------------------
