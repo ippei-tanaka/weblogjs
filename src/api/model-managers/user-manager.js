@@ -2,91 +2,15 @@
 
 
 var User = require('./models/user');
-var modelManager = require('./model-manager');
-var errors = require('../errors/index');
+var modelManager = require('./_model-manager');
 var config = require('../../config-manager').load();
+var errors = require('../errors/index');
+var exports = modelManager.applyTo(User);
+var co = require('co');
 
-
-/**
- * @param {object} userInfo - Information about the user.
- * @param {string} userInfo.email - The email of the user.
- * @param {string} userInfo.password - The password of the user.
- * @param {string} userInfo.display_name - The display name of the user.
- * @returns {Promise}
- */
-var create = (userInfo) => new Promise((resolve, reject) => {
-    modelManager.create(User,{
-        email: userInfo.email,
-        display_name: userInfo.display_name,
-        password: userInfo.password
-    }).then((newUser) => {
-        findById(newUser.id).then(resolve).catch(reject);
-    }).catch((err) => {
-        reject(err);
-    });
-});
-
-
-/**
- * @param {object} [options]
- * @param {string} [options.sort] - info for sort. (e.g.) "author asc,datepublished desc"
- * @param {number} [options.limit]
- * @returns {Promise}
- */
-var getList = modelManager.getList.bind({}, User, null);
-
-
-/**
- * @param {string} id - a user id
- * @returns {Promise}
- */
-var findById = modelManager.findById.bind({}, User, null);
-
-
-/**
- * @param {string} email
- * @returns {Promise}
- */
-var findByEmail = (email) => {
-    return modelManager.findOneBy(User, "email", email);
-};
-
-
-/**
- * @param {string} id
- * @param {object} userInfo
- * @param {string} [userInfo.email] - The email of the user.
- * @param {string} [userInfo.password] - The password of the user.
- * @param {string} [userInfo.display_name] - The display name of the user.
- * @returns {Promise}
- */
-var updateById = (id, userInfo) => {
-
-    var obj = {};
-
-    if (typeof userInfo.email === "string") {
-        obj.email = userInfo.email;
-    }
-
-    // TODO: add password confirmation
-    if (typeof userInfo.password === "string") {
-        obj.password = userInfo.password;
-    }
-
-    if (typeof userInfo.display_name === "string") {
-        obj.display_name = userInfo.display_name;
-    }
-
-    return modelManager.updateById(User, id, obj);
-};
-
-
-/**
- * @param {string} id - a user id
- * @returns {Promise}
- */
-var removeById = modelManager.removeById.bind({}, User);
-
+exports.findByEmail = function (email) {
+    return this.findOne({email: email});
+}.bind(exports);
 
 
 /**
@@ -95,33 +19,34 @@ var removeById = modelManager.removeById.bind({}, User);
  * @param {string} credential.password - The password of the user.
  * @returns {Promise}
  */
-var isValid = (credential) =>  new Promise((resolve, reject) => {
-    User
-        .findOne({"email": credential.email})
-        .select('password')
-        .exec((err, user) => {
+exports.isValid = function (credential) {
 
-            if (err)
-                return reject(err);
+    var condition = { email: credential.email };
+    var options = { select: ["password"] };
 
-            if (!user)
-                return reject(new errors.WeblogJsAuthError());
+    return co(function* () {
+        let user = yield this.findOne(condition, options);
 
-            user.verifyPassword(credential.password, (err, isMatch) => {
-                if (err || !isMatch)
-                    return reject(new errors.WeblogJsAuthError());
+        if (!user) {
+            throw new errors.WeblogJsAuthError();
+        }
 
-                findById(user.id).then(resolve).catch(reject);
-            });
-        });
-});
+        let isMatch = user.verifyPassword(credential.password);
+
+        if (!isMatch) {
+            throw new errors.WeblogJsAuthError();
+        }
+
+        return this.findById(user.id);
+    }.bind(this));
+};
 
 
 /**
  * @returns {Promise}
  */
-var createAdminUser = () => {
-    return create({
+exports.createAdminUser = function () {
+    return this.create({
         email: config.admin_email,
         password: config.admin_password,
         display_name: "Admin"
@@ -129,13 +54,4 @@ var createAdminUser = () => {
 };
 
 
-module.exports = {
-    create,
-    getList,
-    findById,
-    findByEmail,
-    updateById,
-    isValid,
-    removeById,
-    createAdminUser
-};
+module.exports = exports;

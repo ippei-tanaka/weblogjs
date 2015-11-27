@@ -15,7 +15,6 @@ describe('Category Manager', () => {
             });
     };
 
-    before(clearDb);
     beforeEach(clearDb);
     after(clearDb);
 
@@ -31,13 +30,13 @@ describe('Category Manager', () => {
 
             done();
         }).catch((error) => {
-            console.error(error);
+            done(error);
         })
     });
 
     it('should return a filtered, sorted list of categories', (done) => {
         co(function* () {
-            let randomString = function (length) {
+            var randomString = function (length) {
                 var charList = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
                 var text = "";
 
@@ -55,21 +54,21 @@ describe('Category Manager', () => {
             }
 
             let categories = yield weblogjs.api.categoryManager.find({}, {
-                sort: "slug desc"
+                sort: { slug: -1 }
             });
             expect(categories.length).to.equal(10);
             expect(categories[0].slug).to.equal("this-is-a-category-9");
             expect(categories[9].slug).to.equal("this-is-a-category-0");
 
             categories = yield weblogjs.api.categoryManager.find({}, {
-                sort: "slug asc"
+                sort: { slug: 1 }
             });
             expect(categories.length).to.equal(10);
             expect(categories[0].slug).to.equal("this-is-a-category-0");
             expect(categories[9].slug).to.equal("this-is-a-category-9");
 
             categories = yield weblogjs.api.categoryManager.find({}, {
-                sort: "slug asc",
+                sort: { slug: 1 },
                 offset: 2,
                 limit: 6
             });
@@ -79,13 +78,13 @@ describe('Category Manager', () => {
 
             done();
         }).catch((error) => {
-            console.error(error);
+            done(error);
         })
     });
 
     it('should return categories by conditions', (done) => {
         co(function* () {
-            let category1 = yield weblogjs.api.categoryManager.create({
+            var category1 = yield weblogjs.api.categoryManager.create({
                 name: "This is a category 1",
                 slug: `this-is-a-category-1`
             });
@@ -100,8 +99,7 @@ describe('Category Manager', () => {
                 slug: `this-is-a-category-2-2`
             });
 
-
-            let _category = yield weblogjs.api.categoryManager.find({
+            var _category = yield weblogjs.api.categoryManager.find({
                 name: "This is a category 2"
             });
 
@@ -115,19 +113,19 @@ describe('Category Manager', () => {
             expect(_category.name).to.equal("This is a category 1");
             expect(_category.slug).to.equal("this-is-a-category-1");
 
-             _category = yield weblogjs.api.categoryManager.findOneById(category1.id);
+             _category = yield weblogjs.api.categoryManager.findById(category1.id);
 
             expect(_category.name).to.equal("This is a category 1");
             expect(_category.slug).to.equal("this-is-a-category-1");
 
-            _category = yield weblogjs.api.categoryManager.findOneBySlug("this-is-a-category-2");
+            _category = yield weblogjs.api.categoryManager.findBySlug("this-is-a-category-2");
 
             expect(_category.name).to.equal("This is a category 2");
             expect(_category.slug).to.equal("this-is-a-category-2");
 
             done();
         }).catch((error) => {
-            console.error(error);
+            done(error);
         })
     });
 
@@ -146,7 +144,7 @@ describe('Category Manager', () => {
             });
 
             let categories = yield weblogjs.api.categoryManager.find({}, {
-                sort: "slug asc"
+                sort: { slug: 1 }
             });
 
             for (let i = 0; i < categories.length; i++) {
@@ -156,7 +154,7 @@ describe('Category Manager', () => {
 
             done();
         }).catch((error) => {
-            console.error(error);
+            done(error);
         })
     });
 
@@ -177,7 +175,7 @@ describe('Category Manager', () => {
             });
 
             categories = yield weblogjs.api.categoryManager.find({}, {
-                sort: "slug desc"
+                sort: { slug: -1 }
             });
 
             expect(categories[0].name).to.equal("# 2");
@@ -185,7 +183,7 @@ describe('Category Manager', () => {
 
             done();
         }).catch((error) => {
-            console.error(error);
+            done(error);
         })
     });
 
@@ -219,7 +217,7 @@ describe('Category Manager', () => {
 
             done();
         }).catch((error) => {
-            console.error(error);
+            done(error);
         })
     });
 });

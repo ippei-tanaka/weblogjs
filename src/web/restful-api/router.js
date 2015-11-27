@@ -83,7 +83,7 @@ routes.get('/users', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    userManager.getList(query)
+    userManager.find({}, query)
         .then((data) => ok({ items: data }))
         .catch(error);
 }));
@@ -126,7 +126,7 @@ routes.get('/categories', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    categoryManager.getList(query)
+    categoryManager.find({}, query)
         .then((data) => ok({ items: data }))
         .catch(error);
 }));
