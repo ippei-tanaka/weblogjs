@@ -23,7 +23,7 @@ describe('User Manager', () => {
         co(function* () {
             var users = [];
             for (let i = 0; i < 10; i++) {
-                let u = yield weblogjs.api.userManager.create({
+                let u = yield weblogjs.api.userManager.createRegularUser({
                     email: `test${i}@test.com`,
                     display_name: `Test ${i}`,
                     password: `password${i}`
@@ -47,7 +47,7 @@ describe('User Manager', () => {
         co(function* () {
             var users = [];
             for (let i = 0; i < 10; i++) {
-                let u = yield weblogjs.api.userManager.create({
+                let u = yield weblogjs.api.userManager.createRegularUser({
                     email: `test${i}@test.com`,
                     display_name: `Test ${i}`,
                     password: `password${i}`
@@ -62,6 +62,22 @@ describe('User Manager', () => {
 
             expect(user.email).to.equal("test5@test.com");
             expect(user.display_name).to.equal("Test 5");
+            expect(user.password).to.equal(undefined);
+
+            done();
+        }).catch((error) => {
+            console.error(error);
+        })
+    });
+
+    it('should create the admin user', (done) => {
+        co(function* () {
+            let admin = yield weblogjs.api.userManager.createAdminUser();
+
+            let user = yield weblogjs.api.userManager.findOne();
+
+            expect(user.email).to.equal(admin.email);
+            expect(user.display_name).to.equal(admin.display_name);
             expect(user.password).to.equal(undefined);
 
             done();

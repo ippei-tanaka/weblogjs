@@ -3,10 +3,10 @@
 var mongoose = require('mongoose');
 var validate = require('mongoose-validator');
 var uniqueValidatorPlugin = require('mongoose-unique-validator');
+var Privilege = require('./privilege');
 
 var bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
-
 
 var passwordValidator = [
     validate({
@@ -41,6 +41,14 @@ var emailValidator = [
     })
 ];
 
+var privilegeValidator = [
+    validate({
+        validator: 'matches',
+        arguments: new RegExp(`^${Privilege.allPrivileges.join("|")}$`),
+        message: `Privilege should be one of the following string values, ${Privilege.allPrivileges.join(", ")}.`
+    })
+];
+
 var UserSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -62,6 +70,12 @@ var UserSchema = new mongoose.Schema({
         required: 'A display name is required.',
         validate: displayNameValidator
     },
+
+    privileges: [{
+        type: String,
+        validate: privilegeValidator,
+        required: 'Privileges are required.'
+    }],
 
     created: {
         type: Date
