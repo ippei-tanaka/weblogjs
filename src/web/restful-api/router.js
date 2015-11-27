@@ -12,7 +12,7 @@ var localAuth = require('../passport-manager').localAuth;
 var config = require('../../config-manager').load();
 var baseRoute = `/api/v${config.api_version}`;
 var co = require('co');
-
+var helpers = require('../helpers');
 
 //-------------------------------------------------------
 // Utility Functions
@@ -51,30 +51,6 @@ var redirectIfNotLoggedIn = (uri) => (request, response, next) => {
     response.redirect(baseRoute + uri);
 };
 
-var queryParser = function (query) {
-
-    var ret = null;
-
-    if (!query) {
-        return ret;
-    }
-
-    ret = Object.assign({}, query);
-
-    if (query.sort) {
-        let sort = {};
-        for (let value of query.sort.split(/\s*,\s*/)) {
-            value = value.split(/\s+/);
-            let path = value[0];
-            let order = value[1];
-            sort[path] = order === '-1' || order === '1' ? order : 1;
-        }
-        ret.sort = sort;
-    }
-
-    return ret;
-};
-
 
 //-------------------------------------------------------
 // Home
@@ -108,7 +84,7 @@ routes.get('/users', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    userManager.find({}, queryParser(query))
+    userManager.find({}, helpers.parseParams(query))
         .then((data) => ok({ items: data }))
         .catch(error);
 }));
@@ -151,7 +127,7 @@ routes.get('/categories', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    categoryManager.find({}, queryParser(query))
+    categoryManager.find({}, helpers.parseParams(query))
         .then((data) => ok({ items: data }))
         .catch(error);
 }));
@@ -188,7 +164,7 @@ routes.get('/posts', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    postManager.find({}, queryParser(query))
+    postManager.find({}, helpers.parseParams(query))
         .then((data) => ok({ items: data }))
         .catch(error);
 }));

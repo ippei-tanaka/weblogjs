@@ -9,6 +9,7 @@ var co = require('co');
 var userManager = api.userManager;
 var categoryManager = api.categoryManager;
 var postManager = api.postManager;
+var helpers = require('../helpers');
 
 
 var render = function (view, data, status) {
@@ -31,12 +32,12 @@ var errorHandling = function (status) {
     }
 };
 
-var getCategoryList = () => new Promise((resolve, reject) => {
+var getCategoryList = () =>
     co(function* () {
         var categoryCounts = yield postManager.countByCategories();
-        var allCategories = yield categoryManager.getList();
+        var allCategories = yield categoryManager.find();
 
-        resolve(categoryCounts.map((categoryCount) => {
+        return categoryCounts.map((categoryCount) => {
             if (!categoryCount._id) {
                 return {
                     name: "Uncategorized",
@@ -51,24 +52,26 @@ var getCategoryList = () => new Promise((resolve, reject) => {
                     count: categoryCount.count
                 }
             }
-        }));
-    }).catch(reject);
-});
+        });
+    });
 
 // Home
 routes.get('/', (request, response) => {
     var urlParts = url.parse(request.url, true);
-    var query = urlParts.query;
+    var queryOptions = urlParts.query;
     var defaultQuery = {
-        sort: "publish_date asc,_id asc",
+        sort: "publish_date,_id",
         limit: 10,
-        offset: 0
+        offset: 0,
+        populate: ["author", "category"]
     };
-    query = Object.assign(defaultQuery, query);
+    queryOptions = Object.assign({}, defaultQuery, queryOptions);
+    queryOptions = helpers.parseParams(queryOptions);
+
 
     co(function* () {
         return {
-            posts: yield postManager.getList(query),
+            posts: yield postManager.find({}, queryOptions),
             categoryList: yield getCategoryList()
         };
     }).then(function (value) {
@@ -93,7 +96,8 @@ routes.get('/categories/:slug/', (request, response) => {
         limit: 20,
         offset: 0
     };
-    query = Object.assign(defaultQuery, query);
+    query = Object.assign({}, defaultQuery, query);
+    query = helpers.parseParams(query);
 
     slug = slug === "uncategorized" ? null : slug;
 
@@ -101,7 +105,7 @@ routes.get('/categories/:slug/', (request, response) => {
         var category = yield categoryManager.findBySlug(slug);
         var categoryId = category ? category._id : null;
         return {
-            posts: yield postManager.getList(query, {category: categoryId}),
+            posts: yield postManager.find({category: categoryId}, query),
             categoryList: yield getCategoryList()
         };
     }).then(function (value) {
