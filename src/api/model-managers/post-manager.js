@@ -18,19 +18,17 @@ var co = require('co');
  * @property {[string]} [tags] - The tags of the post.
  */
 
-exports.countByCategories = function () {
-    return co(function* () {
-        var posts = yield Post.aggregate([
+exports.countByCategories = () =>
+    co(function* () {
+        return yield Post.aggregate([
             {
                 $group: {
                     _id: "$category",
-                    count: { $sum: 1 }
+                    count: {$sum: 1}
                 }
             }
         ]).exec();
-        resolve(posts);
     });
-};
 
 
 module.exports = exports;
