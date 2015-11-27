@@ -2,7 +2,7 @@
 
 
 var User = require('./models/user');
-var modelManager = require('./_model-manager');
+var modelManager = require('./model-manager');
 var Privilege = require('./models/privilege');
 var config = require('../../config-manager').load();
 var errors = require('../errors/index');
