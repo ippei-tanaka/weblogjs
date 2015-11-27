@@ -2,7 +2,7 @@
 
 
 var Category = require('./models/category');
-var modelManager = require('./_model-manager');
+var modelManager = require('./model-manager');
 var exports = modelManager.applyTo(Category);
 
 
