@@ -66,6 +66,7 @@ methods.create = function (Model, obj) {
     }.bind(this));
 };
 
+
 /**
  * @param {mongoose.Model} Model
  * @param {Object} condition
@@ -73,9 +74,14 @@ methods.create = function (Model, obj) {
  * @returns {Promise}
  */
 methods.find = function (Model, condition, queryOptions) {
-    var query = Model.find(condition);
-    query = addQueryOptions(query, queryOptions);
-    return query.exec();
+    return new Promise((resolve, reject) => {
+        var query = Model.find(condition);
+        query = addQueryOptions(query, queryOptions);
+        query.exec((err, docs) => {
+            if (err) return reject(err);
+            resolve(docs);
+        });
+    });
 };
 
 
@@ -87,7 +93,7 @@ methods.find = function (Model, condition, queryOptions) {
  */
 methods.findOne = function (Model, condition, queryOptions) {
     return this.find(Model, condition, queryOptions)
-        .then((data) => data ? data[0] : null);
+        .then((data) => data.length > 0 ? data[0] : null);
 };
 
 

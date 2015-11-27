@@ -131,7 +131,7 @@ describe('Restful API', () => {
                     return httpRequest.put(`${BASE_URL}/users/${user._id}`, testUserUpdated)
                 })
                 .then(() => {
-                    return httpRequest.get(`${BASE_URL}/users?sort=created+desc`)
+                    return httpRequest.get(`${BASE_URL}/users?sort=created+-1,_id`)
                 })
                 .then((obj) => {
                     var user = obj.items[0];
@@ -455,8 +455,7 @@ describe('Restful API', () => {
                     done();
                 })
                 .catch((err) => {
-                    console.error(err);
-                    done(new Error());
+                    done(err);
                 });
         });
 
