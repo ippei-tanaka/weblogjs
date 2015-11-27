@@ -57,16 +57,6 @@ var addQueryOptions = function (query, options) {
  * @param {object} obj
  * @returns {Promise}
  */
-methods.create = (Model, obj) => new Promise((resolve, reject) => {
-    var doc = new Model(obj);
-
-    co(function* () {
-        yield doc.save();
-        let newDoc = yield Model.findById(doc.id);
-        resolve(newDoc);
-    }).catch(reject);
-});
-
 methods.create = function (Model, obj) {
     var doc = new Model(obj);
 

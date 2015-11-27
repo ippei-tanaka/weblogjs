@@ -3,14 +3,16 @@
 
 var User = require('./models/user');
 var modelManager = require('./_model-manager');
+var Privilege = require('./models/privilege');
 var config = require('../../config-manager').load();
 var errors = require('../errors/index');
 var exports = modelManager.applyTo(User);
 var co = require('co');
 
+
 exports.findByEmail = function (email) {
     return this.findOne({email: email});
-}.bind(exports);
+};
 
 
 /**
@@ -21,8 +23,8 @@ exports.findByEmail = function (email) {
  */
 exports.isValid = function (credential) {
 
-    var condition = { email: credential.email };
-    var options = { select: ["password"] };
+    var condition = {email: credential.email};
+    var options = {select: ["password"]};
 
     return co(function* () {
         let user = yield this.findOne(condition, options);
@@ -41,17 +43,28 @@ exports.isValid = function (credential) {
     }.bind(this));
 };
 
+exports.createAdminUser = function (userObject) {
+    userObject = userObject || {
+            email: config.admin_email,
+            password: config.admin_password,
+            display_name: "Admin"
+        };
 
-/**
- * @returns {Promise}
- */
-exports.createAdminUser = function () {
     return this.create({
-        email: config.admin_email,
-        password: config.admin_password,
-        display_name: "Admin"
+        email: userObject.email,
+        password: userObject.password,
+        display_name: userObject.display_name,
+        privileges: Privilege.allPrivileges
     });
 };
 
+exports.createRegularUser = function (userObject) {
+    return this.create({
+        email: userObject.email,
+        display_name: userObject.display_name,
+        password: userObject.password,
+        privileges: [Privilege.READ, Privilege.EDIT, Privilege.CREATE]
+    })
+};
 
 module.exports = exports;
