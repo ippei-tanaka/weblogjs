@@ -11,6 +11,9 @@ define(['services/event'], function (Event) {
         categoryDeleted: new Event(),
         postCreated: new Event(),
         postUpdated: new Event(),
-        postDeleted: new Event()
+        postDeleted: new Event(),
+        blogCreated: new Event(),
+        blogUpdated: new Event(),
+        blogDeleted: new Event()
     };
 });

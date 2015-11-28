@@ -7,6 +7,7 @@ var api = require('../../api');
 var userManager = api.userManager;
 var categoryManager = api.categoryManager;
 var postManager = api.postManager;
+var blogManager = api.blogManager;
 //var auth = require('../passport-manager').basicAuth;
 var localAuth = require('../passport-manager').localAuth;
 var config = require('../../config-manager').load();
@@ -191,6 +192,45 @@ routes.put('/posts/:id', isLoggedIn, response((ok, error, request) => {
 
 routes.delete('/posts/:id', isLoggedIn, response((ok, error, request) => {
     postManager.removeById(request.params.id)
+        .then(ok)
+        .catch(error);
+}));
+
+
+//-------------------------------------------------------
+// Blogs
+
+routes.get('/blogs', isLoggedIn, response((ok, error, request) => {
+    var urlParts = url.parse(request.url, true),
+        query = urlParts.query;
+
+    query = helpers.parseParams(query);
+
+    blogManager.find({}, query)
+        .then((data) => ok({ items: data }))
+        .catch(error);
+}));
+
+routes.get('/blogs/:id', isLoggedIn, response((ok, error, request) => {
+    blogManager.findById(request.params.id)
+        .then(ok)
+        .catch(error);
+}));
+
+routes.post('/blogs', isLoggedIn, response((ok, error, request) => {
+    blogManager.create(request.body)
+        .then(ok)
+        .catch(error);
+}));
+
+routes.put('/blogs/:id', isLoggedIn, response((ok, error, request) => {
+    blogManager.updateById(request.params.id, request.body)
+        .then(ok)
+        .catch(error);
+}));
+
+routes.delete('/blogs/:id', isLoggedIn, response((ok, error, request) => {
+    blogManager.removeById(request.params.id)
         .then(ok)
         .catch(error);
 }));

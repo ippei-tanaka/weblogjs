@@ -9,6 +9,7 @@ var co = require('co');
 var userManager = api.userManager;
 var categoryManager = api.categoryManager;
 var postManager = api.postManager;
+var blogManager = api.blogManager;
 var helpers = require('../helpers');
 
 
@@ -78,11 +79,13 @@ routes.get('/', (request, response) => {
 
     co(function* () {
         return {
+            blog: yield blogManager.findOne(),
             posts: yield postManager.find({}, queryOptions),
             categoryList: yield getCategoryList()
         };
     }).then(function (value) {
         render.call(response, 'home', {
+            blog: value.blog,
             postList: value.posts,
             categoryList: value.categoryList
         });
@@ -112,11 +115,13 @@ routes.get('/categories/:slug/', (request, response) => {
         var category = yield categoryManager.findBySlug(slug);
         var categoryId = category ? category._id : null;
         return {
+            blog: yield blogManager.findOne(),
             posts: yield postManager.find({category: categoryId}, query),
             categoryList: yield getCategoryList()
         };
     }).then(function (value) {
         render.call(response, 'home', {
+            blog: value.blog,
             postList: value.posts,
             categoryList: value.categoryList
         });

@@ -7,7 +7,8 @@ requirejs([
         'controllers/home-controller',
         'controllers/user-controller',
         'controllers/category-controller',
-        'controllers/post-controller'
+        'controllers/post-controller',
+        'controllers/blog-controller'
     ],
     function (Router,
               ReactComponentMounter,
@@ -15,7 +16,8 @@ requirejs([
               HomeController,
               UserController,
               CategoryController,
-              PostController) {
+              PostController,
+              BlogController) {
 
         var navigationMounter;
 
@@ -28,7 +30,8 @@ requirejs([
                     dashboard: "#/",
                     users: "#/users",
                     categories: "#/categories",
-                    posts: "#/posts"
+                    posts: "#/posts",
+                    blogs: "#/blogs"
                 }
             });
 
@@ -116,6 +119,31 @@ requirejs([
             Router.changeHash("/posts");
         });
 
+        // BlogController
+
+        BlogController.onClickAddButton.on(function () {
+            Router.changeHash("/blogs/new");
+        });
+
+        BlogController.onClickEditButton.on(function (user) {
+            Router.changeHash("/blogs/" + user._id);
+        });
+
+        BlogController.onCompleteAdding.on(function () {
+            Router.changeHash("/blogs");
+        });
+
+        BlogController.onCompleteEditing.on(function () {
+            Router.changeHash("/blogs");
+        });
+
+        BlogController.onCompleteDeleting.on(function () {
+            Router.changeHash("/blogs");
+        });
+
+        BlogController.onClickListLocation.on(function () {
+            Router.changeHash("/blogs");
+        });
 
         //--------------------------------
         // Setting up the router
@@ -167,6 +195,20 @@ requirejs([
 
         Router.addRoute("/posts/:id", function (id) {
             PostController.showPostEditorWithEditMode(id);
+        });
+
+        // Blogs
+
+        Router.addRoute("/blogs", function () {
+            BlogController.showBlogList();
+        });
+
+        Router.addRoute("/blogs/new", function () {
+            BlogController.showBlogEditorWithAddMode();
+        });
+
+        Router.addRoute("/blogs/:id", function (id) {
+            BlogController.showBlogEditorWithEditMode(id);
         });
 
         // Default

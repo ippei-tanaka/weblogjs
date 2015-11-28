@@ -29,6 +29,11 @@ define([
                 label: 'Posts'
             },
             {
+                name: 'blogs',
+                icon: 'newspaper-o',
+                label: 'Blogs'
+            },
+            {
                 name: 'logout',
                 icon: 'sign-out',
                 label: 'Log out'
@@ -44,7 +49,8 @@ define([
                         dashboard: "",
                         categories: "",
                         users: "",
-                        posts: ""
+                        posts: "",
+                        blogs: ""
                     }
                 };
             },

@@ -1,6 +1,8 @@
 {{!< ../../layouts/public/default}}
 
-{{#contentFor "page-title"}}WeblogJS Blog{{/contentFor}}
+{{#contentFor "page-title"}}{{{blog.title}}}{{/contentFor}}
+{{#contentFor "title"}}{{{blog.title}}}{{/contentFor}}
+{{#contentFor "footer"}}&copy;{{{blog.title}}}{{/contentFor}}
 
 <div class="module-blog-layout">
     <div class="m-bll-main">

@@ -84,4 +84,4 @@ BlogSchema.plugin(
     });
 
 
-module.exports = mongoose.model('Category', BlogSchema);
+module.exports = mongoose.model('Blog', BlogSchema);
