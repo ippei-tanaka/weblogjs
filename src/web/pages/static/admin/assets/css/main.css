@@ -852,6 +852,17 @@ table tbody tr {
 .module-data-editor .m-dte-field-container {
   margin-top: 30px; }
 
+.module-data-editor .m-dte-flush-message {
+  display: inline-block;
+  background-color: #A8DBF0;
+  padding: 20px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px; }
+
 /*----------------------------
  Form Field
 ----------------------------*/

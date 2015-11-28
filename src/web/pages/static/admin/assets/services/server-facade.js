@@ -133,6 +133,11 @@ define([
                 .restfulAPI("/users/" + id);
         },
 
+        getMe: function () {
+            return this
+                .restfulAPI("/users/me");
+        },
+
         createUser: function (userObject) {
             return this
                 .restfulAPI("/users/", {
@@ -156,9 +161,17 @@ define([
                 });
         },
 
-        getMe: function () {
+        getSetting: function () {
             return this
-                .restfulAPI("/users/me");
+                .restfulAPI("/setting");
+        },
+
+        updateSetting: function (settingObject) {
+            return this
+                .restfulAPI("/setting", {
+                    data: settingObject,
+                    method: 'put'
+                });
         },
 
         login: function (email, password) {

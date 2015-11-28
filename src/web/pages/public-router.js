@@ -10,6 +10,7 @@ var userManager = api.userManager;
 var categoryManager = api.categoryManager;
 var postManager = api.postManager;
 var blogManager = api.blogManager;
+var settingManager = api.settingManager;
 var helpers = require('../helpers');
 
 
@@ -78,9 +79,10 @@ routes.get('/', (request, response) => {
 
 
     co(function* () {
+        var setting = yield settingManager.getSetting();
         return {
-            blog: yield blogManager.findOne(),
-            posts: yield postManager.find({}, queryOptions),
+            blog: yield blogManager.findById(setting.front),
+            posts: yield postManager.find({blog: setting.front}, queryOptions),
             categoryList: yield getCategoryList()
         };
     }).then(function (value) {
