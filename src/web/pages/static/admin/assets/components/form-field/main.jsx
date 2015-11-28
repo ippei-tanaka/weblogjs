@@ -3,12 +3,12 @@
 define([
         'react',
         'moment',
-        'jquery',
+        'services/extend',
         'jsx!components/form-field/field',
         'jsx!components/form-field/label',
         'jsx!components/form-field/error'
     ],
-    function (React, moment, $, Field, Label, Error) {
+    function (React, moment, extend, Field, Label, Error) {
 
         var FormField = React.createClass({
             getDefaultProps: function () {
@@ -22,8 +22,8 @@ define([
 
             render: function () {
                 var id = this.props.field.id || this._generateId();
-                var fieldProps = $.extend(this.props.field, {id: id});
-                var labelProps = $.extend(this.props.label, {htmlFor: id});
+                var fieldProps = extend(this.props.field, {id: id});
+                var labelProps = extend(this.props.label, {htmlFor: id});
 
                 var field = React.createElement(Field, fieldProps);
                 var label = React.createElement(Label, labelProps);

@@ -5,7 +5,7 @@ define([
         'services/global-events',
         'services/string-formatter',
         'services/server-facade',
-        'jquery',
+        'services/extend',
         'jsx!components/form-field',
         'jsx!components/confirmation'
     ],
@@ -13,11 +13,9 @@ define([
               GlobalEvents,
               StringFormatter,
               ServerFacade,
-              $,
+              extend,
               FormField,
               Confirmation) {
-
-        var url = "/api/v1/categories";
 
         var CategoryEditor = React.createClass({
 
@@ -163,7 +161,7 @@ define([
 
                 var data = this._buildDataForHttpRequest();
 
-                return this._sendHttpRequest(url, 'post', data)
+                return ServerFacade.createCategory(data)
                     .then(function () {
                         GlobalEvents.categoryCreated.fire();
                     });
@@ -171,38 +169,19 @@ define([
 
             _updateCategory: function () {
 
-                var ajaxUrl = url + '/' + this.props.categoryId;
-
                 var data = this._buildDataForHttpRequest();
 
-                return this._sendHttpRequest(ajaxUrl, 'put', data)
+                return ServerFacade.updateCategory(this.props.categoryId, data)
                     .then(function () {
                         GlobalEvents.categoryUpdated.fire();
                     });
             },
 
             _deleteCategory: function () {
-                var ajaxUrl = url + '/' + this.props.categoryId;
-
-                return this._sendHttpRequest(ajaxUrl, 'delete')
+                return ServerFacade.deleteCategory(this.props.categoryId)
                     .then(function () {
                         GlobalEvents.categoryDeleted.fire();
                     });
-            },
-
-            _sendHttpRequest: function (url, method, data) {
-                var options = {
-                    url: url,
-                    dataType: 'json',
-                    cache: false,
-                    method: method
-                };
-
-                if (data) {
-                    options.data = data;
-                }
-
-                return $.ajax(options);
             },
 
             _buildDataForHttpRequest: function () {
@@ -222,7 +201,7 @@ define([
 
             _setCategoryState: function (defaultCategory, category) {
                 this.setState({
-                    category: $.extend(defaultCategory, this._flatten(category))
+                    category: extend(defaultCategory, this._flatten(category))
                 });
             },
 

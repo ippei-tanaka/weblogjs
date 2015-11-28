@@ -2,9 +2,9 @@
 
 define([
         'react',
-        'jquery'
+        'services/extend'
     ],
-    function (React, $) {
+    function (React, extend) {
 
         var LocationBar = React.createClass({
 
@@ -28,7 +28,7 @@ define([
                             {this.props.locations.map(function (location, index) {
                                 var isLink;
 
-                                location = $.extend({} ,this._defaultLocation, location);
+                                location = extend({} ,this._defaultLocation, location);
 
                                 if (!location.enabled) {
                                     return null;
