@@ -164,7 +164,9 @@ routes.get('/posts', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    postManager.find({}, helpers.parseParams(query))
+    query = helpers.parseParams(query);
+
+    postManager.find({}, query)
         .then((data) => ok({ items: data }))
         .catch(error);
 }));

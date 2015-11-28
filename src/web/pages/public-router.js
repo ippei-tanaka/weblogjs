@@ -34,25 +34,32 @@ var errorHandling = function (status) {
 
 var getCategoryList = () =>
     co(function* () {
-        var categoryCounts = yield postManager.countByCategories();
+        var postCountsByCat = yield postManager.countByCategories();
         var allCategories = yield categoryManager.find();
+        var uncategorized = 0;
+        var categoryList = [];
 
-        return categoryCounts.map((categoryCount) => {
-            if (!categoryCount._id) {
-                return {
-                    name: "Uncategorized",
-                    link: "/categories/uncategorized",
-                    count: categoryCount.count
-                }
+        for (let postCategory of postCountsByCat) {
+            var category = allCategories.find((cat) => String(cat._id) === String(postCategory._id));
+
+            if (!category) {
+                uncategorized += 1;
             } else {
-                var category = allCategories.find((cat) => String(cat._id) === String(categoryCount._id));
-                return {
+                categoryList.push({
                     name: category.name,
                     link: `/categories/${category.slug}`,
-                    count: categoryCount.count
-                }
+                    count: postCategory.count
+                });
             }
+        }
+
+        categoryList.push({
+            name: "Uncategorized",
+            link: "/categories/uncategorized",
+            count: uncategorized
         });
+
+        return categoryList;
     });
 
 // Home

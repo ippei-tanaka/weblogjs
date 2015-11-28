@@ -70,6 +70,7 @@ var PostSchema = new mongoose.Schema({
 
     "category": {
         type: mongoose.Schema.Types.ObjectId,
+        required: 'A category is required.',
         ref: 'Category'
     },
 

@@ -19,15 +19,18 @@ var co = require('co');
  */
 
 exports.countByCategories = () =>
-    co(function* () {
-        return yield Post.aggregate([
+    new Promise((resolve, reject) => {
+        Post.aggregate([
             {
                 $group: {
                     _id: "$category",
                     count: {$sum: 1}
                 }
             }
-        ]).exec();
+        ]).exec((err, data) => {
+            if (err) return reject(err);
+            resolve(data);
+        });
     });
 
 
