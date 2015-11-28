@@ -5,51 +5,15 @@ define([
         'moment',
         'services/global-events',
         'services/event',
-        'jquery'],
+        'services/server-facade'
+    ],
     function (React,
               Moment,
               GlobalEvents,
               Event,
-              $) {
-
-        var url = "/api/v1/users";
+              ServerFacade) {
 
         var UserList = React.createClass({
-
-            statics: {
-                getUsers: function () {
-                    return this
-                        .ajaxRequest(url)
-                        .then(function (data) {
-                            return data.items;
-                        });
-                },
-
-                getUser: function (id) {
-                    return this
-                        .ajaxRequest(url + "/" + id)
-                        .then(function (data) {
-                            return data;
-                        });
-                },
-
-                // TODO: is it supposed to be here?
-                getMe: function () {
-                    return this
-                        .ajaxRequest(url + "/me")
-                        .then(function (data) {
-                            return data;
-                        });
-                },
-
-                ajaxRequest: function (ajaxUrl) {
-                    return $.ajax({
-                        url: ajaxUrl,
-                        dataType: 'json',
-                        cache: false
-                    });
-                }
-            },
 
             getInitialState: function () {
                 return {
@@ -76,7 +40,7 @@ define([
             },
 
             _retrieveDataAndUpdateList: function () {
-                this.constructor.getUsers()
+                ServerFacade.getUsers()
                     .then(function (data) {
                         this.setState({
                             users: data

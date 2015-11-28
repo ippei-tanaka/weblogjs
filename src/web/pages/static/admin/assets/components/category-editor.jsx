@@ -4,16 +4,16 @@ define([
         'react',
         'services/global-events',
         'services/string-formatter',
+        'services/server-facade',
         'jquery',
-        'jsx!components/category-list',
         'jsx!components/form-field',
         'jsx!components/confirmation'
     ],
     function (React,
               GlobalEvents,
               StringFormatter,
+              ServerFacade,
               $,
-              CategoryList,
               FormField,
               Confirmation) {
 
@@ -45,7 +45,7 @@ define([
 
             componentWillMount: function () {
                 if (this.props.mode === "edit") {
-                    CategoryList.getCategory(this.props.categoryId).then(function (category) {
+                    ServerFacade.getCategory(this.props.categoryId).then(function (category) {
                         this._setCategoryState(this.getInitialState().category, category);
                     }.bind(this));
                 }

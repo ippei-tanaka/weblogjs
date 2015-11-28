@@ -5,40 +5,15 @@ define([
         'moment',
         'services/global-events',
         'services/event',
-        'jquery'],
+        'services/server-facade'],
     function (React,
               Moment,
               GlobalEvents,
               Event,
-              $) {
+              ServerFacade) {
 
-        var url = "/api/v1/categories";
 
         var CategoryList = React.createClass({
-
-            statics: {
-                getCategories: function () {
-                    return $.ajax({
-                        url: url,
-                        dataType: 'json',
-                        cache: false
-                    })
-                        .then(function (data) {
-                            return data.items;
-                        });
-                },
-
-                getCategory: function (id) {
-                    return $.ajax({
-                        url: url + "/" + id,
-                        dataType: 'json',
-                        cache: false
-                    })
-                        .then(function (data) {
-                            return data;
-                        });
-                }
-            },
 
             getInitialState: function () {
                 return {
@@ -65,7 +40,7 @@ define([
             },
 
             _retrieveDataAndUpdateList: function () {
-                this.constructor.getCategories()
+                ServerFacade.getCategories()
                     .then(function (data) {
                         this.setState({
                             categories: data
