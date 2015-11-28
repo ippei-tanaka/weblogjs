@@ -102,8 +102,8 @@ requirejs([
             Router.changeHash("/posts/new");
         });
 
-        PostController.onClickEditButton.on(function (post) {
-            Router.changeHash("/posts/" + post._id);
+        PostController.onClickEditButton.on(function (id) {
+            Router.changeHash("/posts/" + id);
         });
 
         PostController.onCompleteAdding.on(function () {
@@ -128,8 +128,8 @@ requirejs([
             Router.changeHash("/blogs/new");
         });
 
-        BlogController.onClickEditButton.on(function (user) {
-            Router.changeHash("/blogs/" + user._id);
+        BlogController.onClickEditButton.on(function (blog) {
+            Router.changeHash("/blogs/" + blog._id);
         });
 
         BlogController.onCompleteAdding.on(function () {

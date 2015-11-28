@@ -18,14 +18,24 @@ var co = require('co');
  * @property {[string]} [tags] - The tags of the post.
  */
 
-exports.countByCategories = () =>
+exports.countByCategories = (condition, sort) =>
     new Promise((resolve, reject) => {
+
+        condition = condition || {};
+        sort = sort || {};
+
         Post.aggregate([
+            {
+                $match: condition
+            },
             {
                 $group: {
                     _id: "$category",
                     count: {$sum: 1}
                 }
+            },
+            {
+                $sort: sort
             }
         ]).exec((err, data) => {
             if (err) return reject(err);

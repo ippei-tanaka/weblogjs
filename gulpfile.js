@@ -26,19 +26,23 @@ gulp.task('test', function (callback) {
     runSequence('test:model-managers', 'test:restful-api', callback);
 });
 
-gulp.task('public-sass', function () {
+gulp.task('sass:public', function () {
     gulp.src(WEB_STATIC_SRC_DIR + '/public/sass/**/main.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest(WEB_STATIC_DIR + '/public/assets/css'));
 });
 
-gulp.task('admin-sass', function () {
+gulp.task('sass:admin', function () {
     gulp.src(WEB_STATIC_SRC_DIR + '/admin/sass/**/main.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest(WEB_STATIC_DIR + '/admin/assets/css'));
 });
 
 gulp.task('sass:watch', function () {
-    gulp.watch(WEB_STATIC_SRC_DIR + '/**/*.scss', ['public-sass', 'admin-sass']);
+    gulp.watch(WEB_STATIC_SRC_DIR + '/**/*.scss', ['sass']);
+});
+
+gulp.task('sass', function (callback) {
+    runSequence('sass:public', 'sass:admin', callback);
 });
 

@@ -101,6 +101,7 @@ define([
                 this._updateSetting()
                     .then(function () {
                         this.setState({
+                            errors: this.getInitialState().errors,
                             flush: "Succeeded to update the setting!"
                         });
                     }.bind(this))

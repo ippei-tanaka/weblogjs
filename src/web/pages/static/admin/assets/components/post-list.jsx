@@ -62,6 +62,101 @@ define([
                 GlobalEvents.postDeleted.off(this._retrieveDataAndUpdateList);
             },
 
+            render: function () {
+                return (
+                    <div className="module-data-list">
+                        <h2 className="m-dtl-title">Posts</h2>
+
+                        <div>
+                            <button className="module-button m-btn-clear m-dtl-add-button"
+                                    onClick={this._onAddButtonClicked}
+                                    title="Add"
+                                >
+                                <i className="fa fa-plus-square-o m-dtl-add-icon"></i>
+                                Add
+                            </button>
+                        </div>
+                        <table className="m-dtl-table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th className="m-dtl-for-desktop"></th>
+                                <th>Title</th>
+                                <th>Content</th>
+                                <th>Slug</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>Blog</th>
+                                <th>Tags</th>
+                                <th>Publish Date</th>
+                                <th>Created</th>
+                                <th>Updated</th>
+                                <th className="m-dtl-for-phone"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {this.state.posts.map(function (post, index) {
+
+                                var none = <span className="m-dtl-none">(None)</span>;
+                                var deleted = <span className="m-dtl-none">(Deleted)</span>;
+                                var created = Moment(post.created).format("YYYY-MM-DD HH:mm Z");
+                                var updated = Moment(post.updated).format("YYYY-MM-DD HH:mm Z");
+                                var publish = Moment(post.publish_date).format("YYYY-MM-DD HH:mm Z");
+                                var tags = post.tags && post.tags.length > 0 ? post.tags.join(', ') : none;
+
+                                var author;
+                                var category;
+                                var blog;
+
+                                if (!post.author) {
+                                    author = none;
+                                } else {
+                                    author = this.state.authors.find(function (a) {
+                                        return post.author === a._id;
+                                    });
+                                    author = author ? author.display_name : deleted;
+                                }
+
+                                if (!post.category) {
+                                    category = none;
+                                } else {
+                                    category = this.state.categories.find(function (a) {
+                                        return post.category === a._id;
+                                    });
+                                    category = category ? category.name : deleted;
+                                }
+
+                                if (!post.blog) {
+                                    blog = none;
+                                } else {
+                                    blog = this.state.blogs.find(function (a) {
+                                        return post.blog === a._id;
+                                    });
+                                    blog = blog ? blog.title : deleted;
+                                }
+
+                                return <PostListItem key={post._id}
+                                                     id={post._id}
+                                                     title={post.title}
+                                                     content={post.content}
+                                                     slug={post.slug}
+                                                     category={category}
+                                                     author={author}
+                                                     blog={blog}
+                                                     tags={tags}
+                                                     created={created}
+                                                     updated={updated}
+                                                     publish={publish}
+                                                     deleteButtonClickEvent={this.events.deleteButtonClicked}
+                                                     editButtonClickEvent={this.events.editButtonClicked}
+                                                     number={index+1}/>;
+                            }.bind(this))}
+                            </tbody>
+                        </table>
+                    </div>
+                );
+            },
+
             _retrieveDataAndUpdateList: function () {
                 ServerFacade.getPosts()
                     .then(function (data) {
@@ -75,61 +170,7 @@ define([
                     }.bind(this));
             },
 
-            render: function () {
-                return (
-                    <div className="module-data-list">
-                        <h2 className="m-dtl-title">Posts</h2>
-                        <div>
-                            <button className="module-button m-btn-clear m-dtl-add-button"
-                                    onClick={this.onAddButtonClicked}
-                                    title="Add"
-                                >
-                                <i  className="fa fa-plus-square-o m-dtl-add-icon"></i>
-                                Add
-                            </button>
-                        </div>
-                        <table className="m-dtl-table">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Title</th>
-                                <th>Content</th>
-                                <th>Slug</th>
-                                <th>Author</th>
-                                <th>Category</th>
-                                <th>Blog</th>
-                                <th>Tags</th>
-                                <th>Publish Date</th>
-                                <th>Created</th>
-                                <th>Updated</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.state.posts.map(function (post, index) {
-                                var author = this.state.authors.find(function (a) { return post.author === a._id; });
-                                var category = this.state.categories.find(function (c) { return post.category === c._id; });
-                                var blog = this.state.blogs.find(function (a) { return post.blog === a._id; });
-
-                                blog = blog ? blog.title : null;
-                                author = author ? author.display_name : null;
-                                category = category ? category.name : null;
-
-                                return <CategoryListItem key={post._id}
-                                                         post={post}
-                                                         category={category}
-                                                         author={author}
-                                                         blog={blog}
-                                                         events={this.events}
-                                                         number={index+1}/>;
-                            }.bind(this))}
-                            </tbody>
-                        </table>
-                    </div>
-                );
-            },
-
-            onAddButtonClicked: function (e) {
+            _onAddButtonClicked: function (e) {
                 e.preventDefault();
                 this.events.addButtonClicked.fire();
             },
@@ -141,60 +182,54 @@ define([
             }
         });
 
-        var CategoryListItem = React.createClass({
+        var PostListItem = React.createClass({
 
             render: function () {
 
-                var none = <span className="m-dtl-none">(None)</span>;
-                var created = Moment(this.props.post.created).format("YYYY-MM-DD HH:mm Z");
-                var updated = Moment(this.props.post.updated).format("YYYY-MM-DD HH:mm Z");
-                var publish = Moment(this.props.post.publish_date).format("YYYY-MM-DD HH:mm Z");
-                var author = this.props.author || none;
-                var category = this.props.category || none;
-                var blog = this.props.blog || none;
-                var tags = this.props.post.tags && this.props.post.tags.length > 0 ? this.props.post.tags.join(', ') : none;
+                var buttons = (
+                    <ul className="m-dtl-button-list">
+                        <li className="m-dtl-button-list-item">
+                            <button className="module-button m-btn-clear"
+                                    onClick={this._onEditButtonClicked}>
+                                <i title="Edit" className="fa fa-pencil-square-o m-dtl-edit-icon"></i>
+                            </button>
+                        </li>
+                        <li className="m-dtl-button-list-item">
+                            <button className="module-button m-btn-clear"
+                                    onClick={this._onDeleteButtonClicked}>
+                                <i title="Delete" className="fa fa-trash-o m-dtl-delete-icon"></i>
+                            </button>
+                        </li>
+                    </ul>
+                );
 
                 return (
                     <tr>
                         <td data-label="No.">{this.props.number}</td>
-                        <td data-label="Title" className="element-table-wrap">{this.props.post.title}</td>
-                        <td data-label="Content" className="element-table-wrap">{this.props.post.content}</td>
-                        <td data-label="Slug">{this.props.post.slug}</td>
-                        <td data-label="Author">{author}</td>
-                        <td data-label="Category">{category}</td>
-                        <td data-label="Blog">{blog}</td>
-                        <td data-label="Tags">{tags}</td>
-                        <td data-label="Publish Date">{publish}</td>
-                        <td data-label="Created Date">{created}</td>
-                        <td data-label="Updated Date">{updated}</td>
-                        <td className="m-dtl-no-wrap">
-                            <ul className="m-dtl-button-list">
-                                <li className="m-dtl-button-list-item">
-                                    <button className="module-button m-btn-clear"
-                                            onClick={this.onEditButtonClicked}>
-                                        <i title="Edit" className="fa fa-pencil-square-o m-dtl-edit-icon"></i>
-                                    </button>
-                                </li>
-                                <li className="m-dtl-button-list-item">
-                                    <button className="module-button m-btn-clear"
-                                            onClick={this.onDeleteButtonClicked}>
-                                        <i title="Delete" className="fa fa-trash-o m-dtl-delete-icon"></i>
-                                    </button>
-                                </li>
-                            </ul>
-                        </td>
+                        <td className="m-dtl-no-wrap m-dtl-for-desktop">{buttons}</td>
+                        <td data-label="Title" className="element-table-wrap">{this.props.title}</td>
+                        <td data-label="Content" className="element-table-wrap">{this.props.content}</td>
+                        <td data-label="Slug">{this.props.slug}</td>
+                        <td data-label="Author">{this.props.author}</td>
+                        <td data-label="Category">{this.props.category}</td>
+                        <td data-label="Blog">{this.props.blog}</td>
+                        <td data-label="Tags">{this.props.tags}</td>
+                        <td data-label="Publish Date">{this.props.publish}</td>
+                        <td data-label="Created Date">{this.props.created}</td>
+                        <td data-label="Updated Date">{this.props.updated}</td>
+                        <td className="m-dtl-no-wrap m-dtl-for-phone">{buttons}</td>
                     </tr>
                 );
             },
 
-            onDeleteButtonClicked: function (e) {
+            _onDeleteButtonClicked: function (e) {
                 e.preventDefault();
-                this.props.events.deleteButtonClicked.fire(this.props.post);
+                this.props.deleteButtonClickEvent.fire(this.props.id);
             },
 
-            onEditButtonClicked: function (e) {
+            _onEditButtonClicked: function (e) {
                 e.preventDefault();
-                this.props.events.editButtonClicked.fire(this.props.post);
+                this.props.editButtonClickEvent.fire(this.props.id);
             }
 
         });
