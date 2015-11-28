@@ -74,6 +74,12 @@ var PostSchema = new mongoose.Schema({
         ref: 'Category'
     },
 
+    "blog": {
+        type: mongoose.Schema.Types.ObjectId,
+        required: 'A blog is required.',
+        ref: 'Blog'
+    },
+
     "tags": [{
         type: String,
         validate: tagValidator

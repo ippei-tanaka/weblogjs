@@ -30,8 +30,13 @@ define([
             },
             {
                 name: 'blogs',
-                icon: 'newspaper-o',
+                icon: 'th-large',
                 label: 'Blogs'
+            },
+            {
+                name: 'setting',
+                icon: 'cog',
+                label: 'Setting'
             },
             {
                 name: 'logout',
@@ -50,7 +55,8 @@ define([
                         categories: "",
                         users: "",
                         posts: "",
-                        blogs: ""
+                        blogs: "",
+                        setting: ""
                     }
                 };
             },

@@ -8,7 +8,8 @@ requirejs([
         'controllers/user-controller',
         'controllers/category-controller',
         'controllers/post-controller',
-        'controllers/blog-controller'
+        'controllers/blog-controller',
+        'controllers/setting-controller'
     ],
     function (Router,
               ReactComponentMounter,
@@ -17,7 +18,8 @@ requirejs([
               UserController,
               CategoryController,
               PostController,
-              BlogController) {
+              BlogController,
+              SettingController) {
 
         var navigationMounter;
 
@@ -31,7 +33,8 @@ requirejs([
                     users: "#/users",
                     categories: "#/categories",
                     posts: "#/posts",
-                    blogs: "#/blogs"
+                    blogs: "#/blogs",
+                    setting: "#/setting"
                 }
             });
 
@@ -209,6 +212,12 @@ requirejs([
 
         Router.addRoute("/blogs/:id", function (id) {
             BlogController.showBlogEditorWithEditMode(id);
+        });
+
+        // Blogs
+
+        Router.addRoute("/setting", function () {
+            SettingController.showSettingEditor();
         });
 
         // Default

@@ -8,6 +8,7 @@ var userManager = api.userManager;
 var categoryManager = api.categoryManager;
 var postManager = api.postManager;
 var blogManager = api.blogManager;
+var settingManager = api.settingManager;
 //var auth = require('../passport-manager').basicAuth;
 var localAuth = require('../passport-manager').localAuth;
 var config = require('../../config-manager').load();
@@ -234,6 +235,24 @@ routes.delete('/blogs/:id', isLoggedIn, response((ok, error, request) => {
         .then(ok)
         .catch(error);
 }));
+
+
+//-------------------------------------------------------
+// Setting
+
+
+routes.get('/setting', isLoggedIn, response((ok, error) => {
+    settingManager.getSetting()
+        .then(ok)
+        .catch(error);
+}));
+
+routes.put('/setting', isLoggedIn, response((ok, error, request) => {
+    settingManager.setFront(request.body ? request.body.front : null)
+        .then(ok)
+        .catch(error);
+}));
+
 
 
 //-------------------------------------------------------

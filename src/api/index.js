@@ -6,6 +6,7 @@ var userManager = require('./model-managers/user-manager');
 var categoryManager = require('./model-managers/category-manager');
 var postManager = require('./model-managers/post-manager');
 var blogManager = require('./model-managers/blog-manager');
+var settingManager = require('./model-managers/setting-manager');
 
 
 module.exports = {
@@ -13,5 +14,6 @@ module.exports = {
     userManager,
     categoryManager,
     postManager,
-    blogManager
+    blogManager,
+    settingManager
 };

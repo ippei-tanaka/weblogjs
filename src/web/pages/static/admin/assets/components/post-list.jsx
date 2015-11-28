@@ -20,7 +20,8 @@ define([
                 return {
                     posts: [],
                     categories: [],
-                    authors: []
+                    authors: [],
+                    blogs: []
                 };
             },
 
@@ -35,6 +36,12 @@ define([
                 ServerFacade.getUsers().then(function (users) {
                     this.setState({
                         authors: users
+                    });
+                }.bind(this));
+
+                ServerFacade.getBlogs().then(function (blogs) {
+                    this.setState({
+                        blogs: blogs
                     });
                 }.bind(this));
 
@@ -90,6 +97,7 @@ define([
                                 <th>Slug</th>
                                 <th>Author</th>
                                 <th>Category</th>
+                                <th>Blog</th>
                                 <th>Tags</th>
                                 <th>Publish Date</th>
                                 <th>Created</th>
@@ -101,7 +109,9 @@ define([
                             {this.state.posts.map(function (post, index) {
                                 var author = this.state.authors.find(function (a) { return post.author === a._id; });
                                 var category = this.state.categories.find(function (c) { return post.category === c._id; });
+                                var blog = this.state.blogs.find(function (a) { return post.blog === a._id; });
 
+                                blog = blog ? blog.title : null;
                                 author = author ? author.display_name : null;
                                 category = category ? category.name : null;
 
@@ -109,6 +119,7 @@ define([
                                                          post={post}
                                                          category={category}
                                                          author={author}
+                                                         blog={blog}
                                                          events={this.events}
                                                          number={index+1}/>;
                             }.bind(this))}
@@ -140,6 +151,7 @@ define([
                 var publish = Moment(this.props.post.publish_date).format("YYYY-MM-DD HH:mm Z");
                 var author = this.props.author || none;
                 var category = this.props.category || none;
+                var blog = this.props.blog || none;
                 var tags = this.props.post.tags && this.props.post.tags.length > 0 ? this.props.post.tags.join(', ') : none;
 
                 return (
@@ -150,6 +162,7 @@ define([
                         <td data-label="Slug">{this.props.post.slug}</td>
                         <td data-label="Author">{author}</td>
                         <td data-label="Category">{category}</td>
+                        <td data-label="Blog">{blog}</td>
                         <td data-label="Tags">{tags}</td>
                         <td data-label="Publish Date">{publish}</td>
                         <td data-label="Created Date">{created}</td>

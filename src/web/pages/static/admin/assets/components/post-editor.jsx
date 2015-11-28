@@ -27,6 +27,7 @@ define([
                         slug: undefined,
                         author: undefined,
                         category: undefined,
+                        blog: undefined,
                         tags: undefined,
                         publish_date: undefined
                     },
@@ -36,11 +37,13 @@ define([
                         slug: "",
                         author: null,
                         category: null,
+                        blog: null,
                         tags: [],
                         publish_date: new Date()
                     },
                     categories: [],
-                    authors: []
+                    authors: [],
+                    blogs: []
                 };
             },
 
@@ -48,7 +51,8 @@ define([
                 return {
                     mode: "", // 'add', 'edit' or 'del'
                     postId: "",
-                    onComplete: function () {}
+                    onComplete: function () {
+                    }
                 };
             },
 
@@ -68,6 +72,12 @@ define([
                 ServerFacade.getUsers().then(function (users) {
                     this.setState({
                         authors: users
+                    });
+                }.bind(this));
+
+                ServerFacade.getBlogs().then(function (blogs) {
+                    this.setState({
+                        blogs: blogs
                     });
                 }.bind(this));
 
@@ -142,7 +152,9 @@ define([
                         type: "select",
                         value: this.state.post.author ? this.state.post.author : null,
                         onChange: function (value) {
-                            var author = this.state.authors.find(function (a) { return a._id === value; });
+                            var author = this.state.authors.find(function (a) {
+                                return a._id === value;
+                            });
                             this._setPostState(this.state.post, {author: author ? author._id : null});
                         }.bind(this),
                         children: this._addEmptySelectOption(this.state.authors.map(function (author) {
@@ -166,7 +178,9 @@ define([
                         type: "select",
                         value: this.state.post.category ? this.state.post.category : null,
                         onChange: function (value) {
-                            var category = this.state.categories.find(function (a) { return a._id === value; });
+                            var category = this.state.categories.find(function (a) {
+                                return a._id === value;
+                            });
                             this._setPostState(this.state.post, {category: category ? category._id : null});
                         }.bind(this),
                         children: this._addEmptySelectOption(this.state.categories.map(function (category) {
@@ -182,6 +196,32 @@ define([
                     },
                     error: {
                         children: this.state.errors.category ? this.state.errors.category.message : ""
+                    }
+                });
+
+                var blogField = React.createElement(FormField, {
+                    field: {
+                        type: "select",
+                        value: this.state.post.blog ? this.state.post.blog : null,
+                        onChange: function (value) {
+                            var blog = this.state.blogs.find(function (b) {
+                                return b._id === value;
+                            });
+                            this._setPostState(this.state.post, {blog: blog ? blog._id : null});
+                        }.bind(this),
+                        children: this._addEmptySelectOption(this.state.blogs.map(function (blog) {
+                            return {
+                                key: blog._id,
+                                value: blog._id,
+                                label: blog.title
+                            }
+                        }))
+                    },
+                    label: {
+                        children: "Blog"
+                    },
+                    error: {
+                        children: this.state.errors.blog ? this.state.errors.blog.message : ""
                     }
                 });
 
@@ -224,6 +264,7 @@ define([
                 return (
                     <form className="module-data-editor" onSubmit={this._onSubmit}>
                         <h2 className="m-dte-title">{title}</h2>
+
                         <div className="m-dte-field-container">
                             {titleField}
                         </div>
@@ -238,6 +279,9 @@ define([
                         </div>
                         <div className="m-dte-field-container">
                             {categoryField}
+                        </div>
+                        <div className="m-dte-field-container">
+                            {blogField}
                         </div>
                         <div className="m-dte-field-container">
                             {tagListField}
@@ -333,15 +377,19 @@ define([
                     slug: this.state.post.slug.trim()
                 };
 
-                if(this.state.post.category) {
+                if (this.state.post.category) {
                     data.category = this.state.post.category;
                 }
 
-                if(this.state.post.author) {
+                if (this.state.post.author) {
                     data.author = this.state.post.author;
                 }
 
-                if(data.slug === "") {
+                if (this.state.post.blog) {
+                    data.blog = this.state.post.blog;
+                }
+
+                if (data.slug === "") {
                     data.slug = StringFormatter.slugfy(data.title);
                     this._setPostState(this.state.post, {slug: data.slug});
                 }
