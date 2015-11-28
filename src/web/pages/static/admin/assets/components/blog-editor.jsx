@@ -22,12 +22,12 @@ define([
             getInitialState: function () {
                 return {
                     errors: {
-                        name: undefined,
+                        posts_per_page: undefined,
                         slug: undefined,
                         title: undefined
                     },
                     blog: {
-                        name: "",
+                        posts_per_page: "",
                         slug: "",
                         title: ""
                     }
@@ -61,23 +61,6 @@ define([
 
             _renderForm: function () {
 
-                var nameField = React.createElement(FormField, {
-                    field: {
-                        type: "text",
-                        value: this.state.blog.name,
-                        onChange: function (value) {
-                            this._setBlogState(this.state.blog, {name: value});
-                        }.bind(this),
-                        autoFocus: true
-                    },
-                    label: {
-                        children: "Name"
-                    },
-                    error: {
-                        children: this.state.errors.name ? this.state.errors.name.message : ""
-                    }
-                });
-
                 var slugField = React.createElement(FormField, {
                     field: {
                         type: "text",
@@ -110,6 +93,41 @@ define([
                     }
                 });
 
+                var postsPerPageOptions = [{
+                    key: -1,
+                    value: null,
+                    label: "None"
+                }];
+
+                postsPerPageOptions = postsPerPageOptions.concat([1, 5, 10, 15, 20, 30]
+                    .map(function (number, index) {
+                        return {
+                            key: index,
+                            value: number,
+                            label: number
+                        }
+                    }));
+
+                var postsPerPageField = React.createElement(FormField, {
+                    field: {
+                        type: "select",
+                        value: this.state.blog.posts_per_page,
+                        onChange: function (value) {
+                            this._setBlogState(this.state.blog, {posts_per_page: value});
+                        }.bind(this),
+
+                        children: postsPerPageOptions,
+
+                        autoFocus: true
+                    },
+                    label: {
+                        children: "Posts Per Page"
+                    },
+                    error: {
+                        children: this.state.errors.posts_per_page ? this.state.errors.posts_per_page.message : ""
+                    }
+                });
+
                 var title = this._chooseByMode({add: "Create a New Blog", edit: "Edit the Blog"});
 
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
@@ -117,14 +135,15 @@ define([
                 return (
                     <form className="module-data-editor" onSubmit={this._onSubmit}>
                         <h2 className="m-dte-title">{title}</h2>
+
                         <div className="m-dte-field-container">
-                            {nameField}
+                            {titleField}
                         </div>
                         <div className="m-dte-field-container">
                             {slugField}
                         </div>
                         <div className="m-dte-field-container">
-                            {titleField}
+                            {postsPerPageField}
                         </div>
                         <div className="m-dte-field-container">
                             <button className="module-button"
@@ -208,13 +227,13 @@ define([
             _buildDataForHttpRequest: function () {
 
                 var data = {
-                    name: this.state.blog.name.trim(),
+                    posts_per_page: this.state.blog.posts_per_page,
                     slug: this.state.blog.slug.trim(),
                     title: this.state.blog.title.trim()
                 };
 
-                if(data.slug === "") {
-                    data.slug = StringFormatter.slugfy(data.name);
+                if (data.slug === "") {
+                    data.slug = StringFormatter.slugfy(data.posts_per_page);
                     this._setBlogState(this.state.blog, {slug: data.slug});
                 }
 

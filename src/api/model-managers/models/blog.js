@@ -4,15 +4,6 @@ var mongoose = require('mongoose');
 var validate = require('mongoose-validator');
 var uniqueValidatorPlugin = require('mongoose-unique-validator');
 
-
-var nameValidator = [
-    validate({
-        validator: 'isLength',
-        arguments: [1, 200],
-        message: 'A name should be between {ARGS[0]} and {ARGS[1]} characters.'
-    })
-];
-
 var slugValidator = [
     validate({
         validator: 'matches',
@@ -35,10 +26,10 @@ var titleValidator = [
 ];
 
 var BlogSchema = new mongoose.Schema({
-    "name": {
+    "title": {
         type: String,
-        validate: nameValidator,
-        required: 'A name is required.'
+        validate: titleValidator,
+        required: 'A title is required.'
     },
 
     "slug": {
@@ -48,10 +39,9 @@ var BlogSchema = new mongoose.Schema({
         unique: true
     },
 
-    "title": {
-        type: String,
-        validate: titleValidator,
-        required: 'A title is required.'
+    "posts_per_page": {
+        type: mongoose.Schema.Types.Number,
+        required: 'Posts per page is required.'
     },
 
     "created": {

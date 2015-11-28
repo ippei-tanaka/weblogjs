@@ -53,62 +53,135 @@ var getCategoryList = (condition, sort) =>
     });
 
 
-var buildViewData = function (condition, queryOptions) {
-    var defaultQuery = {
-        sort: "publish_date,_id",
-        limit: 10,
-        offset: 0,
-        populate: ["author", "category"]
+var buildUrl = function (categorySlug, page) {
+    var url = "/";
+
+    if (categorySlug) {
+        url += "categories/" + categorySlug + "/";
+    }
+
+    if (page > 1) {
+        url += "page/" + page + "/";
+    }
+
+    return url;
+};
+
+class Pagination {
+    constructor(args) {
+        this.currentPage = args.currentPage;
+        this.totalPages = Math.ceil(args.totalItems / args.itemsPerPage);
+        this.urlBuilder = args.urlBuilder;
+    }
+
+    get nextPage () {
+        return this.currentPage + 1 <= this.totalPages ? this.currentPage + 1 : null;
+    }
+
+    get prevPage () {
+        return 0 <= this.currentPage - 1 ? this.currentPage - 1 : null;
+    }
+
+    get nextPageUrl () {
+        return this.nextPage ? this.urlBuilder(this.nextPage) : null;
+    }
+
+    get prevPageUrl () {
+        return this.prevPage ? this.urlBuilder(this.prevPage) : null;
+    }
+
+    get needPagination () {
+        return this.totalPages > 1;
+    }
+}
+
+var buildViewData = function (options) {
+    var defaultOptions = {
+        page : 1,
+        categorySlug: null
     };
-    queryOptions = Object.assign({}, defaultQuery, queryOptions);
-    queryOptions = helpers.parseParams(queryOptions);
+
+    options = Object.assign({}, defaultOptions, options);
+
+    options.page = Number.parseInt(options.page);
+    options.page = !isNaN(options.page) ? options.page : 1;
 
     return co(function* () {
         var setting = yield settingManager.getSetting();
+        var blog = yield blogManager.findById(setting.front);
+
         var defaultCondition = {
-            blog: setting.front,
+            blog: blog._id,
             publish_date: { $lt: new Date() }
         };
 
-        condition = Object.assign({}, defaultCondition, condition);
+        var queryOptions = {
+            sort: "publish_date,_id",
+            limit: blog.posts_per_page,
+            offset: (options.page - 1) * blog.posts_per_page,
+            populate: ["author", "category"]
+        };
+
+        var condition = Object.assign({}, defaultCondition);
+
+        if (options.categorySlug) {
+            condition.category = yield categoryManager.findBySlug(options.categorySlug);
+        }
+
+        var pagination = new Pagination({
+            totalItems: yield postManager.count(condition),
+            itemsPerPage: blog.posts_per_page,
+            currentPage: options.page,
+            urlBuilder: buildUrl.bind(null, options.categorySlug)
+        });
 
         return {
-            blog: yield blogManager.findById(setting.front),
+            blog: blog,
             postList: yield postManager.find(condition, queryOptions),
-            categoryList: yield getCategoryList(defaultCondition, { name: 1 })
+            categoryList: yield getCategoryList(defaultCondition, { name: 1 }),
+            pagination: pagination
         };
+    });
+};
+
+
+var renderViewAsResponse = function (response, options) {
+    return co(function* () {
+        var viewData = yield buildViewData(options);
+        render.call(response, 'home', viewData);
+    }).catch((error) => {
+        console.error(error);
+        errorHandling.call(response, 500);
     });
 };
 
 
 // Home
 routes.get('/', (request, response) => {
-    var urlParts = url.parse(request.url, true);
+    renderViewAsResponse(response);
+});
 
-    co(function* () {
-        var viewData = yield buildViewData({}, urlParts.query);
-        render.call(response, 'home', viewData);
-    }).catch((error) => {
-        console.error(error);
-        errorHandling.call(response, 500);
+routes.get('/page/:page', (request, response) => {
+    renderViewAsResponse(response, {
+        page: request.params.page
     });
 });
 
 
 // Category
-routes.get('/categories/:slug/', (request, response) => {
-    var slug = request.params.slug;
-    var urlParts = url.parse(request.url, true);
-
-    co(function* () {
-        var category = yield categoryManager.findBySlug(slug);
-        var viewData = yield buildViewData({ category: category._id }, urlParts.query);
-        render.call(response, 'home', viewData);
-    }).catch((error) => {
-        console.error(error);
-        errorHandling.call(response, 500);
+routes.get('/categories/:slug', (request, response) => {
+    renderViewAsResponse(response, {
+        categorySlug: request.params.slug
     });
 });
+
+routes.get('/categories/:slug/page/:page', (request, response) => {
+    renderViewAsResponse(response, {
+        page: request.params.page,
+        categorySlug: request.params.slug
+    });
+});
+
 
 routes.get("/*", (request, response) => {
     errorHandling.call(response, 400);
