@@ -26,7 +26,15 @@ var slugValidator = [
     })
 ];
 
-var CategorySchema = new mongoose.Schema({
+var titleValidator = [
+    validate({
+        validator: 'isLength',
+        arguments: [1, 200],
+        message: 'A title should be between {ARGS[0]} and {ARGS[1]} characters.'
+    })
+];
+
+var BlogSchema = new mongoose.Schema({
     "name": {
         type: String,
         validate: nameValidator,
@@ -40,6 +48,12 @@ var CategorySchema = new mongoose.Schema({
         unique: true
     },
 
+    "title": {
+        type: String,
+        validate: titleValidator,
+        required: 'A title is required.'
+    },
+
     "created": {
         type: Date
     },
@@ -50,7 +64,7 @@ var CategorySchema = new mongoose.Schema({
 });
 
 
-CategorySchema.pre('save', function (next) {
+BlogSchema.pre('save', function (next) {
     var now = new Date();
 
     this.updated = now;
@@ -63,11 +77,11 @@ CategorySchema.pre('save', function (next) {
 });
 
 
-CategorySchema.plugin(
+BlogSchema.plugin(
     uniqueValidatorPlugin,
     {
         message: 'The {PATH}, "{VALUE}", has been registered.'
     });
 
 
-module.exports = mongoose.model('Category', CategorySchema);
+module.exports = mongoose.model('Category', BlogSchema);

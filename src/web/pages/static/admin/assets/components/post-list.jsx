@@ -5,12 +5,16 @@ define([
         'moment',
         'services/global-events',
         'services/event',
+        'jsx!components/category-list',
+        'jsx!components/user-list',
         'jquery'
     ],
     function (React,
               Moment,
               GlobalEvents,
               Event,
+              CategoryList,
+              UserList,
               $) {
 
         var url = "/api/v1/posts";
@@ -43,11 +47,26 @@ define([
 
             getInitialState: function () {
                 return {
-                    posts: []
+                    posts: [],
+                    categories: [],
+                    authors: []
                 };
             },
 
             componentDidMount: function () {
+
+                CategoryList.getCategories().then(function (categories) {
+                    this.setState({
+                        categories: categories
+                    });
+                }.bind(this));
+
+                UserList.getUsers().then(function (users) {
+                    this.setState({
+                        authors: users
+                    });
+                }.bind(this));
+
                 this.events.addButtonClicked.on(this.props.addButtonClicked);
                 this.events.editButtonClicked.on(this.props.editButtonClicked);
                 this.events.deleteButtonClicked.on(this.props.deleteButtonClicked);
@@ -109,7 +128,17 @@ define([
                             </thead>
                             <tbody>
                             {this.state.posts.map(function (post, index) {
-                                return <CategoryListItem key={post._id} post={post} events={this.events}
+                                var author = this.state.authors.find(function (a) { return post.author === a._id; });
+                                var category = this.state.categories.find(function (c) { return post.category === c._id; });
+
+                                author = author ? author.display_name : null;
+                                category = category ? category.name : null;
+
+                                return <CategoryListItem key={post._id}
+                                                         post={post}
+                                                         category={category}
+                                                         author={author}
+                                                         events={this.events}
                                                          number={index+1}/>;
                             }.bind(this))}
                             </tbody>
@@ -138,8 +167,8 @@ define([
                 var created = Moment(this.props.post.created).format("YYYY-MM-DD HH:mm Z");
                 var updated = Moment(this.props.post.updated).format("YYYY-MM-DD HH:mm Z");
                 var publish = Moment(this.props.post.publish_date).format("YYYY-MM-DD HH:mm Z");
-                var author = this.props.post.author ? (this.props.post.author.display_name || none) : none;
-                var category = this.props.post.category ? (this.props.post.category.name || none) : none;
+                var author = this.props.author || none;
+                var category = this.props.category || none;
                 var tags = this.props.post.tags && this.props.post.tags.length > 0 ? this.props.post.tags.join(', ') : none;
 
                 return (

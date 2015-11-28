@@ -79,7 +79,7 @@ define([
 
                 UserList.getMe().then(function (me) {
                     if (!this.state.post.author) {
-                        this._setPostState(this.state.post, {author: me});
+                        this._setPostState(this.state.post, {author: me._id});
                     }
                 }.bind(this));
             },
@@ -146,10 +146,10 @@ define([
                 var authorField = React.createElement(FormField, {
                     field: {
                         type: "select",
-                        value: this.state.post.author ? this.state.post.author._id : null,
+                        value: this.state.post.author ? this.state.post.author : null,
                         onChange: function (value) {
                             var author = this.state.authors.find(function (a) { return a._id === value; });
-                            this._setPostState(this.state.post, {author: author});
+                            this._setPostState(this.state.post, {author: author ? author._id : null});
                         }.bind(this),
                         children: this._addEmptySelectOption(this.state.authors.map(function (author) {
                             return {
@@ -170,10 +170,10 @@ define([
                 var categoryField = React.createElement(FormField, {
                     field: {
                         type: "select",
-                        value: this.state.post.category ? this.state.post.category._id : null,
+                        value: this.state.post.category ? this.state.post.category : null,
                         onChange: function (value) {
                             var category = this.state.categories.find(function (a) { return a._id === value; });
-                            this._setPostState(this.state.post, {category: category});
+                            this._setPostState(this.state.post, {category: category ? category._id : null});
                         }.bind(this),
                         children: this._addEmptySelectOption(this.state.categories.map(function (category) {
                             return {
@@ -338,12 +338,18 @@ define([
                 var data = {
                     title: this.state.post.title.trim(),
                     content: this.state.post.content.trim(),
-                    category: this.state.post.category ? this.state.post.category._id : "",
-                    author: this.state.post.author ? this.state.post.author._id : "",
                     tags: this.state.post.tags,
                     publish_date: this.state.post.publish_date,
                     slug: this.state.post.slug.trim()
                 };
+
+                if(this.state.post.category) {
+                    data.category = this.state.post.category;
+                }
+
+                if(this.state.post.author) {
+                    data.author = this.state.post.author;
+                }
 
                 if(data.slug === "") {
                     data.slug = StringFormatter.slugfy(data.title);
