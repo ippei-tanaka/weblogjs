@@ -14,7 +14,7 @@ var localAuth = require('../passport-manager').localAuth;
 var config = require('../../config-manager').load();
 var baseRoute = `/api/v${config.api_version}`;
 var co = require('co');
-var helpers = require('../helpers');
+var helpers = require('../router-helpers');
 
 //-------------------------------------------------------
 // Utility Functions

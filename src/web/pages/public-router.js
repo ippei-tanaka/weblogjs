@@ -11,7 +11,7 @@ var categoryManager = api.categoryManager;
 var postManager = api.postManager;
 var blogManager = api.blogManager;
 var settingManager = api.settingManager;
-var helpers = require('../helpers');
+var helpers = require('../router-helpers');
 
 
 var render = function (view, data, status) {
@@ -38,44 +38,22 @@ var getCategoryList = (condition, sort) =>
     co(function* () {
         var postCountsByCat = yield postManager.countByCategories(condition, sort);
         var allCategories = yield categoryManager.find();
-        //var uncategorized = 0;
         var categoryList = [];
 
         for (let postCategory of postCountsByCat) {
             var category = allCategories.find((cat) => String(cat._id) === String(postCategory._id));
-
-            /*
-            if (!category) {
-                uncategorized += 1;
-            } else {
-              */
-                categoryList.push({
-                    name: category.name,
-                    link: `/categories/${category.slug}`,
-                    count: postCategory.count
-                });
-            /*
-            }
-            */
-        }
-
-        /*
-        if (uncategorized > 0) {
             categoryList.push({
-                name: "Uncategorized",
-                link: "/categories/uncategorized",
-                count: uncategorized
+                name: category.name,
+                link: `/categories/${category.slug}`,
+                count: postCategory.count
             });
         }
-        */
 
         return categoryList;
     });
 
-// Home
-routes.get('/', (request, response) => {
-    var urlParts = url.parse(request.url, true);
-    var queryOptions = urlParts.query;
+
+var buildViewData = function (condition, queryOptions) {
     var defaultQuery = {
         sort: "publish_date,_id",
         limit: 10,
@@ -85,25 +63,31 @@ routes.get('/', (request, response) => {
     queryOptions = Object.assign({}, defaultQuery, queryOptions);
     queryOptions = helpers.parseParams(queryOptions);
 
-
-    co(function* () {
+    return co(function* () {
         var setting = yield settingManager.getSetting();
-        var condition = {
+        var defaultCondition = {
             blog: setting.front,
             publish_date: { $lt: new Date() }
         };
 
+        condition = Object.assign({}, defaultCondition, condition);
+
         return {
             blog: yield blogManager.findById(setting.front),
-            posts: yield postManager.find(condition, queryOptions),
-            categoryList: yield getCategoryList(condition, { name: 1 })
+            postList: yield postManager.find(condition, queryOptions),
+            categoryList: yield getCategoryList(defaultCondition, { name: 1 })
         };
-    }).then(function (value) {
-        render.call(response, 'home', {
-            blog: value.blog,
-            postList: value.posts,
-            categoryList: value.categoryList
-        });
+    });
+};
+
+
+// Home
+routes.get('/', (request, response) => {
+    var urlParts = url.parse(request.url, true);
+
+    co(function* () {
+        var viewData = yield buildViewData({}, urlParts.query);
+        render.call(response, 'home', viewData);
     }).catch((error) => {
         console.error(error);
         errorHandling.call(response, 500);
@@ -115,31 +99,11 @@ routes.get('/', (request, response) => {
 routes.get('/categories/:slug/', (request, response) => {
     var slug = request.params.slug;
     var urlParts = url.parse(request.url, true);
-    var query = urlParts.query;
-    var defaultQuery = {
-        sort: "publish_date asc,_id asc",
-        limit: 20,
-        offset: 0
-    };
-    query = Object.assign({}, defaultQuery, query);
-    query = helpers.parseParams(query);
-
-    slug = slug === "uncategorized" ? null : slug;
 
     co(function* () {
         var category = yield categoryManager.findBySlug(slug);
-        var categoryId = category ? category._id : null;
-        return {
-            blog: yield blogManager.findOne(),
-            posts: yield postManager.find({category: categoryId}, query),
-            categoryList: yield getCategoryList()
-        };
-    }).then(function (value) {
-        render.call(response, 'home', {
-            blog: value.blog,
-            postList: value.posts,
-            categoryList: value.categoryList
-        });
+        var viewData = yield buildViewData({ category: category._id }, urlParts.query);
+        render.call(response, 'home', viewData);
     }).catch((error) => {
         console.error(error);
         errorHandling.call(response, 500);
