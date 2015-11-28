@@ -1,8 +1,9 @@
 "use strict";
 
 define([
+    'jquery',
     'services/extend'
-], function (extend) {
+], function ($, extend) {
 
     function ServerFacade() {
         this.urlBase = "/api/v1";
@@ -12,7 +13,7 @@ define([
     {
         getCategories: function () {
             return this
-                .ajaxRequest("/categories")
+                .restfulAPI("/categories")
                 .then(function (data) {
                     return data.items;
                 });
@@ -20,12 +21,12 @@ define([
 
         getCategory: function (id) {
             return this
-                .ajaxRequest("/categories/" + id);
+                .restfulAPI("/categories/" + id);
         },
 
         createCategory: function (categoryObject) {
             return this
-                .ajaxRequest("/categories/", {
+                .restfulAPI("/categories/", {
                     data: categoryObject,
                     method: 'post'
                 });
@@ -33,7 +34,7 @@ define([
 
         updateCategory: function (id, categoryObject) {
             return this
-                .ajaxRequest("/categories/" + id, {
+                .restfulAPI("/categories/" + id, {
                     data: categoryObject,
                     method: 'put'
                 });
@@ -41,14 +42,14 @@ define([
 
         deleteCategory: function (id) {
             return this
-                .ajaxRequest("/categories/" + id, {
+                .restfulAPI("/categories/" + id, {
                     method: 'delete'
                 });
         },
 
         getPosts: function () {
             return this
-                .ajaxRequest("/posts")
+                .restfulAPI("/posts")
                 .then(function (data) {
                     return data.items;
                 });
@@ -56,12 +57,12 @@ define([
 
         getPost: function (id) {
             return this
-                .ajaxRequest("/posts/" + id);
+                .restfulAPI("/posts/" + id);
         },
 
         createPost: function (postObject) {
             return this
-                .ajaxRequest("/posts/", {
+                .restfulAPI("/posts/", {
                     data: postObject,
                     method: 'post'
                 });
@@ -69,7 +70,7 @@ define([
 
         updatePost: function (id, postObject) {
             return this
-                .ajaxRequest("/posts/" + id, {
+                .restfulAPI("/posts/" + id, {
                     data: postObject,
                     method: 'put'
                 });
@@ -77,14 +78,14 @@ define([
 
         deletePost: function (id) {
             return this
-                .ajaxRequest("/posts/" + id, {
+                .restfulAPI("/posts/" + id, {
                     method: 'delete'
                 });
         },
 
         getUsers: function () {
             return this
-                .ajaxRequest("/users")
+                .restfulAPI("/users")
                 .then(function (data) {
                     return data.items;
                 });
@@ -92,12 +93,12 @@ define([
 
         getUser: function (id) {
             return this
-                .ajaxRequest("/users/" + id);
+                .restfulAPI("/users/" + id);
         },
 
         createUser: function (userObject) {
             return this
-                .ajaxRequest("/users/", {
+                .restfulAPI("/users/", {
                     data: userObject,
                     method: 'post'
                 });
@@ -105,7 +106,7 @@ define([
 
         updateUser: function (id, userObject) {
             return this
-                .ajaxRequest("/users/" + id, {
+                .restfulAPI("/users/" + id, {
                     data: userObject,
                     method: 'put'
                 });
@@ -113,19 +114,41 @@ define([
 
         deleteUser: function (id) {
             return this
-                .ajaxRequest("/users/" + id, {
+                .restfulAPI("/users/" + id, {
                     method: 'delete'
                 });
         },
 
         getMe: function () {
             return this
-                .ajaxRequest("/users/me");
+                .restfulAPI("/users/me");
         },
 
-        ajaxRequest: function (uri, options) {
+        login: function (email, password) {
+            return this
+                .admin("/login", {
+                    data: {
+                        email: email,
+                        password: password
+                    },
+                    method: 'post'
+                });
+        },
+
+        restfulAPI: function (uri, options) {
             options = extend({
                 url: this.urlBase + uri,
+                method: "get",
+                dataType: 'json',
+                cache: false
+            }, options);
+
+            return $.ajax(options);
+        },
+
+        admin: function (uri, options) {
+            options = extend({
+                url: "/admin" + uri,
                 method: "get",
                 dataType: 'json',
                 cache: false

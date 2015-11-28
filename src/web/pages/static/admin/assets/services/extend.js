@@ -1,5 +1,5 @@
 "use strict";
 
-define(function () {
+define(['jquery'], function ($) {
     return $.extend.bind($);
 });
