@@ -2,9 +2,9 @@
 
 define([
         'react',
-        'jsx!components/user-list'
+        'services/server-facade'
     ],
-    function (React, UserList) {
+    function (React, ServerFacade) {
 
         var Dashboard = React.createClass({
 
@@ -15,7 +15,7 @@ define([
             },
 
             componentWillMount: function () {
-                UserList.getMe().then(function (me) {
+                ServerFacade.getMe().then(function (me) {
                     this.setState({
                         myName: me.display_name
                     });

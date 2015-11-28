@@ -5,45 +5,16 @@ define([
         'moment',
         'services/global-events',
         'services/event',
-        'jsx!components/category-list',
-        'jsx!components/user-list',
-        'jquery'
+        'services/server-facade'
     ],
     function (React,
               Moment,
               GlobalEvents,
               Event,
-              CategoryList,
-              UserList,
-              $) {
+              ServerFacade) {
 
-        var url = "/api/v1/posts";
 
         var PostList = React.createClass({
-
-            statics: {
-                getPosts: function () {
-                    return $.ajax({
-                        url: url,
-                        dataType: 'json',
-                        cache: false
-                    })
-                        .then(function (data) {
-                            return data.items;
-                        });
-                },
-
-                getPost: function (id) {
-                    return $.ajax({
-                        url: url + "/" + id,
-                        dataType: 'json',
-                        cache: false
-                    })
-                        .then(function (data) {
-                            return data;
-                        });
-                }
-            },
 
             getInitialState: function () {
                 return {
@@ -55,13 +26,13 @@ define([
 
             componentDidMount: function () {
 
-                CategoryList.getCategories().then(function (categories) {
+                ServerFacade.getCategories().then(function (categories) {
                     this.setState({
                         categories: categories
                     });
                 }.bind(this));
 
-                UserList.getUsers().then(function (users) {
+                ServerFacade.getUsers().then(function (users) {
                     this.setState({
                         authors: users
                     });
@@ -85,7 +56,7 @@ define([
             },
 
             _retrieveDataAndUpdateList: function () {
-                this.constructor.getPosts()
+                ServerFacade.getPosts()
                     .then(function (data) {
                         this.setState({
                             posts: data

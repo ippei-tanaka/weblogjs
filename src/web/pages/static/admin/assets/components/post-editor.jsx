@@ -4,22 +4,18 @@ define([
         'react',
         'services/global-events',
         'services/string-formatter',
+        'services/server-facade',
         'jquery',
         'jsx!components/form-field',
-        'jsx!components/confirmation',
-        'jsx!components/post-list',
-        'jsx!components/user-list',
-        'jsx!components/category-list'
+        'jsx!components/confirmation'
     ],
     function (React,
               GlobalEvents,
               StringFormatter,
+              ServerFacade,
               $,
               FormField,
-              Confirmation,
-              PostList,
-              UserList,
-              CategoryList) {
+              Confirmation) {
 
         var url = "/api/v1/posts";
 
@@ -60,24 +56,24 @@ define([
 
             componentWillMount: function () {
                 if (this.props.mode === "edit") {
-                    PostList.getPost(this.props.postId).then(function (post) {
+                    ServerFacade.getPost(this.props.postId).then(function (post) {
                         this._setPostState(this.getInitialState().post, post);
                     }.bind(this));
                 }
 
-                CategoryList.getCategories().then(function (categories) {
+                ServerFacade.getCategories().then(function (categories) {
                     this.setState({
                         categories: categories
                     });
                 }.bind(this));
 
-                UserList.getUsers().then(function (users) {
+                ServerFacade.getUsers().then(function (users) {
                     this.setState({
                         authors: users
                     });
                 }.bind(this));
 
-                UserList.getMe().then(function (me) {
+                ServerFacade.getMe().then(function (me) {
                     if (!this.state.post.author) {
                         this._setPostState(this.state.post, {author: me._id});
                     }

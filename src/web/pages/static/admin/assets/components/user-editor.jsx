@@ -3,15 +3,15 @@
 define([
         'react',
         'services/global-events',
+        'services/server-facade',
         'jquery',
-        'jsx!components/user-list',
         'jsx!components/form-field',
         'jsx!components/confirmation'
     ],
     function (React,
               GlobalEvents,
+              ServerFacade,
               $,
-              UserList,
               FormField,
               Confirmation) {
 
@@ -45,7 +45,7 @@ define([
 
             componentWillMount: function () {
                 if (this.props.mode === "edit") {
-                    UserList.getUser(this.props.userId).then(function (user) {
+                    ServerFacade.getUser(this.props.userId).then(function (user) {
                         this._setUserState(this.getInitialState().user, user);
                     }.bind(this));
                 }
