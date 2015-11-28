@@ -802,8 +802,13 @@ table tbody tr {
   font-size: 26px;
   margin-bottom: 20px; }
 
-.module-data-list .m-dtl-hidden-cell {
-  display: none; }
+@media (max-width: 699px) {
+  .module-data-list .m-dtl-for-desktop {
+    display: none; } }
+
+@media (min-width: 700px) {
+  .module-data-list .m-dtl-for-phone {
+    display: none; } }
 
 .module-data-list .m-dtl-no-wrap {
   white-space: nowrap; }

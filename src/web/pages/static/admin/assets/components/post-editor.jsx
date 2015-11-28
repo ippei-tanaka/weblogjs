@@ -57,7 +57,7 @@ define([
             },
 
             componentWillMount: function () {
-                if (this.props.mode === "edit") {
+                if (this.props.mode === "edit" || this.props.mode === "del") {
                     ServerFacade.getPost(this.props.postId).then(function (post) {
                         this._setPostState(this.getInitialState().post, post);
                     }.bind(this));

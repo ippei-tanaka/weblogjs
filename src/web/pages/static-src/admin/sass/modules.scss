@@ -286,8 +286,16 @@
         //width: 100%;
     }
 
-    .m-dtl-hidden-cell {
-        display: none;
+    .m-dtl-for-desktop {
+        @include media-phone {
+            display: none;
+        }
+    }
+
+    .m-dtl-for-phone {
+        @include media-desktop {
+            display: none;
+        }
     }
 
     .m-dtl-no-wrap {

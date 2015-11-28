@@ -34,32 +34,40 @@ var errorHandling = function (status) {
     }
 };
 
-var getCategoryList = () =>
+var getCategoryList = (condition, sort) =>
     co(function* () {
-        var postCountsByCat = yield postManager.countByCategories();
+        var postCountsByCat = yield postManager.countByCategories(condition, sort);
         var allCategories = yield categoryManager.find();
-        var uncategorized = 0;
+        //var uncategorized = 0;
         var categoryList = [];
 
         for (let postCategory of postCountsByCat) {
             var category = allCategories.find((cat) => String(cat._id) === String(postCategory._id));
 
+            /*
             if (!category) {
                 uncategorized += 1;
             } else {
+              */
                 categoryList.push({
                     name: category.name,
                     link: `/categories/${category.slug}`,
                     count: postCategory.count
                 });
+            /*
             }
+            */
         }
 
-        categoryList.push({
-            name: "Uncategorized",
-            link: "/categories/uncategorized",
-            count: uncategorized
-        });
+        /*
+        if (uncategorized > 0) {
+            categoryList.push({
+                name: "Uncategorized",
+                link: "/categories/uncategorized",
+                count: uncategorized
+            });
+        }
+        */
 
         return categoryList;
     });
@@ -80,10 +88,15 @@ routes.get('/', (request, response) => {
 
     co(function* () {
         var setting = yield settingManager.getSetting();
+        var condition = {
+            blog: setting.front,
+            publish_date: { $lt: new Date() }
+        };
+
         return {
             blog: yield blogManager.findById(setting.front),
-            posts: yield postManager.find({blog: setting.front}, queryOptions),
-            categoryList: yield getCategoryList()
+            posts: yield postManager.find(condition, queryOptions),
+            categoryList: yield getCategoryList(condition, { name: 1 })
         };
     }).then(function (value) {
         render.call(response, 'home', {
