@@ -6,7 +6,9 @@
 
 <div class="module-blog-layout">
     <div class="m-bll-main">
+        {{> public/pagination pagination}}
         {{> public/post-list postList}}
+        {{> public/pagination pagination}}
     </div>
     <aside class="m-bll-sidebar">
         {{> public/category-list categoryList}}

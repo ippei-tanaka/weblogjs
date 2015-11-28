@@ -164,6 +164,21 @@ methods.removeById = function (Model, id) {
 };
 
 
+/**
+ * @param {mongoose.Model} Model
+ * @param {Object} condition
+ * @returns {Promise}
+ */
+methods.count = function (Model, condition) {
+    return new Promise((resolve, reject) => {
+        Model.count(condition).exec((err, data) => {
+            if (err) return reject(err);
+            resolve(data);
+        });
+    });
+};
+
+
 module.exports = {
     applyTo: function (Model) {
         var obj = {};

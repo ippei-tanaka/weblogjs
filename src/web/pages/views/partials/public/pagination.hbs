@@ -1,0 +1,16 @@
+{{#if needPagination}}
+    <div class="module-pagination">
+        <ul class="m-pgn-list">
+            {{#if prevPage}}
+                <li class="m-pgn-list-item m-pgn-prev">
+                    <a class="m-pgn-link" href="{{prevPageUrl}}">&lt prev</a>
+                </li>
+            {{/if}}
+            {{#if nextPage}}
+                <li class="m-pgn-list-item m-pgn-next">
+                    <a class="m-pgn-link" href="{{nextPageUrl}}">next &gt</a>
+                </li>
+            {{/if}}
+        </ul>
+    </div>
+{{/if}}

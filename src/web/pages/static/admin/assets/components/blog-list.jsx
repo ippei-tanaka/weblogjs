@@ -69,9 +69,9 @@ define([
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
                                 <th>Slug</th>
                                 <th>Title</th>
+                                <th>Posts Per Page</th>
                                 <th>Created</th>
                                 <th>Updated</th>
                                 <th></th>
@@ -111,9 +111,9 @@ define([
                 return (
                     <tr>
                         <td data-label="No.">{this.props.number}</td>
-                        <td data-label="Name">{this.props.blog.name}</td>
                         <td data-label="Slug">{this.props.blog.slug}</td>
                         <td data-label="Title">{this.props.blog.title}</td>
+                        <td data-label="Posts Per Page">{this.props.blog.posts_per_page}</td>
                         <td data-label="Created">{created}</td>
                         <td data-label="Updated">{updated}</td>
                         <td className="m-dtl-no-wrap">

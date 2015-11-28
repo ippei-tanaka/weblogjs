@@ -115,6 +115,38 @@
     }
 }
 
+/*----------------------------
+ pagination
+----------------------------*/
+.module-pagination {
+    padding: 20px 40px;
+    border-bottom: 1px solid #ccc;
+
+    .m-pgn-list {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .m-pgn-list-item {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .m-pgn-prev {
+        text-align: left;
+    }
+
+    .m-pgn-next {
+        text-align: right;
+    }
+
+    .m-pgn-link {
+        color: $color-default-font;
+        white-space: nowrap;
+        font-size: 16px;
+    }
+}
+
 
 /*----------------------------
  Post
