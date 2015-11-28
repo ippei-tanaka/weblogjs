@@ -1,8 +1,10 @@
 "use strict";
 
-define(function () {
+define([
+    'services/extend'
+], function (extend) {
 
-    function ServerFacade () {
+    function ServerFacade() {
         this.urlBase = "/api/v1";
     }
 
@@ -18,9 +20,29 @@ define(function () {
 
         getCategory: function (id) {
             return this
-                .ajaxRequest("/categories/" + id)
-                .then(function (data) {
-                    return data;
+                .ajaxRequest("/categories/" + id);
+        },
+
+        createCategory: function (categoryObject) {
+            return this
+                .ajaxRequest("/categories/", {
+                    data: categoryObject,
+                    method: 'post'
+                });
+        },
+
+        updateCategory: function (id, categoryObject) {
+            return this
+                .ajaxRequest("/categories/" + id, {
+                    data: categoryObject,
+                    method: 'put'
+                });
+        },
+
+        deleteCategory: function (id) {
+            return this
+                .ajaxRequest("/categories/" + id, {
+                    method: 'delete'
                 });
         },
 
@@ -34,9 +56,29 @@ define(function () {
 
         getPost: function (id) {
             return this
-                .ajaxRequest("/posts/" + id)
-                .then(function (data) {
-                    return data;
+                .ajaxRequest("/posts/" + id);
+        },
+
+        createPost: function (postObject) {
+            return this
+                .ajaxRequest("/posts/", {
+                    data: postObject,
+                    method: 'post'
+                });
+        },
+
+        updatePost: function (id, postObject) {
+            return this
+                .ajaxRequest("/posts/" + id, {
+                    data: postObject,
+                    method: 'put'
+                });
+        },
+
+        deletePost: function (id) {
+            return this
+                .ajaxRequest("/posts/" + id, {
+                    method: 'delete'
                 });
         },
 
@@ -50,26 +92,46 @@ define(function () {
 
         getUser: function (id) {
             return this
-                .ajaxRequest("/users/" + id)
-                .then(function (data) {
-                    return data;
+                .ajaxRequest("/users/" + id);
+        },
+
+        createUser: function (userObject) {
+            return this
+                .ajaxRequest("/users/", {
+                    data: userObject,
+                    method: 'post'
+                });
+        },
+
+        updateUser: function (id, userObject) {
+            return this
+                .ajaxRequest("/users/" + id, {
+                    data: userObject,
+                    method: 'put'
+                });
+        },
+
+        deleteUser: function (id) {
+            return this
+                .ajaxRequest("/users/" + id, {
+                    method: 'delete'
                 });
         },
 
         getMe: function () {
             return this
-                .ajaxRequest("/users/me")
-                .then(function (data) {
-                    return data;
-                });
+                .ajaxRequest("/users/me");
         },
 
-        ajaxRequest: function (uri) {
-            return $.ajax({
+        ajaxRequest: function (uri, options) {
+            options = extend({
                 url: this.urlBase + uri,
+                method: "get",
                 dataType: 'json',
                 cache: false
-            });
+            }, options);
+
+            return $.ajax(options);
         }
     };
 

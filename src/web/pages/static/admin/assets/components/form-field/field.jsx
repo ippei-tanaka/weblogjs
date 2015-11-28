@@ -3,11 +3,11 @@
 define([
         'react',
         'moment',
-        'jquery',
+        'services/extend',
         'jsx!components/form-field/datetime',
         'jsx!components/form-field/tag-list'
     ],
-    function (React, moment, $, Datetime, TagList) {
+    function (React, moment, extend, Datetime, TagList) {
 
         var Field = React.createClass({
             getDefaultProps: function () {
@@ -42,7 +42,7 @@ define([
 
             render: function () {
 
-                var props = $.extend({}, this.props);
+                var props = extend({}, this.props);
 
                 // set classname
                 props.className = props.className || props.baseClassName + props.type;

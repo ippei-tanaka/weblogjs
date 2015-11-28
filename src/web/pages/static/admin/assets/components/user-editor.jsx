@@ -2,20 +2,18 @@
 
 define([
         'react',
+        'services/extend',
         'services/global-events',
         'services/server-facade',
-        'jquery',
         'jsx!components/form-field',
         'jsx!components/confirmation'
     ],
     function (React,
+              extend,
               GlobalEvents,
               ServerFacade,
-              $,
               FormField,
               Confirmation) {
-
-        var url = "/api/v1/users";
 
         var UserEditor = React.createClass({
 
@@ -192,7 +190,7 @@ define([
                     display_name: this.state.user.display_name.trim()
                 };
 
-                return this._sendHttpRequest(url, 'post', data)
+                return ServerFacade.createUser(data)
                     .then(function () {
                         GlobalEvents.userCreated.fire();
                     });
@@ -200,45 +198,26 @@ define([
 
             _updateUser: function () {
 
-                var ajaxUrl = url + '/' + this.props.userId;
-
                 var data = {
                     display_name: this.state.user.display_name.trim()
                 };
 
-                return this._sendHttpRequest(ajaxUrl, 'put', data)
+                return ServerFacade.updateUser(this.props.userId, data)
                     .then(function () {
                         GlobalEvents.userUpdated.fire();
                     });
             },
 
             _deleteUser: function () {
-                var ajaxUrl = url + '/' + this.props.userId;
-
-                return this._sendHttpRequest(ajaxUrl, 'delete')
+                return ServerFacade.deleteUser(this.props.userId)
                     .then(function () {
                         GlobalEvents.userDeleted.fire();
                     });
             },
 
-            _sendHttpRequest: function (url, method, data) {
-                var options = {
-                    url: url,
-                    dataType: 'json',
-                    cache: false,
-                    method: method
-                };
-
-                if (data) {
-                    options.data = data;
-                }
-
-                return $.ajax(options);
-            },
-
             _setUserState: function (defaultUser, user) {
                 this.setState({
-                    user: $.extend(defaultUser, this._flatten(user))
+                    user: extend(defaultUser, this._flatten(user))
                 });
             },
 

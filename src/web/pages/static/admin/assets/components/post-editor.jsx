@@ -5,7 +5,7 @@ define([
         'services/global-events',
         'services/string-formatter',
         'services/server-facade',
-        'jquery',
+        'services/extend',
         'jsx!components/form-field',
         'jsx!components/confirmation'
     ],
@@ -13,11 +13,9 @@ define([
               GlobalEvents,
               StringFormatter,
               ServerFacade,
-              $,
+              extend,
               FormField,
               Confirmation) {
-
-        var url = "/api/v1/posts";
 
         var PostEditor = React.createClass({
 
@@ -303,7 +301,7 @@ define([
 
                 var data = this._buildDataForHttpRequest();
 
-                return this._sendHttpRequest(url, 'post', data)
+                return ServerFacade.createPost(data)
                     .then(function () {
                         GlobalEvents.postCreated.fire();
                     });
@@ -311,20 +309,16 @@ define([
 
             _updatePost: function () {
 
-                var ajaxUrl = url + '/' + this.props.postId;
-
                 var data = this._buildDataForHttpRequest();
 
-                return this._sendHttpRequest(ajaxUrl, 'put', data)
+                return ServerFacade.updatePost(this.props.postId, data)
                     .then(function () {
                         GlobalEvents.postUpdated.fire();
                     });
             },
 
             _deletePost: function () {
-                var ajaxUrl = url + '/' + this.props.postId;
-
-                return this._sendHttpRequest(ajaxUrl, 'delete')
+                return ServerFacade.deletePost(this.props.postId)
                     .then(function () {
                         GlobalEvents.postDeleted.fire();
                     });
@@ -355,25 +349,9 @@ define([
                 return data;
             },
 
-            _sendHttpRequest: function (url, method, data) {
-                var options = {
-                    url: url,
-                    dataType: 'json',
-                    cache: false,
-                    method: method,
-                    traditional: true
-                };
-
-                if (data) {
-                    options.data = data;
-                }
-
-                return $.ajax(options);
-            },
-
             _setPostState: function (defaultPost, post) {
                 this.setState({
-                    post: $.extend(defaultPost, this._flatten(post))
+                    post: extend(defaultPost, this._flatten(post))
                 });
             },
 
