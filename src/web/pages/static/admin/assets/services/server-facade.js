@@ -11,6 +11,43 @@ define([
 
     ServerFacade.prototype =
     {
+
+        getBlogs: function () {
+            return this
+                .restfulAPI("/blogs")
+                .then(function (data) {
+                    return data.items;
+                });
+        },
+
+        getBlog: function (id) {
+            return this
+                .restfulAPI("/blogs/" + id);
+        },
+
+        createBlog: function (blogObject) {
+            return this
+                .restfulAPI("/blogs/", {
+                    data: blogObject,
+                    method: 'post'
+                });
+        },
+
+        updateBlog: function (id, blogObject) {
+            return this
+                .restfulAPI("/blogs/" + id, {
+                    data: blogObject,
+                    method: 'put'
+                });
+        },
+
+        deleteBlog: function (id) {
+            return this
+                .restfulAPI("/blogs/" + id, {
+                    method: 'delete'
+                });
+        },
+
         getCategories: function () {
             return this
                 .restfulAPI("/categories")
