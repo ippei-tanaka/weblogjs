@@ -1,6 +1,6 @@
 "use strict";
 
-define(['react', 'react-dom', 'jquery'], function (React, ReactDom, $) {
+define(['react', 'react-dom'], function (React, ReactDom) {
 
     /**
      * @param ReactClass {Object}

@@ -2,13 +2,12 @@
 
 define([
         'react',
-        'jquery',
+        'services/server-facade',
         'jsx!components/form-field'],
     function (React,
-              $,
+              ServerFacade,
               FormField) {
 
-        var loginUrl = "/admin/login";
         var successUrl = "/admin/";
 
         var LoginForm = React.createClass({
@@ -19,21 +18,10 @@ define([
                 var email = this.state.email.trim();
                 var password = this.state.password.trim();
 
-                // TODO: create a utility module for ajax
-                $.ajax({
-                    url: loginUrl,
-                    dataType: 'json',
-                    cache: false,
-                    method: 'post',
-                    data: {
-                        email: email,
-                        password: password
-                    }
-                })
+                ServerFacade.login(email, password)
                     .then(function () {
                         window.location.replace(successUrl);
-                    }.bind(this))
-
+                    })
                     .fail(function () {
                         this.setState({
                             error: true
