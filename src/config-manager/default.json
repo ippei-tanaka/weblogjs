@@ -2,7 +2,7 @@
     "database_name": "weblogjs",
     "database_host": "localhost",
     "database_port": 27017,
-    "web_server_port": 8080,
+    "web_server_port": 80,
     "web_server_host": "localhost",
     "admin_email": "admin@example.com",
     "admin_password": "AdminPassword",
