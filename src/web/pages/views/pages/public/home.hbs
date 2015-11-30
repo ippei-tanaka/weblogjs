@@ -1,16 +1,21 @@
 {{!< ../../layouts/public/default}}
 
-{{#contentFor "page-title"}}{{{blog.title}}}{{/contentFor}}
-{{#contentFor "title"}}{{{blog.title}}}{{/contentFor}}
-{{#contentFor "footer"}}&copy;{{{blog.title}}}{{/contentFor}}
-
 <div class="module-blog-layout">
     <div class="m-bll-main">
-        {{> public/pagination pagination}}
-        {{> public/post-list postList}}
-        {{> public/pagination pagination}}
+        {{#each postList}}
+            <section class="m-bll-section">
+                {{> public/post this}}
+            </section>
+        {{/each}}
+        {{#if pagination.needPagination}}
+            <section class="m-bll-section m-bll-short-section">
+                {{> public/pagination pagination}}
+            </section>
+        {{/if}}
     </div>
     <aside class="m-bll-sidebar">
-        {{> public/category-list categoryList}}
+        <section class="m-bll-section">
+            {{> public/category-list categoryList}}
+        </section>
     </aside>
 </div>

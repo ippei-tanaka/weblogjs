@@ -1,14 +1,12 @@
 @import "mixins";
 @import "variables";
 
-
 /*----------------------------
  Header Footer Layout
 ----------------------------*/
 .module-header-footer-layout {
 
     .m-hfl-header {
-        border-bottom: 1px solid #cccccc;
         padding: 130px 40px 40px;
         position: relative;
         overflow: hidden;
@@ -30,17 +28,16 @@
 
     .m-hfl-footer {
         font-size: 14px;
-        border-top: 1px solid #cccccc;
         padding: 40px 40px 40px;
     }
 }
-
 
 /*----------------------------
  Blog Layout
 ----------------------------*/
 .module-blog-layout {
     display: flex;
+    align-items: stretch;
 
     @include media-phone {
         flex-wrap: wrap;
@@ -48,10 +45,36 @@
 
     .m-bll-main {
         width: 100%;
+        border-top: 1px solid #cccccc;
+        border-bottom: 1px solid #cccccc;
+
+        @include media-phone {
+            border-bottom: 0;
+        }
+    }
+
+    .m-bll-section {
+        padding: 45px 40px 50px;
+        border-bottom: 1px solid #cccccc;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+
+        &.m-bll-short-section {
+            padding: 20px 40px;
+        }
     }
 
     .m-bll-sidebar {
         border-left: 1px solid #cccccc;
+        border-top: 1px solid #cccccc;
+        border-bottom: 1px solid #cccccc;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        align-content: stretch;
 
         @include media-phone {
             width: 100%;
@@ -61,15 +84,14 @@
     }
 }
 
-
 /*----------------------------
  Error Page
 ----------------------------*/
 .module-error-page {
-    padding: 60px 40px;
-    font-size: 20px;
+    padding: 100px 40px;
+    font-size: 26px;
+    background-color: #f0f0f0;
 }
-
 
 /*----------------------------
  Post List
@@ -84,13 +106,11 @@
     }
 }
 
-
 /*----------------------------
  Category List
 ----------------------------*/
 .module-category-list {
     font-family: 'Quattrocento', serif;
-    padding: 45px 40px 50px;
 
     .m-ctl-title {
         font-size: 18px;
@@ -119,9 +139,6 @@
  pagination
 ----------------------------*/
 .module-pagination {
-    padding: 20px 40px;
-    border-bottom: 1px solid #ccc;
-
     .m-pgn-list {
         display: flex;
         justify-content: space-around;
@@ -147,13 +164,11 @@
     }
 }
 
-
 /*----------------------------
  Post
 ----------------------------*/
 .module-post {
     font-family: 'Quattrocento', serif;
-    padding: 45px 40px 50px;
 
     .m-pst-title {
         font-size: 36px;
@@ -199,7 +214,6 @@
         margin-top: 40px;
     }
 }
-
 
 /*----------------------------
  Article
