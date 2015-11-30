@@ -3,18 +3,18 @@
 
 var routes = require('express').Router();
 var url = require('url');
-var api = require('../../api');
+var api = require('../../../api');
 var userManager = api.userManager;
 var categoryManager = api.categoryManager;
 var postManager = api.postManager;
 var blogManager = api.blogManager;
 var settingManager = api.settingManager;
 //var auth = require('../passport-manager').basicAuth;
-var localAuth = require('../passport-manager').localAuth;
-var config = require('../../config-manager').load();
+var localAuth = require('../../passport-manager').localAuth;
+var config = require('../../../config-manager').load();
 var baseRoute = `/api/v${config.api_version}`;
 var co = require('co');
-var helpers = require('../router-helpers');
+var helpers = require('../helpers');
 
 //-------------------------------------------------------
 // Utility Functions
