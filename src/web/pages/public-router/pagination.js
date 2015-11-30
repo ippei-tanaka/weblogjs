@@ -1,10 +1,11 @@
 "use strict";
 
+var Type = require('../../../utility').Type;
 
 class Pagination {
     constructor(args) {
-        this.currentPage = Number.parseInt(args.currentPage);
-        this.totalPages = Math.ceil(args.totalItems / args.itemsPerPage);
+        this.currentPage = Type.toInt(args.currentPage);
+        this.totalPages = Math.ceil(Type.toInt(args.totalItems) / Type.toInt(args.itemsPerPage));
         this.urlBuilder = args.urlBuilder;
     }
 

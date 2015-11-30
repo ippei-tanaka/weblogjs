@@ -4,7 +4,6 @@ var Post = require('./models/post');
 var modelManager = require('./model-manager');
 var exports = modelManager.applyTo(Post);
 var errors = require('../errors/index');
-var Helpers = require('./helpers');
 var co = require('co');
 
 /**
