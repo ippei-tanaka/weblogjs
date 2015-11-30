@@ -2,7 +2,7 @@
 
 
 var routes = require('express').Router();
-var localAuth = require('../passport-manager').localAuth;
+var localAuth = require('../../passport-manager').localAuth;
 var baseRoute = '/admin';
 
 var isLoggedIn = (request, response, next) => {
