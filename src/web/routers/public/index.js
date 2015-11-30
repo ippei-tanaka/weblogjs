@@ -36,7 +36,7 @@ var observer = function (generator, response) {
 
 
 var buildUrl = function (blogSlug, categorySlug, page) {
-    var url = "/";
+    var url = baseRoute;
 
     if (blogSlug) {
         url += "blogs/" + blogSlug + "/";
@@ -54,6 +54,55 @@ var buildUrl = function (blogSlug, categorySlug, page) {
 };
 
 
+class BlogFinder {
+
+    constructor(blogSlug) {
+        this._blogSlug = blogSlug;
+        this._blog = null;
+        this._setting = null;
+        this._defaultBlog = null;
+    }
+
+    get blogSlug () {
+        return co(function* () {
+            return this._blogSlug;
+        }.bind(this));
+    }
+
+    get blog () {
+        return co(function* () {
+            yield this._initialize();
+            return this._blog || this._defaultBlog;
+        }.bind(this));
+    }
+
+    isDefaultSlug () {
+        return co(function* () {
+
+            if (!this._blogSlug) {
+                return null;
+            }
+
+            yield this._initialize();
+
+            return String(this._defaultBlog._id) === String(this._blog._id);
+        }.bind(this));
+    };
+
+    _initialize () {
+        return co(function* () {
+            if (!this._setting) {
+                this._setting = yield api.settingManager.getSetting();
+                this._defaultBlog = yield api.blogManager.findById(this._setting.front);
+            }
+            if (this._blogSlug && !this._blog) {
+                this._blog = yield api.blogManager.findBySlug(this._blogSlug);
+            }
+        }.bind(this));
+    }
+}
+
+
 // Routes
 
 routes.get(/^\/(blogs\/[^/]+\/?)?(categories\/[^/]+\/?)?(page\/[0-9]+\/?)?$/, (request, response) => {
@@ -66,11 +115,21 @@ routes.get(/^\/(blogs\/[^/]+\/?)?(categories\/[^/]+\/?)?(page\/[0-9]+\/?)?$/, (r
     var categorySlug = categoryParam.length >= 2 && categoryParam[1] ? categoryParam[1] : null;
     var page = pageParam.length >= 2 && pageParam[1] ? pageParam[1] : null;
 
+    var blogSelector = new BlogFinder(blogSlug);
+
     observer(function* () {
+
+        if (yield blogSelector.isDefaultSlug()) {
+            response.redirect(301, buildUrl(null, categorySlug, page));
+            return;
+        }
+
+
         var renderer = new Renderer(response);
         var dataBuilder = new HomeViewDataBuilder({
             page: page,
-            blogSlug: blogSlug,
+            blogSlug: yield blogSelector.blogSlug,
+            blog: yield blogSelector.blog,
             categorySlug: categorySlug,
             publishDate: new Date(),
             paginationUrlBuilder: buildUrl.bind(null, blogSlug, categorySlug),
