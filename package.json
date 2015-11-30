@@ -1,17 +1,24 @@
 {
     "name": "weblogjs",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "a library for weblogs",
     "main": "./src",
     "scripts": {
-        "build": "./node_modules/.bin/gulp build",
         "test": "./node_modules/.bin/gulp test",
         "test:restful-api": "./node_modules/.bin/gulp test:restful-api",
         "test:model-managers": "./node_modules/.bin/gulp test:model-managers",
         "sass": "./node_modules/.bin/gulp sass",
         "sass:watch": "./node_modules/.bin/gulp sass:watch"
     },
-    "author": "",
+    "author": {
+        "name": "Ippei Tanaka",
+        "email": "tanaka.ippei.jp@gmail.com",
+        "url": "http://ipe.club/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ippei-tanaka/weblogjs.git"
+    },
     "license": "MIT",
     "devDependencies": {
         "browserify": "^12.0.1",
