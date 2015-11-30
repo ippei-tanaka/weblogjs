@@ -113,7 +113,6 @@ body {
  Header Footer Layout
 ----------------------------*/
 .module-header-footer-layout .m-hfl-header {
-  border-bottom: 1px solid #cccccc;
   padding: 130px 40px 40px;
   position: relative;
   overflow: hidden; }
@@ -134,21 +133,39 @@ body {
 
 .module-header-footer-layout .m-hfl-footer {
   font-size: 14px;
-  border-top: 1px solid #cccccc;
   padding: 40px 40px 40px; }
 
 /*----------------------------
  Blog Layout
 ----------------------------*/
 .module-blog-layout {
-  display: flex; }
+  display: flex;
+  align-items: stretch; }
   @media (max-width: 699px) {
     .module-blog-layout {
       flex-wrap: wrap; } }
   .module-blog-layout .m-bll-main {
-    width: 100%; }
+    width: 100%;
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc; }
+    @media (max-width: 699px) {
+      .module-blog-layout .m-bll-main {
+        border-bottom: 0; } }
+  .module-blog-layout .m-bll-section {
+    padding: 45px 40px 50px;
+    border-bottom: 1px solid #cccccc; }
+    .module-blog-layout .m-bll-section:last-child {
+      border-bottom: 0; }
+    .module-blog-layout .m-bll-section.m-bll-short-section {
+      padding: 20px 40px; }
   .module-blog-layout .m-bll-sidebar {
-    border-left: 1px solid #cccccc; }
+    border-left: 1px solid #cccccc;
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch; }
     @media (max-width: 699px) {
       .module-blog-layout .m-bll-sidebar {
         width: 100%;
@@ -159,8 +176,9 @@ body {
  Error Page
 ----------------------------*/
 .module-error-page {
-  padding: 60px 40px;
-  font-size: 20px; }
+  padding: 100px 40px;
+  font-size: 26px;
+  background-color: #f0f0f0; }
 
 /*----------------------------
  Post List
@@ -174,8 +192,7 @@ body {
  Category List
 ----------------------------*/
 .module-category-list {
-  font-family: 'Quattrocento', serif;
-  padding: 45px 40px 50px; }
+  font-family: 'Quattrocento', serif; }
   .module-category-list .m-ctl-title {
     font-size: 18px;
     margin-bottom: 15px;
@@ -191,30 +208,30 @@ body {
 /*----------------------------
  pagination
 ----------------------------*/
-.module-pagination {
-  padding: 20px 40px;
-  border-bottom: 1px solid #ccc; }
-  .module-pagination .m-pgn-list {
-    display: flex;
-    justify-content: space-around; }
-  .module-pagination .m-pgn-list-item {
-    display: inline-block;
-    width: 100%; }
-  .module-pagination .m-pgn-prev {
-    text-align: left; }
-  .module-pagination .m-pgn-next {
-    text-align: right; }
-  .module-pagination .m-pgn-link {
-    color: #000000;
-    white-space: nowrap;
-    font-size: 16px; }
+.module-pagination .m-pgn-list {
+  display: flex;
+  justify-content: space-around; }
+
+.module-pagination .m-pgn-list-item {
+  display: inline-block;
+  width: 100%; }
+
+.module-pagination .m-pgn-prev {
+  text-align: left; }
+
+.module-pagination .m-pgn-next {
+  text-align: right; }
+
+.module-pagination .m-pgn-link {
+  color: #000000;
+  white-space: nowrap;
+  font-size: 16px; }
 
 /*----------------------------
  Post
 ----------------------------*/
 .module-post {
-  font-family: 'Quattrocento', serif;
-  padding: 45px 40px 50px; }
+  font-family: 'Quattrocento', serif; }
   .module-post .m-pst-title {
     font-size: 36px;
     margin-bottom: 44px; }

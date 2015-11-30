@@ -24,8 +24,8 @@ var contentValidator = [
 var slugValidator = [
     validate({
         validator: 'matches',
-        arguments: /^[a-zA-Z0-9!@%\*\-_]*$/,
-        message: 'Only alphabets, numbers and some symbols (!, @, %, *, -, _) are allowed for a slug.'
+        arguments: /^[a-zA-Z0-9\-_]*$/,
+        message: 'Only alphabets, numbers and some symbols (-, _) are allowed for a slug.'
     }),
     validate({
         validator: 'isLength',

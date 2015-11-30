@@ -21,7 +21,14 @@ class WeblogJsAuthError extends ExtendableError {
     }
 }
 
+class WeblogJs404Error extends ExtendableError {
+    constructor(m) {
+        super(m);
+    }
+}
+
 module.exports = {
     WeblogJsConfigError,
-    WeblogJsAuthError
+    WeblogJsAuthError,
+    WeblogJs404Error
 };
