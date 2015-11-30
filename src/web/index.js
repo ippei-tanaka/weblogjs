@@ -24,7 +24,7 @@ var session = expressSession({
     saveUninitialized: false
 });
 
-expressApp.use(favicon(__dirname + '/favicons/favicon.ico'));
+expressApp.use(favicon(__dirname + '/pages/favicons/favicon.ico'));
 expressApp.use(logger('dev'));
 expressApp.use(bodyParser.json());
 expressApp.use(bodyParser.urlencoded({extended: false}));
