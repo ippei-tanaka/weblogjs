@@ -151,7 +151,12 @@ methods.updateById = function (Model, id, newValues) {
  * @param {Object} condition
  * @returns {Promise}
  */
-methods.remove = (Model, condition) => Model.remove(condition);
+methods.remove = (Model, condition) => new Promise((resolve, reject) => {
+    Model.remove(condition).exec((err, docs) => {
+        if (err) return reject(err);
+        resolve(docs);
+    });
+});
 
 
 /**
