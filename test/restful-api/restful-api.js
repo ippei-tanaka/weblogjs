@@ -197,7 +197,7 @@ describe('Restful API', () => {
 
             var cat2 = {
                 name: 'Category Name',
-                slug: '!@%name-_'
+                slug: 'name-_'
             };
 
             httpRequest.post(`${BASE_URL}/categories`, cat1)
@@ -371,6 +371,12 @@ describe('Restful API', () => {
         it('should create a new post', (done) => {
             var category;
 
+            var testBlog = {
+                title: "My Blog",
+                slug: "my-blog",
+                posts_per_page: 1
+            };
+
             var testPost1 = {
                 "title": "b ## My Post Title! ",
                 "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
@@ -399,6 +405,7 @@ describe('Restful API', () => {
                 .then((_category) => {
                     category = _category;
                     testPost1.category = _category._id;
+                    testPost2.category = _category._id;
                     testPost3.category = _category._id;
                     return httpRequest.get(`${BASE_URL}/users/me`);
                 })
@@ -406,6 +413,12 @@ describe('Restful API', () => {
                     testPost1.author = _user._id;
                     testPost2.author = _user._id;
                     testPost3.author = _user._id;
+                    return httpRequest.post(`${BASE_URL}/blogs`, testBlog);
+                })
+                .then((_blog) => {
+                    testPost1.blog = _blog._id;
+                    testPost2.blog = _blog._id;
+                    testPost3.blog = _blog._id;
                     return httpRequest.post(`${BASE_URL}/posts`, testPost1);
                 })
                 .then((post) => {

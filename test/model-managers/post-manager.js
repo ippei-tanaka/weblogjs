@@ -32,6 +32,12 @@ describe('Post Manager', () => {
                 slug: "12345678"
             });
 
+            var blog = yield weblogjs.api.blogManager.create({
+                title: "My Blog",
+                slug: "my-blog",
+                posts_per_page: 1
+            });
+
             var now = new Date();
 
             var post = yield weblogjs.api.postManager.create({
@@ -41,7 +47,8 @@ describe('Post Manager', () => {
                 publish_date: now,
                 category: category.id,
                 slug: "my-slug",
-                tags: ["My Tag"]
+                tags: ["My Tag"],
+                blog: blog._id
             });
 
             expect(post.title).to.equal("My Title");
