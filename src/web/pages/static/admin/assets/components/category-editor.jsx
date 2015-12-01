@@ -42,7 +42,7 @@ define([
             },
 
             componentWillMount: function () {
-                if (this.props.mode === "edit") {
+                if (this.props.mode === "edit" || this.props.mode === "del") {
                     ServerFacade.getCategory(this.props.categoryId).then(function (category) {
                         this._setCategoryState(this.getInitialState().category, category);
                     }.bind(this));

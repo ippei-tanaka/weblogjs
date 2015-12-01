@@ -44,7 +44,7 @@ define([
             },
 
             componentWillMount: function () {
-                if (this.props.mode === "edit") {
+                if (this.props.mode === "edit" || this.props.mode === "del") {
                     ServerFacade.getBlog(this.props.blogId).then(function (blog) {
                         this._setBlogState(this.getInitialState().blog, blog);
                     }.bind(this));
@@ -160,7 +160,7 @@ define([
                         onApproved={this._onDeleteApproved}
                         onCanceled={this._onDeleteCanceled}
                         >
-                        Do you want to delete "{this.state.blog.name}"?
+                        Do you want to delete "{this.state.blog.title}"?
                     </Confirmation>
                 );
             },

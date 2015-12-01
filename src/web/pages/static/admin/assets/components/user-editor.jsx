@@ -42,7 +42,7 @@ define([
             },
 
             componentWillMount: function () {
-                if (this.props.mode === "edit") {
+                if (this.props.mode === "edit" || this.props.mode === "del") {
                     ServerFacade.getUser(this.props.userId).then(function (user) {
                         this._setUserState(this.getInitialState().user, user);
                     }.bind(this));

@@ -136,12 +136,12 @@ define([
 
             onDeleteButtonClicked: function (e) {
                 e.preventDefault();
-                this.props.events.deleteButtonClicked.fire(this.props.category);
+                this.props.events.deleteButtonClicked.fire(this.props.category._id);
             },
 
             onEditButtonClicked: function (e) {
                 e.preventDefault();
-                this.props.events.editButtonClicked.fire(this.props.category);
+                this.props.events.editButtonClicked.fire(this.props.category._id);
             }
 
         });

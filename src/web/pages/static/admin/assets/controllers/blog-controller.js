@@ -49,12 +49,12 @@ define([
                     exports.onClickAddButton.fire();
                 },
 
-                editButtonClicked: function (blog) {
-                    exports.onClickEditButton.fire(blog);
+                editButtonClicked: function (id) {
+                    exports.onClickEditButton.fire(id);
                 },
 
-                deleteButtonClicked: function (blog) {
-                    showBlogEditorWitDeleteMode(blog._id);
+                deleteButtonClicked: function (id) {
+                    showBlogEditorWitDeleteMode(id);
                 }
             }
         );
