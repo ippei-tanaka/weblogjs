@@ -1,10 +1,14 @@
 "use strict";
 
 var config = require('./config.json');
-var weblogjs = require('../')(config);
-var co = require('co');
+var weblogjs;
 
-co(function* () {
-    yield weblogjs.web.startServer();
-    yield weblogjs.api.userManager.createAdminUser();
+try {
+    weblogjs = require('weblog')(config);
+} catch (e) {
+    weblogjs = require('../')(config);
+}
+
+weblogjs.web.startServer().then(function () {
+    weblogjs.api.userManager.createAdminUser();
 });
