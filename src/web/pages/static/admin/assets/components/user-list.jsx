@@ -128,12 +128,12 @@ define([
 
             onDeleteButtonClicked: function (e) {
                 e.preventDefault();
-                this.props.events.deleteButtonClicked.fire(this.props.user);
+                this.props.events.deleteButtonClicked.fire(this.props.user._id);
             },
 
             onEditButtonClicked: function (e) {
                 e.preventDefault();
-                this.props.events.editButtonClicked.fire(this.props.user);
+                this.props.events.editButtonClicked.fire(this.props.user._id);
             }
 
         });

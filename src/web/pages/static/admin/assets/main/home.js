@@ -50,8 +50,8 @@ requirejs([
             Router.changeHash("/users/new");
         });
 
-        UserController.onClickEditButton.on(function (user) {
-            Router.changeHash("/users/" + user._id);
+        UserController.onClickEditButton.on(function (id) {
+            Router.changeHash("/users/" + id);
         });
 
         UserController.onCompleteAdding.on(function () {
@@ -76,8 +76,8 @@ requirejs([
             Router.changeHash("/categories/new");
         });
 
-        CategoryController.onClickEditButton.on(function (category) {
-            Router.changeHash("/categories/" + category._id);
+        CategoryController.onClickEditButton.on(function (id) {
+            Router.changeHash("/categories/" + id);
         });
 
         CategoryController.onCompleteAdding.on(function () {
@@ -128,8 +128,8 @@ requirejs([
             Router.changeHash("/blogs/new");
         });
 
-        BlogController.onClickEditButton.on(function (blog) {
-            Router.changeHash("/blogs/" + blog._id);
+        BlogController.onClickEditButton.on(function (id) {
+            Router.changeHash("/blogs/" + id);
         });
 
         BlogController.onCompleteAdding.on(function () {
