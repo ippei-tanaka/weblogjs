@@ -5,18 +5,12 @@ var Setting = require('./models/setting');
 var modelManager = require('./model-manager');
 var settingManager = modelManager.applyTo(Setting);
 var co = require('co');
+var exports = {
 
-
-module.exports = {
-
-    getSetting: function () {
-        return settingManager
-            .find()
-            .then((docs) => {
-                var setting = docs.length >= 1 ? docs[0] : new Setting();
-                return JSON.parse(JSON.stringify(setting));
-            });
-    },
+    getSetting: () => co(function* () {
+        var docs = yield settingManager.find();
+        return docs.length >= 1 ? docs[0] : new Setting();
+    }),
 
     setFront: (blogId) => co(function* () {
         var setting = yield this.getSetting();
@@ -26,5 +20,7 @@ module.exports = {
         yield setting.save();
 
         return yield this.getSetting();
-    }.bind(module.exports))
+    }.bind(exports))
 };
+
+module.exports = exports;
