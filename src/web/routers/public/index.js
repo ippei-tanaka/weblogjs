@@ -5,24 +5,24 @@ var routes = require('express').Router();
 var url = require('url');
 var baseRoute = '/';
 var co = require('co');
-var helpers = require('../helpers');
 var Renderer = require('./renderer');
 var HomeViewDataBuilder = require('./home-view-data-builder');
-var api = require('../../../api');
+var BlogFinder = require('./blog-finder');
+var BlogInfoDataBuilder = require('./blog-info-data-builder');
 var errors = require('../../../api/errors');
-
 
 var observer = function (generator, response) {
     co(generator).catch((error) => {
         co(function* () {
             var is404 = error instanceof errors.WeblogJs404Error;
             var renderer = new Renderer(response);
+            var blogInfoDataBuilder = new BlogInfoDataBuilder({
+                title: is404 ? "404 Not Found" : "500 Internal Server Error",
+                urlBuilder: () => "/"
+            });
             renderer.viewName = "error";
             renderer.viewData = {
-                blogInfo: {
-                    title: (yield api.blogManager.findById((yield api.settingManager.getSetting()).front)).title,
-                    homeUri: "/"
-                },
+                blogInfo: blogInfoDataBuilder.build(),
                 message: is404
                     ? "The page that you're looking for doesn't exist."
                     : "Errors have occurred." + " " + error
@@ -33,17 +33,15 @@ var observer = function (generator, response) {
     });
 };
 
-
-
 var buildUrl = function (blogSlug, categorySlug, page) {
     var url = baseRoute;
 
     if (blogSlug) {
-        url += "blogs/" + blogSlug + "/";
+        url += "blog/" + blogSlug + "/";
     }
 
     if (categorySlug) {
-        url += "categories/" + categorySlug + "/";
+        url += "category/" + categorySlug + "/";
     }
 
     if (page > 1) {
@@ -53,59 +51,9 @@ var buildUrl = function (blogSlug, categorySlug, page) {
     return url;
 };
 
-
-class BlogFinder {
-
-    constructor(blogSlug) {
-        this._blogSlug = blogSlug;
-        this._blog = null;
-        this._setting = null;
-        this._defaultBlog = null;
-    }
-
-    get blogSlug () {
-        return co(function* () {
-            return this._blogSlug;
-        }.bind(this));
-    }
-
-    get blog () {
-        return co(function* () {
-            yield this._initialize();
-            return this._blog || this._defaultBlog;
-        }.bind(this));
-    }
-
-    isDefaultSlug () {
-        return co(function* () {
-
-            if (!this._blogSlug) {
-                return null;
-            }
-
-            yield this._initialize();
-
-            return String(this._defaultBlog._id) === String(this._blog._id);
-        }.bind(this));
-    };
-
-    _initialize () {
-        return co(function* () {
-            if (!this._setting) {
-                this._setting = yield api.settingManager.getSetting();
-                this._defaultBlog = yield api.blogManager.findById(this._setting.front);
-            }
-            if (this._blogSlug && !this._blog) {
-                this._blog = yield api.blogManager.findBySlug(this._blogSlug);
-            }
-        }.bind(this));
-    }
-}
-
-
 // Routes
 
-routes.get(/^\/(blogs\/[^/]+\/?)?(categories\/[^/]+\/?)?(page\/[0-9]+\/?)?$/, (request, response) => {
+routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(page\/[0-9]+\/?)?$/, (request, response) => {
 
     var blogParam = request.params[0] ? request.params[0].split('/') : [];
     var categoryParam = request.params[1] ? request.params[1].split('/') : [];
@@ -113,7 +61,7 @@ routes.get(/^\/(blogs\/[^/]+\/?)?(categories\/[^/]+\/?)?(page\/[0-9]+\/?)?$/, (r
 
     var blogSlug = blogParam.length >= 2 && blogParam[1] ? blogParam[1] : null;
     var categorySlug = categoryParam.length >= 2 && categoryParam[1] ? categoryParam[1] : null;
-    var page = pageParam.length >= 2 && pageParam[1] ? pageParam[1] : null;
+    var page = pageParam.length >= 2 && pageParam[1] ? pageParam[1] : 1;
 
     var blogSelector = new BlogFinder(blogSlug);
 
@@ -128,8 +76,8 @@ routes.get(/^\/(blogs\/[^/]+\/?)?(categories\/[^/]+\/?)?(page\/[0-9]+\/?)?$/, (r
         var renderer = new Renderer(response);
         var dataBuilder = new HomeViewDataBuilder({
             page: page,
-            blogSlug: yield blogSelector.blogSlug,
             blog: yield blogSelector.blog,
+            blogSlug: yield blogSelector.blogSlug,
             categorySlug: categorySlug,
             publishDate: new Date(),
             paginationUrlBuilder: buildUrl.bind(null, blogSlug, categorySlug),
@@ -138,7 +86,7 @@ routes.get(/^\/(blogs\/[^/]+\/?)?(categories\/[^/]+\/?)?(page\/[0-9]+\/?)?$/, (r
         });
         var data = yield dataBuilder.build();
 
-        if (!data.pagination.isCurrentPageInvalid) {
+        if (!data.pagination.isCurrentPageValid) {
             throw new errors.WeblogJs404Error();
         }
 

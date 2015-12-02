@@ -14,10 +14,10 @@ class ViewDataBuilder {
 
     constructor(args) {
         args = args || {};
-        this._page = args.page || 1;
-        this._blog = args.blog || null;
-        this._blogSlug = args.blogSlug || null;
-        this._categorySlug = args.categorySlug || null;
+        this._page = args.page;
+        this._blog = args.blog;
+        this._blogSlug = args.blogSlug;
+        this._categorySlug = args.categorySlug;
         this._publishDate = args.publishDate;
         this._paginationUrlBuilder = args.paginationUrlBuilder;
         this._categoryUrlBuilder = args.categoryUrlBuilder;
