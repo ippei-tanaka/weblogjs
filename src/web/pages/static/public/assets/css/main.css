@@ -159,7 +159,6 @@ body {
     .module-blog-layout .m-bll-section.m-bll-short-section {
       padding: 20px 40px; }
   .module-blog-layout .m-bll-sidebar {
-    border-left: 1px solid #cccccc;
     border-top: 1px solid #cccccc;
     border-bottom: 1px solid #cccccc;
     display: flex;
