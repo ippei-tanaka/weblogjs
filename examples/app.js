@@ -4,7 +4,7 @@ var config = require('./config.json');
 var weblogjs;
 
 try {
-    weblogjs = require('weblog')(config);
+    weblogjs = require('weblogjs')(config);
 } catch (e) {
     weblogjs = require('../')(config);
 }
