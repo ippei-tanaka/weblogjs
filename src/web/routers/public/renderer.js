@@ -4,7 +4,7 @@ class Renderer {
 
     constructor(response) {
         this._response = response;
-        this._viewName = "home";
+        this._viewName = "";
         this._viewData = {};
         this._status = 200;
     }

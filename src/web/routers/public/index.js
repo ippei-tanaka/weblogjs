@@ -1,15 +1,19 @@
 "use strict";
 
 
+var co = require('co');
 var routes = require('express').Router();
 var url = require('url');
 var baseRoute = '/';
-var co = require('co');
+var errors = require('../../../api/errors');
+var api = require('../../../api');
+var categoryManager = api.categoryManager;
+var postManager = api.postManager;
 var Renderer = require('./renderer');
-var HomeViewDataBuilder = require('./home-view-data-builder');
 var BlogFinder = require('./blog-finder');
 var BlogInfoDataBuilder = require('./blog-info-data-builder');
-var errors = require('../../../api/errors');
+var CategoryListDataBuilder = require('./category-list-data-builder');
+var PostListDataBuilder = require('./post-list-data-builder');
 
 var observer = function (generator, response) {
     co(generator).catch((error) => {
@@ -33,7 +37,7 @@ var observer = function (generator, response) {
     });
 };
 
-var buildUrl = function (blogSlug, categorySlug, page) {
+var buildUrl = function (blogSlug, categorySlug, page, postSlug) {
     var url = baseRoute;
 
     if (blogSlug) {
@@ -48,20 +52,27 @@ var buildUrl = function (blogSlug, categorySlug, page) {
         url += "page/" + page + "/";
     }
 
+    if (postSlug) {
+        url += "post/" + postSlug + "/";
+    }
+
     return url;
 };
 
+var parseParam = function (str, defaultValue) {
+    var arr = str ? str.split('/') : [];
+    return arr.length >= 2 && arr[1] ? arr[1] : defaultValue;
+};
+
+
 // Routes
 
-routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(page\/[0-9]+\/?)?$/, (request, response) => {
+routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(page\/[0-9]+\/?)?(post\/[^/]+\/?)?$/, (request, response) => {
 
-    var blogParam = request.params[0] ? request.params[0].split('/') : [];
-    var categoryParam = request.params[1] ? request.params[1].split('/') : [];
-    var pageParam = request.params[2] ? request.params[2].split('/') : [];
-
-    var blogSlug = blogParam.length >= 2 && blogParam[1] ? blogParam[1] : null;
-    var categorySlug = categoryParam.length >= 2 && categoryParam[1] ? categoryParam[1] : null;
-    var page = pageParam.length >= 2 && pageParam[1] ? pageParam[1] : 1;
+    var blogSlug = parseParam(request.params[0], null);
+    var categorySlug = parseParam(request.params[1], null);
+    var page = parseParam(request.params[2], 1);
+    var postSlug = parseParam(request.params[3], null);
 
     var blogSelector = new BlogFinder(blogSlug);
 
@@ -72,24 +83,47 @@ routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(page\/[0-9]+\/?)?$/, (requ
             return;
         }
 
+        let blog =  yield blogSelector.blog;
 
-        var renderer = new Renderer(response);
-        var dataBuilder = new HomeViewDataBuilder({
-            page: page,
-            blog: yield blogSelector.blog,
-            blogSlug: yield blogSelector.blogSlug,
-            categorySlug: categorySlug,
-            publishDate: new Date(),
+        let publishDate = new Date();
+
+        let postListBuilder = new PostListDataBuilder({
+            currentPage: page,
+            blog: blog,
+            category: yield categoryManager.findBySlug(categorySlug),
+            post: yield postManager.findBySlug(postSlug),
+            publishDate: publishDate,
             paginationUrlBuilder: buildUrl.bind(null, blogSlug, categorySlug),
-            categoryUrlBuilder: buildUrl.bind(null, blogSlug),
-            blogUrlBuilder: buildUrl.bind(null)
+            postUrlBuilder: buildUrl.bind(null, blogSlug, null, 0)
         });
-        var data = yield dataBuilder.build();
 
-        if (!data.pagination.isCurrentPageValid) {
+        let pagination = yield postListBuilder.buildPagination();
+
+        if (!pagination.isCurrentPageValid) {
             throw new errors.WeblogJs404Error();
         }
 
+        let categoryListDataBuilder = new CategoryListDataBuilder({
+            blogId: blog._id,
+            publishDate: publishDate,
+            urlBuilder: buildUrl.bind(null, blogSlug)
+        });
+
+        let blogInfoDataBuilder = new BlogInfoDataBuilder({
+            title: blog.title,
+            blogSlug: blogSlug,
+            urlBuilder: buildUrl.bind(null)
+        });
+
+        let data = {
+            blogInfo: blogInfoDataBuilder.build(),
+            postList: yield postListBuilder.buildList(),
+            categoryList: yield categoryListDataBuilder.build(),
+            pagination: pagination
+        };
+
+        let renderer = new Renderer(response);
+        renderer.viewName = "home";
         renderer.viewData = data;
         renderer.render();
     }, response);

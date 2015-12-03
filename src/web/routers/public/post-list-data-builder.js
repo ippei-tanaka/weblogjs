@@ -12,8 +12,10 @@ class PostListDataBuilder {
         this._currentPage = args.currentPage;
         this._blog = args.blog;
         this._category = args.category;
+        this._post = args.post;
         this._publish_date = args.publishDate;
         this._paginationUrlBuilder = args.paginationUrlBuilder;
+        this._postUrlBuilder = args.postUrlBuilder;
     }
 
     buildCondition () {
@@ -26,19 +28,37 @@ class PostListDataBuilder {
             condition.category = this._category._id;
         }
 
+        if (this._post) {
+            condition._id = this._post._id;
+        }
+
         return condition;
     }
 
     buildList () {
         return co(function* () {
             var queryOptions = {
-                sort: {publish_date : -1, _id: 1},
+                sort: {
+                    publish_date : -1,
+                    _id: 1
+                },
                 limit: this._blog.posts_per_page,
                 offset: (this._currentPage - 1) * this._blog.posts_per_page,
                 populate: ["author", "category"]
             };
 
-            return yield postManager.find(this.buildCondition(), queryOptions);
+            var posts = yield postManager.find(this.buildCondition(), queryOptions);
+            var postList = [];
+
+            for (let post of posts) {
+                let linkObj = {
+                    link: this._postUrlBuilder(post.slug)
+                };
+                postList.push(Object.assign({}, linkObj, post.toObject()));
+            }
+
+            return postList;
+
         }.bind(this))
     }
 
