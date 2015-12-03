@@ -3,8 +3,12 @@
 var Post = require('./models/post');
 var modelManager = require('./model-manager');
 var exports = modelManager.applyTo(Post);
-var errors = require('../errors/index');
-var co = require('co');
+
+
+exports.findBySlug = function (slug) {
+    return this.findOne({slug: slug});
+}.bind(exports);
+
 
 /**
  * @typedef {Object} PostObject
