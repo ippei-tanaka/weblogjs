@@ -3,7 +3,7 @@
 var mongoose = require('mongoose');
 var validate = require('mongoose-validator');
 var uniqueValidatorPlugin = require('mongoose-unique-validator');
-var Privilege = require('./privilege');
+var privileges = require('./privileges');
 
 var bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
@@ -41,11 +41,19 @@ var emailValidator = [
     })
 ];
 
+var allPrivileges = Object.keys(privileges).map((privilege) => privileges[privilege]);
+
+var allPrivilegeReversed = {};
+
+for (let key of Object.keys(privileges)) {
+    allPrivilegeReversed[privileges[key]] = key;
+}
+
 var privilegeValidator = [
     validate({
         validator: 'matches',
-        arguments: new RegExp(`^${Privilege.allPrivileges.join("|")}$`),
-        message: `Privilege should be one of the following string values, ${Privilege.allPrivileges.join(", ")}.`
+        arguments: new RegExp(`^${allPrivileges.join("|")}$`),
+        message: `Privilege should be one of the following string values, ${allPrivileges.join(", ")}.`
     })
 ];
 
@@ -84,7 +92,21 @@ var UserSchema = new mongoose.Schema({
     updated: {
         type: Date
     }
+}, {
+    toObject: {
+        virtuals: true
+    },
+    toJSON: {
+        virtuals: true
+    }
 });
+
+
+UserSchema
+    .virtual('readable_privileges')
+    .get(function () {
+        return this.privileges.map((privilege) => allPrivilegeReversed[privilege]);
+    });
 
 
 UserSchema.plugin(

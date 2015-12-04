@@ -17,7 +17,7 @@ define([
               FormField,
               Confirmation) {
 
-        var SettingEditor = React.createClass({
+        var BlogEditor = React.createClass({
 
             getInitialState: function () {
                 return {
@@ -271,6 +271,6 @@ define([
             }
         });
 
-        return SettingEditor;
+        return BlogEditor;
 
     });

@@ -9,7 +9,7 @@ var categoryManager = api.categoryManager;
 var postManager = api.postManager;
 var blogManager = api.blogManager;
 var settingManager = api.settingManager;
-//var auth = require('../passport-manager').basicAuth;
+var privileges = api.privileges;
 var localAuth = require('../../passport-manager').localAuth;
 var config = require('../../../config-manager').load();
 var baseRoute = `/api/v${config.api_version}`;
@@ -119,6 +119,14 @@ routes.delete('/users/:id', isLoggedIn, response((ok, error, request) => {
     userManager.removeById(request.params.id)
         .then(ok)
         .catch(error);
+}));
+
+
+//-------------------------------------------------------
+// Privileges
+
+routes.get('/privileges', isLoggedIn, response((ok) => {
+    ok(privileges);
 }));
 
 
