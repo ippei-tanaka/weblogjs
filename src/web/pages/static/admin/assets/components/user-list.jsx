@@ -71,6 +71,7 @@ define([
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Privileges</th>
                                 <th>Created</th>
                                 <th>Updated</th>
                                 <th></th>
@@ -102,6 +103,7 @@ define([
 
             render: function () {
 
+                var privileges = this.props.user.readable_privileges.map(function (p) { return p.toLowerCase(); }).join(', ');
                 var created = Moment(this.props.user.created).format("YYYY-MM-DD HH:mm Z");
                 var updated = Moment(this.props.user.updated).format("YYYY-MM-DD HH:mm Z");
 
@@ -110,6 +112,7 @@ define([
                         <td data-label="No.">{this.props.number}</td>
                         <td data-label="Display Name">{this.props.user.display_name}</td>
                         <td data-label="Email">{this.props.user.email}</td>
+                        <td data-label="Updated">{privileges}</td>
                         <td data-label="Created">{created}</td>
                         <td data-label="Updated">{updated}</td>
                         <td className="m-dtl-no-wrap">

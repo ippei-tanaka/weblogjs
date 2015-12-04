@@ -174,6 +174,11 @@ define([
                 });
         },
 
+        getPrivileges: function () {
+            return this
+                .restfulAPI("/privileges");
+        },
+
         login: function (email, password) {
             return this
                 .admin("/login", {
@@ -190,7 +195,8 @@ define([
                 url: this.urlBase + uri,
                 method: "get",
                 dataType: 'json',
-                cache: false
+                cache: false,
+                traditional: true
             }, options);
 
             return $.ajax(options);

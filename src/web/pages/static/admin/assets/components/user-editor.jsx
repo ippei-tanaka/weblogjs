@@ -27,8 +27,10 @@ define([
                     user: {
                         email: "",
                         password: "",
-                        display_name: ""
-                    }
+                        display_name: "",
+                        privileges: []
+                    },
+                    privileges: []
                 };
             },
 
@@ -47,6 +49,17 @@ define([
                         this._setUserState(this.getInitialState().user, user);
                     }.bind(this));
                 }
+
+                ServerFacade.getPrivileges().then(function (privileges) {
+                    this.setState({
+                        privileges: Object.keys(privileges).map(function (key) {
+                            return {
+                                value: privileges[key],
+                                label: key
+                            }
+                        })
+                    });
+                }.bind(this));
             },
 
             render: function () {
@@ -114,6 +127,29 @@ define([
                     }
                 });
 
+                var privilegesField = React.createElement(FormField, {
+                    field: {
+                        type: "checkbox-list",
+                        value: this.state.user.privileges,
+                        onChange: function (value) {
+                            this._setUserState(this.state.user, {privileges: value});
+                        }.bind(this),
+                        children: this.state.privileges.map(function (privilege) {
+                            return {
+                                key: privilege.value,
+                                name: privilege.value,
+                                label: privilege.label
+                            }
+                        })
+                    },
+                    label: {
+                        children: "Privileges"
+                    },
+                    error: {
+                        children: this.state.errors.privileges ? this.state.errors.privileges.message : ""
+                    }
+                });
+
                 var title = this._chooseByMode({add: "Create a New User", edit: "Edit the User"});
 
                 var buttonLabel = this._chooseByMode({add: "Create", edit: "Edit"});
@@ -129,6 +165,9 @@ define([
                         </div>
                         <div className="m-dte-field-container">
                             {displayNameField}
+                        </div>
+                        <div className="m-dte-field-container">
+                            {privilegesField}
                         </div>
                         <div className="m-dte-field-container">
                             <button className="module-button"
@@ -199,7 +238,8 @@ define([
             _updateUser: function () {
 
                 var data = {
-                    display_name: this.state.user.display_name.trim()
+                    display_name: this.state.user.display_name.trim(),
+                    privileges: this.state.user.privileges
                 };
 
                 return ServerFacade.updateUser(this.props.userId, data)

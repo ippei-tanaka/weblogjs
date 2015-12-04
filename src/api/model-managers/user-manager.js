@@ -3,7 +3,7 @@
 
 var User = require('./models/user');
 var modelManager = require('./model-manager');
-var Privilege = require('./models/privilege');
+var privileges = require('./models/privileges');
 var config = require('../../config-manager').load();
 var errors = require('../errors/index');
 var exports = modelManager.applyTo(User);
@@ -54,7 +54,7 @@ exports.createAdminUser = function (userObject) {
         email: userObject.email,
         password: userObject.password,
         display_name: userObject.display_name,
-        privileges: Privilege.allPrivileges
+        privileges: [privileges.READ, privileges.EDIT, privileges.CREATE, privileges.GRANTED]
     });
 };
 
@@ -63,7 +63,7 @@ exports.createRegularUser = function (userObject) {
         email: userObject.email,
         display_name: userObject.display_name,
         password: userObject.password,
-        privileges: [Privilege.READ, Privilege.EDIT, Privilege.CREATE]
+        privileges: [privileges.READ, privileges.EDIT, privileges.CREATE]
     })
 };
 

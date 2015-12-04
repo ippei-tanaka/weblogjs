@@ -2,10 +2,10 @@
 
 define([
         'react',
-        'moment-timezone',
+        'services/extend',
         'classnames'
     ],
-    function (React, moment, classnames) {
+    function (React, extend, classnames) {
 
         var ENTER = 13;
 
@@ -14,7 +14,6 @@ define([
 
             getDefaultProps: function () {
                 return {
-                    id: "",
                     className: "",
                     value: "",
                     onChange: function () {
