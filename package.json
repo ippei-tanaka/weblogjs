@@ -38,11 +38,13 @@
   "dependencies": {
     "bcrypt": "*",
     "body-parser": "*",
+    "classnames": "^2.2.1",
     "co": "*",
     "cookie-parser": "*",
     "express": "*",
     "express-hbs": "*",
     "express-session": "*",
+    "jquery": "^2.1.4",
     "mongoose": "*",
     "mongoose-unique-validator": "*",
     "mongoose-validator": "*",
@@ -52,6 +54,8 @@
     "passport-local": "*",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
-    "serve-favicon": "*"
+    "serve-favicon": "*",
+    "superagent": "^1.5.0",
+    "superagent-no-cache": "^0.1.0"
   }
 }

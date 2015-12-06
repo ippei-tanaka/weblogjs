@@ -1,9 +1,8 @@
 import GlobalEvent from '../services/global-events';
 import Router from "../services/router";
-//import ReactComponentMounter from "../services/react-component-mounter";
-//import Navigation from "../components/navigation";
+import ReactComponentMounter from "../services/react-component-mounter";
+import Navigation from "../components/navigation";
 import HomeController from "../controllers/home-controller";
-
 //import UserController from "../controllers/user-controller";
 //import CategoryController from "../controllers/category-controller";
 //import PostController from "../controllers/post-controller";
@@ -12,6 +11,28 @@ import HomeController from "../controllers/home-controller";
 
 GlobalEvent.domReady.on(() => {
     HomeController.showDashBoard();
+
+    {
+        let navigationMounter;
+
+        navigationMounter = new ReactComponentMounter(
+            Navigation,
+            'navigation',
+            {
+                hrefs: {
+                    logout: "/admin/logout#",
+                    dashboard: "#/",
+                    users: "#/users",
+                    categories: "#/categories",
+                    posts: "#/posts",
+                    blogs: "#/blogs",
+                    setting: "#/setting"
+                }
+            });
+
+        navigationMounter.mount();
+    }
+
 });
 
 
@@ -20,28 +41,7 @@ Router.addRoute("/", function () {
     //HomeController.showDashBoard();
 });
 
-/*
-{
-    let navigationMounter;
 
-    navigationMounter = new ReactComponentMounter(
-        Navigation,
-        'navigation',
-        {
-            hrefs: {
-                logout: "/admin/logout#",
-                dashboard: "#/",
-                users: "#/users",
-                categories: "#/categories",
-                posts: "#/posts",
-                blogs: "#/blogs",
-                setting: "#/setting"
-            }
-        });
-
-    navigationMounter.mount();
-}
-*/
 
 //--------------------------------
 // Callbacks on Controllers
