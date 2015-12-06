@@ -5,11 +5,11 @@ var mocha = require('gulp-mocha');
 var path = require('path');
 var sass = require('gulp-sass');
 var runSequence = require('run-sequence');
+var webpack = require('webpack');
 
-
-const TEST_DIR = "./test";
-const WEB_STATIC_SRC_DIR = "./src/web/pages/static-src";
-const WEB_STATIC_DIR = "./src/web/pages/static";
+const TEST_DIR = path.resolve(__dirname, "./test");
+const WEB_STATIC_SRC_DIR = path.resolve(__dirname, "./src/web/pages/static-src");
+const WEB_STATIC_DIR = path.resolve(__dirname, "./src/web/pages/static");
 
 
 gulp.task('test:restful-api', () => {
@@ -46,3 +46,31 @@ gulp.task('sass', function (callback) {
     runSequence('sass:public', 'sass:admin', callback);
 });
 
+gulp.task('webpack', function (callback) {
+    webpack({
+        entry: WEB_STATIC_SRC_DIR + '/admin/assets/main/home.js',
+        output: {
+            filename: WEB_STATIC_DIR + "/admin/assets/index.js"
+        },
+        devtool: 'source-map',
+        module: {
+            loaders: [
+                {
+                    test: /\.jsx?$/,
+                    loader: 'babel-loader',
+                    exclude: /node_modules/,
+                    query: {
+                        presets: ['es2015', 'react']
+                    }
+                }
+            ]
+        },
+        resolve: {
+            extensions: ['', '.js', '.jsx']
+        }
+    }, callback);
+});
+
+gulp.task('webpack:watch', function () {
+    gulp.watch(WEB_STATIC_SRC_DIR + '/admin/assets/**/*.js', ['webpack']);
+});
