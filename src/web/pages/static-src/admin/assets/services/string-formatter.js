@@ -1,30 +1,29 @@
-"use strict";
+class StringFormatter {
 
-define(function () {
+    constructor(str) {
+        this._str = str;
+    }
 
-    var Formatter = function StringFormatter (str) {
-        this.str = str;
-    };
+    slugfy() {
+        this._str = this.constructor.slugfy(this._str);
+        return this;
+    }
 
-    Formatter.slugfy = function (str) {
+    toString() {
+        return this._str.toString();
+    }
+
+    static slugfy(str) {
         return str
             .replace(/[^A-Za-z0-9 !@%\*\-_]/g, "")
             .replace(/[ ]+/g, " ")
             .trim()
             .replace(/[ ]/g, "-")
             .toLowerCase();
-    };
+    }
 
-    Formatter.prototype = {
-        slugfy: function () {
-            this.str = Formatter.slugfy(this.str);
-            return this;
-        },
+}
 
-        toString: function () {
-            return this.str.toString();
-        }
-    };
+export let slugfy = StringFormatter.slugfy;
 
-    return Formatter;
-});
+export default StringFormatter;

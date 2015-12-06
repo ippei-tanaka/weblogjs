@@ -45,6 +45,7 @@
     "express-hbs": "*",
     "express-session": "*",
     "jquery": "^2.1.4",
+    "moment": "^2.10.6",
     "mongoose": "*",
     "mongoose-unique-validator": "*",
     "mongoose-validator": "*",
