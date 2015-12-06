@@ -72,5 +72,8 @@ gulp.task('webpack', function (callback) {
 });
 
 gulp.task('webpack:watch', function () {
-    gulp.watch(WEB_STATIC_SRC_DIR + '/admin/assets/**/*.js', ['webpack']);
+    gulp.watch([
+        WEB_STATIC_SRC_DIR + '/admin/assets/**/*.js',
+        WEB_STATIC_SRC_DIR + '/admin/assets/**/*.jsx'
+    ], ['webpack']);
 });
