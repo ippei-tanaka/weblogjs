@@ -1,26 +1,19 @@
-"use strict";
+import React from 'react';
 
-define([
-        'react'
-    ],
-    function (React) {
+var Error = React.createClass({
+    getDefaultProps: function () {
+        return {
+            className: "m-frf-error"
+        };
+    },
 
-        var Error = React.createClass({
-            getDefaultProps: function () {
-                return {
-                    className: "m-frf-error"
-                };
-            },
+    render: function () {
+        return (
+            <span className={this.props.className}>
+                {this.props.children}
+            </span>
+        );
+    }
+});
 
-            render: function () {
-                return (
-                    <span className={this.props.className}>
-                        {this.props.children}
-                    </span>
-                );
-            }
-        });
-
-        return Error;
-
-    });
+export default Error;

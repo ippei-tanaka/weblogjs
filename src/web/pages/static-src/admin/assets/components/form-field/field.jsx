@@ -1,46 +1,33 @@
-"use strict";
+import React from 'react';
+import Datetime from './datetime';
+import TagList from './tag-list';
+import CheckboxList from './checkbox-list';
+import Select from './select';
+import Input from './input';
+import Textarea from './textarea';
 
-define([
-        'react',
-        'jsx!components/form-field/datetime',
-        'jsx!components/form-field/tag-list',
-        'jsx!components/form-field/checkbox-list',
-        'jsx!components/form-field/select',
-        'jsx!components/form-field/input',
-        'jsx!components/form-field/textarea'
-    ],
-    function (React,
-              Datetime,
-              TagList,
-              CheckboxList,
-              Select,
-              Input,
-              Textarea) {
+var elements = {
+    "datetime": Datetime,
+    "tag-list": TagList,
+    "checkbox-list": CheckboxList,
+    "select": Select,
+    "email": Input,
+    "text": Input,
+    "password": Input,
+    "textarea": Textarea
+};
 
-        var elements = {
-            "datetime": Datetime,
-            "tag-list": TagList,
-            "checkbox-list": CheckboxList,
-            "select": Select,
-            "email": Input,
-            "text": Input,
-            "password": Input,
-            "textarea": Textarea
+var Field = React.createClass({
+
+    getDefaultProps: function () {
+        return {
+            type: ""
         };
+    },
 
-        var Field = React.createClass({
+    render: function () {
+        return React.createElement(elements[this.props.type], this.props);
+    }
+});
 
-            getDefaultProps: function () {
-                return {
-                    type: ""
-                };
-            },
-
-            render: function () {
-                return React.createElement(elements[this.props.type], this.props);
-            }
-        });
-
-        return Field;
-
-    });
+export default Field;

@@ -3,15 +3,14 @@ import Router from "../services/router";
 import ReactComponentMounter from "../services/react-component-mounter";
 import Navigation from "../components/navigation";
 import HomeController from "../controllers/home-controller";
-//import UserController from "../controllers/user-controller";
+import UserController from "../controllers/user-controller";
 //import CategoryController from "../controllers/category-controller";
 //import PostController from "../controllers/post-controller";
 //import BlogController from "../controllers/blog-controller";
 //import SettingController from "../controllers/setting-controller";
 
-GlobalEvent.domReady.on(() => {
-    HomeController.showDashBoard();
 
+GlobalEvent.domReady.on(() => {
     {
         let navigationMounter;
 
@@ -33,14 +32,6 @@ GlobalEvent.domReady.on(() => {
         navigationMounter.mount();
     }
 
-});
-
-
-Router.addRoute("/", function () {
-    console.log(4);
-    //HomeController.showDashBoard();
-});
-
 
 
 //--------------------------------
@@ -48,7 +39,6 @@ Router.addRoute("/", function () {
 //--------------------------------
 
 // UserController
-/*
 UserController.onClickAddButton.on(function () {
     Router.changeHash("/users/new");
 });
@@ -72,6 +62,7 @@ UserController.onCompleteDeleting.on(function () {
 UserController.onClickListLocation.on(function () {
     Router.changeHash("/users");
 });
+    /*
 
 // CategoryController
 
@@ -150,6 +141,7 @@ BlogController.onCompleteDeleting.on(function () {
 BlogController.onClickListLocation.on(function () {
     Router.changeHash("/blogs");
 });
+ */
 
 //--------------------------------
 // Setting up the router
@@ -174,6 +166,7 @@ Router.addRoute("/users/new", function () {
 Router.addRoute("/users/:id", function (id) {
     UserController.showUserEditorWithEditMode(id);
 });
+    /*
 
 // Categories
 
@@ -222,11 +215,13 @@ Router.addRoute("/blogs/:id", function (id) {
 Router.addRoute("/setting", function () {
     SettingController.showSettingEditor();
 });
-
+*/
 // Default
 
 Router.setDefaultRouteCallback(function () {
     Router.changeHash("/");
 });
- */
+
 Router.listen(true);
+
+});

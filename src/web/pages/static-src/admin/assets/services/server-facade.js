@@ -221,7 +221,7 @@ class ServerFacade {
         return new Promise((resolve, reject) => {
             requestObject.end(function (err, res) {
                 if (err) {
-                    reject(err);
+                    reject(res.body);
                     return;
                 }
                 resolve(res.body);

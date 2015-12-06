@@ -22,7 +22,7 @@ var LocationBar = React.createClass({
                     {this.props.locations.map(function (location, index) {
                         var isLink;
 
-                        location = extend({} ,this._defaultLocation, location);
+                        location = Object.assign({} ,this._defaultLocation, location);
 
                         if (!location.enabled) {
                             return null;
