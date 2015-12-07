@@ -50,7 +50,7 @@
 	
 	var _homeController2 = _interopRequireDefault(_homeController);
 	
-	var _loginController = __webpack_require__(281);
+	var _loginController = __webpack_require__(282);
 	
 	var _loginController2 = _interopRequireDefault(_loginController);
 	
@@ -22381,11 +22381,11 @@
 	
 	var _userEditor2 = _interopRequireDefault(_userEditor);
 	
-	var _popup = __webpack_require__(279);
+	var _popup = __webpack_require__(280);
 	
 	var _popup2 = _interopRequireDefault(_popup);
 	
-	var _locationBar = __webpack_require__(280);
+	var _locationBar = __webpack_require__(281);
 	
 	var _locationBar2 = _interopRequireDefault(_locationBar);
 	
@@ -34653,11 +34653,11 @@
 	
 	var _field2 = _interopRequireDefault(_field);
 	
-	var _label = __webpack_require__(277);
+	var _label = __webpack_require__(278);
 	
 	var _label2 = _interopRequireDefault(_label);
 	
-	var _error = __webpack_require__(278);
+	var _error = __webpack_require__(279);
 	
 	var _error2 = _interopRequireDefault(_error);
 	
@@ -34742,7 +34742,7 @@
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	var _textarea = __webpack_require__(276);
+	var _textarea = __webpack_require__(277);
 	
 	var _textarea2 = _interopRequireDefault(_textarea);
 	
@@ -35364,6 +35364,42 @@
 /* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _field = __webpack_require__(276);
+	
+	var _field2 = _interopRequireDefault(_field);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Input = (function (_Field) {
+	  _inherits(Input, _Field);
+	
+	  function Input() {
+	    _classCallCheck(this, Input);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Input).apply(this, arguments));
+	  }
+	
+	  return Input;
+	})(_field2.default);
+	
+	exports.default = Input;
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -35384,13 +35420,13 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Input = (function (_React$Component) {
-	    _inherits(Input, _React$Component);
+	var Field = (function (_React$Component) {
+	    _inherits(Field, _React$Component);
 	
-	    function Input(props) {
-	        _classCallCheck(this, Input);
+	    function Field(props) {
+	        _classCallCheck(this, Field);
 	
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Field).call(this, props));
 	
 	        _this.state = {
 	            value: ""
@@ -35398,11 +35434,11 @@
 	        return _this;
 	    }
 	
-	    _createClass(Input, [{
+	    _createClass(Field, [{
 	        key: "componentWillMount",
 	        value: function componentWillMount() {
 	            this._props = Object.assign({}, this.props);
-	            this._props.onChange = this._onChange.bind(this);
+	            this._props.onChange = this.onChange.bind(this);
 	        }
 	    }, {
 	        key: "componentWillReceiveProps",
@@ -35415,11 +35451,11 @@
 	        key: "render",
 	        value: function render() {
 	            this._props.value = this.state.value;
-	            return _react2.default.createElement("input", this._props);
+	            return _react2.default.createElement(this._props.elementName, this._props);
 	        }
 	    }, {
-	        key: "_onChange",
-	        value: function _onChange(e) {
+	        key: "onChange",
+	        value: function onChange(e) {
 	            var value = e.target.value;
 	
 	            if (this.props.onChange(value) === false) {
@@ -35433,19 +35469,20 @@
 	        }
 	    }]);
 	
-	    return Input;
+	    return Field;
 	})(_react2.default.Component);
 	
-	Input.defaultProps = {
+	Field.defaultProps = {
+	    elementName: "input",
 	    className: "m-frf-text",
 	    value: "",
 	    onChange: function onChange() {}
 	};
 	
-	exports.default = Input;
+	exports.default = Field;
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35510,7 +35547,7 @@
 	exports.default = Textarea;
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35548,7 +35585,7 @@
 	exports.default = Label;
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35584,7 +35621,7 @@
 	exports.default = Error;
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35653,7 +35690,7 @@
 	exports.default = PopUp;
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35739,7 +35776,7 @@
 	exports.default = LocationBar;
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35758,7 +35795,7 @@
 	
 	var _globalEvents2 = _interopRequireDefault(_globalEvents);
 	
-	var _loginForm = __webpack_require__(282);
+	var _loginForm = __webpack_require__(283);
 	
 	var _loginForm2 = _interopRequireDefault(_loginForm);
 	
@@ -35787,7 +35824,7 @@
 	exports.default = LoginController;
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
