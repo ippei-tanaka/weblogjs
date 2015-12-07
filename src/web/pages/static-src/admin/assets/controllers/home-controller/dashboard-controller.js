@@ -1,5 +1,5 @@
-import Mounter from '../services/react-component-mounter';
-import Dashboard from '../components/dashboard';
+import Mounter from '../../services/react-component-mounter';
+import Dashboard from '../../components/dashboard';
 
 export default {
     showDashBoard: function () {
