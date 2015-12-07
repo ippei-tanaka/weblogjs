@@ -1,9 +1,9 @@
-import UserList     from '../components/user-list';
-import UserEditor   from '../components/user-editor';
-import PopUp        from '../components/popup';
-import LocationBar  from '../components/location-bar';
-import Mounter      from '../services/react-component-mounter';
-import Event      from '../services/event';
+import UserList     from '../../components/user-list';
+import UserEditor   from '../../components/user-editor';
+import PopUp        from '../../components/popup';
+import LocationBar  from '../../components/location-bar';
+import Mounter      from '../../services/react-component-mounter';
+import Event      from '../../services/event';
 
 
 var userEditorMounter;
