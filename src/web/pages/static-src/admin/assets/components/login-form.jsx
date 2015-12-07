@@ -18,7 +18,7 @@ var LoginForm = React.createClass({
             .then(function () {
                 window.location.replace(successUrl);
             })
-            .fail(function () {
+            .catch(function () {
                 this.setState({
                     error: true
                 });
@@ -35,7 +35,6 @@ var LoginForm = React.createClass({
 
     render: function () {
 
-        /*
         var emailField = React.createElement(FormField, {
             field: {
                 type: "email",
@@ -58,10 +57,7 @@ var LoginForm = React.createClass({
                 placeholder: "Password"
             }
         });
-        */
 
-        return <div>Test</div>;
-/*
         return (
             <form className="module-login-form" method="post" onSubmit={this.onSubmit}>
                 <div className="m-lgf-wrapper">
@@ -87,7 +83,6 @@ var LoginForm = React.createClass({
                 </div>
             </form>
         );
-        */
     }
 });
 

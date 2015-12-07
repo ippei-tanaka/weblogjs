@@ -34,7 +34,7 @@ class HomeController {
 
     static start () {
         GlobalEvent.domReady.on(() => {
-            this.constructor.showNavigation();
+            this.showNavigation();
 
 //--------------------------------
 // Callbacks on Controllers
