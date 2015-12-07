@@ -1,11 +1,11 @@
-//import HomeController from "../controllers/home-controller";
+import HomeController from "../controllers/home-controller";
 import LoginController from "../controllers/login-controller";
 
 
 window.WeblogJS =
 {
     showHome: function () {
-        //HomeController.start();
+        HomeController.start();
     },
 
     showLogin: function () {
