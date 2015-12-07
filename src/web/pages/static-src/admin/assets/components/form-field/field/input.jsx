@@ -1,39 +1,32 @@
 import React from 'react';
 
+class Input extends React.Component {
 
-var Input = React.createClass({
+    constructor(props) {
+        super(props);
 
-    getDefaultProps: function () {
-        return {
-            className: "m-frf-text",
-            value: "",
-            onChange: function () {}
-        };
-    },
-
-    getInitialState: function () {
-        return {
+        this.setState({
             value: ""
-        };
-    },
+        });
+    }
 
-    componentWillMount: function () {
+    componentWillMount() {
         this._props = Object.assign({}, this.props);
-        this._props.onChange = this._onChange;
-    },
+        this._props.onChange = this._onChange.bind(this);
+    }
 
-    componentWillReceiveProps: function (newProps) {
+    componentWillReceiveProps(newProps) {
         this.setState({
             value: newProps.value
         });
-    },
+    }
 
-    render: function () {
+    render() {
         this._props.value = this.state.value;
         return React.createElement("input", this._props);
-    },
+    }
 
-    _onChange: function (e) {
+    _onChange(e) {
         var value = e.target.value;
 
         if (this.props.onChange(value) === false) {
@@ -45,6 +38,14 @@ var Input = React.createClass({
             value: value
         });
     }
-});
+
+}
+
+Input.defaultProps = {
+    className: "m-frf-text",
+    value: "",
+    onChange: function () {
+    }
+};
 
 export default Input;

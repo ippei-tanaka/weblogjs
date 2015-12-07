@@ -8,7 +8,9 @@
     "test:restful-api": "./node_modules/.bin/gulp test:restful-api",
     "test:model-managers": "./node_modules/.bin/gulp test:model-managers",
     "sass": "./node_modules/.bin/gulp sass",
-    "sass:watch": "./node_modules/.bin/gulp sass:watch"
+    "sass:watch": "./node_modules/.bin/gulp sass:watch",
+    "webpack": "./node_modules/.bin/gulp webpack",
+    "webpack:watch": "./node_modules/.bin/gulp webpack:watch"
   },
   "author": {
     "name": "Ippei Tanaka",

@@ -48,9 +48,12 @@ gulp.task('sass', function (callback) {
 
 gulp.task('webpack', function (callback) {
     webpack({
-        entry: WEB_STATIC_SRC_DIR + '/admin/assets/main/home.js',
+        entry: {
+            index: WEB_STATIC_SRC_DIR + '/admin/assets/main/index.js'
+        },
         output: {
-            filename: WEB_STATIC_DIR + "/admin/assets/index.js"
+            path: WEB_STATIC_DIR + "/admin/assets",
+            filename: "[name].js"
         },
         devtool: 'source-map',
         module: {
