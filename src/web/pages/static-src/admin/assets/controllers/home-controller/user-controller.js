@@ -104,7 +104,7 @@ showUserEditorWithAddMode = function () {
 showUserEditorWithEditMode = function (id) {
     userEditorMounter.props = {
         mode: "edit",
-        userId: id,
+        id: id,
         onComplete: function () {
             this.unmount();
             exports.onCompleteEditing.fire();

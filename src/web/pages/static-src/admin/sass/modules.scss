@@ -371,20 +371,28 @@
 
 
 /*----------------------------
- Form Field
+ Form Field Items (Modules)
 ----------------------------*/
 
-.module-form-field {
-    .m-frf-label {
-        margin-bottom: 5px;
-        display: block;
-    }
+.module-field-label {
+    margin-bottom: 5px;
+    display: block;
+}
 
-    .m-frf-text
-    {
-        width: 100%;
-        display: block;
-    }
+.module-field-text {
+    width: 100%;
+    display: block;
+}
+
+.module-field-error-message {
+    margin-top: 4px;
+    color: $color-error-message;
+    display: block;
+}
+
+.module-form-field {
+
+
 
     .m-frf-textarea {
         width: 100%;
@@ -399,11 +407,7 @@
         display: block;
     }
 
-    .m-frf-error {
-        margin-top: 4px;
-        color: $color-error-message;
-        display: block;
-    }
+
 }
 
 
