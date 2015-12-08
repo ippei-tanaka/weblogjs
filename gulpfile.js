@@ -78,5 +78,5 @@ gulp.task('webpack:watch', function () {
     gulp.watch([
         WEB_STATIC_SRC_DIR + '/admin/assets/**/*.js',
         WEB_STATIC_SRC_DIR + '/admin/assets/**/*.jsx'
-    ], ['webpack']);
+    ], {debounceDelay: 500}, ['webpack']);
 });
