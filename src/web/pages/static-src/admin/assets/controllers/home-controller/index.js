@@ -1,20 +1,20 @@
 import GlobalEvent from '../../services/global-events';
 import Router from "../../services/router";
-import ReactComponentMounter from "../../services/react-component-mounter";
+import Mounter from "../../services/react-component-mounter";
 import Navigation from "../../components/navigation";
 import DashboardController from "./dashboard-controller";
 import UserController from "./user-controller";
 //import CategoryController from "../controllers/category-controller";
 //import PostController from "../controllers/post-controller";
 //import BlogController from "../controllers/blog-controller";
-//import SettingController from "../controllers/setting-controller";
+import SettingController from "./setting-controller";
 
 class HomeController {
 
-    static showNavigation () {
+    static showNavigation() {
         var navigationMounter;
 
-        navigationMounter = new ReactComponentMounter(
+        navigationMounter = new Mounter(
             Navigation,
             'navigation',
             {
@@ -32,7 +32,7 @@ class HomeController {
         navigationMounter.mount();
     }
 
-    static start () {
+    static start() {
         GlobalEvent.domReady.on(() => {
             this.showNavigation();
 
@@ -211,14 +211,15 @@ class HomeController {
              Router.addRoute("/blogs/:id", function (id) {
              BlogController.showBlogEditorWithEditMode(id);
              });
-
-             // Blogs
-
-             Router.addRoute("/setting", function () {
-             SettingController.showSettingEditor();
-             });
              */
-// Default
+
+            // Setting
+
+            Router.addRoute("/setting", function () {
+                SettingController.showSettingEditor();
+            });
+
+            // Default
 
             Router.setDefaultRouteCallback(function () {
                 Router.changeHash("/");

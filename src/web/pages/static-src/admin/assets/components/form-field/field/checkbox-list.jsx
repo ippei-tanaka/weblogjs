@@ -1,71 +1,53 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import Checkbox from './checkbox';
 
 
-var Select = React.createClass({
+class CheckboxList extends React.Component {
 
-    getDefaultProps: function () {
-        return {
-            className: "m-frf-checkbox-list",
-            value: "",
-            onChange: function () {}
-        };
-    },
+    constructor(props) {
+        super(props);
+    }
 
-    getInitialState: function () {
-        return {
-            value: ""
-        };
-    },
+    render() {
+        return (
+            <ul className={this.props.className}>
+                {React.Children.map(this.props.children,
+                    (child, index) => {
+                        if (child.type !== Checkbox) throw new Error("Each child has to be Checkbox.");
+                        var checkbox = this.createCheckBox(child.props);
+                        return <li key={index}>{checkbox}</li>
+                    })}
+            </ul>
+        );
+    }
 
-    componentWillMount: function () {
-        this._props = Object.assign({}, this.props);
-        this._props.onChange = this._onChange;
-        delete this._props.children;
-    },
+    createCheckBox (props) {
+        props = Object.assign({}, props);
+        props.onChange = this.onCheckboxChanged.bind(this);
+        return React.createElement(Checkbox, props);
+    }
 
-    componentWillReceiveProps: function (newProps) {
-        this.setState({
-            value: newProps.value
-        });
-    },
+    onCheckboxChanged () {
+        var checkboxes = ReactDom.findDOMNode(this).querySelectorAll("input[type='checkbox']");
+        var values = [];
 
-    render: function () {
-        var options = this.props.children.map(function (childProps) {
-            var checked = this.state.value.indexOf(childProps.name) !== -1;
-            return (
-                <label key={childProps.key}>
-                    <input
-                        type="checkbox"
-                        name={childProps.name}
-                        onChange={this._onChange}
-                        checked={checked} />
-                    <span>{childProps.label.toLowerCase()}</span>
-                </label>
-            );
-        }.bind(this));
-        return <div>{options}</div>
-    },
-
-    _onChange: function () {
-        var inputs = ReactDom.findDOMNode(this).querySelectorAll("input");
-        var input, value = [];
-
-        for (var i = 0; i < inputs.length; i++) {
-            input = inputs[i];
-            if (input.checked) {
-                value.push(input.name);
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                values.push(checkboxes[i].name);
             }
         }
 
-        if (this.props.onChange(value) === false) {
-            return;
-        }
-
-        this.setState({
-            value: value
-        });
+        this.props.onChange(values);
     }
-});
 
-export default Select;
+}
+
+
+CheckboxList.defaultProps = {
+    className: "module-checkbox-list",
+    onChange: function () {}
+};
+
+
+export default CheckboxList;

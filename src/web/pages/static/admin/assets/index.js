@@ -73,6 +73,9 @@
 	"use strict";
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	//import CategoryController from "../controllers/category-controller";
+	//import PostController from "../controllers/post-controller";
+	//import BlogController from "../controllers/blog-controller";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -102,14 +105,13 @@
 	
 	var _userController2 = _interopRequireDefault(_userController);
 	
+	var _settingController = __webpack_require__(277);
+	
+	var _settingController2 = _interopRequireDefault(_settingController);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	//import CategoryController from "../controllers/category-controller";
-	//import PostController from "../controllers/post-controller";
-	//import BlogController from "../controllers/blog-controller";
-	//import SettingController from "../controllers/setting-controller";
 	
 	var HomeController = (function () {
 	    function HomeController() {
@@ -285,11 +287,14 @@
 	                  Router.addRoute("/blogs/:id", function (id) {
 	                 BlogController.showBlogEditorWithEditMode(id);
 	                 });
-	                  // Blogs
-	                  Router.addRoute("/setting", function () {
-	                 SettingController.showSettingEditor();
-	                 });
 	                 */
+	
+	                // Setting
+	
+	                _router2.default.addRoute("/setting", function () {
+	                    _settingController2.default.showSettingEditor();
+	                });
+	
 	                // Default
 	
 	                _router2.default.setDefaultRouteCallback(function () {
@@ -22381,11 +22386,11 @@
 	
 	var _userEditor2 = _interopRequireDefault(_userEditor);
 	
-	var _popup = __webpack_require__(280);
+	var _popup = __webpack_require__(275);
 	
 	var _popup2 = _interopRequireDefault(_popup);
 	
-	var _locationBar = __webpack_require__(281);
+	var _locationBar = __webpack_require__(276);
 	
 	var _locationBar2 = _interopRequireDefault(_locationBar);
 	
@@ -22487,7 +22492,7 @@
 	showUserEditorWithEditMode = function (id) {
 	    userEditorMounter.props = {
 	        mode: "edit",
-	        userId: id,
+	        id: id,
 	        onComplete: (function () {
 	            this.unmount();
 	            _exports.onCompleteEditing.fire();
@@ -34237,13 +34242,11 @@
 
 	'use strict';
 	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	
-	var _react = __webpack_require__(8);
-	
-	var _react2 = _interopRequireDefault(_react);
 	
 	var _globalEvents = __webpack_require__(2);
 	
@@ -34253,301 +34256,102 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _confirmation = __webpack_require__(268);
+	var _editor = __webpack_require__(268);
 	
-	var _confirmation2 = _interopRequireDefault(_confirmation);
-	
-	var _formField = __webpack_require__(269);
-	
-	var _formField2 = _interopRequireDefault(_formField);
+	var _editor2 = _interopRequireDefault(_editor);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var UserEditor = _react2.default.createClass({
-	    displayName: 'UserEditor',
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    getInitialState: function getInitialState() {
-	        return {
-	            errors: {
-	                email: undefined,
-	                password: undefined,
-	                display_name: undefined
-	            },
-	            user: {
-	                email: "",
-	                password: "",
-	                display_name: "",
-	                privileges: []
-	            },
-	            privileges: []
-	        };
-	    },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            mode: "", // 'add', 'edit' or 'del'
-	            userId: "",
-	            onComplete: function onComplete() {}
-	        };
-	    },
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	    componentWillMount: function componentWillMount() {
-	        if (this.props.mode === "edit" || this.props.mode === "del") {
-	            _serverFacade2.default.getUser(this.props.userId).then((function (user) {
-	                this._setUserState(this.getInitialState().user, user);
-	            }).bind(this));
-	        }
+	var UserEditor = (function (_Editor) {
+	    _inherits(UserEditor, _Editor);
 	
-	        _serverFacade2.default.getPrivileges().then((function (privileges) {
-	            this.setState({
-	                privileges: Object.keys(privileges).map(function (key) {
-	                    return {
-	                        value: privileges[key],
-	                        label: key
-	                    };
-	                })
-	            });
-	        }).bind(this));
-	    },
+	    function UserEditor() {
+	        _classCallCheck(this, UserEditor);
 	
-	    render: function render() {
-	        return this._chooseByMode({
-	            add: this._renderForm,
-	            edit: this._renderForm,
-	            del: this._renderConfirmation
-	        })();
-	    },
-	
-	    _renderForm: function _renderForm() {
-	
-	        var emailField = _react2.default.createElement(_formField2.default, {
-	            field: {
-	                type: "email",
-	                value: this.state.user.email,
-	                onChange: (function (value) {
-	                    this._setUserState(this.state.user, { email: value });
-	                }).bind(this),
-	                autoFocus: true,
-	                disabled: this._chooseByMode({
-	                    add: false,
-	                    edit: true
-	                })
-	            },
-	            label: {
-	                children: "Email Address"
-	            },
-	            error: {
-	                children: this.state.errors.email ? this.state.errors.email.message : ""
-	            }
-	        });
-	
-	        var passwordField = _react2.default.createElement(_formField2.default, {
-	            field: {
-	                type: "password",
-	                value: this.state.user.password,
-	                onChange: (function (value) {
-	                    this._setUserState(this.state.user, { password: value });
-	                }).bind(this)
-	            },
-	            label: {
-	                children: "Password"
-	            },
-	            error: {
-	                children: this.state.errors.password ? this.state.errors.password.message : ""
-	            }
-	        });
-	
-	        passwordField = this._chooseByMode({ add: passwordField, edit: null });
-	
-	        var displayNameField = _react2.default.createElement(_formField2.default, {
-	            field: {
-	                type: "text",
-	                value: this.state.user.display_name,
-	                onChange: (function (value) {
-	                    this._setUserState(this.state.user, { display_name: value });
-	                }).bind(this)
-	            },
-	            label: {
-	                children: "Display Name"
-	            },
-	            error: {
-	                children: this.state.errors.display_name ? this.state.errors.display_name.message : ""
-	            }
-	        });
-	
-	        var privilegesField = _react2.default.createElement(_formField2.default, {
-	            field: {
-	                type: "checkbox-list",
-	                value: this.state.user.privileges,
-	                onChange: (function (value) {
-	                    this._setUserState(this.state.user, { privileges: value });
-	                }).bind(this),
-	                children: this.state.privileges.map(function (privilege) {
-	                    return {
-	                        key: privilege.value,
-	                        name: privilege.value,
-	                        label: privilege.label
-	                    };
-	                })
-	            },
-	            label: {
-	                children: "Privileges"
-	            },
-	            error: {
-	                children: this.state.errors.privileges ? this.state.errors.privileges.message : ""
-	            }
-	        });
-	
-	        var title = this._chooseByMode({ add: "Create a New User", edit: "Edit the User" });
-	
-	        var buttonLabel = this._chooseByMode({ add: "Create", edit: "Edit" });
-	
-	        return _react2.default.createElement(
-	            'form',
-	            { className: 'module-data-editor', onSubmit: this._onSubmit },
-	            _react2.default.createElement(
-	                'h2',
-	                { className: 'm-dte-title' },
-	                title
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'm-dte-field-container' },
-	                emailField
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'm-dte-field-container' },
-	                passwordField
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'm-dte-field-container' },
-	                displayNameField
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'm-dte-field-container' },
-	                privilegesField
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'm-dte-field-container' },
-	                _react2.default.createElement(
-	                    'button',
-	                    { className: 'module-button',
-	                        type: 'submit' },
-	                    buttonLabel
-	                )
-	            )
-	        );
-	    },
-	
-	    _renderConfirmation: function _renderConfirmation() {
-	        return _react2.default.createElement(
-	            _confirmation2.default,
-	            {
-	                mode: 'choose',
-	                onApproved: this._onDeleteApproved,
-	                onCanceled: this._onDeleteCanceled
-	            },
-	            'Do you want to delete "',
-	            this.state.user.display_name,
-	            '"?'
-	        );
-	    },
-	
-	    _onSubmit: function _onSubmit(e) {
-	        e.preventDefault();
-	
-	        var ajaxFunc = this._chooseByMode({
-	            add: this._createUser,
-	            edit: this._updateUser
-	        });
-	
-	        ajaxFunc().then((function () {
-	            this.setState(this.getInitialState());
-	            this.props.onComplete();
-	        }).bind(this)).catch((function (data) {
-	            this.setState({
-	                errors: data.errors
-	            });
-	        }).bind(this));
-	    },
-	
-	    _onDeleteApproved: function _onDeleteApproved() {
-	        this._deleteUser().then((function () {
-	            this.props.onComplete();
-	        }).bind(this)).catch(function (data) {
-	            console.error(data);
-	        });
-	    },
-	
-	    _onDeleteCanceled: function _onDeleteCanceled() {
-	        this.props.onComplete();
-	    },
-	
-	    _createUser: function _createUser() {
-	
-	        var data = {
-	            email: this.state.user.email.trim(),
-	            password: this.state.user.password.trim(),
-	            display_name: this.state.user.display_name.trim()
-	        };
-	
-	        return _serverFacade2.default.createUser(data).then(function () {
-	            _globalEvents2.default.userCreated.fire();
-	        });
-	    },
-	
-	    _updateUser: function _updateUser() {
-	
-	        var data = {
-	            display_name: this.state.user.display_name.trim(),
-	            privileges: this.state.user.privileges
-	        };
-	
-	        return _serverFacade2.default.updateUser(this.props.userId, data).then(function () {
-	            _globalEvents2.default.userUpdated.fire();
-	        });
-	    },
-	
-	    _deleteUser: function _deleteUser() {
-	        return _serverFacade2.default.deleteUser(this.props.userId).then(function () {
-	            _globalEvents2.default.userDeleted.fire();
-	        });
-	    },
-	
-	    _setUserState: function _setUserState(defaultUser, user) {
-	        this.setState({
-	            user: Object.assign({}, defaultUser, this._flatten(user))
-	        });
-	    },
-	
-	    _flatten: function _flatten(obj) {
-	        var newObj = {};
-	
-	        Object.keys(obj).forEach(function (key) {
-	            if (typeof obj[key] !== 'undefined') {
-	                newObj[key] = obj[key];
-	            }
-	        });
-	
-	        return newObj;
-	    },
-	
-	    _chooseByMode: function _chooseByMode(options) {
-	        if (this.props.mode === 'add') {
-	            return options.add;
-	        } else if (this.props.mode === 'edit') {
-	            return options.edit;
-	        } else if (this.props.mode === 'del') {
-	            return options.del;
-	        } else {
-	            throw new Error('Mode should have been selected.');
-	        }
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(UserEditor).apply(this, arguments));
 	    }
-	});
+	
+	    _createClass(UserEditor, [{
+	        key: 'retrieveModel',
+	        value: function retrieveModel(id) {
+	            return _serverFacade2.default.getUser(id).then(function (data) {
+	                return {
+	                    email: data.email,
+	                    password: data.password,
+	                    display_name: data.display_name,
+	                    privileges: data.privileges
+	                };
+	            });
+	        }
+	    }, {
+	        key: 'sendToServer',
+	        value: function sendToServer(values, id) {
+	            var data = {
+	                display_name: values.display_name.trim(),
+	                privileges: values.privileges
+	            };
+	
+	            return _serverFacade2.default.updateUser(id, data).then(function () {
+	                _globalEvents2.default.userCreated.fire();
+	            });
+	        }
+	    }, {
+	        key: 'title',
+	        get: function get() {
+	            return "Edit the User";
+	        }
+	    }, {
+	        key: 'fieldSettings',
+	        get: function get() {
+	            return {
+	                email: {
+	                    id: "UserEditorEmailField",
+	                    type: "email",
+	                    label: "Email Address",
+	                    value: ""
+	                },
+	
+	                password: {
+	                    id: "UserEditorPasswordField",
+	                    type: "password",
+	                    label: "Password",
+	                    value: ""
+	                },
+	
+	                display_name: {
+	                    id: "UserEditorDisplayNameField",
+	                    type: "text",
+	                    label: "Display Name",
+	                    value: ""
+	                },
+	
+	                privileges: {
+	                    type: "checkbox-list",
+	                    label: "Privileges",
+	                    value: [],
+	                    list: function list() {
+	                        return _serverFacade2.default.getPrivileges().then(function (privileges) {
+	                            return Object.keys(privileges).map(function (key) {
+	                                return {
+	                                    value: privileges[key],
+	                                    label: key
+	                                };
+	                            });
+	                        });
+	                    }
+	                }
+	            };
+	        }
+	    }]);
+	
+	    return UserEditor;
+	})(_editor2.default);
 	
 	exports.default = UserEditor;
 
@@ -34555,7 +34359,9 @@
 /* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -34565,814 +34371,238 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _input = __webpack_require__(269);
+	
+	var _input2 = _interopRequireDefault(_input);
+	
+	var _checkbox = __webpack_require__(271);
+	
+	var _checkbox2 = _interopRequireDefault(_checkbox);
+	
+	var _checkboxList = __webpack_require__(272);
+	
+	var _checkboxList2 = _interopRequireDefault(_checkboxList);
+	
+	var _label = __webpack_require__(273);
+	
+	var _label2 = _interopRequireDefault(_label);
+	
+	var _errorMessage = __webpack_require__(274);
+	
+	var _errorMessage2 = _interopRequireDefault(_errorMessage);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Confirmation = _react2.default.createClass({
-	    displayName: "Confirmation",
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            mode: "", // 'choose' or 'confirm'
-	            okayLabel: "Okay",
-	            cancelLabel: "Cancel",
-	            onApproved: function onApproved() {},
-	            onCanceled: function onCanceled() {}
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Editor = (function (_React$Component) {
+	    _inherits(Editor, _React$Component);
+	
+	    function Editor(props) {
+	        _classCallCheck(this, Editor);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Editor).call(this, props));
+	
+	        var values = {};
+	        var lists = {};
+	
+	        _this.listRetrievers = {};
+	
+	        Object.keys(_this.fieldSettings).forEach(function (fKey) {
+	            var setting = _this.fieldSettings[fKey];
+	
+	            values[fKey] = setting.value;
+	
+	            if (setting.list) {
+	                lists[fKey] = [];
+	                _this.listRetrievers[fKey] = setting.list;
+	            }
+	        });
+	
+	        _this.state = {
+	            values: values,
+	            lists: lists,
+	            errors: {}
 	        };
-	    },
-	
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "module-confirmation" },
-	            _react2.default.createElement(
-	                "p",
-	                { className: "m-cfm-message" },
-	                this.props.children
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                { className: "m-cfm-button-list" },
-	                _react2.default.createElement(
-	                    "li",
-	                    { className: "m-cfm-button-list-item" },
-	                    _react2.default.createElement(
-	                        "button",
-	                        { className: "module-button",
-	                            onClick: this.onClickOkay },
-	                        this.props.okayLabel
-	                    )
-	                ),
-	                this.props.mode === "choose" ? _react2.default.createElement(
-	                    "li",
-	                    { className: "m-cfm-button-list-item" },
-	                    _react2.default.createElement(
-	                        "button",
-	                        { ref: this._autoFocus, className: "module-button m-btn-alert",
-	                            onClick: this.onClickCancel },
-	                        this.props.cancelLabel
-	                    )
-	                ) : null
-	            )
-	        );
-	    },
-	
-	    _autoFocus: function _autoFocus(input) {
-	        if (input != null) {
-	            input.focus();
-	        }
-	    },
-	
-	    onClickOkay: function onClickOkay(e) {
-	        e.preventDefault();
-	        this.props.onApproved.call(null);
-	    },
-	
-	    onClickCancel: function onClickCancel(e) {
-	        e.preventDefault();
-	        this.props.onCanceled.call(null);
+	        return _this;
 	    }
-	});
 	
-	exports.default = Confirmation;
+	    _createClass(Editor, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var _this2 = this;
+	
+	            this.retrieveModel(this.props.id).then(function (values) {
+	                return _this2.setState({ values: values });
+	            }).catch(function () {});
+	
+	            Object.keys(this.listRetrievers).forEach(function (key) {
+	                var retriever = _this2.listRetrievers[key];
+	                retriever().then(function (value) {
+	                    _this2.setListState(key, value);
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'retrieveModel',
+	        value: function retrieveModel(id) {
+	            return Promise.reject(null);
+	        }
+	    }, {
+	        key: 'setValueState',
+	        value: function setValueState(name, value) {
+	            this.setState(function (previousState) {
+	                previousState.values[name] = value;
+	                return previousState.values;
+	            });
+	        }
+	    }, {
+	        key: 'setListState',
+	        value: function setListState(name, value) {
+	            this.setState(function (previousState) {
+	                previousState.lists[name] = value;
+	                return previousState.lists;
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this3 = this;
+	
+	            var fields = Object.keys(this.fieldSettings).map(function (key, index) {
+	                var setting = _this3.fieldSettings[key];
+	                var value = _this3.state.values[key];
+	                var list = _this3.state.lists[key];
+	                var error = _this3.state.errors[key];
+	                var element = null;
+	
+	                switch (setting.type) {
+	                    case "text":
+	                    case "email":
+	                    case "password":
+	                    default:
+	                        element = _react2.default.createElement(_input2.default, {
+	                            id: setting.id,
+	                            type: setting.type,
+	                            value: value,
+	                            onChange: function onChange(value) {
+	                                return _this3.setValueState(key, value);
+	                            }
+	                        });
+	                        break;
+	                    case "checkbox-list":
+	                        element = _react2.default.createElement(
+	                            _checkboxList2.default,
+	                            { onChange: function onChange(value) {
+	                                    return _this3.setValueState(key, value);
+	                                } },
+	                            list.map(function (item, index) {
+	                                return _react2.default.createElement(_checkbox2.default, { key: index,
+	                                    name: item.value,
+	                                    value: value.indexOf(item.value) !== -1,
+	                                    label: item.label });
+	                            })
+	                        );
+	                        break;
+	                }
+	
+	                return _react2.default.createElement(
+	                    'div',
+	                    { key: index, className: 'm-dte-field-container' },
+	                    _react2.default.createElement(
+	                        _label2.default,
+	                        { htmlFor: setting.id },
+	                        setting.label
+	                    ),
+	                    element,
+	                    _react2.default.createElement(_errorMessage2.default, { error: error })
+	                );
+	            });
+	
+	            return _react2.default.createElement(
+	                'form',
+	                { className: 'module-data-editor', onSubmit: this.onSubmit.bind(this) },
+	                _react2.default.createElement(
+	                    'h2',
+	                    { className: 'm-dte-title' },
+	                    this.title
+	                ),
+	                fields,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'm-dte-field-container' },
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'module-button',
+	                            type: 'submit' },
+	                        this.buttonLabel
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'onSubmit',
+	        value: function onSubmit(e) {
+	            var _this4 = this;
+	
+	            e.preventDefault();
+	            this.sendToServer(this.state.values, this.props.id).then(function () {
+	                _this4.props.onComplete();
+	            }).catch(function (data) {
+	                return _this4.setState({
+	                    errors: data.errors
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'sendToServer',
+	        value: function sendToServer(values) {
+	            return Promise.reject(null);
+	        }
+	    }, {
+	        key: 'fieldSettings',
+	        get: function get() {
+	            return {};
+	        }
+	    }, {
+	        key: 'title',
+	        get: function get() {
+	            return "Edit Something";
+	        }
+	    }, {
+	        key: 'buttonLabel',
+	        get: function get() {
+	            return "Edit";
+	        }
+	    }]);
+	
+	    return Editor;
+	})(_react2.default.Component);
+	
+	Editor.defaultProps = {
+	    id: "",
+	    onComplete: function onComplete() {}
+	};
+	
+	exports.default = Editor;
 
 /***/ },
 /* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _react = __webpack_require__(8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _field = __webpack_require__(270);
-	
-	var _field2 = _interopRequireDefault(_field);
-	
-	var _label = __webpack_require__(278);
-	
-	var _label2 = _interopRequireDefault(_label);
-	
-	var _error = __webpack_require__(279);
-	
-	var _error2 = _interopRequireDefault(_error);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var FormField = _react2.default.createClass({
-	    displayName: 'FormField',
-	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            containerClassName: "module-form-field",
-	            field: {},
-	            label: {},
-	            error: {}
-	        };
-	    },
-	
-	    render: function render() {
-	        var id = this.props.field.id || this._generateId();
-	        var fieldProps = Object.assign({}, this.props.field, { id: id });
-	        var labelProps = Object.assign({}, this.props.label, { htmlFor: id });
-	
-	        var field = _react2.default.createElement(_field2.default, fieldProps);
-	        var label = _react2.default.createElement(_label2.default, labelProps);
-	        var error = _react2.default.createElement(_error2.default, this.props.error);
-	
-	        return _react2.default.createElement(
-	            'div',
-	            { className: this.props.containerClassName },
-	            label,
-	            field,
-	            error
-	        );
-	    },
-	
-	    _generateId: function _generateId() {
-	        var id = "FormField";
-	        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	        var length = 12;
-	
-	        for (var i = 0; i < length; i++) {
-	            id += possible.charAt(Math.floor(Math.random() * possible.length));
-	        }
-	
-	        return id;
-	    }
-	});
-	
-	exports.default = FormField;
-
-/***/ },
-/* 270 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _react = __webpack_require__(8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _datetime = __webpack_require__(271);
-	
-	var _datetime2 = _interopRequireDefault(_datetime);
-	
-	var _tagList = __webpack_require__(272);
-	
-	var _tagList2 = _interopRequireDefault(_tagList);
-	
-	var _checkboxList = __webpack_require__(273);
-	
-	var _checkboxList2 = _interopRequireDefault(_checkboxList);
-	
-	var _select = __webpack_require__(274);
-	
-	var _select2 = _interopRequireDefault(_select);
-	
-	var _input = __webpack_require__(275);
-	
-	var _input2 = _interopRequireDefault(_input);
-	
-	var _textarea = __webpack_require__(277);
-	
-	var _textarea2 = _interopRequireDefault(_textarea);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var elements = {
-	    "datetime": _datetime2.default,
-	    "tag-list": _tagList2.default,
-	    "checkbox-list": _checkboxList2.default,
-	    "select": _select2.default,
-	    "email": _input2.default,
-	    "text": _input2.default,
-	    "password": _input2.default,
-	    "textarea": _textarea2.default
-	};
-	
-	var Field = _react2.default.createClass({
-	    displayName: 'Field',
-	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            type: ""
-	        };
-	    },
-	
-	    render: function render() {
-	        return _react2.default.createElement(elements[this.props.type], this.props);
-	    }
-	});
-	
-	exports.default = Field;
-
-/***/ },
-/* 271 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _react = __webpack_require__(8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _moment = __webpack_require__(179);
-	
-	var _moment2 = _interopRequireDefault(_moment);
-	
-	var _classnames = __webpack_require__(167);
-	
-	var _classnames2 = _interopRequireDefault(_classnames);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Datetime = _react2.default.createClass({
-	    displayName: 'Datetime',
-	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            id: "",
-	            className: "",
-	            value: "",
-	            onChange: function onChange() {}
-	        };
-	    },
-	
-	    getInitialState: function getInitialState() {
-	        return {
-	            year: "",
-	            month: "",
-	            date: "",
-	            hour: "",
-	            minute: "",
-	            utcOffset: ""
-	        };
-	    },
-	
-	    componentWillMount: function componentWillMount() {
-	        this._setDateTimeState(this.props.value);
-	    },
-	
-	    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-	        this._setDateTimeState(newProps.value);
-	    },
-	
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { className: (0, _classnames2.default)(this.props.className, "element-datetime-field") },
-	            _react2.default.createElement(
-	                'fieldset',
-	                { className: 'e-dtf-field-set' },
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select', value: this.state.month,
-	                            id: this.props.id,
-	                            onChange: this._onChange('month') },
-	                        this._listOfMonths.map(function (name, index) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: index + 1, key: index + 1 },
-	                                name
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'Month'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select', value: this.state.date,
-	                            onChange: this._onChange('date') },
-	                        this._range(1, 31, function (i) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: i, key: i },
-	                                i
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'Date'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select', value: this.state.year,
-	                            onChange: this._onChange('year') },
-	                        this._range(1970, 2100, function (i) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: i, key: i },
-	                                i
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'Year'
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'fieldset',
-	                { className: 'e-dtf-field-set' },
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select', value: this.state.hour,
-	                            onChange: this._onChange('hour') },
-	                        this._range(0, 23, function (i) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: i, key: i },
-	                                i
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'Hour'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'e-dtf-separator' },
-	                    ':'
-	                ),
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select', value: this.state.minute,
-	                            onChange: this._onChange('minute') },
-	                        this._range(0, 59, function (i) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: i, key: i },
-	                                i
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'Minute'
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'fieldset',
-	                { className: 'e-dtf-field-set' },
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select',
-	                            value: this.state.utcOffset,
-	                            disabled: 'true' },
-	                        this._listOfOffsets.map(function (offset, index) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: offset, key: index },
-	                                offset
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'UTC Offset'
-	                    )
-	                )
-	            )
-	        );
-	    },
-	
-	    _formats: {
-	        year: "YYYY",
-	        month: "M",
-	        date: "D",
-	        hour: "H",
-	        minute: "m",
-	        utcOffset: "Z"
-	    },
-	
-	    _setDateTimeState: function _setDateTimeState(dateTimeString) {
-	        var thisMoment = (0, _moment2.default)(dateTimeString);
-	        var newState = {};
-	
-	        Object.keys(this._formats).forEach((function (key) {
-	            newState[key] = thisMoment.format(this._formats[key]);
-	        }).bind(this));
-	
-	        this.setState(newState);
-	    },
-	
-	    _buildDateFromState: function _buildDateFromState() {
-	
-	        var thisMoment = (0, _moment2.default)({
-	            year: this.state.year,
-	            month: this.state.month - 1,
-	            date: this.state.date,
-	            hour: this.state.hour,
-	            minute: this.state.minute,
-	            second: 0
-	        });
-	
-	        return thisMoment.toDate();
-	    },
-	
-	    _onChange: function _onChange(field) {
-	        return (function (e) {
-	            var obj = {};
-	            obj[field] = e.target.value.trim();
-	            this.setState(obj, (function () {
-	                this.props.onChange(this._buildDateFromState());
-	            }).bind(this));
-	        }).bind(this);
-	    },
-	
-	    _range: function _range(start, end, func) {
-	        var results = [];
-	        for (var i = start; i <= end; i++) {
-	            results.push(func(i));
-	        }
-	        return results;
-	    },
-	
-	    _listOfMonths: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-	
-	    _listOfOffsets: ["-12:00", "-11:00", "-10:00", "-09:30", "-09:00", "-08:00", "-07:00", "-06:00", "-05:00", "-04:30", "-04:00", "-03:30", "-03:00", "-02:00", "-01:00", "+00:00", "+01:00", "+02:00", "+03:00", "+03:30", "+04:00", "+04:30", "+05:00", "+05:30", "+05:45", "+06:00", "+06:30", "+07:00", "+08:00", "+08:30", "+08:45", "+09:00", "+09:30", "+10:00", "+10:30", "+11:00", "+12:00", "+12:45", "+13:00", "+14:00"]
-	});
-	
-	exports.default = Datetime;
-
-/***/ },
-/* 272 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _react = __webpack_require__(8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _classnames = __webpack_require__(167);
-	
-	var _classnames2 = _interopRequireDefault(_classnames);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var ENTER = 13;
-	
-	var TagList = _react2.default.createClass({
-	    displayName: 'TagList',
-	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            className: "",
-	            value: "",
-	            onChange: function onChange() {}
-	        };
-	    },
-	
-	    getInitialState: function getInitialState() {
-	        return {
-	            tags: []
-	        };
-	    },
-	
-	    componentWillMount: function componentWillMount() {
-	        this.setState({
-	            tags: this.props.value || []
-	        });
-	    },
-	
-	    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-	        this.setState({
-	            tags: newProps.value || []
-	        });
-	    },
-	
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { className: (0, _classnames2.default)(this.props.className, "element-tag-list-field") },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'e-tgl-new-tag-list-container' },
-	                this.state.tags.length > 0 ? _react2.default.createElement(
-	                    'ul',
-	                    { className: 'e-tgl-new-tag-list' },
-	                    this.state.tags.map((function (tag, index) {
-	                        return _react2.default.createElement(
-	                            'li',
-	                            { key: index,
-	                                className: 'e-tgl-new-tag-list-item' },
-	                            _react2.default.createElement(
-	                                'span',
-	                                { className: 'e-tgl-tag-name' },
-	                                tag
-	                            ),
-	                            _react2.default.createElement(
-	                                'button',
-	                                { className: 'module-button m-btn-clear',
-	                                    'data-tag-name': tag,
-	                                    onClick: this._onCloseButtonClicked },
-	                                _react2.default.createElement('i', { className: 'fa fa-times-circle e-tgl-delete-icon' })
-	                            )
-	                        );
-	                    }).bind(this))
-	                ) : _react2.default.createElement(
-	                    'span',
-	                    { className: 'e-tgl-no-tags-message' },
-	                    '(No Tags)'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'e-tgl-new-tag-input-container' },
-	                _react2.default.createElement('input', { type: 'text',
-	                    placeholder: 'Add a new tag',
-	                    ref: 'newTag',
-	                    id: this.props.id,
-	                    onKeyDown: this._onKeyDowned }),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'e-tgl-add-button-container' },
-	                    _react2.default.createElement(
-	                        'button',
-	                        { className: 'module-button m-btn-clear',
-	                            onClick: this._onAddButtonClicked },
-	                        _react2.default.createElement('i', { className: 'fa fa-plus-square e-tgl-add-icon' })
-	                    )
-	                )
-	            )
-	        );
-	    },
-	
-	    _onKeyDowned: function _onKeyDowned(e) {
-	        if (e.keyCode == ENTER) {
-	            e.preventDefault();
-	            this._addNewTag();
-	        }
-	    },
-	
-	    _onAddButtonClicked: function _onAddButtonClicked(e) {
-	        e.preventDefault();
-	        this._addNewTag();
-	    },
-	
-	    _onCloseButtonClicked: function _onCloseButtonClicked(e) {
-	        e.preventDefault();
-	        this._deleteTag(e.currentTarget.getAttribute("data-tag-name"));
-	    },
-	
-	    _addNewTag: function _addNewTag() {
-	        var tag = this.refs.newTag.value.trim();
-	
-	        if (tag !== "") {
-	            this.setState((function (state) {
-	                if (state.tags.indexOf(tag) === -1) {
-	                    state.tags.push(tag);
-	                }
-	                this.refs.newTag.value = "";
-	            }).bind(this), (function () {
-	                this.props.onChange(this.state.tags);
-	            }).bind(this));
-	        }
-	    },
-	
-	    _deleteTag: function _deleteTag(tag) {
-	        var index = this.state.tags.indexOf(tag);
-	        if (index !== -1) {
-	            this.setState((function (state) {
-	                state.tags.splice(index, 1);
-	            }).bind(this));
-	        }
-	    }
-	});
-	
-	exports.default = TagList;
-
-/***/ },
-/* 273 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _react = __webpack_require__(8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(165);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Select = _react2.default.createClass({
-	    displayName: 'Select',
-	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            className: "m-frf-checkbox-list",
-	            value: "",
-	            onChange: function onChange() {}
-	        };
-	    },
-	
-	    getInitialState: function getInitialState() {
-	        return {
-	            value: ""
-	        };
-	    },
-	
-	    componentWillMount: function componentWillMount() {
-	        this._props = Object.assign({}, this.props);
-	        this._props.onChange = this._onChange;
-	        delete this._props.children;
-	    },
-	
-	    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-	        this.setState({
-	            value: newProps.value
-	        });
-	    },
-	
-	    render: function render() {
-	        var options = this.props.children.map((function (childProps) {
-	            var checked = this.state.value.indexOf(childProps.name) !== -1;
-	            return _react2.default.createElement(
-	                'label',
-	                { key: childProps.key },
-	                _react2.default.createElement('input', {
-	                    type: 'checkbox',
-	                    name: childProps.name,
-	                    onChange: this._onChange,
-	                    checked: checked }),
-	                _react2.default.createElement(
-	                    'span',
-	                    null,
-	                    childProps.label.toLowerCase()
-	                )
-	            );
-	        }).bind(this));
-	        return _react2.default.createElement(
-	            'div',
-	            null,
-	            options
-	        );
-	    },
-	
-	    _onChange: function _onChange() {
-	        var inputs = _reactDom2.default.findDOMNode(this).querySelectorAll("input");
-	        var input,
-	            value = [];
-	
-	        for (var i = 0; i < inputs.length; i++) {
-	            input = inputs[i];
-	            if (input.checked) {
-	                value.push(input.name);
-	            }
-	        }
-	
-	        if (this.props.onChange(value) === false) {
-	            return;
-	        }
-	
-	        this.setState({
-	            value: value
-	        });
-	    }
-	});
-	
-	exports.default = Select;
-
-/***/ },
-/* 274 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	
-	var _react = __webpack_require__(8);
+	var _abstractField = __webpack_require__(270);
 	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Select = _react2.default.createClass({
-	    displayName: "Select",
-	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            className: "m-frf-select",
-	            value: "",
-	            onChange: function onChange() {}
-	        };
-	    },
-	
-	    getInitialState: function getInitialState() {
-	        return {
-	            value: ""
-	        };
-	    },
-	
-	    componentWillMount: function componentWillMount() {
-	        this._props = Object.assign({}, this.props);
-	        this._props.onChange = this._onChange;
-	        delete this._props.children;
-	    },
-	
-	    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-	        this.setState({
-	            value: newProps.value
-	        });
-	    },
-	
-	    render: function render() {
-	        var options = this.props.children.map(function (child) {
-	            return _react2.default.createElement("option", child);
-	        });
-	        this._props.value = this.state.value;
-	        return _react2.default.createElement("select", this._props, options);
-	    },
-	
-	    _onChange: function _onChange(e) {
-	        var value = e.target.value;
-	
-	        if (this.props.onChange(value) === false) {
-	            e.preventDefault();
-	            return;
-	        }
-	
-	        this.setState({
-	            value: value
-	        });
-	    }
-	});
-	
-	exports.default = Select;
-
-/***/ },
-/* 275 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _field = __webpack_require__(276);
-	
-	var _field2 = _interopRequireDefault(_field);
+	var _abstractField2 = _interopRequireDefault(_abstractField);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -35383,21 +34613,112 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var Input = (function (_Field) {
-	  _inherits(Input, _Field);
+	    _inherits(Input, _Field);
 	
-	  function Input() {
-	    _classCallCheck(this, Input);
+	    function Input() {
+	        _classCallCheck(this, Input);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Input).apply(this, arguments));
-	  }
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Input).apply(this, arguments));
+	    }
 	
-	  return Input;
-	})(_field2.default);
+	    return Input;
+	})(_abstractField2.default);
+	
+	Input.defaultProps = Object.assign({}, _abstractField2.default.defaultProps, {
+	    elementName: "input",
+	    type: "text",
+	    className: "module-field-text"
+	});
 	
 	exports.default = Input;
 
 /***/ },
-/* 276 */
+/* 270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var AbstractField = (function (_React$Component) {
+	    _inherits(AbstractField, _React$Component);
+	
+	    function AbstractField() {
+	        _classCallCheck(this, AbstractField);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(AbstractField).apply(this, arguments));
+	    }
+	
+	    _createClass(AbstractField, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(this.props.elementName, this.buildElementProps());
+	        }
+	    }, {
+	        key: "buildElementProps",
+	        value: function buildElementProps() {
+	            var _ref;
+	
+	            return _ref = {
+	                id: this.props.id,
+	                type: this.props.type
+	            }, _defineProperty(_ref, this.keyNameForValue, this.props.value), _defineProperty(_ref, "className", this.props.className), _defineProperty(_ref, "onChange", this.wrapOnChange.call(this, this.props.onChange)), _ref;
+	        }
+	    }, {
+	        key: "wrapOnChange",
+	        value: function wrapOnChange(onChange) {
+	            var _this2 = this;
+	
+	            return function (e) {
+	                onChange(_this2.getFieldValue(e));
+	            };
+	        }
+	    }, {
+	        key: "getFieldValue",
+	        value: function getFieldValue(event) {
+	            return event.target[this.keyNameForValue];
+	        }
+	    }, {
+	        key: "keyNameForValue",
+	        get: function get() {
+	            return "value";
+	        }
+	    }]);
+	
+	    return AbstractField;
+	})(_react2.default.Component);
+	
+	AbstractField.defaultProps = {
+	    elementName: "",
+	    type: "",
+	    id: "",
+	    className: "",
+	    value: null,
+	    onChange: function onChange() {}
+	};
+	
+	exports.default = AbstractField;
+
+/***/ },
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35420,72 +34741,56 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Field = (function (_React$Component) {
-	    _inherits(Field, _React$Component);
+	var Checkbox = (function (_React$Component) {
+	    _inherits(Checkbox, _React$Component);
 	
-	    function Field(props) {
-	        _classCallCheck(this, Field);
+	    function Checkbox() {
+	        _classCallCheck(this, Checkbox);
 	
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Field).call(this, props));
-	
-	        _this.state = {
-	            value: ""
-	        };
-	        return _this;
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Checkbox).apply(this, arguments));
 	    }
 	
-	    _createClass(Field, [{
-	        key: "componentWillMount",
-	        value: function componentWillMount() {
-	            this._props = Object.assign({}, this.props);
-	            this._props.onChange = this.onChange.bind(this);
-	        }
-	    }, {
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(newProps) {
-	            this.setState({
-	                value: newProps.value
-	            });
-	        }
-	    }, {
+	    _createClass(Checkbox, [{
 	        key: "render",
 	        value: function render() {
-	            this._props.value = this.state.value;
-	            return _react2.default.createElement(this._props.elementName, this._props);
-	        }
-	    }, {
-	        key: "onChange",
-	        value: function onChange(e) {
-	            var value = e.target.value;
-	
-	            if (this.props.onChange(value) === false) {
-	                e.preventDefault();
-	                return;
-	            }
-	
-	            this.setState({
-	                value: value
-	            });
+	            return _react2.default.createElement(
+	                "label",
+	                null,
+	                _react2.default.createElement("input", {
+	                    type: "checkbox",
+	                    name: this.props.name,
+	                    checked: this.props.value,
+	                    className: this.props.className,
+	                    onChange: this.props.onChange
+	                }),
+	                _react2.default.createElement(
+	                    "span",
+	                    null,
+	                    this.props.label
+	                )
+	            );
 	        }
 	    }]);
 	
-	    return Field;
+	    return Checkbox;
 	})(_react2.default.Component);
 	
-	Field.defaultProps = {
-	    elementName: "input",
-	    className: "m-frf-text",
-	    value: "",
+	Checkbox.defaultProps = {
+	    name: "",
+	    value: false,
+	    className: "module-checkbox",
 	    onChange: function onChange() {}
 	};
 	
-	exports.default = Field;
+	exports.default = Checkbox;
 
 /***/ },
-/* 277 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -35495,62 +34800,90 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactDom = __webpack_require__(165);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _checkbox = __webpack_require__(271);
+	
+	var _checkbox2 = _interopRequireDefault(_checkbox);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Textarea = _react2.default.createClass({
-	    displayName: "Textarea",
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            className: "m-frf-textarea",
-	            value: "",
-	            onChange: function onChange() {}
-	        };
-	    },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	    getInitialState: function getInitialState() {
-	        return {
-	            value: ""
-	        };
-	    },
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	    componentWillMount: function componentWillMount() {
-	        this._props = Object.assign({}, this.props);
-	        this._props.onChange = this._onChange;
-	    },
+	var CheckboxList = (function (_React$Component) {
+	    _inherits(CheckboxList, _React$Component);
 	
-	    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-	        this.setState({
-	            value: newProps.value
-	        });
-	    },
+	    function CheckboxList(props) {
+	        _classCallCheck(this, CheckboxList);
 	
-	    render: function render() {
-	        this._props.value = this.state.value;
-	        return _react2.default.createElement("textarea", this._props);
-	    },
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(CheckboxList).call(this, props));
+	    }
 	
-	    _onChange: function _onChange(e) {
-	        var value = e.target.value;
+	    _createClass(CheckboxList, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
 	
-	        if (this.props.onChange(value) === false) {
-	            e.preventDefault();
-	            return;
+	            return _react2.default.createElement(
+	                'ul',
+	                { className: this.props.className },
+	                _react2.default.Children.map(this.props.children, function (child, index) {
+	                    if (child.type !== _checkbox2.default) throw new Error("Each child has to be Checkbox.");
+	                    var checkbox = _this2.createCheckBox(child.props);
+	                    return _react2.default.createElement(
+	                        'li',
+	                        { key: index },
+	                        checkbox
+	                    );
+	                })
+	            );
 	        }
+	    }, {
+	        key: 'createCheckBox',
+	        value: function createCheckBox(props) {
+	            props = Object.assign({}, props);
+	            props.onChange = this.onCheckboxChanged.bind(this);
+	            return _react2.default.createElement(_checkbox2.default, props);
+	        }
+	    }, {
+	        key: 'onCheckboxChanged',
+	        value: function onCheckboxChanged() {
+	            var checkboxes = _reactDom2.default.findDOMNode(this).querySelectorAll("input[type='checkbox']");
+	            var values = [];
 	
-	        this.setState({
-	            value: value
-	        });
-	    }
-	});
+	            for (var i = 0; i < checkboxes.length; i++) {
+	                if (checkboxes[i].checked) {
+	                    values.push(checkboxes[i].name);
+	                }
+	            }
 	
-	exports.default = Textarea;
+	            this.props.onChange(values);
+	        }
+	    }]);
+	
+	    return CheckboxList;
+	})(_react2.default.Component);
+	
+	CheckboxList.defaultProps = {
+	    className: "module-checkbox-list",
+	    onChange: function onChange() {}
+	};
+	
+	exports.default = CheckboxList;
 
 /***/ },
-/* 278 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -35562,33 +34895,49 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Label = _react2.default.createClass({
-	    displayName: "Label",
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            id: "",
-	            className: "m-frf-label"
-	        };
-	    },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "label",
-	            { className: this.props.className,
-	                htmlFor: this.props.htmlFor },
-	            this.props.children
-	        );
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Label = (function (_React$Component) {
+	    _inherits(Label, _React$Component);
+	
+	    function Label() {
+	        _classCallCheck(this, Label);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Label).apply(this, arguments));
 	    }
-	});
+	
+	    _createClass(Label, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "label",
+	                { className: this.props.className,
+	                    htmlFor: this.props.htmlFor },
+	                this.props.children
+	            );
+	        }
+	    }]);
+	
+	    return Label;
+	})(_react2.default.Component);
+	
+	Label.defaultProps = {
+	    className: "module-field-label"
+	};
 	
 	exports.default = Label;
 
 /***/ },
-/* 279 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -35600,28 +34949,44 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Error = _react2.default.createClass({
-	    displayName: "Error",
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            className: "m-frf-error"
-	        };
-	    },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "span",
-	            { className: this.props.className },
-	            this.props.children
-	        );
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ErrorMessage = (function (_React$Component) {
+	    _inherits(ErrorMessage, _React$Component);
+	
+	    function ErrorMessage() {
+	        _classCallCheck(this, ErrorMessage);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ErrorMessage).apply(this, arguments));
 	    }
-	});
 	
-	exports.default = Error;
+	    _createClass(ErrorMessage, [{
+	        key: "render",
+	        value: function render() {
+	            var errorMessage = this.props.error ? _react2.default.createElement(
+	                "span",
+	                { className: this.props.className },
+	                this.props.error.message
+	            ) : null;
+	            return errorMessage;
+	        }
+	    }]);
+	
+	    return ErrorMessage;
+	})(_react2.default.Component);
+	
+	ErrorMessage.defaultProps = {
+	    className: "module-field-error-message"
+	};
+	
+	exports.default = ErrorMessage;
 
 /***/ },
-/* 280 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35690,7 +35055,7 @@
 	exports.default = PopUp;
 
 /***/ },
-/* 281 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35776,6 +35141,435 @@
 	exports.default = LocationBar;
 
 /***/ },
+/* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _reactComponentMounter = __webpack_require__(7);
+	
+	var _reactComponentMounter2 = _interopRequireDefault(_reactComponentMounter);
+	
+	var _settingEditor = __webpack_require__(278);
+	
+	var _settingEditor2 = _interopRequireDefault(_settingEditor);
+	
+	var _popup = __webpack_require__(275);
+	
+	var _popup2 = _interopRequireDefault(_popup);
+	
+	var _locationBar = __webpack_require__(276);
+	
+	var _locationBar2 = _interopRequireDefault(_locationBar);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var settingEditorMounter;
+	var locationBarMounter;
+	var buildLocations;
+	var showSettingEditor;
+	var _exports;
+	
+	settingEditorMounter = new _reactComponentMounter2.default(_settingEditor2.default, 'main-content-container');
+	
+	locationBarMounter = new _reactComponentMounter2.default(_locationBar2.default, 'location-bar-container');
+	
+	buildLocations = function () {
+	    var ret;
+	    ret = [{
+	        label: "Home"
+	    }, {
+	        label: "Setting Editor"
+	    }];
+	    return ret;
+	};
+	
+	showSettingEditor = function () {
+	    settingEditorMounter.mount();
+	
+	    locationBarMounter.props = {
+	        locations: buildLocations({ hasEditor: true })
+	    };
+	    locationBarMounter.mount();
+	};
+	
+	_exports = {
+	    showSettingEditor: showSettingEditor
+	};
+	
+	exports.default = _exports;
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _globalEvents = __webpack_require__(2);
+	
+	var _globalEvents2 = _interopRequireDefault(_globalEvents);
+	
+	var _serverFacade = __webpack_require__(171);
+	
+	var _serverFacade2 = _interopRequireDefault(_serverFacade);
+	
+	var _stringFormatter = __webpack_require__(279);
+	
+	var _stringFormatter2 = _interopRequireDefault(_stringFormatter);
+	
+	var _formField = __webpack_require__(280);
+	
+	var _formField2 = _interopRequireDefault(_formField);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var SettingEditor = _react2.default.createClass({
+	    displayName: 'SettingEditor',
+	
+	    getInitialState: function getInitialState() {
+	        return {
+	            errors: {
+	                front: undefined
+	            },
+	            setting: {
+	                front: null
+	            },
+	            blogs: [],
+	            flush: ""
+	        };
+	    },
+	
+	    componentWillMount: function componentWillMount() {
+	        _serverFacade2.default.getSetting().then((function (setting) {
+	            this._setSettingState(this.getInitialState().setting, setting);
+	        }).bind(this));
+	
+	        _serverFacade2.default.getBlogs().then((function (blogs) {
+	            this.setState({ blogs: blogs });
+	        }).bind(this));
+	    },
+	
+	    render: function render() {
+	        var frontField = _react2.default.createElement(_formField2.default, {
+	            field: {
+	                type: "select",
+	                value: this.state.setting.front,
+	                onChange: (function (value) {
+	                    var blog = this.state.blogs.find(function (b) {
+	                        return b._id === value;
+	                    });
+	                    this._setSettingState(this.state.setting, { front: blog ? blog._id : null });
+	                }).bind(this),
+	
+	                children: this._addEmptySelectOption(this.state.blogs.map(function (blog) {
+	                    return {
+	                        key: blog._id,
+	                        value: blog._id,
+	                        label: blog.title
+	                    };
+	                })),
+	
+	                autoFocus: true
+	            },
+	            label: {
+	                children: "Front Page"
+	            },
+	            error: {
+	                children: this.state.errors.front ? this.state.errors.front.message : ""
+	            }
+	        });
+	
+	        return _react2.default.createElement(
+	            'form',
+	            { className: 'module-data-editor', onSubmit: this._onSubmit },
+	            _react2.default.createElement(
+	                'h2',
+	                { className: 'm-dte-title' },
+	                'Setting'
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'm-dte-field-container' },
+	                frontField
+	            ),
+	            this.state.flush ? _react2.default.createElement(
+	                'div',
+	                { className: 'm-dte-field-container' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'm-dte-flush-message' },
+	                    this.state.flush
+	                )
+	            ) : null,
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'm-dte-field-container' },
+	                _react2.default.createElement(
+	                    'button',
+	                    { className: 'module-button',
+	                        type: 'submit' },
+	                    'Edit'
+	                )
+	            )
+	        );
+	    },
+	
+	    _onSubmit: function _onSubmit(e) {
+	        e.preventDefault();
+	
+	        this._updateSetting().then((function () {
+	            this.setState({
+	                errors: this.getInitialState().errors,
+	                flush: "Succeeded to update the setting!"
+	            });
+	        }).bind(this)).catch((function (data) {
+	            this.setState({
+	                errors: data.errors,
+	                flush: ""
+	            });
+	        }).bind(this));
+	    },
+	
+	    _updateSetting: function _updateSetting() {
+	
+	        var data = this._buildDataForHttpRequest();
+	
+	        return _serverFacade2.default.updateSetting(data);
+	    },
+	
+	    _buildDataForHttpRequest: function _buildDataForHttpRequest() {
+	
+	        var data = {};
+	
+	        if (this.state.setting.front) {
+	            data.front = this.state.setting.front;
+	        }
+	
+	        return data;
+	    },
+	
+	    _setSettingState: function _setSettingState(defaultSetting, setting) {
+	        this.setState({
+	            setting: Object.assign({}, defaultSetting, this._flatten(setting))
+	        });
+	    },
+	
+	    _flatten: function _flatten(obj) {
+	        var newObj = {};
+	
+	        Object.keys(obj).forEach(function (key) {
+	            if (typeof obj[key] !== 'undefined') {
+	                newObj[key] = obj[key];
+	            }
+	        });
+	
+	        return newObj;
+	    },
+	
+	    _addEmptySelectOption: function _addEmptySelectOption(array) {
+	        array = array || [];
+	        array.unshift({
+	            key: "---------",
+	            value: "",
+	            label: "None"
+	        });
+	        return array;
+	    }
+	});
+	
+	exports.default = SettingEditor;
+
+/***/ },
+/* 279 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var StringFormatter = (function () {
+	    function StringFormatter(str) {
+	        _classCallCheck(this, StringFormatter);
+	
+	        this._str = str;
+	    }
+	
+	    _createClass(StringFormatter, [{
+	        key: "slugfy",
+	        value: function slugfy() {
+	            this._str = this.constructor.slugfy(this._str);
+	            return this;
+	        }
+	    }, {
+	        key: "toString",
+	        value: function toString() {
+	            return this._str.toString();
+	        }
+	    }], [{
+	        key: "slugfy",
+	        value: function slugfy(str) {
+	            return str.replace(/[^A-Za-z0-9 !@%\*\-_]/g, "").replace(/[ ]+/g, " ").trim().replace(/[ ]/g, "-").toLowerCase();
+	        }
+	    }]);
+	
+	    return StringFormatter;
+	})();
+	
+	var slugfy = exports.slugfy = StringFormatter.slugfy;
+	
+	exports.default = StringFormatter;
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _field = __webpack_require__(281);
+	
+	var _field2 = _interopRequireDefault(_field);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var FormField = _react2.default.createClass({
+	    displayName: 'FormField',
+	
+	    getDefaultProps: function getDefaultProps() {
+	        return {
+	            containerClassName: "module-form-field",
+	            label: "",
+	            field: {},
+	            error: ""
+	        };
+	    },
+	
+	    render: function render() {
+	        var id = this.props.field.id || this._generateId();
+	        var fieldProps = Object.assign({}, this.props.field, { id: id });
+	
+	        var field = _react2.default.createElement(_field2.default, fieldProps);
+	
+	        return _react2.default.createElement(
+	            'div',
+	            { className: this.props.containerClassName },
+	            field
+	        );
+	    },
+	
+	    _generateId: function _generateId() {
+	        var id = "FormField";
+	        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	        var length = 12;
+	
+	        for (var i = 0; i < length; i++) {
+	            id += possible.charAt(Math.floor(Math.random() * possible.length));
+	        }
+	
+	        return id;
+	    }
+	});
+	
+	exports.default = FormField;
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	/*
+	import Datetime from './datetime';
+	import TagList from './tag-list';
+	import CheckboxList from './checkbox-list';
+	import Select from './select';
+	import Input from './input';
+	import Textarea from './textarea';
+	*/
+	/*
+	var elements = {
+	    "datetime": Datetime,
+	    "tag-list": TagList,
+	    "checkbox-list": CheckboxList,
+	    "select": Select,
+	    "email": Input,
+	    "text": Input,
+	    "password": Input,
+	    "textarea": Textarea
+	};
+	*/
+	
+	var Field = (function (_React$Component) {
+	    _inherits(Field, _React$Component);
+	
+	    function Field() {
+	        _classCallCheck(this, Field);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Field).apply(this, arguments));
+	    }
+	
+	    _createClass(Field, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement("input", this.props);
+	        }
+	    }]);
+	
+	    return Field;
+	})(_react2.default.Component);
+	
+	Field.defaultProps = {
+	    fieldType: "",
+	    initialValue: "",
+	    onValueChanged: function onValueChanged() {}
+	};
+	
+	exports.default = Field;
+
+/***/ },
 /* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -35841,7 +35635,7 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _formField = __webpack_require__(269);
+	var _formField = __webpack_require__(280);
 	
 	var _formField2 = _interopRequireDefault(_formField);
 	

@@ -1,14 +1,9 @@
 import React from 'react';
 
-var Label = React.createClass({
-    getDefaultProps: function () {
-        return {
-            id: "",
-            className: "m-frf-label"
-        };
-    },
 
-    render: function () {
+class Label extends React.Component {
+
+    render() {
         return (
             <label className={this.props.className}
                    htmlFor={this.props.htmlFor}>
@@ -16,6 +11,11 @@ var Label = React.createClass({
             </label>
         );
     }
-});
+
+}
+
+Label.defaultProps = {
+    className: "module-field-label"
+};
 
 export default Label;

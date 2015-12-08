@@ -869,16 +869,19 @@ table tbody tr {
   border-radius: 5px; }
 
 /*----------------------------
- Form Field
+ Form Field Items (Modules)
 ----------------------------*/
-.module-form-field .m-frf-label {
+.module-field-label {
   margin-bottom: 5px;
   display: block; }
 
-.module-form-field .m-frf-text,
-.module-form-field .m-frf-email,
-.module-form-field .m-frf-password {
+.module-field-text {
   width: 100%;
+  display: block; }
+
+.module-field-error-message {
+  margin-top: 4px;
+  color: #ff0000;
   display: block; }
 
 .module-form-field .m-frf-textarea {
@@ -889,11 +892,6 @@ table tbody tr {
   display: block; }
 
 .module-form-field .m-frf-datetime {
-  display: block; }
-
-.module-form-field .m-frf-error {
-  margin-top: 4px;
-  color: #ff0000;
   display: block; }
 
 /*----------------------------

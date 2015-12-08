@@ -1,33 +1,26 @@
 import React from 'react';
 import Field from './field';
-import Label from './label';
-import Error from './error';
 
 var FormField = React.createClass({
 
     getDefaultProps: function () {
         return {
             containerClassName: "module-form-field",
+            label: "",
             field: {},
-            label: {},
-            error: {}
+            error: ""
         };
     },
 
     render: function () {
         var id = this.props.field.id || this._generateId();
         var fieldProps = Object.assign({}, this.props.field, {id: id});
-        var labelProps = Object.assign({}, this.props.label, {htmlFor: id});
 
         var field = React.createElement(Field, fieldProps);
-        var label = React.createElement(Label, labelProps);
-        var error = React.createElement(Error, this.props.error);
 
         return (
             <div className={this.props.containerClassName}>
-                { label }
                 { field }
-                { error }
             </div>
         );
     },
