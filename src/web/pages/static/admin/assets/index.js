@@ -34485,7 +34485,7 @@
 	                    case "email":
 	                    case "password":
 	                    default:
-	                        element = _react2.default.createElement(_input2.default, {
+	                        element = _react2.default.createElement(InputField, {
 	                            id: setting.id,
 	                            type: setting.type,
 	                            value: value,
@@ -35623,6 +35623,8 @@
 
 	'use strict';
 	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -35635,112 +35637,139 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _formField = __webpack_require__(280);
+	var _input = __webpack_require__(269);
 	
-	var _formField2 = _interopRequireDefault(_formField);
+	var _input2 = _interopRequireDefault(_input);
+	
+	var _label = __webpack_require__(273);
+	
+	var _label2 = _interopRequireDefault(_label);
+	
+	var _errorMessage = __webpack_require__(274);
+	
+	var _errorMessage2 = _interopRequireDefault(_errorMessage);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
 	var successUrl = "/admin/";
 	
-	var LoginForm = _react2.default.createClass({
-	    displayName: 'LoginForm',
+	var LoginForm = (function (_React$Component) {
+	    _inherits(LoginForm, _React$Component);
 	
-	    onSubmit: function onSubmit(e) {
-	        e.preventDefault();
+	    function LoginForm(props) {
+	        _classCallCheck(this, LoginForm);
 	
-	        var email = this.state.email.trim();
-	        var password = this.state.password.trim();
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LoginForm).call(this, props));
 	
-	        _serverFacade2.default.login(email, password).then(function () {
-	            window.location.replace(successUrl);
-	        }).catch((function () {
-	            this.setState({
-	                error: true
-	            });
-	        }).bind(this));
-	    },
-	
-	    getInitialState: function getInitialState() {
-	        return {
+	        _this.state = {
 	            error: false,
 	            email: "",
 	            password: ""
 	        };
-	    },
+	        return _this;
+	    }
 	
-	    render: function render() {
+	    _createClass(LoginForm, [{
+	        key: 'onSubmit',
+	        value: function onSubmit(e) {
+	            e.preventDefault();
 	
-	        var emailField = _react2.default.createElement(_formField2.default, {
-	            field: {
-	                type: "email",
-	                value: this.state.email,
-	                onChange: (function (value) {
-	                    this.setState({ email: value });
-	                }).bind(this),
-	                autoFocus: true,
-	                placeholder: "Email Address"
-	            }
-	        });
+	            var email = this.state.email.trim();
+	            var password = this.state.password.trim();
 	
-	        var passwordField = _react2.default.createElement(_formField2.default, {
-	            field: {
-	                type: "password",
-	                value: this.state.password,
-	                onChange: (function (value) {
-	                    this.setState({ password: value });
-	                }).bind(this),
-	                placeholder: "Password"
-	            }
-	        });
+	            _serverFacade2.default.login(email, password).then(function () {
+	                window.location.replace(successUrl);
+	            }).catch((function () {
+	                this.setState({
+	                    error: true
+	                });
+	            }).bind(this));
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
 	
-	        return _react2.default.createElement(
-	            'form',
-	            { className: 'module-login-form', method: 'post', onSubmit: this.onSubmit },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'm-lgf-wrapper' },
+	            return _react2.default.createElement(
+	                'form',
+	                { className: 'module-login-form', method: 'post', onSubmit: this.onSubmit.bind(this) },
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'module-data-editor' },
-	                    _react2.default.createElement(
-	                        'h1',
-	                        { className: 'm-dte-title' },
-	                        'WeblogJS Admin Site'
-	                    ),
+	                    { className: 'm-lgf-wrapper' },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'm-dte-field-container' },
-	                        emailField
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'm-dte-field-container' },
-	                        passwordField
-	                    ),
-	                    this.state.error ? _react2.default.createElement(
-	                        'div',
-	                        { className: 'm-dte-field-container' },
+	                        { className: 'module-data-editor' },
 	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'm-lgf-error' },
-	                            'The email or password is incorrect.'
-	                        )
-	                    ) : null,
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'm-dte-field-container' },
+	                            'h1',
+	                            { className: 'm-dte-title' },
+	                            'WeblogJS Admin Site'
+	                        ),
 	                        _react2.default.createElement(
-	                            'button',
-	                            { className: 'module-button m-btn-plain', type: 'submit' },
-	                            'Sign in'
+	                            'div',
+	                            { className: 'm-dte-field-container' },
+	                            _react2.default.createElement(
+	                                _label2.default,
+	                                { htmlFor: 'LoginFormEmailField' },
+	                                'Email Address'
+	                            ),
+	                            _react2.default.createElement(_input2.default, {
+	                                id: 'LoginFormEmailField',
+	                                type: 'email',
+	                                value: this.state.email,
+	                                onChange: function onChange(value) {
+	                                    return _this2.setState({ email: value });
+	                                }
+	                            })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'm-dte-field-container' },
+	                            _react2.default.createElement(
+	                                _label2.default,
+	                                { htmlFor: 'LoginFormPasswordField' },
+	                                'Password'
+	                            ),
+	                            _react2.default.createElement(_input2.default, {
+	                                id: 'LoginFormPasswordField',
+	                                type: 'password',
+	                                value: this.state.password,
+	                                onChange: function onChange(value) {
+	                                    return _this2.setState({ password: value });
+	                                }
+	                            })
+	                        ),
+	                        this.state.error ? _react2.default.createElement(
+	                            'div',
+	                            { className: 'm-dte-field-container' },
+	                            _react2.default.createElement(
+	                                'span',
+	                                { className: 'm-lgf-error' },
+	                                'The email or password is incorrect.'
+	                            )
+	                        ) : null,
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'm-dte-field-container' },
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'module-button m-btn-plain', type: 'submit' },
+	                                'Sign in'
+	                            )
 	                        )
 	                    )
 	                )
-	            )
-	        );
-	    }
-	});
+	            );
+	        }
+	    }]);
+	
+	    return LoginForm;
+	})(_react2.default.Component);
 	
 	exports.default = LoginForm;
 

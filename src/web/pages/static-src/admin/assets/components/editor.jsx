@@ -1,5 +1,5 @@
 import React from 'react';
-import InputField from './form-field/field/input';
+import Input from './form-field/field/input';
 import Checkbox from './form-field/field/checkbox';
 import CheckboxList from './form-field/field/checkbox-list';
 import Label from './form-field/label';
