@@ -21,15 +21,15 @@ class ModelController {
         this._deleterMounter = new Mounter(this.Deleter, 'main-content-container');
 
         this._listMounter.props = {
-            addButtonClicked: () => {
+            onAddButtonClicked: () => {
                 this.onClickAddButton.fire();
             },
 
-            editButtonClicked: id => {
+            onEditButtonClicked: id => {
                 this.onClickEditButton.fire(id);
             },
 
-            deleteButtonClicked: id => {
+            onDeleteButtonClicked: id => {
                 this.onClickDeleteButton.fire(id);
             }
         };

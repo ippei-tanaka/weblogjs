@@ -11,15 +11,12 @@ class Editor extends React.Component {
     constructor(props) {
         super(props);
 
-        var values = {};
         var lists = {};
 
         this.listRetrievers = {};
 
         Object.keys(this.fieldSettings).forEach((fKey) => {
             var setting = this.fieldSettings[fKey];
-
-            values[fKey] = setting.value;
 
             if (setting.list) {
                 lists[fKey] = [];
@@ -28,7 +25,7 @@ class Editor extends React.Component {
         });
 
         this.state = {
-            values: values,
+            values: {},
             lists: lists,
             errors: {}
         };
@@ -83,7 +80,7 @@ class Editor extends React.Component {
         var fields = Object.keys(this.fieldSettings).map(
             (key, index) => {
                 var setting = this.fieldSettings[key];
-                var value = this.state.values[key];
+                var val = this.state.values[key];
                 var list = this.state.lists[key];
                 var error = this.state.errors[key];
                 var element = null;
@@ -97,19 +94,19 @@ class Editor extends React.Component {
                             <Input
                                 id={setting.id}
                                 type={setting.type}
-                                value={value}
-                                onChange={value => this.setValueState(key, value)}
+                                value={val}
+                                onChange={v => this.setValueState(key, v)}
                             />
                         );
                         break;
                     case "checkbox-list":
                         element = (
-                            <CheckboxList onChange={value => this.setValueState(key, value) }>
+                            <CheckboxList onChange={v => this.setValueState(key, v) }>
                                 {list.map(
                                     (item, index) =>
                                     <Checkbox key={index}
                                               name={item.value}
-                                              value={value.indexOf(item.value) !== -1}
+                                              value={val ? val.indexOf(item.value) !== -1 : false}
                                               label={item.label}/>)}
                             </CheckboxList>
                         );

@@ -1,4 +1,3 @@
-import GlobalEvents from '../services/global-events';
 import ServerFacade from '../services/server-facade';
 import Editor from './editor';
 
@@ -14,28 +13,24 @@ class UserAdder extends Editor {
             email: {
                 id: "UserAdderEmailField",
                 type: "email",
-                label: "Email Address",
-                value: ""
+                label: "Email Address"
             },
 
             password: {
                 id: "UserAdderPasswordField",
                 type: "password",
-                label: "Password",
-                value: ""
+                label: "Password"
             },
 
             display_name: {
                 id: "UserAdderDisplayNameField",
                 type: "text",
-                label: "Display Name",
-                value: ""
+                label: "Display Name"
             },
 
             privileges: {
                 type: "checkbox-list",
                 label: "Privileges",
-                value: [],
                 list: () => ServerFacade.getPrivileges().then(
                     privileges => Object.keys(privileges).map(key => {
                         return {
@@ -48,6 +43,15 @@ class UserAdder extends Editor {
         }
     }
 
+    retrieveModel() {
+        return Promise.resolve({
+            email: "",
+            password: "",
+            display_name: "",
+            privileges: []
+        });
+    }
+
     sendToServer(values) {
         var data = {
             email: values.email.trim(),
@@ -56,10 +60,7 @@ class UserAdder extends Editor {
             privileges: values.privileges
         };
 
-        return ServerFacade.createUser(data)
-            .then(function () {
-                GlobalEvents.userCreated.fire();
-            });
+        return ServerFacade.createUser(data);
     }
 }
 

@@ -1,4 +1,3 @@
-import GlobalEvents from '../services/global-events';
 import ServerFacade from '../services/server-facade';
 import UserAdder from './user-adder';
 
@@ -33,10 +32,7 @@ class UserEditor extends UserAdder {
             privileges: values.privileges
         };
 
-        return ServerFacade.updateUser(id, data)
-            .then(function () {
-                GlobalEvents.userUpdated.fire();
-            });
+        return ServerFacade.updateUser(id, data);
     }
 }
 

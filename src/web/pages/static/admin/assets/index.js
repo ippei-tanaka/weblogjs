@@ -50,7 +50,7 @@
 	
 	var _homeController2 = _interopRequireDefault(_homeController);
 	
-	var _loginController = __webpack_require__(287);
+	var _loginController = __webpack_require__(288);
 	
 	var _loginController2 = _interopRequireDefault(_loginController);
 	
@@ -105,7 +105,7 @@
 	
 	var _userController2 = _interopRequireDefault(_userController);
 	
-	var _settingController = __webpack_require__(282);
+	var _settingController = __webpack_require__(283);
 	
 	var _settingController2 = _interopRequireDefault(_settingController);
 	
@@ -22401,15 +22401,15 @@
 	
 	var _userList2 = _interopRequireDefault(_userList);
 	
-	var _userAdder = __webpack_require__(270);
+	var _userAdder = __webpack_require__(271);
 	
 	var _userAdder2 = _interopRequireDefault(_userAdder);
 	
-	var _userEditor = __webpack_require__(278);
+	var _userEditor = __webpack_require__(279);
 	
 	var _userEditor2 = _interopRequireDefault(_userEditor);
 	
-	var _userDeleter = __webpack_require__(279);
+	var _userDeleter = __webpack_require__(280);
 	
 	var _userDeleter2 = _interopRequireDefault(_userDeleter);
 	
@@ -22514,15 +22514,15 @@
 	        this._deleterMounter = new _reactComponentMounter2.default(this.Deleter, 'main-content-container');
 	
 	        this._listMounter.props = {
-	            addButtonClicked: function addButtonClicked() {
+	            onAddButtonClicked: function onAddButtonClicked() {
 	                _this.onClickAddButton.fire();
 	            },
 	
-	            editButtonClicked: function editButtonClicked(id) {
+	            onEditButtonClicked: function onEditButtonClicked(id) {
 	                _this.onClickEditButton.fire(id);
 	            },
 	
-	            deleteButtonClicked: function deleteButtonClicked(id) {
+	            onDeleteButtonClicked: function onDeleteButtonClicked(id) {
 	                _this.onClickDeleteButton.fire(id);
 	            }
 	        };
@@ -22800,240 +22800,91 @@
 
 	'use strict';
 	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	
-	var _react = __webpack_require__(8);
-	
-	var _react2 = _interopRequireDefault(_react);
 	
 	var _moment = __webpack_require__(182);
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
+	var _list = __webpack_require__(270);
+	
+	var _list2 = _interopRequireDefault(_list);
+	
 	var _serverFacade = __webpack_require__(171);
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _globalEvents = __webpack_require__(2);
-	
-	var _globalEvents2 = _interopRequireDefault(_globalEvents);
-	
-	var _event = __webpack_require__(3);
-	
-	var _event2 = _interopRequireDefault(_event);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var UserList = _react2.default.createClass({
-	    displayName: 'UserList',
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    getInitialState: function getInitialState() {
-	        return {
-	            users: []
-	        };
-	    },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	    componentDidMount: function componentDidMount() {
-	        this.events.addButtonClicked.on(this.props.addButtonClicked);
-	        this.events.editButtonClicked.on(this.props.editButtonClicked);
-	        this.events.deleteButtonClicked.on(this.props.deleteButtonClicked);
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	        _globalEvents2.default.userCreated.on(this._retrieveDataAndUpdateList);
-	        _globalEvents2.default.userUpdated.on(this._retrieveDataAndUpdateList);
-	        _globalEvents2.default.userDeleted.on(this._retrieveDataAndUpdateList);
+	var UserList = (function (_List) {
+	    _inherits(UserList, _List);
 	
-	        this._retrieveDataAndUpdateList();
-	    },
+	    function UserList() {
+	        _classCallCheck(this, UserList);
 	
-	    componentWillUnmount: function componentWillUnmount() {
-	        _globalEvents2.default.userCreated.off(this._retrieveDataAndUpdateList);
-	        _globalEvents2.default.userUpdated.off(this._retrieveDataAndUpdateList);
-	        _globalEvents2.default.userDeleted.off(this._retrieveDataAndUpdateList);
-	    },
-	
-	    _retrieveDataAndUpdateList: function _retrieveDataAndUpdateList() {
-	        _serverFacade2.default.getUsers().then((function (data) {
-	            this.setState({
-	                users: data
-	            });
-	        }).bind(this)).catch((function (xhr, status, err) {
-	            console.error(url, status, err.toString());
-	        }).bind(this));
-	    },
-	
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'module-data-list' },
-	            _react2.default.createElement(
-	                'h2',
-	                { className: 'm-dtl-title' },
-	                'Users'
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'button',
-	                    { className: 'module-button m-btn-clear m-dtl-add-button',
-	                        onClick: this.onAddButtonClicked,
-	                        title: 'Add'
-	                    },
-	                    _react2.default.createElement('i', { className: 'fa fa-plus-square-o m-dtl-add-icon' }),
-	                    'Add'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'table',
-	                { className: 'm-dtl-table' },
-	                _react2.default.createElement(
-	                    'thead',
-	                    null,
-	                    _react2.default.createElement(
-	                        'tr',
-	                        null,
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            '#'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'Name'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'Email'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'Privileges'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'Created'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'Updated'
-	                        ),
-	                        _react2.default.createElement('th', null)
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'tbody',
-	                    null,
-	                    this.state.users.map((function (user, index) {
-	                        return _react2.default.createElement(UserListItem, { key: user._id, user: user, events: this.events, number: index + 1 });
-	                    }).bind(this))
-	                )
-	            )
-	        );
-	    },
-	
-	    onAddButtonClicked: function onAddButtonClicked(e) {
-	        e.preventDefault();
-	        this.events.addButtonClicked.fire();
-	    },
-	
-	    events: {
-	        addButtonClicked: new _event2.default(),
-	        editButtonClicked: new _event2.default(),
-	        deleteButtonClicked: new _event2.default()
-	    }
-	});
-	
-	var UserListItem = _react2.default.createClass({
-	    displayName: 'UserListItem',
-	
-	    render: function render() {
-	
-	        var privileges = this.props.user.readable_privileges.map(function (p) {
-	            return p.toLowerCase();
-	        }).join(', ');
-	        var created = (0, _moment2.default)(this.props.user.created).format("YYYY-MM-DD HH:mm Z");
-	        var updated = (0, _moment2.default)(this.props.user.updated).format("YYYY-MM-DD HH:mm Z");
-	
-	        return _react2.default.createElement(
-	            'tr',
-	            null,
-	            _react2.default.createElement(
-	                'td',
-	                { 'data-label': 'No.' },
-	                this.props.number
-	            ),
-	            _react2.default.createElement(
-	                'td',
-	                { 'data-label': 'Display Name' },
-	                this.props.user.display_name
-	            ),
-	            _react2.default.createElement(
-	                'td',
-	                { 'data-label': 'Email' },
-	                this.props.user.email
-	            ),
-	            _react2.default.createElement(
-	                'td',
-	                { 'data-label': 'Updated' },
-	                privileges
-	            ),
-	            _react2.default.createElement(
-	                'td',
-	                { 'data-label': 'Created' },
-	                created
-	            ),
-	            _react2.default.createElement(
-	                'td',
-	                { 'data-label': 'Updated' },
-	                updated
-	            ),
-	            _react2.default.createElement(
-	                'td',
-	                { className: 'm-dtl-no-wrap' },
-	                _react2.default.createElement(
-	                    'ul',
-	                    { className: 'm-dtl-button-list' },
-	                    _react2.default.createElement(
-	                        'li',
-	                        { className: 'm-dtl-button-list-item' },
-	                        _react2.default.createElement(
-	                            'button',
-	                            { className: 'module-button m-btn-clear', onClick: this.onEditButtonClicked },
-	                            _react2.default.createElement('i', { title: 'Edit', className: 'fa fa-pencil-square-o m-dtl-edit-icon' })
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'li',
-	                        { className: 'm-dtl-button-list-item' },
-	                        _react2.default.createElement(
-	                            'button',
-	                            { className: 'module-button m-btn-clear', onClick: this.onDeleteButtonClicked },
-	                            _react2.default.createElement('i', { title: 'Delete', className: 'fa fa-trash-o m-dtl-delete-icon' })
-	                        )
-	                    )
-	                )
-	            )
-	        );
-	    },
-	
-	    onDeleteButtonClicked: function onDeleteButtonClicked(e) {
-	        e.preventDefault();
-	        this.props.events.deleteButtonClicked.fire(this.props.user._id);
-	    },
-	
-	    onEditButtonClicked: function onEditButtonClicked(e) {
-	        e.preventDefault();
-	        this.props.events.editButtonClicked.fire(this.props.user._id);
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(UserList).apply(this, arguments));
 	    }
 	
-	});
+	    _createClass(UserList, [{
+	        key: 'retrieveModels',
+	        value: function retrieveModels() {
+	            return _serverFacade2.default.getUsers();
+	        }
+	    }, {
+	        key: 'title',
+	        get: function get() {
+	            return "User List";
+	        }
+	    }, {
+	        key: 'fields',
+	        get: function get() {
+	            return {
+	                display_name: {
+	                    label: "Name"
+	                },
+	
+	                email: {
+	                    label: "Email"
+	                },
+	
+	                readable_privileges: {
+	                    label: "Privileges",
+	                    stringify: function stringify(value) {
+	                        return value.map(function (p) {
+	                            return p.toLowerCase();
+	                        }).join(', ');
+	                    }
+	                },
+	
+	                created: {
+	                    label: "Created",
+	                    stringify: function stringify(value) {
+	                        return (0, _moment2.default)(value).format("YYYY-MM-DD HH:mm Z");
+	                    }
+	                },
+	
+	                updated: {
+	                    label: "Updated",
+	                    stringify: function stringify(value) {
+	                        return (0, _moment2.default)(value).format("YYYY-MM-DD HH:mm Z");
+	                    }
+	                }
+	            };
+	        }
+	    }]);
+	
+	    return UserList;
+	})(_list2.default);
 	
 	exports.default = UserList;
 
@@ -34509,15 +34360,259 @@
 	    value: true
 	});
 	
-	var _globalEvents = __webpack_require__(2);
+	var _react = __webpack_require__(8);
 	
-	var _globalEvents2 = _interopRequireDefault(_globalEvents);
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _moment = __webpack_require__(182);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var List = (function (_React$Component) {
+	    _inherits(List, _React$Component);
+	
+	    function List(props) {
+	        _classCallCheck(this, List);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(List).call(this, props));
+	
+	        _this.state = {
+	            models: []
+	        };
+	        return _this;
+	    }
+	
+	    _createClass(List, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var _this2 = this;
+	
+	            this.retrieveModels().then(function (value) {
+	                return _this2.setState({ models: value });
+	            }).catch(function (data) {
+	                return console.error(data);
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this3 = this;
+	
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'module-data-list' },
+	                _react2.default.createElement(
+	                    'h2',
+	                    { className: 'm-dtl-title' },
+	                    this.title
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'module-button m-btn-clear m-dtl-add-button',
+	                            onClick: this.onAddButtonClicked.bind(this),
+	                            title: 'Add' },
+	                        _react2.default.createElement('i', { className: 'fa fa-plus-square-o m-dtl-add-icon' }),
+	                        'Add'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'table',
+	                    { className: 'm-dtl-table' },
+	                    _react2.default.createElement(
+	                        'thead',
+	                        null,
+	                        _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                '#'
+	                            ),
+	                            _react2.default.createElement('th', null),
+	                            Object.keys(this.fields).map(function (key, index) {
+	                                return _react2.default.createElement(
+	                                    'th',
+	                                    { key: index },
+	                                    _this3.fields[key].label
+	                                );
+	                            })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tbody',
+	                        null,
+	                        this.state.models.map(function (model, index) {
+	                            return _react2.default.createElement(ListItem, { key: model._id,
+	                                model: model,
+	                                fields: _this3.fields,
+	                                onEditButtonClicked: _this3.props.onEditButtonClicked,
+	                                onDeleteButtonClicked: _this3.props.onDeleteButtonClicked,
+	                                number: index + 1 });
+	                        })
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'retrieveModels',
+	        value: function retrieveModels() {
+	            return Promise.reject("Implement retrieveModel().");
+	        }
+	    }, {
+	        key: 'onAddButtonClicked',
+	        value: function onAddButtonClicked(e) {
+	            e.preventDefault();
+	            this.props.onAddButtonClicked();
+	        }
+	    }, {
+	        key: 'title',
+	        get: function get() {
+	            return "Something";
+	        }
+	    }, {
+	        key: 'fields',
+	        get: function get() {
+	            return Promise.reject("Implement fields.");
+	        }
+	    }]);
+	
+	    return List;
+	})(_react2.default.Component);
+	
+	List.defaultProps = {
+	
+	    onAddButtonClicked: function onAddButtonClicked() {},
+	
+	    onEditButtonClicked: function onEditButtonClicked() {},
+	
+	    onDeleteButtonClicked: function onDeleteButtonClicked() {}
+	
+	};
+	
+	var ListItem = (function (_React$Component2) {
+	    _inherits(ListItem, _React$Component2);
+	
+	    function ListItem(props) {
+	        _classCallCheck(this, ListItem);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ListItem).call(this, props));
+	    }
+	
+	    _createClass(ListItem, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this5 = this;
+	
+	            return _react2.default.createElement(
+	                'tr',
+	                null,
+	                _react2.default.createElement(
+	                    'td',
+	                    { 'data-label': 'No.' },
+	                    this.props.number
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    { className: 'm-dtl-no-wrap' },
+	                    _react2.default.createElement(
+	                        'ul',
+	                        { className: 'm-dtl-button-list' },
+	                        _react2.default.createElement(
+	                            'li',
+	                            { className: 'm-dtl-button-list-item' },
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'module-button m-btn-clear',
+	                                    onClick: this.onEditButtonClicked.bind(this) },
+	                                _react2.default.createElement('i', { title: 'Edit', className: 'fa fa-pencil-square-o m-dtl-edit-icon' })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'li',
+	                            { className: 'm-dtl-button-list-item' },
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'module-button m-btn-clear',
+	                                    onClick: this.onDeleteButtonClicked.bind(this) },
+	                                _react2.default.createElement('i', { title: 'Delete', className: 'fa fa-trash-o m-dtl-delete-icon' })
+	                            )
+	                        )
+	                    )
+	                ),
+	                Object.keys(this.props.fields).map(function (key, index) {
+	                    var field = _this5.props.fields[key];
+	                    var value = _this5.props.model[key];
+	
+	                    value = field.stringify ? field.stringify(value) : value;
+	
+	                    return _react2.default.createElement(
+	                        'td',
+	                        { 'data-label': field.label, key: index },
+	                        value
+	                    );
+	                })
+	            );
+	        }
+	    }, {
+	        key: 'onDeleteButtonClicked',
+	        value: function onDeleteButtonClicked(e) {
+	            e.preventDefault();
+	            this.props.onDeleteButtonClicked(this.props.model._id);
+	        }
+	    }, {
+	        key: 'onEditButtonClicked',
+	        value: function onEditButtonClicked(e) {
+	            e.preventDefault();
+	            this.props.onEditButtonClicked(this.props.model._id);
+	        }
+	    }]);
+	
+	    return ListItem;
+	})(_react2.default.Component);
+	
+	ListItem.defaultProps = {
+	
+	    onEditButtonClicked: function onEditButtonClicked() {},
+	
+	    onDeleteButtonClicked: function onDeleteButtonClicked() {},
+	
+	    model: null,
+	
+	    fields: null
+	
+	};
+	
+	exports.default = List;
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	
 	var _serverFacade = __webpack_require__(171);
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _editor = __webpack_require__(271);
+	var _editor = __webpack_require__(272);
 	
 	var _editor2 = _interopRequireDefault(_editor);
 	
@@ -34539,6 +34634,16 @@
 	    }
 	
 	    _createClass(UserAdder, [{
+	        key: 'retrieveModel',
+	        value: function retrieveModel() {
+	            return Promise.resolve({
+	                email: "",
+	                password: "",
+	                display_name: "",
+	                privileges: []
+	            });
+	        }
+	    }, {
 	        key: 'sendToServer',
 	        value: function sendToServer(values) {
 	            var data = {
@@ -34548,9 +34653,7 @@
 	                privileges: values.privileges
 	            };
 	
-	            return _serverFacade2.default.createUser(data).then(function () {
-	                _globalEvents2.default.userCreated.fire();
-	            });
+	            return _serverFacade2.default.createUser(data);
 	        }
 	    }, {
 	        key: 'title',
@@ -34564,28 +34667,24 @@
 	                email: {
 	                    id: "UserAdderEmailField",
 	                    type: "email",
-	                    label: "Email Address",
-	                    value: ""
+	                    label: "Email Address"
 	                },
 	
 	                password: {
 	                    id: "UserAdderPasswordField",
 	                    type: "password",
-	                    label: "Password",
-	                    value: ""
+	                    label: "Password"
 	                },
 	
 	                display_name: {
 	                    id: "UserAdderDisplayNameField",
 	                    type: "text",
-	                    label: "Display Name",
-	                    value: ""
+	                    label: "Display Name"
 	                },
 	
 	                privileges: {
 	                    type: "checkbox-list",
 	                    label: "Privileges",
-	                    value: [],
 	                    list: function list() {
 	                        return _serverFacade2.default.getPrivileges().then(function (privileges) {
 	                            return Object.keys(privileges).map(function (key) {
@@ -34607,7 +34706,7 @@
 	exports.default = UserAdder;
 
 /***/ },
-/* 271 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34622,23 +34721,23 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _input = __webpack_require__(272);
+	var _input = __webpack_require__(273);
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	var _checkbox = __webpack_require__(274);
+	var _checkbox = __webpack_require__(275);
 	
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 	
-	var _checkboxList = __webpack_require__(275);
+	var _checkboxList = __webpack_require__(276);
 	
 	var _checkboxList2 = _interopRequireDefault(_checkboxList);
 	
-	var _label = __webpack_require__(276);
+	var _label = __webpack_require__(277);
 	
 	var _label2 = _interopRequireDefault(_label);
 	
-	var _errorMessage = __webpack_require__(277);
+	var _errorMessage = __webpack_require__(278);
 	
 	var _errorMessage2 = _interopRequireDefault(_errorMessage);
 	
@@ -34658,15 +34757,12 @@
 	
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Editor).call(this, props));
 	
-	        var values = {};
 	        var lists = {};
 	
 	        _this.listRetrievers = {};
 	
 	        Object.keys(_this.fieldSettings).forEach(function (fKey) {
 	            var setting = _this.fieldSettings[fKey];
-	
-	            values[fKey] = setting.value;
 	
 	            if (setting.list) {
 	                lists[fKey] = [];
@@ -34675,7 +34771,7 @@
 	        });
 	
 	        _this.state = {
-	            values: values,
+	            values: {},
 	            lists: lists,
 	            errors: {}
 	        };
@@ -34728,7 +34824,7 @@
 	
 	            var fields = Object.keys(this.fieldSettings).map(function (key, index) {
 	                var setting = _this3.fieldSettings[key];
-	                var value = _this3.state.values[key];
+	                var val = _this3.state.values[key];
 	                var list = _this3.state.lists[key];
 	                var error = _this3.state.errors[key];
 	                var element = null;
@@ -34741,22 +34837,22 @@
 	                        element = _react2.default.createElement(_input2.default, {
 	                            id: setting.id,
 	                            type: setting.type,
-	                            value: value,
-	                            onChange: function onChange(value) {
-	                                return _this3.setValueState(key, value);
+	                            value: val,
+	                            onChange: function onChange(v) {
+	                                return _this3.setValueState(key, v);
 	                            }
 	                        });
 	                        break;
 	                    case "checkbox-list":
 	                        element = _react2.default.createElement(
 	                            _checkboxList2.default,
-	                            { onChange: function onChange(value) {
-	                                    return _this3.setValueState(key, value);
+	                            { onChange: function onChange(v) {
+	                                    return _this3.setValueState(key, v);
 	                                } },
 	                            list.map(function (item, index) {
 	                                return _react2.default.createElement(_checkbox2.default, { key: index,
 	                                    name: item.value,
-	                                    value: value.indexOf(item.value) !== -1,
+	                                    value: val ? val.indexOf(item.value) !== -1 : false,
 	                                    label: item.label });
 	                            })
 	                        );
@@ -34844,7 +34940,7 @@
 	exports.default = Editor;
 
 /***/ },
-/* 272 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -34853,7 +34949,7 @@
 	    value: true
 	});
 	
-	var _abstractField = __webpack_require__(273);
+	var _abstractField = __webpack_require__(274);
 	
 	var _abstractField2 = _interopRequireDefault(_abstractField);
 	
@@ -34886,7 +34982,7 @@
 	exports.default = Input;
 
 /***/ },
-/* 273 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -34971,7 +35067,7 @@
 	exports.default = AbstractField;
 
 /***/ },
-/* 274 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35038,7 +35134,7 @@
 	exports.default = Checkbox;
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35057,7 +35153,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _checkbox = __webpack_require__(274);
+	var _checkbox = __webpack_require__(275);
 	
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 	
@@ -35131,7 +35227,7 @@
 	exports.default = CheckboxList;
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35185,7 +35281,7 @@
 	exports.default = Label;
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35239,7 +35335,7 @@
 	exports.default = ErrorMessage;
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35252,15 +35348,11 @@
 	    value: true
 	});
 	
-	var _globalEvents = __webpack_require__(2);
-	
-	var _globalEvents2 = _interopRequireDefault(_globalEvents);
-	
 	var _serverFacade = __webpack_require__(171);
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _userAdder = __webpack_require__(270);
+	var _userAdder = __webpack_require__(271);
 	
 	var _userAdder2 = _interopRequireDefault(_userAdder);
 	
@@ -35300,9 +35392,7 @@
 	                privileges: values.privileges
 	            };
 	
-	            return _serverFacade2.default.updateUser(id, data).then(function () {
-	                _globalEvents2.default.userUpdated.fire();
-	            });
+	            return _serverFacade2.default.updateUser(id, data);
 	        }
 	    }, {
 	        key: 'title',
@@ -35326,7 +35416,7 @@
 	exports.default = UserEditor;
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35337,13 +35427,9 @@
 	    value: true
 	});
 	
-	var _deleter = __webpack_require__(280);
+	var _deleter = __webpack_require__(281);
 	
 	var _deleter2 = _interopRequireDefault(_deleter);
-	
-	var _globalEvents = __webpack_require__(2);
-	
-	var _globalEvents2 = _interopRequireDefault(_globalEvents);
 	
 	var _serverFacade = __webpack_require__(171);
 	
@@ -35376,9 +35462,7 @@
 	    }, {
 	        key: 'deleteUser',
 	        value: function deleteUser(id) {
-	            return _serverFacade2.default.deleteUser(id).then(function () {
-	                _globalEvents2.default.userDeleted.fire();
-	            });
+	            return _serverFacade2.default.deleteUser(id);
 	        }
 	    }, {
 	        key: 'title',
@@ -35393,7 +35477,7 @@
 	exports.default = UserDeleter;
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35408,7 +35492,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _confirmation = __webpack_require__(281);
+	var _confirmation = __webpack_require__(282);
 	
 	var _confirmation2 = _interopRequireDefault(_confirmation);
 	
@@ -35518,7 +35602,7 @@
 	exports.default = Deleter;
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35602,7 +35686,7 @@
 	exports.default = Confirmation;
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35615,7 +35699,7 @@
 	
 	var _reactComponentMounter2 = _interopRequireDefault(_reactComponentMounter);
 	
-	var _settingEditor = __webpack_require__(283);
+	var _settingEditor = __webpack_require__(284);
 	
 	var _settingEditor2 = _interopRequireDefault(_settingEditor);
 	
@@ -35665,7 +35749,7 @@
 	exports.default = _exports;
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35686,11 +35770,11 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _stringFormatter = __webpack_require__(284);
+	var _stringFormatter = __webpack_require__(285);
 	
 	var _stringFormatter2 = _interopRequireDefault(_stringFormatter);
 	
-	var _formField = __webpack_require__(285);
+	var _formField = __webpack_require__(286);
 	
 	var _formField2 = _interopRequireDefault(_formField);
 	
@@ -35853,7 +35937,7 @@
 	exports.default = SettingEditor;
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35899,7 +35983,7 @@
 	exports.default = StringFormatter;
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35912,7 +35996,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _field = __webpack_require__(286);
+	var _field = __webpack_require__(287);
 	
 	var _field2 = _interopRequireDefault(_field);
 	
@@ -35959,7 +36043,7 @@
 	exports.default = FormField;
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36031,7 +36115,7 @@
 	exports.default = Field;
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36050,7 +36134,7 @@
 	
 	var _globalEvents2 = _interopRequireDefault(_globalEvents);
 	
-	var _loginForm = __webpack_require__(288);
+	var _loginForm = __webpack_require__(289);
 	
 	var _loginForm2 = _interopRequireDefault(_loginForm);
 	
@@ -36079,7 +36163,7 @@
 	exports.default = LoginController;
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36098,15 +36182,15 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _input = __webpack_require__(272);
+	var _input = __webpack_require__(273);
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	var _label = __webpack_require__(276);
+	var _label = __webpack_require__(277);
 	
 	var _label2 = _interopRequireDefault(_label);
 	
-	var _errorMessage = __webpack_require__(277);
+	var _errorMessage = __webpack_require__(278);
 	
 	var _errorMessage2 = _interopRequireDefault(_errorMessage);
 	
