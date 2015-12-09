@@ -5,10 +5,10 @@ import LoginController from "../controllers/login-controller";
 window.WeblogJS =
 {
     showHome: function () {
-        HomeController.start();
+        (new HomeController()).start();
     },
 
     showLogin: function () {
-        LoginController.start();
+        (new LoginController()).start();
     }
 };

@@ -94,7 +94,7 @@ class Editor extends React.Component {
                     case "password":
                     default:
                         element = (
-                            <InputField
+                            <Input
                                 id={setting.id}
                                 type={setting.type}
                                 value={value}

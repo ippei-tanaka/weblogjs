@@ -4,7 +4,7 @@ import LoginForm from '../components/login-form';
 
 class LoginController {
 
-    static start () {
+    start () {
         GlobalEvent.domReady.on(() => {
             var mounter = new ReactComponentMounter(LoginForm, 'login-form');
             mounter.mount();

@@ -3,30 +3,30 @@ import ServerFacade from '../services/server-facade';
 import Editor from './editor';
 
 
-class UserEditor extends Editor {
+class UserAdder extends Editor {
 
     get title() {
-        return "Edit the User";
+        return "Create a New User";
     }
 
     get fieldSettings() {
         return {
             email: {
-                id: "UserEditorEmailField",
+                id: "UserAdderEmailField",
                 type: "email",
                 label: "Email Address",
                 value: ""
             },
 
             password: {
-                id: "UserEditorPasswordField",
+                id: "UserAdderPasswordField",
                 type: "password",
                 label: "Password",
                 value: ""
             },
 
             display_name: {
-                id: "UserEditorDisplayNameField",
+                id: "UserAdderDisplayNameField",
                 type: "text",
                 label: "Display Name",
                 value: ""
@@ -48,29 +48,20 @@ class UserEditor extends Editor {
         }
     }
 
-    retrieveModel(id) {
-        return ServerFacade.getUser(id).then(data => {
-            return {
-                email: data.email,
-                password: data.password,
-                display_name: data.display_name,
-                privileges: data.privileges
-            }
-        });
-    }
-
-    sendToServer(values, id) {
+    sendToServer(values) {
         var data = {
+            email: values.email.trim(),
+            password: values.password.trim(),
             display_name: values.display_name.trim(),
             privileges: values.privileges
         };
 
-        return ServerFacade.updateUser(id, data)
+        return ServerFacade.createUser(data)
             .then(function () {
-                GlobalEvents.userUpdated.fire();
+                GlobalEvents.userCreated.fire();
             });
     }
 }
 
 
-export default UserEditor;
+export default UserAdder;
