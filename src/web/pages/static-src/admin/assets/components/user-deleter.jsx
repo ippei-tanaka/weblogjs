@@ -1,5 +1,4 @@
 import Deleter from './deleter';
-import GlobalEvents from '../services/global-events';
 import ServerFacade from '../services/server-facade';
 
 class UserDeleter extends Deleter {
@@ -15,10 +14,7 @@ class UserDeleter extends Deleter {
     }
 
     deleteUser(id) {
-        return ServerFacade.deleteUser(id)
-            .then(function () {
-                GlobalEvents.userDeleted.fire();
-            });
+        return ServerFacade.deleteUser(id);
     }
 
 }
