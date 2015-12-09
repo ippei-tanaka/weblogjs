@@ -11,7 +11,40 @@ import SettingController from "./setting-controller";
 
 class HomeController {
 
-    static showNavigation() {
+    constructor () {
+        this.userController = new UserController();
+
+
+        this.userController.onClickAddButton.on(function () {
+            Router.changeHash("/users/new");
+        });
+
+        this.userController.onClickEditButton.on(function (id) {
+            Router.changeHash("/users/" + id);
+        });
+
+        this.userController.onClickDeleteButton.on(function (id) {
+            Router.changeHash("/users/" + id + "/delete");
+        });
+
+        this.userController.onCompleteAdding.on(function () {
+            Router.changeHash("/users");
+        });
+
+        this.userController.onCompleteEditing.on(function () {
+            Router.changeHash("/users");
+        });
+
+        this.userController.onCompleteDeleting.on(function () {
+            Router.changeHash("/users");
+        });
+
+        this.userController.onClickListLocation.on(function () {
+            Router.changeHash("/users");
+        });
+    }
+
+     showNavigation() {
         var navigationMounter;
 
         navigationMounter = new Mounter(
@@ -32,7 +65,7 @@ class HomeController {
         navigationMounter.mount();
     }
 
-    static start() {
+    start() {
         GlobalEvent.domReady.on(() => {
             this.showNavigation();
 
@@ -41,29 +74,7 @@ class HomeController {
 //--------------------------------
 
 // UserController
-            UserController.onClickAddButton.on(function () {
-                Router.changeHash("/users/new");
-            });
 
-            UserController.onClickEditButton.on(function (id) {
-                Router.changeHash("/users/" + id);
-            });
-
-            UserController.onCompleteAdding.on(function () {
-                Router.changeHash("/users");
-            });
-
-            UserController.onCompleteEditing.on(function () {
-                Router.changeHash("/users");
-            });
-
-            UserController.onCompleteDeleting.on(function () {
-                Router.changeHash("/users");
-            });
-
-            UserController.onClickListLocation.on(function () {
-                Router.changeHash("/users");
-            });
             /*
 
              // CategoryController
@@ -157,17 +168,22 @@ class HomeController {
 
 // Users
 
-            Router.addRoute("/users", function () {
-                UserController.showUserList();
+            Router.addRoute("/users", () => {
+                this.userController.showList();
             });
 
-            Router.addRoute("/users/new", function () {
-                UserController.showUserEditorWithAddMode();
+            Router.addRoute("/users/new", () => {
+                this.userController.showAdder();
             });
 
-            Router.addRoute("/users/:id", function (id) {
-                UserController.showUserEditorWithEditMode(id);
+            Router.addRoute("/users/:id", id => {
+                this.userController.showEditor(id);
             });
+
+            Router.addRoute("/users/:id/delete", id => {
+                this.userController.showDeleter(id);
+            });
+
             /*
 
              // Categories
