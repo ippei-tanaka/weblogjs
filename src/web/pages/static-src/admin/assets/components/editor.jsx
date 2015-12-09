@@ -2,6 +2,8 @@ import React from 'react';
 import Input from './form-field/field/input';
 import Checkbox from './form-field/field/checkbox';
 import CheckboxList from './form-field/field/checkbox-list';
+import Select from './form-field/field/select';
+import Option from './form-field/field/option';
 import Label from './form-field/label';
 import ErrorMessage from './form-field/error-message';
 
@@ -109,6 +111,19 @@ class Editor extends React.Component {
                                               value={val ? val.indexOf(item.value) !== -1 : false}
                                               label={item.label}/>)}
                             </CheckboxList>
+                        );
+                        break;
+                    case "select":
+                        element = (
+                            <Select onChange={v => this.setValueState(key, v) }>
+                                {list.map(
+                                    (item, index) =>
+                                    <Option key={index}
+                                            value={item.value}>
+                                        {item.label}
+                                    </Option>
+                                    )}
+                            </Select>
                         );
                         break;
                 }
