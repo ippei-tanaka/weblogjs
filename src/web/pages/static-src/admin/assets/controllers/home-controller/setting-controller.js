@@ -1,46 +1,30 @@
-import Mounter from "../../services/react-component-mounter";
+import LocationBar  from '../../components/location-bar';
+import Mounter      from '../../services/react-component-mounter';
 import SettingEditor from "../../components/setting-editor";
-import PopUp from "../../components/popup";
-import LocationBar from "../../components/location-bar";
 
+class SettingController {
 
-var settingEditorMounter;
-var locationBarMounter;
-var buildLocations;
-var showSettingEditor;
-var exports;
+    constructor() {
+        this._editorMounter = new Mounter(SettingEditor, 'main-content-container');
+        this._locationBarMounter = new Mounter(LocationBar, 'location-bar-container');
+    }
 
+    get locations() {
+        return [
+            {
+                label: "Home"
+            },
+            {
+                label: "Setting Editor"
+            }
+        ];
+    }
 
-settingEditorMounter = new Mounter(
-    SettingEditor, 'main-content-container');
+    showEditor() {
+        this._editorMounter.mount();
+        this._locationBarMounter.props.locations = this.locations;
+        this._locationBarMounter.mount();
+    }
+}
 
-locationBarMounter = new Mounter(LocationBar, 'location-bar-container');
-
-buildLocations = function () {
-    var ret;
-    ret = [
-        {
-            label: "Home"
-        },
-        {
-            label: "Setting Editor"
-        }
-    ];
-    return ret;
-};
-
-showSettingEditor = function () {
-    settingEditorMounter.mount();
-
-    locationBarMounter.props = {
-        locations: buildLocations({hasEditor: true})
-    };
-    locationBarMounter.mount();
-};
-
-exports = {
-    showSettingEditor: showSettingEditor
-};
-
-
-export default exports;
+export default SettingController;
