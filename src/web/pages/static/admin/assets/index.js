@@ -50,7 +50,7 @@
 	
 	var _homeController2 = _interopRequireDefault(_homeController);
 	
-	var _loginController = __webpack_require__(286);
+	var _loginController = __webpack_require__(287);
 	
 	var _loginController2 = _interopRequireDefault(_loginController);
 	
@@ -105,7 +105,7 @@
 	
 	var _userController2 = _interopRequireDefault(_userController);
 	
-	var _settingController = __webpack_require__(281);
+	var _settingController = __webpack_require__(282);
 	
 	var _settingController2 = _interopRequireDefault(_settingController);
 	
@@ -34689,7 +34689,9 @@
 	
 	            this.retrieveModel(this.props.id).then(function (values) {
 	                return _this2.setState({ values: values });
-	            }).catch(function () {});
+	            }).catch(function (data) {
+	                return console.error(data);
+	            });
 	
 	            Object.keys(this.listRetrievers).forEach(function (key) {
 	                var retriever = _this2.listRetrievers[key];
@@ -34701,7 +34703,7 @@
 	    }, {
 	        key: 'retrieveModel',
 	        value: function retrieveModel(id) {
-	            return Promise.reject(null);
+	            return Promise.reject("Implement retrieveModel(id).");
 	        }
 	    }, {
 	        key: 'setValueState',
@@ -35244,6 +35246,8 @@
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -35256,9 +35260,9 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _editor = __webpack_require__(271);
+	var _userAdder = __webpack_require__(270);
 	
-	var _editor2 = _interopRequireDefault(_editor);
+	var _userAdder2 = _interopRequireDefault(_userAdder);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -35268,8 +35272,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var UserEditor = (function (_Editor) {
-	    _inherits(UserEditor, _Editor);
+	var UserEditor = (function (_UserAdder) {
+	    _inherits(UserEditor, _UserAdder);
 	
 	    function UserEditor() {
 	        _classCallCheck(this, UserEditor);
@@ -35283,7 +35287,6 @@
 	            return _serverFacade2.default.getUser(id).then(function (data) {
 	                return {
 	                    email: data.email,
-	                    password: data.password,
 	                    display_name: data.display_name,
 	                    privileges: data.privileges
 	                };
@@ -35309,49 +35312,16 @@
 	    }, {
 	        key: 'fieldSettings',
 	        get: function get() {
-	            return {
-	                email: {
-	                    id: "UserEditorEmailField",
-	                    type: "email",
-	                    label: "Email Address",
-	                    value: ""
-	                },
+	            var settings = _get(Object.getPrototypeOf(UserEditor.prototype), 'fieldSettings', this);
 	
-	                password: {
-	                    id: "UserEditorPasswordField",
-	                    type: "password",
-	                    label: "Password",
-	                    value: ""
-	                },
+	            delete settings.password;
 	
-	                display_name: {
-	                    id: "UserEditorDisplayNameField",
-	                    type: "text",
-	                    label: "Display Name",
-	                    value: ""
-	                },
-	
-	                privileges: {
-	                    type: "checkbox-list",
-	                    label: "Privileges",
-	                    value: [],
-	                    list: function list() {
-	                        return _serverFacade2.default.getPrivileges().then(function (privileges) {
-	                            return Object.keys(privileges).map(function (key) {
-	                                return {
-	                                    value: privileges[key],
-	                                    label: key
-	                                };
-	                            });
-	                        });
-	                    }
-	                }
-	            };
+	            return settings;
 	        }
 	    }]);
 	
 	    return UserEditor;
-	})(_editor2.default);
+	})(_userAdder2.default);
 	
 	exports.default = UserEditor;
 
@@ -35361,13 +35331,15 @@
 
 	'use strict';
 	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	
-	var _react = __webpack_require__(8);
+	var _deleter = __webpack_require__(280);
 	
-	var _react2 = _interopRequireDefault(_react);
+	var _deleter2 = _interopRequireDefault(_deleter);
 	
 	var _globalEvents = __webpack_require__(2);
 	
@@ -35377,76 +35349,176 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _confirmation = __webpack_require__(280);
-	
-	var _confirmation2 = _interopRequireDefault(_confirmation);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var UserDeleter = _react2.default.createClass({
-	    displayName: 'UserDeleter',
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    getInitialState: function getInitialState() {
-	        return {
-	            display_name: ""
-	        };
-	    },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            userId: "",
-	            onComplete: function onComplete() {}
-	        };
-	    },
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	    componentWillMount: function componentWillMount() {
-	        _serverFacade2.default.getUser(this.props.userId).then((function (user) {
-	            this.setState({
-	                display_name: user.display_name
-	            });
-	        }).bind(this));
-	    },
+	var UserDeleter = (function (_Deleter) {
+	    _inherits(UserDeleter, _Deleter);
 	
-	    render: function render() {
-	        return _react2.default.createElement(
-	            _confirmation2.default,
-	            {
-	                mode: 'choose',
-	                onApproved: this._onDeleteApproved,
-	                onCanceled: this._onDeleteCanceled
-	            },
-	            'Do you want to delete "',
-	            this.state.display_name,
-	            '"?'
-	        );
-	    },
+	    function UserDeleter() {
+	        _classCallCheck(this, UserDeleter);
 	
-	    _onDeleteApproved: function _onDeleteApproved() {
-	        var _this = this;
-	
-	        this._deleteUser().then(function () {
-	            return _this.props.onComplete();
-	        }).catch(function (data) {
-	            return console.error(data);
-	        });
-	    },
-	
-	    _onDeleteCanceled: function _onDeleteCanceled() {
-	        this.props.onComplete();
-	    },
-	
-	    _deleteUser: function _deleteUser() {
-	        return _serverFacade2.default.deleteUser(this.props.userId).then(function () {
-	            _globalEvents2.default.userDeleted.fire();
-	        });
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(UserDeleter).apply(this, arguments));
 	    }
 	
-	});
+	    _createClass(UserDeleter, [{
+	        key: 'retrieveLabel',
+	        value: function retrieveLabel(id) {
+	            return _serverFacade2.default.getUser(id).then(function (user) {
+	                return user.display_name;
+	            });
+	        }
+	    }, {
+	        key: 'deleteUser',
+	        value: function deleteUser(id) {
+	            return _serverFacade2.default.deleteUser(id).then(function () {
+	                _globalEvents2.default.userDeleted.fire();
+	            });
+	        }
+	    }, {
+	        key: 'title',
+	        get: function get() {
+	            return "Delete User";
+	        }
+	    }]);
+	
+	    return UserDeleter;
+	})(_deleter2.default);
 	
 	exports.default = UserDeleter;
 
 /***/ },
 /* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _confirmation = __webpack_require__(281);
+	
+	var _confirmation2 = _interopRequireDefault(_confirmation);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Deleter = (function (_React$Component) {
+	    _inherits(Deleter, _React$Component);
+	
+	    function Deleter(props) {
+	        _classCallCheck(this, Deleter);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Deleter).call(this, props));
+	
+	        _this.state = {
+	            label: ""
+	        };
+	        return _this;
+	    }
+	
+	    _createClass(Deleter, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var _this2 = this;
+	
+	            this.retrieveLabel(this.props.id).then(function (values) {
+	                return _this2.setState({ label: values });
+	            }).catch(function (data) {
+	                return console.error(data);
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'module-data-editor' },
+	                _react2.default.createElement(
+	                    'h2',
+	                    { className: 'm-dte-title' },
+	                    this.title
+	                ),
+	                _react2.default.createElement(
+	                    _confirmation2.default,
+	                    {
+	                        mode: 'choose',
+	                        onApproved: this.onDeleteApproved.bind(this),
+	                        onCanceled: this.onDeleteCanceled.bind(this)
+	                    },
+	                    'Do you want to delete "',
+	                    this.state.label,
+	                    '"?'
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'retrieveLabel',
+	        value: function retrieveLabel(id) {
+	            return Promise.reject("Implement retrieveLabel(id).");
+	        }
+	    }, {
+	        key: 'onDeleteApproved',
+	        value: function onDeleteApproved() {
+	            var _this3 = this;
+	
+	            this.deleteUser(this.props.id).then(function () {
+	                return _this3.props.onComplete();
+	            }).catch(function (data) {
+	                return console.error(data);
+	            });
+	        }
+	    }, {
+	        key: 'onDeleteCanceled',
+	        value: function onDeleteCanceled() {
+	            this.props.onComplete();
+	        }
+	    }, {
+	        key: 'deleteUser',
+	        value: function deleteUser(id) {
+	            return Promise.reject("Implement deleteUser(id).");
+	        }
+	    }, {
+	        key: 'title',
+	        get: function get() {
+	            return "Delete Something";
+	        }
+	    }, {
+	        key: 'labelField',
+	        get: function get() {
+	            throw new Error("Implement labelField.");
+	        }
+	    }]);
+	
+	    return Deleter;
+	})(_react2.default.Component);
+	
+	Deleter.defaultProps = {
+	    id: "",
+	    onComplete: function onComplete() {}
+	};
+	
+	exports.default = Deleter;
+
+/***/ },
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35530,7 +35602,7 @@
 	exports.default = Confirmation;
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35543,7 +35615,7 @@
 	
 	var _reactComponentMounter2 = _interopRequireDefault(_reactComponentMounter);
 	
-	var _settingEditor = __webpack_require__(282);
+	var _settingEditor = __webpack_require__(283);
 	
 	var _settingEditor2 = _interopRequireDefault(_settingEditor);
 	
@@ -35593,7 +35665,7 @@
 	exports.default = _exports;
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35614,11 +35686,11 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _stringFormatter = __webpack_require__(283);
+	var _stringFormatter = __webpack_require__(284);
 	
 	var _stringFormatter2 = _interopRequireDefault(_stringFormatter);
 	
-	var _formField = __webpack_require__(284);
+	var _formField = __webpack_require__(285);
 	
 	var _formField2 = _interopRequireDefault(_formField);
 	
@@ -35781,7 +35853,7 @@
 	exports.default = SettingEditor;
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35827,7 +35899,7 @@
 	exports.default = StringFormatter;
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35840,7 +35912,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _field = __webpack_require__(285);
+	var _field = __webpack_require__(286);
 	
 	var _field2 = _interopRequireDefault(_field);
 	
@@ -35887,7 +35959,7 @@
 	exports.default = FormField;
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35959,7 +36031,7 @@
 	exports.default = Field;
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35978,7 +36050,7 @@
 	
 	var _globalEvents2 = _interopRequireDefault(_globalEvents);
 	
-	var _loginForm = __webpack_require__(287);
+	var _loginForm = __webpack_require__(288);
 	
 	var _loginForm2 = _interopRequireDefault(_loginForm);
 	
@@ -36007,7 +36079,7 @@
 	exports.default = LoginController;
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
