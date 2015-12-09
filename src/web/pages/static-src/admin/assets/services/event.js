@@ -1,5 +1,6 @@
 class Event {
-    constructor(x, y, color) {
+
+    constructor() {
         this._callbacks = [];
     }
 
@@ -28,6 +29,7 @@ class Event {
             delete this._callbacks[index];
         }.bind(this));
     }
+
 }
 
 export default Event;
