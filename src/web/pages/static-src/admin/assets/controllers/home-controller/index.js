@@ -11,8 +11,9 @@ import SettingController from "./setting-controller";
 
 class HomeController {
 
-    constructor () {
+    constructor() {
         this.userController = new UserController();
+        this.settingController = new SettingController();
 
         this.userController.clickAddEvent.on(() => Router.changeHash("/users/new"));
         this.userController.clickEditEvent.on(id => Router.changeHash("/users/" + id));
@@ -31,13 +32,14 @@ class HomeController {
         Router.addRoute("/users/new", () => this.userController.showAdder());
         Router.addRoute("/users/:id", id => this.userController.showEditor(id));
         Router.addRoute("/users/:id/delete", id => this.userController.showDeleter(id));
+        Router.addRoute("/setting", () => this.settingController.showEditor());
+
+        Router.setDefaultRouteCallback(() => Router.changeHash("/"));
 
     }
 
-     showNavigation() {
-        var navigationMounter;
-
-        navigationMounter = new Mounter(
+    showNavigation() {
+        var navigationMounter = new Mounter(
             Navigation,
             'navigation',
             {
@@ -195,18 +197,6 @@ class HomeController {
              BlogController.showBlogEditorWithEditMode(id);
              });
              */
-
-            // Setting
-
-            Router.addRoute("/setting", function () {
-                SettingController.showSettingEditor();
-            });
-
-            // Default
-
-            Router.setDefaultRouteCallback(function () {
-                Router.changeHash("/");
-            });
 
             Router.listen(true);
 

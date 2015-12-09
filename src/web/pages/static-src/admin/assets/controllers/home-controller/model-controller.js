@@ -1,4 +1,3 @@
-import PopUp        from '../../components/popup';
 import LocationBar  from '../../components/location-bar';
 import Mounter      from '../../services/react-component-mounter';
 import Event        from '../../services/event';

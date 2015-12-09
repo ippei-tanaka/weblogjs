@@ -2,80 +2,65 @@ import React from 'react';
 import GlobalEvents from '../services/global-events';
 import ServerFacade from '../services/server-facade';
 import StringFormatter from '../services/string-formatter';
-import FormField from './form-field';
+import Select from './form-field/field/select';
+import Option from './form-field/field/option';
+import Label from './form-field/label';
+import ErrorMessage from './form-field/error-message';
 
 
-var SettingEditor = React.createClass({
+class SettingEditor extends React.Component {
 
-    getInitialState: function () {
-        return {
-            errors: {
-                front: undefined
-            },
-            setting: {
-                front: null
-            },
+    constructor (props) {
+        super(props);
+
+        this.state = {
+            errors: {},
+            setting: {},
             blogs: [],
             flush: ""
         };
-    },
+    }
 
-    componentWillMount: function () {
+    componentWillMount () {
         ServerFacade.getSetting().then(function (setting) {
-            this._setSettingState(this.getInitialState().setting, setting);
+            this.setState({setting: setting});
         }.bind(this));
 
         ServerFacade.getBlogs().then(function (blogs) {
             this.setState({blogs: blogs});
         }.bind(this));
-    },
+    }
 
-    render: function () {
-        var frontField = React.createElement(FormField, {
-            field: {
-                type: "select",
-                value: this.state.setting.front,
-                onChange: function (value) {
-                    var blog = this.state.blogs.find(function (b) {
-                        return b._id === value;
-                    });
-                    this._setSettingState(this.state.setting, {front: blog ? blog._id : null});
-                }.bind(this),
-
-                children: this._addEmptySelectOption(this.state.blogs.map(function (blog) {
-                    return {
-                        key: blog._id,
-                        value: blog._id,
-                        label: blog.title
-                    }
-                })),
-
-                autoFocus: true
-            },
-            label: {
-                children: "Front Page"
-            },
-            error: {
-                children: this.state.errors.front ? this.state.errors.front.message : ""
-            }
-        });
-
+    render () {
         return (
-            <form className="module-data-editor" onSubmit={this._onSubmit}>
+            <form className="module-data-editor" onSubmit={this.onSubmit.bind(this)}>
                 <h2 className="m-dte-title">Setting</h2>
 
                 <div className="m-dte-field-container">
-                    {frontField}
+                    <Label htmlFor="SettingEditorFrontPageField">
+                        Front Page
+                    </Label>
+                    <Select id="SettingEditorFrontPageField"
+                            value={this.state.setting.front}
+                            autoFocus={true}
+                            onChange={val => this.setState((state) => { state.setting.front = val })}>
+
+                        {this.state.blogs.map((blog, index) => {
+                        return <Option key={index} value={blog._id}>{blog.title}</Option>}
+                            )}
+
+                    </Select>
+                    <ErrorMessage error={this.state.errors.front}/>
                 </div>
-                { this.state.flush ?
-                    (
+
+                { this.state.flush ? (
                     <div className="m-dte-field-container">
                         <div className="m-dte-flush-message">
                             {this.state.flush}
                         </div>
                     </div>
-                        ) : null
-                    }
+                        ) : null}
+
                 <div className="m-dte-field-container">
                     <button className="module-button"
                             type="submit">Edit
@@ -83,73 +68,27 @@ var SettingEditor = React.createClass({
                 </div>
             </form>
         );
-    },
+    }
 
-    _onSubmit: function (e) {
+    onSubmit (e) {
         e.preventDefault();
 
-        this._updateSetting()
-            .then(function () {
-                this.setState({
-                    errors: this.getInitialState().errors,
-                    flush: "Succeeded to update the setting!"
+        ServerFacade.updateSetting(this.state.setting)
+            .then(() => {
+                this.setState((state) => {
+                    state.errors.front = null;
+                    state.flush = "Succeeded to update the setting!";
                 });
-            }.bind(this))
-
-            .catch(function (data) {
-                this.setState({
-                    errors: data.errors,
-                    flush: ""
+            })
+            .catch(data => {
+                this.setState((state) => {
+                    state.errors = data.errors;
+                    state.flush = "";
                 });
-            }.bind(this));
-    },
-
-    _updateSetting: function () {
-
-        var data = this._buildDataForHttpRequest();
-
-        return ServerFacade.updateSetting(data);
-    },
-
-    _buildDataForHttpRequest: function () {
-
-        var data = {};
-
-        if (this.state.setting.front) {
-            data.front = this.state.setting.front;
-        }
-
-        return data;
-    },
-
-    _setSettingState: function (defaultSetting, setting) {
-        this.setState({
-            setting: Object.assign({}, defaultSetting, this._flatten(setting))
-        });
-    },
-
-    _flatten: function (obj) {
-        var newObj = {};
-
-        Object.keys(obj).forEach(function (key) {
-            if (typeof obj[key] !== 'undefined') {
-                newObj[key] = obj[key];
-            }
-        });
-
-        return newObj;
-    },
-
-    _addEmptySelectOption: function (array) {
-        array = array || [];
-        array.unshift({
-            key: "---------",
-            value: "",
-            label: "None"
-        });
-        return array;
+            });
     }
-});
+
+}
 
 
 export default SettingEditor;
