@@ -49,8 +49,8 @@ class Editor extends React.Component {
     componentWillMount() {
         this.retrieveModel(this.props.id)
             .then((values) => this.setState({values: values}))
-            .catch(() => {
-            });
+            .catch(data => console.error(data));
+
 
         Object.keys(this.listRetrievers).forEach((key) => {
             var retriever = this.listRetrievers[key];
@@ -61,7 +61,7 @@ class Editor extends React.Component {
     }
 
     retrieveModel(id) {
-        return Promise.reject(null);
+        return Promise.reject("Implement retrieveModel(id).");
     }
 
     setValueState(name, value) {
