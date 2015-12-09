@@ -43,10 +43,12 @@ class SettingEditor extends React.Component {
                     <Select id="SettingEditorFrontPageField"
                             value={this.state.setting.front}
                             autoFocus={true}
-                            onChange={val => this.setState((state) => { state.setting.front = val })}>
+                            onChange={val => this.setState((state) => { state.setting.front = val || null })}>
 
-                        {this.state.blogs.map((blog, index) => {
-                        return <Option key={index} value={blog._id}>{blog.title}</Option>}
+                        <Option key="null" value="">-----</Option>
+
+                        {this.state.blogs.map(blog => {
+                        return <Option key={blog._id} value={blog._id}>{blog.title}</Option>}
                             )}
 
                     </Select>

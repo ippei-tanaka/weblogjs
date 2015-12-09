@@ -35763,13 +35763,18 @@
 	                            autoFocus: true,
 	                            onChange: function onChange(val) {
 	                                return _this2.setState(function (state) {
-	                                    state.setting.front = val;
+	                                    state.setting.front = val || null;
 	                                });
 	                            } },
-	                        this.state.blogs.map(function (blog, index) {
+	                        _react2.default.createElement(
+	                            _option2.default,
+	                            { key: 'null', value: '' },
+	                            '-----'
+	                        ),
+	                        this.state.blogs.map(function (blog) {
 	                            return _react2.default.createElement(
 	                                _option2.default,
-	                                { key: index, value: blog._id },
+	                                { key: blog._id, value: blog._id },
 	                                blog.title
 	                            );
 	                        })
