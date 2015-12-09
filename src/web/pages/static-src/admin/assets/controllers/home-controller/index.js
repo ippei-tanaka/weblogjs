@@ -14,34 +14,24 @@ class HomeController {
     constructor () {
         this.userController = new UserController();
 
+        this.userController.clickAddEvent.on(() => Router.changeHash("/users/new"));
+        this.userController.clickEditEvent.on(id => Router.changeHash("/users/" + id));
+        this.userController.clickDeleteEvent.on(id => Router.changeHash("/users/" + id + "/delete"));
+        this.userController.completeAddEvent.on(() => Router.changeHash("/users"));
+        this.userController.completeEditEvent.on(() => Router.changeHash("/users"));
+        this.userController.completeDeleteEvent.on(() => Router.changeHash("/users"));
+        this.userController.clickListLocation.on(() => Router.changeHash("/users"));
 
-        this.userController.onClickAddButton.on(function () {
-            Router.changeHash("/users/new");
-        });
 
-        this.userController.onClickEditButton.on(function (id) {
-            Router.changeHash("/users/" + id);
-        });
+        // Routes
 
-        this.userController.onClickDeleteButton.on(function (id) {
-            Router.changeHash("/users/" + id + "/delete");
-        });
+        Router.addRoute("/", () => DashboardController.showDashBoard());
 
-        this.userController.onCompleteAdding.on(function () {
-            Router.changeHash("/users");
-        });
+        Router.addRoute("/users", () => this.userController.showList());
+        Router.addRoute("/users/new", () => this.userController.showAdder());
+        Router.addRoute("/users/:id", id => this.userController.showEditor(id));
+        Router.addRoute("/users/:id/delete", id => this.userController.showDeleter(id));
 
-        this.userController.onCompleteEditing.on(function () {
-            Router.changeHash("/users");
-        });
-
-        this.userController.onCompleteDeleting.on(function () {
-            Router.changeHash("/users");
-        });
-
-        this.userController.onClickListLocation.on(function () {
-            Router.changeHash("/users");
-        });
     }
 
      showNavigation() {
@@ -160,29 +150,6 @@ class HomeController {
 // Setting up the router
 //--------------------------------
 
-// Home
-
-            Router.addRoute("/", function () {
-                DashboardController.showDashBoard();
-            });
-
-// Users
-
-            Router.addRoute("/users", () => {
-                this.userController.showList();
-            });
-
-            Router.addRoute("/users/new", () => {
-                this.userController.showAdder();
-            });
-
-            Router.addRoute("/users/:id", id => {
-                this.userController.showEditor(id);
-            });
-
-            Router.addRoute("/users/:id/delete", id => {
-                this.userController.showDeleter(id);
-            });
 
             /*
 

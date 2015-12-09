@@ -115,36 +115,51 @@
 	
 	var HomeController = (function () {
 	    function HomeController() {
+	        var _this = this;
+	
 	        _classCallCheck(this, HomeController);
 	
 	        this.userController = new _userController2.default();
 	
-	        this.userController.onClickAddButton.on(function () {
-	            _router2.default.changeHash("/users/new");
+	        this.userController.clickAddEvent.on(function () {
+	            return _router2.default.changeHash("/users/new");
+	        });
+	        this.userController.clickEditEvent.on(function (id) {
+	            return _router2.default.changeHash("/users/" + id);
+	        });
+	        this.userController.clickDeleteEvent.on(function (id) {
+	            return _router2.default.changeHash("/users/" + id + "/delete");
+	        });
+	        this.userController.completeAddEvent.on(function () {
+	            return _router2.default.changeHash("/users");
+	        });
+	        this.userController.completeEditEvent.on(function () {
+	            return _router2.default.changeHash("/users");
+	        });
+	        this.userController.completeDeleteEvent.on(function () {
+	            return _router2.default.changeHash("/users");
+	        });
+	        this.userController.clickListLocation.on(function () {
+	            return _router2.default.changeHash("/users");
 	        });
 	
-	        this.userController.onClickEditButton.on(function (id) {
-	            _router2.default.changeHash("/users/" + id);
+	        // Routes
+	
+	        _router2.default.addRoute("/", function () {
+	            return _dashboardController2.default.showDashBoard();
 	        });
 	
-	        this.userController.onClickDeleteButton.on(function (id) {
-	            _router2.default.changeHash("/users/" + id + "/delete");
+	        _router2.default.addRoute("/users", function () {
+	            return _this.userController.showList();
 	        });
-	
-	        this.userController.onCompleteAdding.on(function () {
-	            _router2.default.changeHash("/users");
+	        _router2.default.addRoute("/users/new", function () {
+	            return _this.userController.showAdder();
 	        });
-	
-	        this.userController.onCompleteEditing.on(function () {
-	            _router2.default.changeHash("/users");
+	        _router2.default.addRoute("/users/:id", function (id) {
+	            return _this.userController.showEditor(id);
 	        });
-	
-	        this.userController.onCompleteDeleting.on(function () {
-	            _router2.default.changeHash("/users");
-	        });
-	
-	        this.userController.onClickListLocation.on(function () {
-	            _router2.default.changeHash("/users");
+	        _router2.default.addRoute("/users/:id/delete", function (id) {
+	            return _this.userController.showDeleter(id);
 	        });
 	    }
 	
@@ -170,10 +185,10 @@
 	    }, {
 	        key: "start",
 	        value: function start() {
-	            var _this = this;
+	            var _this2 = this;
 	
 	            _globalEvents2.default.domReady.on(function () {
-	                _this.showNavigation();
+	                _this2.showNavigation();
 	
 	                //--------------------------------
 	                // Callbacks on Controllers
@@ -244,30 +259,6 @@
 	                //--------------------------------
 	                // Setting up the router
 	                //--------------------------------
-	
-	                // Home
-	
-	                _router2.default.addRoute("/", function () {
-	                    _dashboardController2.default.showDashBoard();
-	                });
-	
-	                // Users
-	
-	                _router2.default.addRoute("/users", function () {
-	                    _this.userController.showList();
-	                });
-	
-	                _router2.default.addRoute("/users/new", function () {
-	                    _this.userController.showAdder();
-	                });
-	
-	                _router2.default.addRoute("/users/:id", function (id) {
-	                    _this.userController.showEditor(id);
-	                });
-	
-	                _router2.default.addRoute("/users/:id/delete", function (id) {
-	                    _this.userController.showDeleter(id);
-	                });
 	
 	                /*
 	                  // Categories
@@ -377,7 +368,7 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var Event = (function () {
-	    function Event(x, y, color) {
+	    function Event() {
 	        _classCallCheck(this, Event);
 	
 	        this._callbacks = [];
@@ -22500,14 +22491,13 @@
 	
 	        _classCallCheck(this, ModelController);
 	
-	        this.onClickListLocation = new _event2.default();
-	        this.onClickAddButton = new _event2.default();
-	        this.onClickEditButton = new _event2.default();
-	        this.onClickDeleteButton = new _event2.default();
-	        this.onCompleteAdding = new _event2.default();
-	        this.onCompleteEditing = new _event2.default();
-	        this.onCompleteDeleting = new _event2.default();
-	
+	        this.clickListLocation = new _event2.default();
+	        this.clickAddEvent = new _event2.default();
+	        this.clickEditEvent = new _event2.default();
+	        this.clickDeleteEvent = new _event2.default();
+	        this.completeAddEvent = new _event2.default();
+	        this.completeEditEvent = new _event2.default();
+	        this.completeDeleteEvent = new _event2.default();
 	        this._listMounter = new _reactComponentMounter2.default(this.List, 'main-content-container');
 	        this._adderMounter = new _reactComponentMounter2.default(this.Adder, 'main-content-container');
 	        this._editorMounter = new _reactComponentMounter2.default(this.Editor, 'main-content-container');
@@ -22515,36 +22505,36 @@
 	
 	        this._listMounter.props = {
 	            onAddButtonClicked: function onAddButtonClicked() {
-	                _this.onClickAddButton.fire();
+	                _this.clickAddEvent.fire();
 	            },
 	
 	            onEditButtonClicked: function onEditButtonClicked(id) {
-	                _this.onClickEditButton.fire(id);
+	                _this.clickEditEvent.fire(id);
 	            },
 	
 	            onDeleteButtonClicked: function onDeleteButtonClicked(id) {
-	                _this.onClickDeleteButton.fire(id);
+	                _this.clickDeleteEvent.fire(id);
 	            }
 	        };
 	
 	        this._adderMounter.props = {
 	            onComplete: function onComplete() {
 	                _this._adderMounter.unmount();
-	                _this.onCompleteAdding.fire();
+	                _this.completeAddEvent.fire();
 	            }
 	        };
 	
 	        this._editorMounter.props = {
 	            onComplete: function onComplete() {
 	                _this._editorMounter.unmount();
-	                _this.onCompleteEditing.fire();
+	                _this.completeEditEvent.fire();
 	            }
 	        };
 	
 	        this._deleterMounter.props = {
 	            onComplete: function onComplete() {
 	                _this._deleterMounter.unmount();
-	                _this.onCompleteDeleting.fire();
+	                _this.completeDeleteEvent.fire();
 	            }
 	        };
 	
@@ -22626,7 +22616,7 @@
 	                label: this.modelName + ' List',
 	                link: true,
 	                onClick: function onClick() {
-	                    _this2.onClickListLocation.fire();
+	                    _this2.clickListLocation.fire();
 	                }
 	            }, {
 	                label: this.modelName + ' Editor'

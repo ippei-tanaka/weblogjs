@@ -6,52 +6,54 @@ import Event        from '../../services/event';
 class ModelController {
 
     constructor() {
-        this.onClickListLocation = new Event();
-        this.onClickAddButton = new Event();
-        this.onClickEditButton = new Event();
-        this.onClickDeleteButton = new Event();
-        this.onCompleteAdding = new Event();
-        this.onCompleteEditing = new Event();
-        this.onCompleteDeleting = new Event();
-
-
+        this.clickListLocation = new Event();
+        this.clickAddEvent = new Event();
+        this.clickEditEvent = new Event();
+        this.clickDeleteEvent = new Event();
+        this.completeAddEvent = new Event();
+        this.completeEditEvent = new Event();
+        this.completeDeleteEvent = new Event();
         this._listMounter = new Mounter(this.List, 'main-content-container');
         this._adderMounter = new Mounter(this.Adder, 'main-content-container');
         this._editorMounter = new Mounter(this.Editor, 'main-content-container');
         this._deleterMounter = new Mounter(this.Deleter, 'main-content-container');
 
+
         this._listMounter.props = {
             onAddButtonClicked: () => {
-                this.onClickAddButton.fire();
+                this.clickAddEvent.fire();
             },
 
             onEditButtonClicked: id => {
-                this.onClickEditButton.fire(id);
+                this.clickEditEvent.fire(id);
             },
 
             onDeleteButtonClicked: id => {
-                this.onClickDeleteButton.fire(id);
+                this.clickDeleteEvent.fire(id);
             }
         };
+
 
         this._adderMounter.props = {
             onComplete: () => {
                 this._adderMounter.unmount();
-                this.onCompleteAdding.fire();
+                this.completeAddEvent.fire();
             }
         };
+
 
         this._editorMounter.props = {
             onComplete: () => {
                 this._editorMounter.unmount();
-                this.onCompleteEditing.fire();
+                this.completeEditEvent.fire();
             }
         };
+
 
         this._deleterMounter.props = {
             onComplete: () => {
                 this._deleterMounter.unmount();
-                this.onCompleteDeleting.fire();
+                this.completeDeleteEvent.fire();
             }
         };
 
@@ -99,7 +101,7 @@ class ModelController {
             {
                 label: `${this.modelName} List`,
                 link: true,
-                onClick: () => { this.onClickListLocation.fire(); }
+                onClick: () => { this.clickListLocation.fire(); }
             },
             {
                 label: `${this.modelName} Editor`
