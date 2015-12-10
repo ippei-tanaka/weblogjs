@@ -7,9 +7,7 @@ class List extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            models: []
-        };
+        this.state = this.initialState;
     }
 
     componentWillMount() {
@@ -40,8 +38,18 @@ class List extends React.Component {
                     </thead>
                     <tbody>
                     {this.state.models.map((model, index) => {
+
+                        var values = {};
+
+                        Object.keys(this.fields).forEach(key => {
+                            var field = this.fields[key];
+                            var value = model[key];
+                            values[key] = field.stringify ? field.stringify(value) : value;
+                            });
+
                         return <ListItem key={model._id}
-                                         model={model}
+                                         id={model._id}
+                                         values={values}
                                          fields={this.fields}
                                          onEditButtonClicked={this.props.onEditButtonClicked}
                                          onDeleteButtonClicked={this.props.onDeleteButtonClicked}
@@ -53,10 +61,15 @@ class List extends React.Component {
         );
     }
 
+    get initialState () {
+        return {
+            models: []
+        };
+    }
+
     retrieveModels() {
         return Promise.reject("Implement retrieveModel().");
     }
-
 
     onAddButtonClicked(e) {
         e.preventDefault();
@@ -90,10 +103,6 @@ List.defaultProps = {
 
 class ListItem extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <tr>
@@ -118,9 +127,7 @@ class ListItem extends React.Component {
 
                 {Object.keys(this.props.fields).map((key, index) => {
                     var field = this.props.fields[key];
-                    var value = this.props.model[key];
-
-                    value = field.stringify ? field.stringify(value) : value;
+                    var value = this.props.values[key];
 
                     return <td data-label={field.label} key={index}>{value}</td>;
 
@@ -132,12 +139,12 @@ class ListItem extends React.Component {
 
     onDeleteButtonClicked(e) {
         e.preventDefault();
-        this.props.onDeleteButtonClicked(this.props.model._id);
+        this.props.onDeleteButtonClicked(this.props.id);
     }
 
     onEditButtonClicked(e) {
         e.preventDefault();
-        this.props.onEditButtonClicked(this.props.model._id);
+        this.props.onEditButtonClicked(this.props.id);
     }
 
 }

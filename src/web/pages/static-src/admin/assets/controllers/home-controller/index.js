@@ -5,7 +5,7 @@ import Navigation from "../../components/navigation";
 import DashboardController from "./dashboard-controller";
 import UserController from "./user-controller";
 import CategoryController from "./category-controller";
-//import PostController from "../controllers/post-controller";
+import PostController from "./post-controller";
 import BlogController from "./blog-controller";
 import SettingController from "./setting-controller";
 
@@ -16,6 +16,7 @@ class HomeController {
         this.dashboardController = new DashboardController();
         this.userController = new UserController();
         this.categoryController = new CategoryController();
+        this.postController = new PostController();
         this.blogController = new BlogController();
         this.settingController = new SettingController();
 
@@ -34,6 +35,14 @@ class HomeController {
         this.categoryController.completeEditEvent.on(() => Router.changeHash("/categories"));
         this.categoryController.completeDeleteEvent.on(() => Router.changeHash("/categories"));
         this.categoryController.clickListLocation.on(() => Router.changeHash("/categories"));
+
+        this.postController.clickAddEvent.on(() => Router.changeHash("/posts/new"));
+        this.postController.clickEditEvent.on(id => Router.changeHash("/posts/" + id));
+        this.postController.clickDeleteEvent.on(id => Router.changeHash("/posts/" + id + "/delete"));
+        this.postController.completeAddEvent.on(() => Router.changeHash("/posts"));
+        this.postController.completeEditEvent.on(() => Router.changeHash("/posts"));
+        this.postController.completeDeleteEvent.on(() => Router.changeHash("/posts"));
+        this.postController.clickListLocation.on(() => Router.changeHash("/posts"));
 
         this.blogController.clickAddEvent.on(() => Router.changeHash("/blogs/new"));
         this.blogController.clickEditEvent.on(id => Router.changeHash("/blogs/" + id));
@@ -56,6 +65,11 @@ class HomeController {
         Router.addRoute("/categories/new", () => this.categoryController.showAdder());
         Router.addRoute("/categories/:id", id => this.categoryController.showEditor(id));
         Router.addRoute("/categories/:id/delete", id => this.categoryController.showDeleter(id));
+
+        Router.addRoute("/posts", () => this.postController.showList());
+        Router.addRoute("/posts/new", () => this.postController.showAdder());
+        Router.addRoute("/posts/:id", id => this.postController.showEditor(id));
+        Router.addRoute("/posts/:id/delete", id => this.postController.showDeleter(id));
 
         Router.addRoute("/blogs", () => this.blogController.showList());
         Router.addRoute("/blogs/new", () => this.blogController.showAdder());
@@ -90,148 +104,8 @@ class HomeController {
     start() {
         GlobalEvent.domReady.on(() => {
             this.showNavigation();
-
-//--------------------------------
-// Callbacks on Controllers
-//--------------------------------
-
-// UserController
-
-            /*
-
-             // CategoryController
-
-             CategoryController.onClickAddButton.on(function () {
-             Router.changeHash("/categories/new");
-             });
-
-             CategoryController.onClickEditButton.on(function (id) {
-             Router.changeHash("/categories/" + id);
-             });
-
-             CategoryController.onCompleteAdding.on(function () {
-             Router.changeHash("/categories");
-             });
-
-             CategoryController.onCompleteEditing.on(function () {
-             Router.changeHash("/categories");
-             });
-
-             CategoryController.onCompleteDeleting.on(function () {
-             Router.changeHash("/categories");
-             });
-
-             CategoryController.onClickListLocation.on(function () {
-             Router.changeHash("/categories");
-             });
-
-             // PostController
-
-             PostController.onClickAddButton.on(function () {
-             Router.changeHash("/posts/new");
-             });
-
-             PostController.onClickEditButton.on(function (id) {
-             Router.changeHash("/posts/" + id);
-             });
-
-             PostController.onCompleteAdding.on(function () {
-             Router.changeHash("/posts");
-             });
-
-             PostController.onCompleteEditing.on(function () {
-             Router.changeHash("/posts");
-             });
-
-             PostController.onCompleteDeleting.on(function () {
-             Router.changeHash("/posts");
-             });
-
-             PostController.onClickListLocation.on(function () {
-             Router.changeHash("/posts");
-             });
-
-             // BlogController
-
-             BlogController.onClickAddButton.on(function () {
-             Router.changeHash("/blogs/new");
-             });
-
-             BlogController.onClickEditButton.on(function (id) {
-             Router.changeHash("/blogs/" + id);
-             });
-
-             BlogController.onCompleteAdding.on(function () {
-             Router.changeHash("/blogs");
-             });
-
-             BlogController.onCompleteEditing.on(function () {
-             Router.changeHash("/blogs");
-             });
-
-             BlogController.onCompleteDeleting.on(function () {
-             Router.changeHash("/blogs");
-             });
-
-             BlogController.onClickListLocation.on(function () {
-             Router.changeHash("/blogs");
-             });
-             */
-
-//--------------------------------
-// Setting up the router
-//--------------------------------
-
-
-            /*
-
-             // Categories
-
-             Router.addRoute("/categories", function () {
-             CategoryController.showCategoryList();
-             });
-
-             Router.addRoute("/categories/new", function () {
-             CategoryController.showCategoryEditorWithAddMode();
-             });
-
-             Router.addRoute("/categories/:id", function (id) {
-             CategoryController.showCategoryEditorWithEditMode(id);
-             });
-
-             // Posts
-
-             Router.addRoute("/posts", function () {
-             PostController.showPostList();
-             });
-
-             Router.addRoute("/posts/new", function () {
-             PostController.showPostEditorWithAddMode();
-             });
-
-             Router.addRoute("/posts/:id", function (id) {
-             PostController.showPostEditorWithEditMode(id);
-             });
-
-             // Blogs
-
-             Router.addRoute("/blogs", function () {
-             BlogController.showBlogList();
-             });
-
-             Router.addRoute("/blogs/new", function () {
-             BlogController.showBlogEditorWithAddMode();
-             });
-
-             Router.addRoute("/blogs/:id", function (id) {
-             BlogController.showBlogEditorWithEditMode(id);
-             });
-             */
-
             Router.listen(true);
-
         });
-
     }
 }
 

@@ -4,6 +4,9 @@ import Checkbox from './form-field/field/checkbox';
 import CheckboxList from './form-field/field/checkbox-list';
 import Select from './form-field/field/select';
 import Option from './form-field/field/option';
+import TagList from './form-field/field/tag-list';
+import Datetime from './form-field/field/datetime';
+import Textarea from './form-field/field/textarea';
 import Label from './form-field/label';
 import ErrorMessage from './form-field/error-message';
 
@@ -50,12 +53,11 @@ class Editor extends React.Component {
             .then((values) => this.setState({values: values}))
             .catch(data => console.error(data));
 
-
         Object.keys(this.listRetrievers).forEach((key) => {
             var retriever = this.listRetrievers[key];
             retriever().then((value) => {
                 this.setListState(key, value);
-            })
+            });
         });
     }
 
@@ -101,6 +103,12 @@ class Editor extends React.Component {
                             />
                         );
                         break;
+                    case "textarea":
+                        element = (
+                            <Textarea onChange={v => this.setValueState(key, v) }
+                                      value={val} />
+                        );
+                        break;
                     case "checkbox-list":
                         element = (
                             <CheckboxList onChange={v => this.setValueState(key, v) }>
@@ -115,7 +123,8 @@ class Editor extends React.Component {
                         break;
                     case "select":
                         element = (
-                            <Select onChange={v => this.setValueState(key, v) }>
+                            <Select onChange={v => this.setValueState(key, v) }
+                                    value={val}>
                                 {list.map(
                                     (item, index) =>
                                     <Option key={index}
@@ -124,6 +133,18 @@ class Editor extends React.Component {
                                     </Option>
                                     )}
                             </Select>
+                        );
+                        break;
+                    case "tag-list":
+                        element = (
+                            <TagList onChange={v => this.setValueState(key, v) }
+                                     value={val} />
+                        );
+                        break;
+                    case "datetime":
+                        element = (
+                            <Datetime onChange={v => this.setValueState(key, v) }
+                                      value={val} />
                         );
                         break;
                 }
