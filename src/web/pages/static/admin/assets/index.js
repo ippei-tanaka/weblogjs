@@ -34695,7 +34695,7 @@
 	    }
 	
 	    _createClass(Adder, [{
-	        key: "buttonLabel",
+	        key: "okayButtonLabel",
 	        get: function get() {
 	            return "Create";
 	        }
@@ -34941,10 +34941,28 @@
 	                    'div',
 	                    { className: 'm-dte-field-container' },
 	                    _react2.default.createElement(
-	                        'button',
-	                        { className: 'module-button',
-	                            type: 'submit' },
-	                        this.buttonLabel
+	                        'ul',
+	                        { className: 'm-dte-button-list' },
+	                        _react2.default.createElement(
+	                            'li',
+	                            { className: 'm-dte-button-list-item' },
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'module-button',
+	                                    type: 'submit' },
+	                                this.okayButtonLabel
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'li',
+	                            { className: 'm-dte-button-list-item' },
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'module-button m-btn-alert',
+	                                    onClick: this.onCancelButtonClicked.bind(this) },
+	                                this.cancelButtonLabel
+	                            )
+	                        )
 	                    )
 	                )
 	            );
@@ -34964,6 +34982,12 @@
 	            });
 	        }
 	    }, {
+	        key: 'onCancelButtonClicked',
+	        value: function onCancelButtonClicked(e) {
+	            e.preventDefault();
+	            this.props.onComplete();
+	        }
+	    }, {
 	        key: 'sendToServer',
 	        value: function sendToServer(values) {
 	            return Promise.reject(null);
@@ -34979,9 +35003,14 @@
 	            return "Edit Something";
 	        }
 	    }, {
-	        key: 'buttonLabel',
+	        key: 'okayButtonLabel',
 	        get: function get() {
 	            return "Edit";
+	        }
+	    }, {
+	        key: 'cancelButtonLabel',
+	        get: function get() {
+	            return "Cancel";
 	        }
 	    }]);
 	
