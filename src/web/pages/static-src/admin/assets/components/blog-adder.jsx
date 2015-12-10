@@ -1,8 +1,8 @@
 import ServerFacade from '../services/server-facade';
-import Editor from './editor';
+import Adder from './adder';
 
 
-class BlogAdder extends Editor {
+class BlogAdder extends Adder {
 
     get title() {
         return "Create a New Blog";

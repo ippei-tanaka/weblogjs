@@ -1,8 +1,8 @@
 import ServerFacade from '../services/server-facade';
-import Editor from './editor';
+import Adder from './adder';
 
 
-class UserAdder extends Editor {
+class UserAdder extends Adder {
 
     get title() {
         return "Create a New User";

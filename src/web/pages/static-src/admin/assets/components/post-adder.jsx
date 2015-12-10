@@ -1,8 +1,8 @@
 import ServerFacade from '../services/server-facade';
-import Editor from './editor';
+import Adder from './adder';
 
 
-class PostAdder extends Editor {
+class PostAdder extends Adder {
 
     get title() {
         return "Create a New Post";
