@@ -1,8 +1,8 @@
 import ServerFacade from '../services/server-facade';
-import Editor from './editor';
+import Adder from './adder';
 
 
-class CategoryAdder extends Editor {
+class CategoryAdder extends Adder {
 
     get title() {
         return "Create a New Category";
