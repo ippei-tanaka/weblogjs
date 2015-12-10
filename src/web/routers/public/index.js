@@ -83,18 +83,24 @@ routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(page\/[0-9]+\/?)?(post\/[^
             return;
         }
 
+        let category = yield categoryManager.findBySlug(categorySlug);
+
+        if (categorySlug && !category) {
+            throw new errors.WeblogJs404Error();
+        }
+
         let blog =  yield blogSelector.blog;
 
         let publishDate = new Date();
 
         let postListBuilder = new PostListDataBuilder({
-            currentPage: page,
-            blog: blog,
-            category: yield categoryManager.findBySlug(categorySlug),
-            post: yield postManager.findBySlug(postSlug),
-            publishDate: publishDate,
+            currentPage         : page,
+            blog                : blog,
+            category            : category,
+            post                : yield postManager.findBySlug(postSlug),
+            publishDate         : publishDate,
             paginationUrlBuilder: buildUrl.bind(null, blogSlug, categorySlug),
-            postUrlBuilder: buildUrl.bind(null, blogSlug, null, 0)
+            postUrlBuilder      : buildUrl.bind(null, blogSlug, null, 0)
         });
 
         let pagination = yield postListBuilder.buildPagination();
@@ -104,22 +110,24 @@ routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(page\/[0-9]+\/?)?(post\/[^
         }
 
         let categoryListDataBuilder = new CategoryListDataBuilder({
-            blogId: blog._id,
-            publishDate: publishDate,
-            urlBuilder: buildUrl.bind(null, blogSlug)
+            blogId              : blog._id,
+            publishDate         : publishDate,
+            urlBuilder          : buildUrl.bind(null, blogSlug)/*,
+            uncategorizedLabel  : "Uncategorized",
+            uncategorizedSlug   : "uncategorized"*/
         });
 
         let blogInfoDataBuilder = new BlogInfoDataBuilder({
-            title: blog.title,
-            blogSlug: blogSlug,
-            urlBuilder: buildUrl.bind(null)
+            title               : blog.title,
+            blogSlug            : blogSlug,
+            urlBuilder          : buildUrl.bind(null)
         });
 
         let data = {
-            blogInfo: blogInfoDataBuilder.build(),
-            postList: yield postListBuilder.buildList(),
-            categoryList: yield categoryListDataBuilder.build(),
-            pagination: pagination
+            blogInfo            : blogInfoDataBuilder.build(),
+            postList            : yield postListBuilder.buildList(),
+            categoryList        : yield categoryListDataBuilder.build(),
+            pagination          : pagination
         };
 
         let renderer = new Renderer(response);
