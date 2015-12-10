@@ -36129,8 +36129,8 @@
 	            });
 	        }
 	    }, {
-	        key: 'deleteUser',
-	        value: function deleteUser(id) {
+	        key: 'deleteModel',
+	        value: function deleteModel(id) {
 	            return _serverFacade2.default.deleteUser(id);
 	        }
 	    }, {
@@ -36232,7 +36232,7 @@
 	        value: function onDeleteApproved() {
 	            var _this3 = this;
 	
-	            this.deleteUser(this.props.id).then(function () {
+	            this.deleteModel(this.props.id).then(function () {
 	                return _this3.props.onComplete();
 	            }).catch(function (data) {
 	                return console.error(data);
@@ -36244,19 +36244,14 @@
 	            this.props.onComplete();
 	        }
 	    }, {
-	        key: 'deleteUser',
-	        value: function deleteUser(id) {
+	        key: 'deleteModel',
+	        value: function deleteModel(id) {
 	            return Promise.reject("Implement deleteUser(id).");
 	        }
 	    }, {
 	        key: 'title',
 	        get: function get() {
 	            return "Delete Something";
-	        }
-	    }, {
-	        key: 'labelField',
-	        get: function get() {
-	            throw new Error("Implement labelField.");
 	        }
 	    }]);
 	
@@ -36718,8 +36713,8 @@
 	            });
 	        }
 	    }, {
-	        key: 'deleteUser',
-	        value: function deleteUser(id) {
+	        key: 'deleteModel',
+	        value: function deleteModel(id) {
 	            return _serverFacade2.default.deleteCategory(id);
 	        }
 	    }, {
@@ -37325,8 +37320,8 @@
 	            });
 	        }
 	    }, {
-	        key: 'deletePost',
-	        value: function deletePost(id) {
+	        key: 'deleteModel',
+	        value: function deleteModel(id) {
 	            return _serverFacade2.default.deletePost(id);
 	        }
 	    }, {
@@ -37731,8 +37726,8 @@
 	            });
 	        }
 	    }, {
-	        key: 'deleteUser',
-	        value: function deleteUser(id) {
+	        key: 'deleteModel',
+	        value: function deleteModel(id) {
 	            return _serverFacade2.default.deleteBlog(id);
 	        }
 	    }, {

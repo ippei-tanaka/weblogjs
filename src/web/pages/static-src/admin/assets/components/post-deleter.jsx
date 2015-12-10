@@ -13,7 +13,7 @@ class PostDeleter extends Deleter {
         return "Delete Post";
     }
 
-    deletePost(id) {
+    deleteModel(id) {
         return ServerFacade.deletePost(id);
     }
 

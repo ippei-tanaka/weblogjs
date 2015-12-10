@@ -13,7 +13,7 @@ class UserDeleter extends Deleter {
         return "Delete User";
     }
 
-    deleteUser(id) {
+    deleteModel(id) {
         return ServerFacade.deleteUser(id);
     }
 
