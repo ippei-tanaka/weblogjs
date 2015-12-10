@@ -13,7 +13,7 @@ class BlogDeleter extends Deleter {
         return "Delete Blog";
     }
 
-    deleteUser(id) {
+    deleteModel(id) {
         return ServerFacade.deleteBlog(id);
     }
 

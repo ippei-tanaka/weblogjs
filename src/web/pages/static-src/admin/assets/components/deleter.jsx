@@ -6,6 +6,7 @@ class Deleter extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
             label: ""
         };
@@ -40,12 +41,8 @@ class Deleter extends React.Component {
         return "Delete Something";
     }
 
-    get labelField() {
-        throw new Error("Implement labelField.");
-    }
-
     onDeleteApproved() {
-        this.deleteUser(this.props.id)
+        this.deleteModel(this.props.id)
             .then(() => this.props.onComplete())
             .catch(data => console.error(data));
     }
@@ -54,7 +51,7 @@ class Deleter extends React.Component {
         this.props.onComplete();
     }
 
-    deleteUser(id) {
+    deleteModel(id) {
         return Promise.reject("Implement deleteUser(id).");
     }
 
