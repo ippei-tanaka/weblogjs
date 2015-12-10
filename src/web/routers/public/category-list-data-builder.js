@@ -10,6 +10,8 @@ class CategoryListDataBuilder {
         this._blogId = args.blogId;
         this._publish_date = args.publishDate;
         this._urlBuilder = args.urlBuilder;
+        //this._uncategorizedLabel = args.uncategorizedLabel;
+        //this._uncategorizedSlug = args.uncategorizedSlug;
     }
 
     build() {
@@ -21,15 +23,34 @@ class CategoryListDataBuilder {
             var sort = {name: 1};
             var postCountsByCat = yield postManager.countByCategories(condition, sort);
             var allCategories = yield categoryManager.find();
+            var list = [];
+            //var uncategorizedCount = 0;
 
-            return postCountsByCat.map((postCategory) => {
-                var category = allCategories.find((cat) => String(cat._id) === String(postCategory._id));
-                return {
-                    name: category.name,
-                    link: this._urlBuilder(category.slug),
-                    count: postCategory.count
-                };
+            for (let postCount of postCountsByCat) {
+                let category = allCategories.find((cat) => String(cat._id) === String(postCount._id));
+
+                if (category) {
+                    list.push({
+                        name: category.name,
+                        link: this._urlBuilder(category.slug),
+                        count: postCount.count
+                    });
+                }/* else {
+                    uncategorizedCount++;
+                }
+                */
+            }
+
+            /*
+            list.push({
+                name: this._uncategorizedLabel,
+                link: this._urlBuilder(this._uncategorizedSlug),
+                count: uncategorizedCount
             });
+            */
+
+            return list;
+
         }.bind(this))
     }
 }
