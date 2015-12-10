@@ -361,6 +361,15 @@
         margin-top: 30px;
     }
 
+    .m-dte-button-list {}
+
+    .m-dte-button-list-item {
+        display: inline-block;
+    }
+    .m-dte-button-list-item:first-child {
+        margin-right: 20px;
+    }
+
     .m-dte-flush-message {
         display: inline-block;
         background-color: $color-background-prominent;
@@ -492,7 +501,6 @@
 
     .m-cfm-button-list {
         display: block;
-        text-align: center;
         padding-bottom: 5px;
     }
 

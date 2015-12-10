@@ -3,7 +3,7 @@ import Editor from './editor';
 
 class Adder extends Editor {
 
-    get buttonLabel() {
+    get okayButtonLabel() {
         return "Create";
     }
 }

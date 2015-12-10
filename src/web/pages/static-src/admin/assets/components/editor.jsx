@@ -44,8 +44,12 @@ class Editor extends React.Component {
         return "Edit Something";
     }
 
-    get buttonLabel() {
+    get okayButtonLabel() {
         return "Edit";
+    }
+
+    get cancelButtonLabel() {
+        return "Cancel";
     }
 
     componentWillMount() {
@@ -166,8 +170,16 @@ class Editor extends React.Component {
                 <h2 className="m-dte-title">{this.title}</h2>
                 {fields}
                 <div className="m-dte-field-container">
-                    <button className="module-button"
-                            type="submit">{this.buttonLabel}</button>
+                    <ul className="m-dte-button-list">
+                        <li className="m-dte-button-list-item">
+                            <button className="module-button"
+                                    type="submit">{this.okayButtonLabel}</button>
+                        </li>
+                        <li className="m-dte-button-list-item">
+                            <button className="module-button m-btn-alert"
+                                    onClick={this.onCancelButtonClicked.bind(this)}>{this.cancelButtonLabel}</button>
+                        </li>
+                    </ul>
                 </div>
             </form>
         );
@@ -184,6 +196,11 @@ class Editor extends React.Component {
                     errors: data.errors
                 })
             );
+    }
+
+    onCancelButtonClicked(e) {
+        e.preventDefault();
+        this.props.onComplete();
     }
 
     sendToServer(values) {

@@ -857,6 +857,12 @@ table tbody tr {
 .module-data-editor .m-dte-field-container {
   margin-top: 30px; }
 
+.module-data-editor .m-dte-button-list-item {
+  display: inline-block; }
+
+.module-data-editor .m-dte-button-list-item:first-child {
+  margin-right: 20px; }
+
 .module-data-editor .m-dte-flush-message {
   display: inline-block;
   background-color: #A8DBF0;
@@ -963,7 +969,6 @@ table tbody tr {
 
 .module-confirmation .m-cfm-button-list {
   display: block;
-  text-align: center;
   padding-bottom: 5px; }
 
 .module-confirmation .m-cfm-button-list-item {
