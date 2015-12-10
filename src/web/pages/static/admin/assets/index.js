@@ -50,7 +50,7 @@
 	
 	var _homeController2 = _interopRequireDefault(_homeController);
 	
-	var _loginController = __webpack_require__(297);
+	var _loginController = __webpack_require__(305);
 	
 	var _loginController2 = _interopRequireDefault(_loginController);
 	
@@ -73,7 +73,6 @@
 	"use strict";
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	//import PostController from "../controllers/post-controller";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -103,15 +102,19 @@
 	
 	var _userController2 = _interopRequireDefault(_userController);
 	
-	var _categoryController = __webpack_require__(284);
+	var _categoryController = __webpack_require__(287);
 	
 	var _categoryController2 = _interopRequireDefault(_categoryController);
 	
-	var _blogController = __webpack_require__(289);
+	var _postController = __webpack_require__(292);
+	
+	var _postController2 = _interopRequireDefault(_postController);
+	
+	var _blogController = __webpack_require__(297);
 	
 	var _blogController2 = _interopRequireDefault(_blogController);
 	
-	var _settingController = __webpack_require__(294);
+	var _settingController = __webpack_require__(302);
 	
 	var _settingController2 = _interopRequireDefault(_settingController);
 	
@@ -128,6 +131,7 @@
 	        this.dashboardController = new _dashboardController2.default();
 	        this.userController = new _userController2.default();
 	        this.categoryController = new _categoryController2.default();
+	        this.postController = new _postController2.default();
 	        this.blogController = new _blogController2.default();
 	        this.settingController = new _settingController2.default();
 	
@@ -173,6 +177,28 @@
 	        });
 	        this.categoryController.clickListLocation.on(function () {
 	            return _router2.default.changeHash("/categories");
+	        });
+	
+	        this.postController.clickAddEvent.on(function () {
+	            return _router2.default.changeHash("/posts/new");
+	        });
+	        this.postController.clickEditEvent.on(function (id) {
+	            return _router2.default.changeHash("/posts/" + id);
+	        });
+	        this.postController.clickDeleteEvent.on(function (id) {
+	            return _router2.default.changeHash("/posts/" + id + "/delete");
+	        });
+	        this.postController.completeAddEvent.on(function () {
+	            return _router2.default.changeHash("/posts");
+	        });
+	        this.postController.completeEditEvent.on(function () {
+	            return _router2.default.changeHash("/posts");
+	        });
+	        this.postController.completeDeleteEvent.on(function () {
+	            return _router2.default.changeHash("/posts");
+	        });
+	        this.postController.clickListLocation.on(function () {
+	            return _router2.default.changeHash("/posts");
 	        });
 	
 	        this.blogController.clickAddEvent.on(function () {
@@ -229,6 +255,19 @@
 	            return _this.categoryController.showDeleter(id);
 	        });
 	
+	        _router2.default.addRoute("/posts", function () {
+	            return _this.postController.showList();
+	        });
+	        _router2.default.addRoute("/posts/new", function () {
+	            return _this.postController.showAdder();
+	        });
+	        _router2.default.addRoute("/posts/:id", function (id) {
+	            return _this.postController.showEditor(id);
+	        });
+	        _router2.default.addRoute("/posts/:id/delete", function (id) {
+	            return _this.postController.showDeleter(id);
+	        });
+	
 	        _router2.default.addRoute("/blogs", function () {
 	            return _this.blogController.showList();
 	        });
@@ -275,110 +314,6 @@
 	
 	            _globalEvents2.default.domReady.on(function () {
 	                _this2.showNavigation();
-	
-	                //--------------------------------
-	                // Callbacks on Controllers
-	                //--------------------------------
-	
-	                // UserController
-	
-	                /*
-	                  // CategoryController
-	                  CategoryController.onClickAddButton.on(function () {
-	                 Router.changeHash("/categories/new");
-	                 });
-	                  CategoryController.onClickEditButton.on(function (id) {
-	                 Router.changeHash("/categories/" + id);
-	                 });
-	                  CategoryController.onCompleteAdding.on(function () {
-	                 Router.changeHash("/categories");
-	                 });
-	                  CategoryController.onCompleteEditing.on(function () {
-	                 Router.changeHash("/categories");
-	                 });
-	                  CategoryController.onCompleteDeleting.on(function () {
-	                 Router.changeHash("/categories");
-	                 });
-	                  CategoryController.onClickListLocation.on(function () {
-	                 Router.changeHash("/categories");
-	                 });
-	                  // PostController
-	                  PostController.onClickAddButton.on(function () {
-	                 Router.changeHash("/posts/new");
-	                 });
-	                  PostController.onClickEditButton.on(function (id) {
-	                 Router.changeHash("/posts/" + id);
-	                 });
-	                  PostController.onCompleteAdding.on(function () {
-	                 Router.changeHash("/posts");
-	                 });
-	                  PostController.onCompleteEditing.on(function () {
-	                 Router.changeHash("/posts");
-	                 });
-	                  PostController.onCompleteDeleting.on(function () {
-	                 Router.changeHash("/posts");
-	                 });
-	                  PostController.onClickListLocation.on(function () {
-	                 Router.changeHash("/posts");
-	                 });
-	                  // BlogController
-	                  BlogController.onClickAddButton.on(function () {
-	                 Router.changeHash("/blogs/new");
-	                 });
-	                  BlogController.onClickEditButton.on(function (id) {
-	                 Router.changeHash("/blogs/" + id);
-	                 });
-	                  BlogController.onCompleteAdding.on(function () {
-	                 Router.changeHash("/blogs");
-	                 });
-	                  BlogController.onCompleteEditing.on(function () {
-	                 Router.changeHash("/blogs");
-	                 });
-	                  BlogController.onCompleteDeleting.on(function () {
-	                 Router.changeHash("/blogs");
-	                 });
-	                  BlogController.onClickListLocation.on(function () {
-	                 Router.changeHash("/blogs");
-	                 });
-	                 */
-	
-	                //--------------------------------
-	                // Setting up the router
-	                //--------------------------------
-	
-	                /*
-	                  // Categories
-	                  Router.addRoute("/categories", function () {
-	                 CategoryController.showCategoryList();
-	                 });
-	                  Router.addRoute("/categories/new", function () {
-	                 CategoryController.showCategoryEditorWithAddMode();
-	                 });
-	                  Router.addRoute("/categories/:id", function (id) {
-	                 CategoryController.showCategoryEditorWithEditMode(id);
-	                 });
-	                  // Posts
-	                  Router.addRoute("/posts", function () {
-	                 PostController.showPostList();
-	                 });
-	                  Router.addRoute("/posts/new", function () {
-	                 PostController.showPostEditorWithAddMode();
-	                 });
-	                  Router.addRoute("/posts/:id", function (id) {
-	                 PostController.showPostEditorWithEditMode(id);
-	                 });
-	                  // Blogs
-	                  Router.addRoute("/blogs", function () {
-	                 BlogController.showBlogList();
-	                 });
-	                  Router.addRoute("/blogs/new", function () {
-	                 BlogController.showBlogEditorWithAddMode();
-	                 });
-	                  Router.addRoute("/blogs/:id", function (id) {
-	                 BlogController.showBlogEditorWithEditMode(id);
-	                 });
-	                 */
-	
 	                _router2.default.listen(true);
 	            });
 	        }
@@ -22487,11 +22422,11 @@
 	
 	var _userAdder2 = _interopRequireDefault(_userAdder);
 	
-	var _userEditor = __webpack_require__(280);
+	var _userEditor = __webpack_require__(283);
 	
 	var _userEditor2 = _interopRequireDefault(_userEditor);
 	
-	var _userDeleter = __webpack_require__(281);
+	var _userDeleter = __webpack_require__(284);
 	
 	var _userDeleter2 = _interopRequireDefault(_userDeleter);
 	
@@ -34392,9 +34327,7 @@
 	
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(List).call(this, props));
 	
-	        _this.state = {
-	            models: []
-	        };
+	        _this.state = _this.initialState;
 	        return _this;
 	    }
 	
@@ -34462,8 +34395,18 @@
 	                        'tbody',
 	                        null,
 	                        this.state.models.map(function (model, index) {
+	
+	                            var values = {};
+	
+	                            Object.keys(_this3.fields).forEach(function (key) {
+	                                var field = _this3.fields[key];
+	                                var value = model[key];
+	                                values[key] = field.stringify ? field.stringify(value) : value;
+	                            });
+	
 	                            return _react2.default.createElement(ListItem, { key: model._id,
-	                                model: model,
+	                                id: model._id,
+	                                values: values,
 	                                fields: _this3.fields,
 	                                onEditButtonClicked: _this3.props.onEditButtonClicked,
 	                                onDeleteButtonClicked: _this3.props.onDeleteButtonClicked,
@@ -34483,6 +34426,13 @@
 	        value: function onAddButtonClicked(e) {
 	            e.preventDefault();
 	            this.props.onAddButtonClicked();
+	        }
+	    }, {
+	        key: 'initialState',
+	        get: function get() {
+	            return {
+	                models: []
+	            };
 	        }
 	    }, {
 	        key: 'title',
@@ -34512,10 +34462,10 @@
 	var ListItem = (function (_React$Component2) {
 	    _inherits(ListItem, _React$Component2);
 	
-	    function ListItem(props) {
+	    function ListItem() {
 	        _classCallCheck(this, ListItem);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ListItem).call(this, props));
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ListItem).apply(this, arguments));
 	    }
 	
 	    _createClass(ListItem, [{
@@ -34561,9 +34511,7 @@
 	                ),
 	                Object.keys(this.props.fields).map(function (key, index) {
 	                    var field = _this5.props.fields[key];
-	                    var value = _this5.props.model[key];
-	
-	                    value = field.stringify ? field.stringify(value) : value;
+	                    var value = _this5.props.values[key];
 	
 	                    return _react2.default.createElement(
 	                        'td',
@@ -34577,13 +34525,13 @@
 	        key: 'onDeleteButtonClicked',
 	        value: function onDeleteButtonClicked(e) {
 	            e.preventDefault();
-	            this.props.onDeleteButtonClicked(this.props.model._id);
+	            this.props.onDeleteButtonClicked(this.props.id);
 	        }
 	    }, {
 	        key: 'onEditButtonClicked',
 	        value: function onEditButtonClicked(e) {
 	            e.preventDefault();
-	            this.props.onEditButtonClicked(this.props.model._id);
+	            this.props.onEditButtonClicked(this.props.id);
 	        }
 	    }]);
 	
@@ -34749,11 +34697,23 @@
 	
 	var _option2 = _interopRequireDefault(_option);
 	
-	var _label = __webpack_require__(278);
+	var _tagList = __webpack_require__(278);
+	
+	var _tagList2 = _interopRequireDefault(_tagList);
+	
+	var _datetime = __webpack_require__(279);
+	
+	var _datetime2 = _interopRequireDefault(_datetime);
+	
+	var _textarea = __webpack_require__(280);
+	
+	var _textarea2 = _interopRequireDefault(_textarea);
+	
+	var _label = __webpack_require__(281);
 	
 	var _label2 = _interopRequireDefault(_label);
 	
-	var _errorMessage = __webpack_require__(279);
+	var _errorMessage = __webpack_require__(282);
 	
 	var _errorMessage2 = _interopRequireDefault(_errorMessage);
 	
@@ -34859,6 +34819,12 @@
 	                            }
 	                        });
 	                        break;
+	                    case "textarea":
+	                        element = _react2.default.createElement(_textarea2.default, { onChange: function onChange(v) {
+	                                return _this3.setValueState(key, v);
+	                            },
+	                            value: val });
+	                        break;
 	                    case "checkbox-list":
 	                        element = _react2.default.createElement(
 	                            _checkboxList2.default,
@@ -34878,7 +34844,8 @@
 	                            _select2.default,
 	                            { onChange: function onChange(v) {
 	                                    return _this3.setValueState(key, v);
-	                                } },
+	                                },
+	                                value: val },
 	                            list.map(function (item, index) {
 	                                return _react2.default.createElement(
 	                                    _option2.default,
@@ -34888,6 +34855,18 @@
 	                                );
 	                            })
 	                        );
+	                        break;
+	                    case "tag-list":
+	                        element = _react2.default.createElement(_tagList2.default, { onChange: function onChange(v) {
+	                                return _this3.setValueState(key, v);
+	                            },
+	                            value: val });
+	                        break;
+	                    case "datetime":
+	                        element = _react2.default.createElement(_datetime2.default, { onChange: function onChange(v) {
+	                                return _this3.setValueState(key, v);
+	                            },
+	                            value: val });
 	                        break;
 	                }
 	
@@ -35392,6 +35371,489 @@
 /* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _classnames = __webpack_require__(167);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ENTER = 13;
+	
+	var TagList = _react2.default.createClass({
+	    displayName: 'TagList',
+	
+	    getDefaultProps: function getDefaultProps() {
+	        return {
+	            className: "",
+	            value: "",
+	            onChange: function onChange() {}
+	        };
+	    },
+	
+	    getInitialState: function getInitialState() {
+	        return {
+	            tags: []
+	        };
+	    },
+	
+	    componentWillMount: function componentWillMount() {
+	        this.setState({
+	            tags: this.props.value || []
+	        });
+	    },
+	
+	    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+	        this.setState({
+	            tags: newProps.value || []
+	        });
+	    },
+	
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: (0, _classnames2.default)(this.props.className, "element-tag-list-field") },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'e-tgl-new-tag-list-container' },
+	                this.state.tags.length > 0 ? _react2.default.createElement(
+	                    'ul',
+	                    { className: 'e-tgl-new-tag-list' },
+	                    this.state.tags.map((function (tag, index) {
+	                        return _react2.default.createElement(
+	                            'li',
+	                            { key: index,
+	                                className: 'e-tgl-new-tag-list-item' },
+	                            _react2.default.createElement(
+	                                'span',
+	                                { className: 'e-tgl-tag-name' },
+	                                tag
+	                            ),
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'module-button m-btn-clear',
+	                                    'data-tag-name': tag,
+	                                    onClick: this._onCloseButtonClicked },
+	                                _react2.default.createElement('i', { className: 'fa fa-times-circle e-tgl-delete-icon' })
+	                            )
+	                        );
+	                    }).bind(this))
+	                ) : _react2.default.createElement(
+	                    'span',
+	                    { className: 'e-tgl-no-tags-message' },
+	                    '(No Tags)'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'e-tgl-new-tag-input-container' },
+	                _react2.default.createElement('input', { type: 'text',
+	                    placeholder: 'Add a new tag',
+	                    ref: 'newTag',
+	                    id: this.props.id,
+	                    onKeyDown: this._onKeyDowned }),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'e-tgl-add-button-container' },
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'module-button m-btn-clear',
+	                            onClick: this._onAddButtonClicked },
+	                        _react2.default.createElement('i', { className: 'fa fa-plus-square e-tgl-add-icon' })
+	                    )
+	                )
+	            )
+	        );
+	    },
+	
+	    _onKeyDowned: function _onKeyDowned(e) {
+	        if (e.keyCode == ENTER) {
+	            e.preventDefault();
+	            this._addNewTag();
+	        }
+	    },
+	
+	    _onAddButtonClicked: function _onAddButtonClicked(e) {
+	        e.preventDefault();
+	        this._addNewTag();
+	    },
+	
+	    _onCloseButtonClicked: function _onCloseButtonClicked(e) {
+	        e.preventDefault();
+	        this._deleteTag(e.currentTarget.getAttribute("data-tag-name"));
+	    },
+	
+	    _addNewTag: function _addNewTag() {
+	        var tag = this.refs.newTag.value.trim();
+	
+	        if (tag !== "") {
+	            this.setState((function (state) {
+	                if (state.tags.indexOf(tag) === -1) {
+	                    state.tags.push(tag);
+	                }
+	                this.refs.newTag.value = "";
+	            }).bind(this), (function () {
+	                this.props.onChange(this.state.tags);
+	            }).bind(this));
+	        }
+	    },
+	
+	    _deleteTag: function _deleteTag(tag) {
+	        var index = this.state.tags.indexOf(tag);
+	        if (index !== -1) {
+	            this.setState((function (state) {
+	                state.tags.splice(index, 1);
+	            }).bind(this));
+	        }
+	    }
+	});
+	
+	exports.default = TagList;
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _moment = __webpack_require__(181);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
+	var _classnames = __webpack_require__(167);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Datetime = _react2.default.createClass({
+	    displayName: 'Datetime',
+	
+	    getDefaultProps: function getDefaultProps() {
+	        return {
+	            id: "",
+	            className: "",
+	            value: "",
+	            onChange: function onChange() {}
+	        };
+	    },
+	
+	    getInitialState: function getInitialState() {
+	        return {
+	            year: "",
+	            month: "",
+	            date: "",
+	            hour: "",
+	            minute: "",
+	            utcOffset: ""
+	        };
+	    },
+	
+	    componentWillMount: function componentWillMount() {
+	        this._setDateTimeState(this.props.value);
+	    },
+	
+	    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+	        this._setDateTimeState(newProps.value);
+	    },
+	
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: (0, _classnames2.default)(this.props.className, "element-datetime-field") },
+	            _react2.default.createElement(
+	                'fieldset',
+	                { className: 'e-dtf-field-set' },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'e-dtf-select-container' },
+	                    _react2.default.createElement(
+	                        'select',
+	                        { className: 'e-dtf-select', value: this.state.month,
+	                            id: this.props.id,
+	                            onChange: this._onChange('month') },
+	                        this._listOfMonths.map(function (name, index) {
+	                            return _react2.default.createElement(
+	                                'option',
+	                                { value: index + 1, key: index + 1 },
+	                                name
+	                            );
+	                        })
+	                    ),
+	                    _react2.default.createElement(
+	                        'small',
+	                        { className: 'e-dtf-label' },
+	                        'Month'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'e-dtf-select-container' },
+	                    _react2.default.createElement(
+	                        'select',
+	                        { className: 'e-dtf-select', value: this.state.date,
+	                            onChange: this._onChange('date') },
+	                        this._range(1, 31, function (i) {
+	                            return _react2.default.createElement(
+	                                'option',
+	                                { value: i, key: i },
+	                                i
+	                            );
+	                        })
+	                    ),
+	                    _react2.default.createElement(
+	                        'small',
+	                        { className: 'e-dtf-label' },
+	                        'Date'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'e-dtf-select-container' },
+	                    _react2.default.createElement(
+	                        'select',
+	                        { className: 'e-dtf-select', value: this.state.year,
+	                            onChange: this._onChange('year') },
+	                        this._range(1970, 2100, function (i) {
+	                            return _react2.default.createElement(
+	                                'option',
+	                                { value: i, key: i },
+	                                i
+	                            );
+	                        })
+	                    ),
+	                    _react2.default.createElement(
+	                        'small',
+	                        { className: 'e-dtf-label' },
+	                        'Year'
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'fieldset',
+	                { className: 'e-dtf-field-set' },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'e-dtf-select-container' },
+	                    _react2.default.createElement(
+	                        'select',
+	                        { className: 'e-dtf-select', value: this.state.hour,
+	                            onChange: this._onChange('hour') },
+	                        this._range(0, 23, function (i) {
+	                            return _react2.default.createElement(
+	                                'option',
+	                                { value: i, key: i },
+	                                i
+	                            );
+	                        })
+	                    ),
+	                    _react2.default.createElement(
+	                        'small',
+	                        { className: 'e-dtf-label' },
+	                        'Hour'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'e-dtf-separator' },
+	                    ':'
+	                ),
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'e-dtf-select-container' },
+	                    _react2.default.createElement(
+	                        'select',
+	                        { className: 'e-dtf-select', value: this.state.minute,
+	                            onChange: this._onChange('minute') },
+	                        this._range(0, 59, function (i) {
+	                            return _react2.default.createElement(
+	                                'option',
+	                                { value: i, key: i },
+	                                i
+	                            );
+	                        })
+	                    ),
+	                    _react2.default.createElement(
+	                        'small',
+	                        { className: 'e-dtf-label' },
+	                        'Minute'
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'fieldset',
+	                { className: 'e-dtf-field-set' },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'e-dtf-select-container' },
+	                    _react2.default.createElement(
+	                        'select',
+	                        { className: 'e-dtf-select',
+	                            value: this.state.utcOffset,
+	                            disabled: 'true' },
+	                        this._listOfOffsets.map(function (offset, index) {
+	                            return _react2.default.createElement(
+	                                'option',
+	                                { value: offset, key: index },
+	                                offset
+	                            );
+	                        })
+	                    ),
+	                    _react2.default.createElement(
+	                        'small',
+	                        { className: 'e-dtf-label' },
+	                        'UTC Offset'
+	                    )
+	                )
+	            )
+	        );
+	    },
+	
+	    _formats: {
+	        year: "YYYY",
+	        month: "M",
+	        date: "D",
+	        hour: "H",
+	        minute: "m",
+	        utcOffset: "Z"
+	    },
+	
+	    _setDateTimeState: function _setDateTimeState(dateTimeString) {
+	        var thisMoment = (0, _moment2.default)(dateTimeString);
+	        var newState = {};
+	
+	        Object.keys(this._formats).forEach((function (key) {
+	            newState[key] = thisMoment.format(this._formats[key]);
+	        }).bind(this));
+	
+	        this.setState(newState);
+	    },
+	
+	    _buildDateFromState: function _buildDateFromState() {
+	
+	        var thisMoment = (0, _moment2.default)({
+	            year: this.state.year,
+	            month: this.state.month - 1,
+	            date: this.state.date,
+	            hour: this.state.hour,
+	            minute: this.state.minute,
+	            second: 0
+	        });
+	
+	        return thisMoment.toDate();
+	    },
+	
+	    _onChange: function _onChange(field) {
+	        return (function (e) {
+	            var obj = {};
+	            obj[field] = e.target.value.trim();
+	            this.setState(obj, (function () {
+	                this.props.onChange(this._buildDateFromState());
+	            }).bind(this));
+	        }).bind(this);
+	    },
+	
+	    _range: function _range(start, end, func) {
+	        var results = [];
+	        for (var i = start; i <= end; i++) {
+	            results.push(func(i));
+	        }
+	        return results;
+	    },
+	
+	    _listOfMonths: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+	
+	    _listOfOffsets: ["-12:00", "-11:00", "-10:00", "-09:30", "-09:00", "-08:00", "-07:00", "-06:00", "-05:00", "-04:30", "-04:00", "-03:30", "-03:00", "-02:00", "-01:00", "+00:00", "+01:00", "+02:00", "+03:00", "+03:30", "+04:00", "+04:30", "+05:00", "+05:30", "+05:45", "+06:00", "+06:30", "+07:00", "+08:00", "+08:30", "+08:45", "+09:00", "+09:30", "+10:00", "+10:30", "+11:00", "+12:00", "+12:45", "+13:00", "+14:00"]
+	});
+	
+	exports.default = Datetime;
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Textarea = _react2.default.createClass({
+	    displayName: "Textarea",
+	
+	    getDefaultProps: function getDefaultProps() {
+	        return {
+	            className: "m-frf-textarea",
+	            value: "",
+	            onChange: function onChange() {}
+	        };
+	    },
+	
+	    getInitialState: function getInitialState() {
+	        return {
+	            value: ""
+	        };
+	    },
+	
+	    componentWillMount: function componentWillMount() {
+	        this._props = Object.assign({}, this.props);
+	        this._props.onChange = this._onChange;
+	    },
+	
+	    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+	        this.setState({
+	            value: newProps.value
+	        });
+	    },
+	
+	    render: function render() {
+	        this._props.value = this.state.value;
+	        return _react2.default.createElement("textarea", this._props);
+	    },
+	
+	    _onChange: function _onChange(e) {
+	        var value = e.target.value;
+	
+	        if (this.props.onChange(value) === false) {
+	            e.preventDefault();
+	            return;
+	        }
+	
+	        this.setState({
+	            value: value
+	        });
+	    }
+	});
+	
+	exports.default = Textarea;
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -35443,7 +35905,7 @@
 	exports.default = Label;
 
 /***/ },
-/* 279 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35497,7 +35959,7 @@
 	exports.default = ErrorMessage;
 
 /***/ },
-/* 280 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35578,7 +36040,7 @@
 	exports.default = UserEditor;
 
 /***/ },
-/* 281 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35589,7 +36051,7 @@
 	    value: true
 	});
 	
-	var _deleter = __webpack_require__(282);
+	var _deleter = __webpack_require__(285);
 	
 	var _deleter2 = _interopRequireDefault(_deleter);
 	
@@ -35639,7 +36101,7 @@
 	exports.default = UserDeleter;
 
 /***/ },
-/* 282 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35654,7 +36116,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _confirmation = __webpack_require__(283);
+	var _confirmation = __webpack_require__(286);
 	
 	var _confirmation2 = _interopRequireDefault(_confirmation);
 	
@@ -35764,7 +36226,7 @@
 	exports.default = Deleter;
 
 /***/ },
-/* 283 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35848,7 +36310,7 @@
 	exports.default = Confirmation;
 
 /***/ },
-/* 284 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35863,19 +36325,19 @@
 	
 	var _modelController2 = _interopRequireDefault(_modelController);
 	
-	var _categoryList = __webpack_require__(285);
+	var _categoryList = __webpack_require__(288);
 	
 	var _categoryList2 = _interopRequireDefault(_categoryList);
 	
-	var _categoryAdder = __webpack_require__(286);
+	var _categoryAdder = __webpack_require__(289);
 	
 	var _categoryAdder2 = _interopRequireDefault(_categoryAdder);
 	
-	var _categoryEditor = __webpack_require__(287);
+	var _categoryEditor = __webpack_require__(290);
 	
 	var _categoryEditor2 = _interopRequireDefault(_categoryEditor);
 	
-	var _categoryDeleter = __webpack_require__(288);
+	var _categoryDeleter = __webpack_require__(291);
 	
 	var _categoryDeleter2 = _interopRequireDefault(_categoryDeleter);
 	
@@ -35929,7 +36391,7 @@
 	exports.default = CategoryController;
 
 /***/ },
-/* 285 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36014,7 +36476,7 @@
 	exports.default = CategoryList;
 
 /***/ },
-/* 286 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36098,7 +36560,7 @@
 	exports.default = CategoryAdder;
 
 /***/ },
-/* 287 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36113,7 +36575,7 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _categoryAdder = __webpack_require__(286);
+	var _categoryAdder = __webpack_require__(289);
 	
 	var _categoryAdder2 = _interopRequireDefault(_categoryAdder);
 	
@@ -36167,7 +36629,7 @@
 	exports.default = CategoryEditor;
 
 /***/ },
-/* 288 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36178,7 +36640,7 @@
 	    value: true
 	});
 	
-	var _deleter = __webpack_require__(282);
+	var _deleter = __webpack_require__(285);
 	
 	var _deleter2 = _interopRequireDefault(_deleter);
 	
@@ -36228,7 +36690,7 @@
 	exports.default = CategoryDeleter;
 
 /***/ },
-/* 289 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36243,19 +36705,626 @@
 	
 	var _modelController2 = _interopRequireDefault(_modelController);
 	
-	var _blogList = __webpack_require__(290);
+	var _postList = __webpack_require__(293);
+	
+	var _postList2 = _interopRequireDefault(_postList);
+	
+	var _postAdder = __webpack_require__(294);
+	
+	var _postAdder2 = _interopRequireDefault(_postAdder);
+	
+	var _postEditor = __webpack_require__(295);
+	
+	var _postEditor2 = _interopRequireDefault(_postEditor);
+	
+	var _postDeleter = __webpack_require__(296);
+	
+	var _postDeleter2 = _interopRequireDefault(_postDeleter);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var PostController = (function (_ModelController) {
+	    _inherits(PostController, _ModelController);
+	
+	    function PostController() {
+	        _classCallCheck(this, PostController);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(PostController).apply(this, arguments));
+	    }
+	
+	    _createClass(PostController, [{
+	        key: 'List',
+	        get: function get() {
+	            return _postList2.default;
+	        }
+	    }, {
+	        key: 'Adder',
+	        get: function get() {
+	            return _postAdder2.default;
+	        }
+	    }, {
+	        key: 'Editor',
+	        get: function get() {
+	            return _postEditor2.default;
+	        }
+	    }, {
+	        key: 'Deleter',
+	        get: function get() {
+	            return _postDeleter2.default;
+	        }
+	    }, {
+	        key: 'modelName',
+	        get: function get() {
+	            return "Post";
+	        }
+	    }]);
+	
+	    return PostController;
+	})(_modelController2.default);
+	
+	exports.default = PostController;
+
+/***/ },
+/* 293 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _moment = __webpack_require__(181);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
+	var _list = __webpack_require__(269);
+	
+	var _list2 = _interopRequireDefault(_list);
+	
+	var _serverFacade = __webpack_require__(171);
+	
+	var _serverFacade2 = _interopRequireDefault(_serverFacade);
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var PostList = (function (_List) {
+	    _inherits(PostList, _List);
+	
+	    function PostList() {
+	        _classCallCheck(this, PostList);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(PostList).apply(this, arguments));
+	    }
+	
+	    _createClass(PostList, [{
+	        key: 'retrieveModels',
+	        value: function retrieveModels() {
+	            return _serverFacade2.default.getPosts();
+	        }
+	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var _this2 = this;
+	
+	            _get(Object.getPrototypeOf(PostList.prototype), 'componentWillMount', this).call(this);
+	
+	            _serverFacade2.default.getCategories().then(function (categories) {
+	                return _this2.setState(function (state) {
+	                    state.categories = categories;
+	                });
+	            });
+	
+	            _serverFacade2.default.getUsers().then(function (users) {
+	                return _this2.setState(function (state) {
+	                    state.authors = users;
+	                });
+	            });
+	
+	            _serverFacade2.default.getBlogs().then(function (blogs) {
+	                return _this2.setState(function (state) {
+	                    state.blogs = blogs;
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'initialState',
+	        get: function get() {
+	            var state = _get(Object.getPrototypeOf(PostList.prototype), 'initialState', this);
+	
+	            state.categories = [];
+	            state.authors = [];
+	            state.blogs = [];
+	
+	            return state;
+	        }
+	    }, {
+	        key: 'title',
+	        get: function get() {
+	            return "Post List";
+	        }
+	    }, {
+	        key: 'fields',
+	        get: function get() {
+	            var _this3 = this;
+	
+	            return {
+	                title: {
+	                    label: "Title"
+	                },
+	
+	                content: {
+	                    label: "Content"
+	                },
+	
+	                slug: {
+	                    label: "Slug"
+	                },
+	
+	                author: {
+	                    label: "Author",
+	                    stringify: function stringify(value) {
+	                        if (!value) {
+	                            return _this3.noneElement;
+	                        } else {
+	                            var author = _this3.state.authors.find(function (a) {
+	                                return value === a._id;
+	                            });
+	                            return author ? author.display_name : _this3.deletedElement;
+	                        }
+	                    }
+	                },
+	
+	                category: {
+	                    label: "Category",
+	                    stringify: function stringify(value) {
+	                        if (!value) {
+	                            return _this3.noneElement;
+	                        } else {
+	                            var category = _this3.state.categories.find(function (a) {
+	                                return value === a._id;
+	                            });
+	                            return category ? category.name : _this3.deletedElement;
+	                        }
+	                    }
+	                },
+	
+	                blog: {
+	                    label: "Blog",
+	                    stringify: function stringify(value) {
+	                        if (!value) {
+	                            return _this3.noneElement;
+	                        } else {
+	                            var blog = _this3.state.blogs.find(function (a) {
+	                                return value === a._id;
+	                            });
+	                            return blog ? blog.title : _this3.deletedElement;
+	                        }
+	                    }
+	                },
+	
+	                tags: {
+	                    label: "Tags",
+	                    stringify: function stringify(value) {
+	                        return value.length > 0 ? value.join(', ') : _this3.noneElement;
+	                    }
+	                },
+	
+	                publish_date: {
+	                    label: "Publish Date",
+	                    stringify: function stringify(value) {
+	                        return (0, _moment2.default)(value).format("YYYY-MM-DD HH:mm Z");
+	                    }
+	                },
+	
+	                created: {
+	                    label: "Created Date",
+	                    stringify: function stringify(value) {
+	                        return (0, _moment2.default)(value).format("YYYY-MM-DD HH:mm Z");
+	                    }
+	                },
+	
+	                updated: {
+	                    label: "Updated Date",
+	                    stringify: function stringify(value) {
+	                        return (0, _moment2.default)(value).format("YYYY-MM-DD HH:mm Z");
+	                    }
+	                }
+	            };
+	        }
+	    }, {
+	        key: 'noneElement',
+	        get: function get() {
+	            return _react2.default.createElement(
+	                'span',
+	                { className: 'm-dtl-none' },
+	                '(None)'
+	            );
+	        }
+	    }, {
+	        key: 'deletedElement',
+	        get: function get() {
+	            return _react2.default.createElement(
+	                'span',
+	                { className: 'm-dtl-none' },
+	                '(Deleted)'
+	            );
+	        }
+	    }]);
+	
+	    return PostList;
+	})(_list2.default);
+	
+	exports.default = PostList;
+
+/***/ },
+/* 294 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _serverFacade = __webpack_require__(171);
+	
+	var _serverFacade2 = _interopRequireDefault(_serverFacade);
+	
+	var _editor = __webpack_require__(271);
+	
+	var _editor2 = _interopRequireDefault(_editor);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var PostAdder = (function (_Editor) {
+	    _inherits(PostAdder, _Editor);
+	
+	    function PostAdder() {
+	        _classCallCheck(this, PostAdder);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(PostAdder).apply(this, arguments));
+	    }
+	
+	    _createClass(PostAdder, [{
+	        key: 'retrieveModel',
+	        value: function retrieveModel() {
+	            return Promise.resolve({
+	                title: "",
+	                content: "",
+	                slug: "",
+	                category: "",
+	                author: "",
+	                blog: "",
+	                tags: [],
+	                publish_date: new Date()
+	            });
+	        }
+	    }, {
+	        key: 'sendToServer',
+	        value: function sendToServer(values) {
+	            var data = {
+	                title: values.title.trim(),
+	                content: values.content.trim(),
+	                slug: values.slug.trim(),
+	                category: values.category || null,
+	                author: values.author || null,
+	                blog: values.blog || null,
+	                tags: values.tags,
+	                publish_date: values.publish_date
+	            };
+	
+	            return _serverFacade2.default.createPost(data);
+	        }
+	    }, {
+	        key: 'title',
+	        get: function get() {
+	            return "Create a New Post";
+	        }
+	    }, {
+	        key: 'fieldSettings',
+	        get: function get() {
+	            return {
+	                title: {
+	                    id: "PostAdderTitleField",
+	                    type: "text",
+	                    label: "Title"
+	                },
+	
+	                content: {
+	                    id: "PostAdderContentField",
+	                    type: "textarea",
+	                    label: "Content"
+	                },
+	
+	                slug: {
+	                    id: "PostAdderDisplaySlugField",
+	                    type: "text",
+	                    label: "Slug"
+	                },
+	
+	                category: {
+	                    type: "select",
+	                    label: "Category",
+	                    list: function list() {
+	                        return _serverFacade2.default.getCategories().then(function (users) {
+	                            return [{
+	                                value: "",
+	                                label: "-----"
+	                            }].concat(users.map(function (category) {
+	                                return {
+	                                    value: category._id,
+	                                    label: category.name
+	                                };
+	                            }));
+	                        });
+	                    }
+	                },
+	
+	                author: {
+	                    type: "select",
+	                    label: "Author",
+	                    list: function list() {
+	                        return _serverFacade2.default.getUsers().then(function (users) {
+	                            return [{
+	                                value: "",
+	                                label: "-----"
+	                            }].concat(users.map(function (user) {
+	                                return {
+	                                    value: user._id,
+	                                    label: user.display_name
+	                                };
+	                            }));
+	                        });
+	                    }
+	                },
+	
+	                blog: {
+	                    type: "select",
+	                    label: "Blog",
+	                    list: function list() {
+	                        return _serverFacade2.default.getBlogs().then(function (blogs) {
+	                            return [{
+	                                value: "",
+	                                label: "-----"
+	                            }].concat(blogs.map(function (blog) {
+	                                return {
+	                                    value: blog._id,
+	                                    label: blog.title
+	                                };
+	                            }));
+	                        });
+	                    }
+	                },
+	
+	                tags: {
+	                    type: "tag-list",
+	                    label: "Tags"
+	                },
+	
+	                publish_date: {
+	                    type: "datetime",
+	                    label: "Published Date"
+	                }
+	            };
+	        }
+	    }]);
+	
+	    return PostAdder;
+	})(_editor2.default);
+	
+	exports.default = PostAdder;
+
+/***/ },
+/* 295 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _serverFacade = __webpack_require__(171);
+	
+	var _serverFacade2 = _interopRequireDefault(_serverFacade);
+	
+	var _postAdder = __webpack_require__(294);
+	
+	var _postAdder2 = _interopRequireDefault(_postAdder);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var PostEditor = (function (_PostAdder) {
+	    _inherits(PostEditor, _PostAdder);
+	
+	    function PostEditor() {
+	        _classCallCheck(this, PostEditor);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(PostEditor).apply(this, arguments));
+	    }
+	
+	    _createClass(PostEditor, [{
+	        key: 'retrieveModel',
+	        value: function retrieveModel(id) {
+	            return _serverFacade2.default.getPost(id).then(function (data) {
+	                return {
+	                    title: data.title,
+	                    content: data.content,
+	                    slug: data.slug,
+	                    category: data.category,
+	                    author: data.author,
+	                    blog: data.blog,
+	                    tags: data.tags,
+	                    publish_date: data.publish_date
+	                };
+	            });
+	        }
+	    }, {
+	        key: 'sendToServer',
+	        value: function sendToServer(values, id) {
+	            var data = {
+	                title: values.title.trim(),
+	                content: values.content.trim(),
+	                slug: values.slug.trim(),
+	                category: values.category || null,
+	                author: values.author || null,
+	                blog: values.blog || null,
+	                tags: values.tags,
+	                publish_date: values.publish_date
+	            };
+	
+	            return _serverFacade2.default.updatePost(id, data);
+	        }
+	    }, {
+	        key: 'title',
+	        get: function get() {
+	            return "Edit the Post";
+	        }
+	    }, {
+	        key: 'fieldSettings',
+	        get: function get() {
+	            var settings = _get(Object.getPrototypeOf(PostEditor.prototype), 'fieldSettings', this);
+	
+	            delete settings.password;
+	
+	            return settings;
+	        }
+	    }]);
+	
+	    return PostEditor;
+	})(_postAdder2.default);
+	
+	exports.default = PostEditor;
+
+/***/ },
+/* 296 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _deleter = __webpack_require__(285);
+	
+	var _deleter2 = _interopRequireDefault(_deleter);
+	
+	var _serverFacade = __webpack_require__(171);
+	
+	var _serverFacade2 = _interopRequireDefault(_serverFacade);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var PostDeleter = (function (_Deleter) {
+	    _inherits(PostDeleter, _Deleter);
+	
+	    function PostDeleter() {
+	        _classCallCheck(this, PostDeleter);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(PostDeleter).apply(this, arguments));
+	    }
+	
+	    _createClass(PostDeleter, [{
+	        key: 'retrieveLabel',
+	        value: function retrieveLabel(id) {
+	            return _serverFacade2.default.getPost(id).then(function (post) {
+	                return post.title;
+	            });
+	        }
+	    }, {
+	        key: 'deletePost',
+	        value: function deletePost(id) {
+	            return _serverFacade2.default.deletePost(id);
+	        }
+	    }, {
+	        key: 'title',
+	        get: function get() {
+	            return "Delete Post";
+	        }
+	    }]);
+	
+	    return PostDeleter;
+	})(_deleter2.default);
+	
+	exports.default = PostDeleter;
+
+/***/ },
+/* 297 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _modelController = __webpack_require__(178);
+	
+	var _modelController2 = _interopRequireDefault(_modelController);
+	
+	var _blogList = __webpack_require__(298);
 	
 	var _blogList2 = _interopRequireDefault(_blogList);
 	
-	var _blogAdder = __webpack_require__(291);
+	var _blogAdder = __webpack_require__(299);
 	
 	var _blogAdder2 = _interopRequireDefault(_blogAdder);
 	
-	var _blogEditor = __webpack_require__(292);
+	var _blogEditor = __webpack_require__(300);
 	
 	var _blogEditor2 = _interopRequireDefault(_blogEditor);
 	
-	var _blogDeleter = __webpack_require__(293);
+	var _blogDeleter = __webpack_require__(301);
 	
 	var _blogDeleter2 = _interopRequireDefault(_blogDeleter);
 	
@@ -36309,7 +37378,7 @@
 	exports.default = BlogController;
 
 /***/ },
-/* 290 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36398,7 +37467,7 @@
 	exports.default = BlogList;
 
 /***/ },
-/* 291 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36502,7 +37571,7 @@
 	exports.default = BlogAdder;
 
 /***/ },
-/* 292 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36517,7 +37586,7 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _blogAdder = __webpack_require__(291);
+	var _blogAdder = __webpack_require__(299);
 	
 	var _blogAdder2 = _interopRequireDefault(_blogAdder);
 	
@@ -36573,7 +37642,7 @@
 	exports.default = BlogEditor;
 
 /***/ },
-/* 293 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36584,7 +37653,7 @@
 	    value: true
 	});
 	
-	var _deleter = __webpack_require__(282);
+	var _deleter = __webpack_require__(285);
 	
 	var _deleter2 = _interopRequireDefault(_deleter);
 	
@@ -36634,7 +37703,7 @@
 	exports.default = BlogDeleter;
 
 /***/ },
-/* 294 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36653,7 +37722,7 @@
 	
 	var _reactComponentMounter2 = _interopRequireDefault(_reactComponentMounter);
 	
-	var _settingEditor = __webpack_require__(295);
+	var _settingEditor = __webpack_require__(303);
 	
 	var _settingEditor2 = _interopRequireDefault(_settingEditor);
 	
@@ -36693,7 +37762,7 @@
 	exports.default = SettingController;
 
 /***/ },
-/* 295 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36716,7 +37785,7 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _stringFormatter = __webpack_require__(296);
+	var _stringFormatter = __webpack_require__(304);
 	
 	var _stringFormatter2 = _interopRequireDefault(_stringFormatter);
 	
@@ -36728,11 +37797,11 @@
 	
 	var _option2 = _interopRequireDefault(_option);
 	
-	var _label = __webpack_require__(278);
+	var _label = __webpack_require__(281);
 	
 	var _label2 = _interopRequireDefault(_label);
 	
-	var _errorMessage = __webpack_require__(279);
+	var _errorMessage = __webpack_require__(282);
 	
 	var _errorMessage2 = _interopRequireDefault(_errorMessage);
 	
@@ -36866,7 +37935,7 @@
 	exports.default = SettingEditor;
 
 /***/ },
-/* 296 */
+/* 304 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36912,7 +37981,7 @@
 	exports.default = StringFormatter;
 
 /***/ },
-/* 297 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36931,7 +38000,7 @@
 	
 	var _globalEvents2 = _interopRequireDefault(_globalEvents);
 	
-	var _loginForm = __webpack_require__(298);
+	var _loginForm = __webpack_require__(306);
 	
 	var _loginForm2 = _interopRequireDefault(_loginForm);
 	
@@ -36960,7 +38029,7 @@
 	exports.default = LoginController;
 
 /***/ },
-/* 298 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36983,11 +38052,11 @@
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	var _label = __webpack_require__(278);
+	var _label = __webpack_require__(281);
 	
 	var _label2 = _interopRequireDefault(_label);
 	
-	var _errorMessage = __webpack_require__(279);
+	var _errorMessage = __webpack_require__(282);
 	
 	var _errorMessage2 = _interopRequireDefault(_errorMessage);
 	

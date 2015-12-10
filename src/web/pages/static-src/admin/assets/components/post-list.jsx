@@ -1,239 +1,126 @@
-"use strict";
-
-define([
-        'react',
-        'moment',
-        'services/global-events',
-        'services/event',
-        'services/server-facade'
-    ],
-    function (React,
-              Moment,
-              GlobalEvents,
-              Event,
-              ServerFacade) {
+import Moment from 'moment';
+import List from './list';
+import ServerFacade from '../services/server-facade';
+import React from 'react';
 
 
-        var PostList = React.createClass({
+class PostList extends List {
 
-            getInitialState: function () {
-                return {
-                    posts: [],
-                    categories: [],
-                    authors: [],
-                    blogs: []
-                };
+    retrieveModels() {
+        return ServerFacade.getPosts();
+    }
+
+    get initialState () {
+        var state = super.initialState;
+
+        state.categories = [];
+        state.authors = [];
+        state.blogs = [];
+
+        return state;
+    }
+
+    componentWillMount() {
+        super.componentWillMount();
+
+        ServerFacade.getCategories().then(categories =>
+            this.setState(state => { state.categories = categories; }));
+
+        ServerFacade.getUsers().then(users =>
+            this.setState(state => { state.authors = users; }));
+
+        ServerFacade.getBlogs().then(blogs =>
+            this.setState(state => { state.blogs = blogs; }));
+    }
+
+    get title() {
+        return "Post List";
+    }
+
+    get fields() {
+        return {
+            title: {
+                label: "Title"
             },
 
-            componentDidMount: function () {
-
-                ServerFacade.getCategories().then(function (categories) {
-                    this.setState({
-                        categories: categories
-                    });
-                }.bind(this));
-
-                ServerFacade.getUsers().then(function (users) {
-                    this.setState({
-                        authors: users
-                    });
-                }.bind(this));
-
-                ServerFacade.getBlogs().then(function (blogs) {
-                    this.setState({
-                        blogs: blogs
-                    });
-                }.bind(this));
-
-                this.events.addButtonClicked.on(this.props.addButtonClicked);
-                this.events.editButtonClicked.on(this.props.editButtonClicked);
-                this.events.deleteButtonClicked.on(this.props.deleteButtonClicked);
-
-                GlobalEvents.postCreated.on(this._retrieveDataAndUpdateList);
-                GlobalEvents.postUpdated.on(this._retrieveDataAndUpdateList);
-                GlobalEvents.postDeleted.on(this._retrieveDataAndUpdateList);
-
-                this._retrieveDataAndUpdateList();
+            content: {
+                label: "Content"
             },
 
-            componentWillUnmount: function () {
-                GlobalEvents.postCreated.off(this._retrieveDataAndUpdateList);
-                GlobalEvents.postUpdated.off(this._retrieveDataAndUpdateList);
-                GlobalEvents.postDeleted.off(this._retrieveDataAndUpdateList);
+            slug: {
+                label: "Slug"
             },
 
-            render: function () {
-                return (
-                    <div className="module-data-list">
-                        <h2 className="m-dtl-title">Posts</h2>
-
-                        <div>
-                            <button className="module-button m-btn-clear m-dtl-add-button"
-                                    onClick={this._onAddButtonClicked}
-                                    title="Add"
-                                >
-                                <i className="fa fa-plus-square-o m-dtl-add-icon"></i>
-                                Add
-                            </button>
-                        </div>
-                        <table className="m-dtl-table">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th className="m-dtl-for-desktop"></th>
-                                <th>Title</th>
-                                <th>Content</th>
-                                <th>Slug</th>
-                                <th>Author</th>
-                                <th>Category</th>
-                                <th>Blog</th>
-                                <th>Tags</th>
-                                <th>Publish Date</th>
-                                <th>Created</th>
-                                <th>Updated</th>
-                                <th className="m-dtl-for-phone"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.state.posts.map(function (post, index) {
-
-                                var none = <span className="m-dtl-none">(None)</span>;
-                                var deleted = <span className="m-dtl-none">(Deleted)</span>;
-                                var created = Moment(post.created).format("YYYY-MM-DD HH:mm Z");
-                                var updated = Moment(post.updated).format("YYYY-MM-DD HH:mm Z");
-                                var publish = Moment(post.publish_date).format("YYYY-MM-DD HH:mm Z");
-                                var tags = post.tags && post.tags.length > 0 ? post.tags.join(', ') : none;
-
-                                var author;
-                                var category;
-                                var blog;
-
-                                if (!post.author) {
-                                    author = none;
-                                } else {
-                                    author = this.state.authors.find(function (a) {
-                                        return post.author === a._id;
-                                    });
-                                    author = author ? author.display_name : deleted;
-                                }
-
-                                if (!post.category) {
-                                    category = none;
-                                } else {
-                                    category = this.state.categories.find(function (a) {
-                                        return post.category === a._id;
-                                    });
-                                    category = category ? category.name : deleted;
-                                }
-
-                                if (!post.blog) {
-                                    blog = none;
-                                } else {
-                                    blog = this.state.blogs.find(function (a) {
-                                        return post.blog === a._id;
-                                    });
-                                    blog = blog ? blog.title : deleted;
-                                }
-
-                                return <PostListItem key={post._id}
-                                                     id={post._id}
-                                                     title={post.title}
-                                                     content={post.content}
-                                                     slug={post.slug}
-                                                     category={category}
-                                                     author={author}
-                                                     blog={blog}
-                                                     tags={tags}
-                                                     created={created}
-                                                     updated={updated}
-                                                     publish={publish}
-                                                     deleteButtonClickEvent={this.events.deleteButtonClicked}
-                                                     editButtonClickEvent={this.events.editButtonClicked}
-                                                     number={index+1}/>;
-                            }.bind(this))}
-                            </tbody>
-                        </table>
-                    </div>
-                );
+            author: {
+                label: "Author",
+                stringify: value => {
+                    if (!value) {
+                        return this.noneElement;
+                    } else {
+                        let author = this.state.authors.find(a => value === a._id);
+                        return author ? author.display_name : this.deletedElement;
+                    }
+                }
             },
 
-            _retrieveDataAndUpdateList: function () {
-                ServerFacade.getPosts()
-                    .then(function (data) {
-                        this.setState({
-                            posts: data
-                        });
-                    }.bind(this))
-
-                    .fail(function (xhr) {
-                        console.error(xhr.responseJSON.errors);
-                    }.bind(this));
+            category: {
+                label: "Category",
+                stringify: value => {
+                    if (!value) {
+                        return this.noneElement;
+                    } else {
+                        let category = this.state.categories.find(a => value === a._id);
+                        return category ? category.name : this.deletedElement;
+                    }
+                }
             },
 
-            _onAddButtonClicked: function (e) {
-                e.preventDefault();
-                this.events.addButtonClicked.fire();
+            blog: {
+                label: "Blog",
+                stringify: value => {
+                    if (!value) {
+                        return this.noneElement;
+                    } else {
+                        let blog = this.state.blogs.find(a => value === a._id);
+                        return blog ? blog.title : this.deletedElement;
+                    }
+                }
             },
 
-            events: {
-                addButtonClicked: new Event(),
-                editButtonClicked: new Event(),
-                deleteButtonClicked: new Event()
+            tags: {
+                label: "Tags",
+                stringify: value => {
+                    return value.length > 0 ? value.join(', ') : this.noneElement;
+                }
+            },
+
+            publish_date: {
+                label: "Publish Date",
+                stringify: value =>
+                    Moment(value).format("YYYY-MM-DD HH:mm Z")
+            },
+
+            created: {
+                label: "Created Date",
+                stringify: value =>
+                    Moment(value).format("YYYY-MM-DD HH:mm Z")
+            },
+
+            updated: {
+                label: "Updated Date",
+                stringify: value =>
+                    Moment(value).format("YYYY-MM-DD HH:mm Z")
             }
-        });
+        }
+    }
 
-        var PostListItem = React.createClass({
+    get noneElement () {
+        return <span className="m-dtl-none">(None)</span>;
+    }
 
-            render: function () {
+    get deletedElement () {
+        return <span className="m-dtl-none">(Deleted)</span>;
+    }
+}
 
-                var buttons = (
-                    <ul className="m-dtl-button-list">
-                        <li className="m-dtl-button-list-item">
-                            <button className="module-button m-btn-clear"
-                                    onClick={this._onEditButtonClicked}>
-                                <i title="Edit" className="fa fa-pencil-square-o m-dtl-edit-icon"></i>
-                            </button>
-                        </li>
-                        <li className="m-dtl-button-list-item">
-                            <button className="module-button m-btn-clear"
-                                    onClick={this._onDeleteButtonClicked}>
-                                <i title="Delete" className="fa fa-trash-o m-dtl-delete-icon"></i>
-                            </button>
-                        </li>
-                    </ul>
-                );
-
-                return (
-                    <tr>
-                        <td data-label="No.">{this.props.number}</td>
-                        <td className="m-dtl-no-wrap m-dtl-for-desktop">{buttons}</td>
-                        <td data-label="Title" className="element-table-wrap">{this.props.title}</td>
-                        <td data-label="Content" className="element-table-wrap">{this.props.content}</td>
-                        <td data-label="Slug">{this.props.slug}</td>
-                        <td data-label="Author">{this.props.author}</td>
-                        <td data-label="Category">{this.props.category}</td>
-                        <td data-label="Blog">{this.props.blog}</td>
-                        <td data-label="Tags">{this.props.tags}</td>
-                        <td data-label="Publish Date">{this.props.publish}</td>
-                        <td data-label="Created Date">{this.props.created}</td>
-                        <td data-label="Updated Date">{this.props.updated}</td>
-                        <td className="m-dtl-no-wrap m-dtl-for-phone">{buttons}</td>
-                    </tr>
-                );
-            },
-
-            _onDeleteButtonClicked: function (e) {
-                e.preventDefault();
-                this.props.deleteButtonClickEvent.fire(this.props.id);
-            },
-
-            _onEditButtonClicked: function (e) {
-                e.preventDefault();
-                this.props.editButtonClickEvent.fire(this.props.id);
-            }
-
-        });
-
-        return PostList;
-    });
-
+export default PostList;
