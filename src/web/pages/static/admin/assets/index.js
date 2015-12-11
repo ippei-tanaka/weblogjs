@@ -75,7 +75,7 @@
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 	
 	var _globalEvents = __webpack_require__(2);
@@ -123,203 +123,203 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var HomeController = (function () {
-	    function HomeController() {
-	        var _this = this;
+	        function HomeController() {
+	                var _this = this;
 	
-	        _classCallCheck(this, HomeController);
+	                _classCallCheck(this, HomeController);
 	
-	        this.dashboardController = new _dashboardController2.default();
-	        this.userController = new _userController2.default();
-	        this.categoryController = new _categoryController2.default();
-	        this.postController = new _postController2.default();
-	        this.blogController = new _blogController2.default();
-	        this.settingController = new _settingController2.default();
+	                this.dashboardController = new _dashboardController2.default();
+	                this.userController = new _userController2.default();
+	                this.categoryController = new _categoryController2.default();
+	                this.postController = new _postController2.default();
+	                this.blogController = new _blogController2.default();
+	                this.settingController = new _settingController2.default();
 	
-	        this.userController.clickAddEvent.on(function () {
-	            return _router2.default.changeHash("/users/new");
-	        });
-	        this.userController.clickEditEvent.on(function (id) {
-	            return _router2.default.changeHash("/users/" + id);
-	        });
-	        this.userController.clickDeleteEvent.on(function (id) {
-	            return _router2.default.changeHash("/users/" + id + "/delete");
-	        });
-	        this.userController.completeAddEvent.on(function () {
-	            return _router2.default.changeHash("/users");
-	        });
-	        this.userController.completeEditEvent.on(function () {
-	            return _router2.default.changeHash("/users");
-	        });
-	        this.userController.completeDeleteEvent.on(function () {
-	            return _router2.default.changeHash("/users");
-	        });
-	        this.userController.clickListLocation.on(function () {
-	            return _router2.default.changeHash("/users");
-	        });
+	                this.userController.clickAddEvent.on(function () {
+	                        return _router2.default.changeHash("/users/new");
+	                });
+	                this.userController.clickEditEvent.on(function (id) {
+	                        return _router2.default.changeHash("/users/" + id);
+	                });
+	                this.userController.clickDeleteEvent.on(function (id) {
+	                        return _router2.default.changeHash("/users/" + id + "/delete");
+	                });
+	                this.userController.completeAddEvent.on(function () {
+	                        return _router2.default.changeHash("/users");
+	                });
+	                this.userController.completeEditEvent.on(function () {
+	                        return _router2.default.changeHash("/users");
+	                });
+	                this.userController.completeDeleteEvent.on(function () {
+	                        return _router2.default.changeHash("/users");
+	                });
+	                this.userController.clickListLocation.on(function () {
+	                        return _router2.default.changeHash("/users");
+	                });
 	
-	        this.categoryController.clickAddEvent.on(function () {
-	            return _router2.default.changeHash("/categories/new");
-	        });
-	        this.categoryController.clickEditEvent.on(function (id) {
-	            return _router2.default.changeHash("/categories/" + id);
-	        });
-	        this.categoryController.clickDeleteEvent.on(function (id) {
-	            return _router2.default.changeHash("/categories/" + id + "/delete");
-	        });
-	        this.categoryController.completeAddEvent.on(function () {
-	            return _router2.default.changeHash("/categories");
-	        });
-	        this.categoryController.completeEditEvent.on(function () {
-	            return _router2.default.changeHash("/categories");
-	        });
-	        this.categoryController.completeDeleteEvent.on(function () {
-	            return _router2.default.changeHash("/categories");
-	        });
-	        this.categoryController.clickListLocation.on(function () {
-	            return _router2.default.changeHash("/categories");
-	        });
+	                this.categoryController.clickAddEvent.on(function () {
+	                        return _router2.default.changeHash("/categories/new");
+	                });
+	                this.categoryController.clickEditEvent.on(function (id) {
+	                        return _router2.default.changeHash("/categories/" + id);
+	                });
+	                this.categoryController.clickDeleteEvent.on(function (id) {
+	                        return _router2.default.changeHash("/categories/" + id + "/delete");
+	                });
+	                this.categoryController.completeAddEvent.on(function () {
+	                        return _router2.default.changeHash("/categories");
+	                });
+	                this.categoryController.completeEditEvent.on(function () {
+	                        return _router2.default.changeHash("/categories");
+	                });
+	                this.categoryController.completeDeleteEvent.on(function () {
+	                        return _router2.default.changeHash("/categories");
+	                });
+	                this.categoryController.clickListLocation.on(function () {
+	                        return _router2.default.changeHash("/categories");
+	                });
 	
-	        this.postController.clickAddEvent.on(function () {
-	            return _router2.default.changeHash("/posts/new");
-	        });
-	        this.postController.clickEditEvent.on(function (id) {
-	            return _router2.default.changeHash("/posts/" + id);
-	        });
-	        this.postController.clickDeleteEvent.on(function (id) {
-	            return _router2.default.changeHash("/posts/" + id + "/delete");
-	        });
-	        this.postController.completeAddEvent.on(function () {
-	            return _router2.default.changeHash("/posts");
-	        });
-	        this.postController.completeEditEvent.on(function () {
-	            return _router2.default.changeHash("/posts");
-	        });
-	        this.postController.completeDeleteEvent.on(function () {
-	            return _router2.default.changeHash("/posts");
-	        });
-	        this.postController.clickListLocation.on(function () {
-	            return _router2.default.changeHash("/posts");
-	        });
+	                this.postController.clickAddEvent.on(function () {
+	                        return _router2.default.changeHash("/posts/new");
+	                });
+	                this.postController.clickEditEvent.on(function (id) {
+	                        return _router2.default.changeHash("/posts/" + id);
+	                });
+	                this.postController.clickDeleteEvent.on(function (id) {
+	                        return _router2.default.changeHash("/posts/" + id + "/delete");
+	                });
+	                this.postController.completeAddEvent.on(function () {
+	                        return _router2.default.changeHash("/posts");
+	                });
+	                this.postController.completeEditEvent.on(function () {
+	                        return _router2.default.changeHash("/posts");
+	                });
+	                this.postController.completeDeleteEvent.on(function () {
+	                        return _router2.default.changeHash("/posts");
+	                });
+	                this.postController.clickListLocation.on(function () {
+	                        return _router2.default.changeHash("/posts");
+	                });
 	
-	        this.blogController.clickAddEvent.on(function () {
-	            return _router2.default.changeHash("/blogs/new");
-	        });
-	        this.blogController.clickEditEvent.on(function (id) {
-	            return _router2.default.changeHash("/blogs/" + id);
-	        });
-	        this.blogController.clickDeleteEvent.on(function (id) {
-	            return _router2.default.changeHash("/blogs/" + id + "/delete");
-	        });
-	        this.blogController.completeAddEvent.on(function () {
-	            return _router2.default.changeHash("/blogs");
-	        });
-	        this.blogController.completeEditEvent.on(function () {
-	            return _router2.default.changeHash("/blogs");
-	        });
-	        this.blogController.completeDeleteEvent.on(function () {
-	            return _router2.default.changeHash("/blogs");
-	        });
-	        this.blogController.clickListLocation.on(function () {
-	            return _router2.default.changeHash("/blogs");
-	        });
+	                this.blogController.clickAddEvent.on(function () {
+	                        return _router2.default.changeHash("/blogs/new");
+	                });
+	                this.blogController.clickEditEvent.on(function (id) {
+	                        return _router2.default.changeHash("/blogs/" + id);
+	                });
+	                this.blogController.clickDeleteEvent.on(function (id) {
+	                        return _router2.default.changeHash("/blogs/" + id + "/delete");
+	                });
+	                this.blogController.completeAddEvent.on(function () {
+	                        return _router2.default.changeHash("/blogs");
+	                });
+	                this.blogController.completeEditEvent.on(function () {
+	                        return _router2.default.changeHash("/blogs");
+	                });
+	                this.blogController.completeDeleteEvent.on(function () {
+	                        return _router2.default.changeHash("/blogs");
+	                });
+	                this.blogController.clickListLocation.on(function () {
+	                        return _router2.default.changeHash("/blogs");
+	                });
 	
-	        // Routes
+	                // Routes
 	
-	        _router2.default.addRoute("/", function () {
-	            return _this.dashboardController.showDashBoard();
-	        });
+	                _router2.default.addRoute("/", function () {
+	                        return _this.dashboardController.showDashBoard();
+	                });
 	
-	        _router2.default.addRoute("/users", function () {
-	            return _this.userController.showList();
-	        });
-	        _router2.default.addRoute("/users/new", function () {
-	            return _this.userController.showAdder();
-	        });
-	        _router2.default.addRoute("/users/:id", function (id) {
-	            return _this.userController.showEditor(id);
-	        });
-	        _router2.default.addRoute("/users/:id/delete", function (id) {
-	            return _this.userController.showDeleter(id);
-	        });
+	                _router2.default.addRoute("/users", function () {
+	                        return _this.userController.showList();
+	                });
+	                _router2.default.addRoute("/users/new", function () {
+	                        return _this.userController.showAdder();
+	                });
+	                _router2.default.addRoute("/users/:id", function (id) {
+	                        return _this.userController.showEditor(id);
+	                });
+	                _router2.default.addRoute("/users/:id/delete", function (id) {
+	                        return _this.userController.showDeleter(id);
+	                });
 	
-	        _router2.default.addRoute("/categories", function () {
-	            return _this.categoryController.showList();
-	        });
-	        _router2.default.addRoute("/categories/new", function () {
-	            return _this.categoryController.showAdder();
-	        });
-	        _router2.default.addRoute("/categories/:id", function (id) {
-	            return _this.categoryController.showEditor(id);
-	        });
-	        _router2.default.addRoute("/categories/:id/delete", function (id) {
-	            return _this.categoryController.showDeleter(id);
-	        });
+	                _router2.default.addRoute("/categories", function () {
+	                        return _this.categoryController.showList();
+	                });
+	                _router2.default.addRoute("/categories/new", function () {
+	                        return _this.categoryController.showAdder();
+	                });
+	                _router2.default.addRoute("/categories/:id", function (id) {
+	                        return _this.categoryController.showEditor(id);
+	                });
+	                _router2.default.addRoute("/categories/:id/delete", function (id) {
+	                        return _this.categoryController.showDeleter(id);
+	                });
 	
-	        _router2.default.addRoute("/posts", function () {
-	            return _this.postController.showList();
-	        });
-	        _router2.default.addRoute("/posts/new", function () {
-	            return _this.postController.showAdder();
-	        });
-	        _router2.default.addRoute("/posts/:id", function (id) {
-	            return _this.postController.showEditor(id);
-	        });
-	        _router2.default.addRoute("/posts/:id/delete", function (id) {
-	            return _this.postController.showDeleter(id);
-	        });
+	                _router2.default.addRoute("/posts", function () {
+	                        return _this.postController.showList();
+	                });
+	                _router2.default.addRoute("/posts/new", function () {
+	                        return _this.postController.showAdder();
+	                });
+	                _router2.default.addRoute("/posts/:id", function (id) {
+	                        return _this.postController.showEditor(id);
+	                });
+	                _router2.default.addRoute("/posts/:id/delete", function (id) {
+	                        return _this.postController.showDeleter(id);
+	                });
 	
-	        _router2.default.addRoute("/blogs", function () {
-	            return _this.blogController.showList();
-	        });
-	        _router2.default.addRoute("/blogs/new", function () {
-	            return _this.blogController.showAdder();
-	        });
-	        _router2.default.addRoute("/blogs/:id", function (id) {
-	            return _this.blogController.showEditor(id);
-	        });
-	        _router2.default.addRoute("/blogs/:id/delete", function (id) {
-	            return _this.blogController.showDeleter(id);
-	        });
+	                _router2.default.addRoute("/blogs", function () {
+	                        return _this.blogController.showList();
+	                });
+	                _router2.default.addRoute("/blogs/new", function () {
+	                        return _this.blogController.showAdder();
+	                });
+	                _router2.default.addRoute("/blogs/:id", function (id) {
+	                        return _this.blogController.showEditor(id);
+	                });
+	                _router2.default.addRoute("/blogs/:id/delete", function (id) {
+	                        return _this.blogController.showDeleter(id);
+	                });
 	
-	        _router2.default.addRoute("/setting", function () {
-	            return _this.settingController.showEditor();
-	        });
+	                _router2.default.addRoute("/setting", function () {
+	                        return _this.settingController.showEditor();
+	                });
 	
-	        _router2.default.setDefaultRouteCallback(function () {
-	            return _router2.default.changeHash("/");
-	        });
-	    }
+	                _router2.default.setDefaultRouteCallback(function () {
+	                        return _router2.default.changeHash("/");
+	                });
+	        }
 	
-	    _createClass(HomeController, [{
-	        key: "showNavigation",
-	        value: function showNavigation() {
-	            var navigationMounter = new _reactComponentMounter2.default(_navigation2.default, 'navigation', {
-	                hrefs: {
-	                    logout: "/admin/logout#",
-	                    dashboard: "#/",
-	                    users: "#/users",
-	                    categories: "#/categories",
-	                    posts: "#/posts",
-	                    blogs: "#/blogs",
-	                    setting: "#/setting"
+	        _createClass(HomeController, [{
+	                key: "showNavigation",
+	                value: function showNavigation() {
+	                        var navigationMounter = new _reactComponentMounter2.default(_navigation2.default, 'navigation', {
+	                                hrefs: {
+	                                        logout: "/admin/logout#",
+	                                        dashboard: "#/",
+	                                        users: "#/users",
+	                                        categories: "#/categories",
+	                                        posts: "#/posts",
+	                                        blogs: "#/blogs",
+	                                        setting: "#/setting"
+	                                }
+	                        });
+	
+	                        navigationMounter.mount();
 	                }
-	            });
+	        }, {
+	                key: "start",
+	                value: function start() {
+	                        var _this2 = this;
 	
-	            navigationMounter.mount();
-	        }
-	    }, {
-	        key: "start",
-	        value: function start() {
-	            var _this2 = this;
+	                        _globalEvents2.default.domReady.on(function () {
+	                                _this2.showNavigation();
+	                                _router2.default.listen(true);
+	                        });
+	                }
+	        }]);
 	
-	            _globalEvents2.default.domReady.on(function () {
-	                _this2.showNavigation();
-	                _router2.default.listen(true);
-	            });
-	        }
-	    }]);
-	
-	    return HomeController;
+	        return HomeController;
 	})();
 	
 	exports.default = HomeController;
@@ -35447,6 +35447,8 @@
 
 	'use strict';
 	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -35461,135 +35463,160 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
 	var ENTER = 13;
 	
-	var TagList = _react2.default.createClass({
-	    displayName: 'TagList',
+	var TagList = (function (_React$Component) {
+	    _inherits(TagList, _React$Component);
 	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            className: "",
-	            value: "",
-	            onChange: function onChange() {}
-	        };
-	    },
+	    function TagList(props) {
+	        _classCallCheck(this, TagList);
 	
-	    getInitialState: function getInitialState() {
-	        return {
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TagList).call(this, props));
+	
+	        _this.state = {
 	            tags: []
 	        };
-	    },
+	        return _this;
+	    }
 	
-	    componentWillMount: function componentWillMount() {
-	        this.setState({
-	            tags: this.props.value || []
-	        });
-	    },
+	    _createClass(TagList, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            this.setState({
+	                tags: this.props.value || []
+	            });
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(newProps) {
+	            this.setState({
+	                tags: newProps.value || []
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
 	
-	    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-	        this.setState({
-	            tags: newProps.value || []
-	        });
-	    },
-	
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { className: (0, _classnames2.default)(this.props.className, "element-tag-list-field") },
-	            _react2.default.createElement(
+	            return _react2.default.createElement(
 	                'div',
-	                { className: 'e-tgl-new-tag-list-container' },
-	                this.state.tags.length > 0 ? _react2.default.createElement(
-	                    'ul',
-	                    { className: 'e-tgl-new-tag-list' },
-	                    this.state.tags.map((function (tag, index) {
-	                        return _react2.default.createElement(
-	                            'li',
-	                            { key: index,
-	                                className: 'e-tgl-new-tag-list-item' },
-	                            _react2.default.createElement(
-	                                'span',
-	                                { className: 'e-tgl-tag-name' },
-	                                tag
-	                            ),
-	                            _react2.default.createElement(
-	                                'button',
-	                                { className: 'module-button m-btn-clear',
-	                                    'data-tag-name': tag,
-	                                    onClick: this._onCloseButtonClicked },
-	                                _react2.default.createElement('i', { className: 'fa fa-times-circle e-tgl-delete-icon' })
-	                            )
-	                        );
-	                    }).bind(this))
-	                ) : _react2.default.createElement(
-	                    'span',
-	                    { className: 'e-tgl-no-tags-message' },
-	                    '(No Tags)'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'e-tgl-new-tag-input-container' },
-	                _react2.default.createElement('input', { type: 'text',
-	                    placeholder: 'Add a new tag',
-	                    ref: 'newTag',
-	                    id: this.props.id,
-	                    onKeyDown: this._onKeyDowned }),
+	                { className: 'element-tag-list-field' },
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'e-tgl-add-button-container' },
+	                    { className: 'e-tgl-new-tag-list-container' },
+	                    this.state.tags.length > 0 ? _react2.default.createElement(
+	                        'ul',
+	                        { className: 'e-tgl-new-tag-list' },
+	                        this.state.tags.map(function (tag, index) {
+	                            return _react2.default.createElement(
+	                                'li',
+	                                { key: index,
+	                                    className: 'e-tgl-new-tag-list-item' },
+	                                _react2.default.createElement(
+	                                    'span',
+	                                    { className: 'e-tgl-tag-name' },
+	                                    tag
+	                                ),
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { className: 'module-button m-btn-clear',
+	                                        'data-tag-name': tag,
+	                                        onClick: _this2.onCloseButtonClicked.bind(_this2) },
+	                                    _react2.default.createElement('i', { className: 'fa fa-times-circle e-tgl-delete-icon' })
+	                                )
+	                            );
+	                        })
+	                    ) : _react2.default.createElement(
+	                        'span',
+	                        { className: 'e-tgl-no-tags-message' },
+	                        '(No Tags)'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'e-tgl-new-tag-input-container' },
+	                    _react2.default.createElement('input', { type: 'text',
+	                        placeholder: 'Add a new tag',
+	                        ref: 'newTag',
+	                        id: this.props.id,
+	                        onKeyDown: this.onKeyDowned.bind(this) }),
 	                    _react2.default.createElement(
-	                        'button',
-	                        { className: 'module-button m-btn-clear',
-	                            onClick: this._onAddButtonClicked },
-	                        _react2.default.createElement('i', { className: 'fa fa-plus-square e-tgl-add-icon' })
+	                        'div',
+	                        { className: 'e-tgl-add-button-container' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { className: 'module-button m-btn-clear',
+	                                onClick: this.onAddButtonClicked.bind(this) },
+	                            _react2.default.createElement('i', { className: 'fa fa-plus-square e-tgl-add-icon' })
+	                        )
 	                    )
 	                )
-	            )
-	        );
-	    },
-	
-	    _onKeyDowned: function _onKeyDowned(e) {
-	        if (e.keyCode == ENTER) {
+	            );
+	        }
+	    }, {
+	        key: 'onKeyDowned',
+	        value: function onKeyDowned(e) {
+	            if (e.keyCode == ENTER) {
+	                e.preventDefault();
+	                this.addNewTag();
+	            }
+	        }
+	    }, {
+	        key: 'onAddButtonClicked',
+	        value: function onAddButtonClicked(e) {
 	            e.preventDefault();
-	            this._addNewTag();
+	            this.addNewTag();
 	        }
-	    },
-	
-	    _onAddButtonClicked: function _onAddButtonClicked(e) {
-	        e.preventDefault();
-	        this._addNewTag();
-	    },
-	
-	    _onCloseButtonClicked: function _onCloseButtonClicked(e) {
-	        e.preventDefault();
-	        this._deleteTag(e.currentTarget.getAttribute("data-tag-name"));
-	    },
-	
-	    _addNewTag: function _addNewTag() {
-	        var tag = this.refs.newTag.value.trim();
-	
-	        if (tag !== "") {
-	            this.setState((function (state) {
-	                if (state.tags.indexOf(tag) === -1) {
-	                    state.tags.push(tag);
-	                }
-	                this.refs.newTag.value = "";
-	            }).bind(this), (function () {
-	                this.props.onChange(this.state.tags);
-	            }).bind(this));
+	    }, {
+	        key: 'onCloseButtonClicked',
+	        value: function onCloseButtonClicked(e) {
+	            e.preventDefault();
+	            this.deleteTag(e.currentTarget.getAttribute("data-tag-name"));
 	        }
-	    },
+	    }, {
+	        key: 'addNewTag',
+	        value: function addNewTag() {
+	            var _this3 = this;
 	
-	    _deleteTag: function _deleteTag(tag) {
-	        var index = this.state.tags.indexOf(tag);
-	        if (index !== -1) {
-	            this.setState((function (state) {
-	                state.tags.splice(index, 1);
-	            }).bind(this));
+	            var tag = this.refs.newTag.value.trim();
+	
+	            if (tag !== "") {
+	                this.setState(function (state) {
+	                    if (state.tags.indexOf(tag) === -1) {
+	                        state.tags.push(tag);
+	                    }
+	                    _this3.refs.newTag.value = "";
+	                }, function () {
+	                    _this3.props.onChange(_this3.state.tags);
+	                });
+	            }
 	        }
-	    }
-	});
+	    }, {
+	        key: 'deleteTag',
+	        value: function deleteTag(tag) {
+	            var index = this.state.tags.indexOf(tag);
+	            if (index !== -1) {
+	                this.setState(function (state) {
+	                    state.tags.splice(index, 1);
+	                });
+	            }
+	        }
+	    }]);
+	
+	    return TagList;
+	})(_react2.default.Component);
+	
+	TagList.defaultProps = {
+	    id: "",
+	    value: "",
+	    onChange: function onChange() {}
+	};
 	
 	exports.default = TagList;
 
@@ -35598,6 +35625,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -35617,20 +35646,21 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Datetime = _react2.default.createClass({
-	    displayName: 'Datetime',
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            id: "",
-	            className: "",
-	            value: "",
-	            onChange: function onChange() {}
-	        };
-	    },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	    getInitialState: function getInitialState() {
-	        return {
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Datetime = (function (_React$Component) {
+	    _inherits(Datetime, _React$Component);
+	
+	    function Datetime(props) {
+	        _classCallCheck(this, Datetime);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Datetime).call(this, props));
+	
+	        _this.state = {
 	            year: "",
 	            month: "",
 	            date: "",
@@ -35638,224 +35668,256 @@
 	            minute: "",
 	            utcOffset: ""
 	        };
-	    },
+	        return _this;
+	    }
 	
-	    componentWillMount: function componentWillMount() {
-	        this._setDateTimeState(this.props.value);
-	    },
-	
-	    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-	        this._setDateTimeState(newProps.value);
-	    },
-	
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { className: (0, _classnames2.default)(this.props.className, "element-datetime-field") },
-	            _react2.default.createElement(
-	                'fieldset',
-	                { className: 'e-dtf-field-set' },
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select', value: this.state.month,
-	                            id: this.props.id,
-	                            onChange: this._onChange('month') },
-	                        this._listOfMonths.map(function (name, index) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: index + 1, key: index + 1 },
-	                                name
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'Month'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select', value: this.state.date,
-	                            onChange: this._onChange('date') },
-	                        this._range(1, 31, function (i) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: i, key: i },
-	                                i
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'Date'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select', value: this.state.year,
-	                            onChange: this._onChange('year') },
-	                        this._range(1970, 2100, function (i) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: i, key: i },
-	                                i
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'Year'
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'fieldset',
-	                { className: 'e-dtf-field-set' },
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select', value: this.state.hour,
-	                            onChange: this._onChange('hour') },
-	                        this._range(0, 23, function (i) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: i, key: i },
-	                                i
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'Hour'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'e-dtf-separator' },
-	                    ':'
-	                ),
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select', value: this.state.minute,
-	                            onChange: this._onChange('minute') },
-	                        this._range(0, 59, function (i) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: i, key: i },
-	                                i
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'Minute'
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'fieldset',
-	                { className: 'e-dtf-field-set' },
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'e-dtf-select-container' },
-	                    _react2.default.createElement(
-	                        'select',
-	                        { className: 'e-dtf-select',
-	                            value: this.state.utcOffset,
-	                            disabled: 'true' },
-	                        this._listOfOffsets.map(function (offset, index) {
-	                            return _react2.default.createElement(
-	                                'option',
-	                                { value: offset, key: index },
-	                                offset
-	                            );
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'small',
-	                        { className: 'e-dtf-label' },
-	                        'UTC Offset'
-	                    )
-	                )
-	            )
-	        );
-	    },
-	
-	    _formats: {
-	        year: "YYYY",
-	        month: "M",
-	        date: "D",
-	        hour: "H",
-	        minute: "m",
-	        utcOffset: "Z"
-	    },
-	
-	    _setDateTimeState: function _setDateTimeState(dateTimeString) {
-	        var thisMoment = (0, _moment2.default)(dateTimeString);
-	        var newState = {};
-	
-	        Object.keys(this._formats).forEach((function (key) {
-	            newState[key] = thisMoment.format(this._formats[key]);
-	        }).bind(this));
-	
-	        this.setState(newState);
-	    },
-	
-	    _buildDateFromState: function _buildDateFromState() {
-	
-	        var thisMoment = (0, _moment2.default)({
-	            year: this.state.year,
-	            month: this.state.month - 1,
-	            date: this.state.date,
-	            hour: this.state.hour,
-	            minute: this.state.minute,
-	            second: 0
-	        });
-	
-	        return thisMoment.toDate();
-	    },
-	
-	    _onChange: function _onChange(field) {
-	        return (function (e) {
-	            var obj = {};
-	            obj[field] = e.target.value.trim();
-	            this.setState(obj, (function () {
-	                this.props.onChange(this._buildDateFromState());
-	            }).bind(this));
-	        }).bind(this);
-	    },
-	
-	    _range: function _range(start, end, func) {
-	        var results = [];
-	        for (var i = start; i <= end; i++) {
-	            results.push(func(i));
+	    _createClass(Datetime, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            this.setDateTimeState(this.props.value);
 	        }
-	        return results;
-	    },
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(newProps) {
+	            this.setDateTimeState(newProps.value);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: (0, _classnames2.default)(this.props.className, "element-datetime-field") },
+	                _react2.default.createElement(
+	                    'fieldset',
+	                    { className: 'e-dtf-field-set' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { className: 'e-dtf-select-container' },
+	                        _react2.default.createElement(
+	                            'select',
+	                            { className: 'e-dtf-select', value: this.state.month,
+	                                id: this.props.id,
+	                                onChange: this.onValueChanged.call(this, 'month') },
+	                            this.listOfMonths.map(function (name, index) {
+	                                return _react2.default.createElement(
+	                                    'option',
+	                                    { value: index + 1, key: index + 1 },
+	                                    name
+	                                );
+	                            })
+	                        ),
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'e-dtf-label' },
+	                            'Month'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'label',
+	                        { className: 'e-dtf-select-container' },
+	                        _react2.default.createElement(
+	                            'select',
+	                            { className: 'e-dtf-select', value: this.state.date,
+	                                onChange: this.onValueChanged.call(this, 'date') },
+	                            this.range(1, 31, function (i) {
+	                                return _react2.default.createElement(
+	                                    'option',
+	                                    { value: i, key: i },
+	                                    i
+	                                );
+	                            })
+	                        ),
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'e-dtf-label' },
+	                            'Date'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'label',
+	                        { className: 'e-dtf-select-container' },
+	                        _react2.default.createElement(
+	                            'select',
+	                            { className: 'e-dtf-select', value: this.state.year,
+	                                onChange: this.onValueChanged.call(this, 'year') },
+	                            this.range(1970, 2100, function (i) {
+	                                return _react2.default.createElement(
+	                                    'option',
+	                                    { value: i, key: i },
+	                                    i
+	                                );
+	                            })
+	                        ),
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'e-dtf-label' },
+	                            'Year'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'fieldset',
+	                    { className: 'e-dtf-field-set' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { className: 'e-dtf-select-container' },
+	                        _react2.default.createElement(
+	                            'select',
+	                            { className: 'e-dtf-select', value: this.state.hour,
+	                                onChange: this.onValueChanged.call(this, 'hour') },
+	                            this.range(0, 23, function (i) {
+	                                return _react2.default.createElement(
+	                                    'option',
+	                                    { value: i, key: i },
+	                                    i
+	                                );
+	                            })
+	                        ),
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'e-dtf-label' },
+	                            'Hour'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'span',
+	                        { className: 'e-dtf-separator' },
+	                        ':'
+	                    ),
+	                    _react2.default.createElement(
+	                        'label',
+	                        { className: 'e-dtf-select-container' },
+	                        _react2.default.createElement(
+	                            'select',
+	                            { className: 'e-dtf-select', value: this.state.minute,
+	                                onChange: this.onValueChanged.call(this, 'minute') },
+	                            this.range(0, 59, function (i) {
+	                                return _react2.default.createElement(
+	                                    'option',
+	                                    { value: i, key: i },
+	                                    i
+	                                );
+	                            })
+	                        ),
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'e-dtf-label' },
+	                            'Minute'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'fieldset',
+	                    { className: 'e-dtf-field-set' },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { className: 'e-dtf-select-container' },
+	                        _react2.default.createElement(
+	                            'select',
+	                            { className: 'e-dtf-select',
+	                                value: this.state.utcOffset,
+	                                disabled: 'true' },
+	                            this.listOfOffsets.map(function (offset, index) {
+	                                return _react2.default.createElement(
+	                                    'option',
+	                                    { value: offset, key: index },
+	                                    offset
+	                                );
+	                            })
+	                        ),
+	                        _react2.default.createElement(
+	                            'small',
+	                            { className: 'e-dtf-label' },
+	                            'UTC Offset'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'setDateTimeState',
+	        value: function setDateTimeState(dateTimeString) {
+	            var _this2 = this;
 	
-	    _listOfMonths: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+	            var thisMoment = (0, _moment2.default)(dateTimeString);
+	            var newState = {};
 	
-	    _listOfOffsets: ["-12:00", "-11:00", "-10:00", "-09:30", "-09:00", "-08:00", "-07:00", "-06:00", "-05:00", "-04:30", "-04:00", "-03:30", "-03:00", "-02:00", "-01:00", "+00:00", "+01:00", "+02:00", "+03:00", "+03:30", "+04:00", "+04:30", "+05:00", "+05:30", "+05:45", "+06:00", "+06:30", "+07:00", "+08:00", "+08:30", "+08:45", "+09:00", "+09:30", "+10:00", "+10:30", "+11:00", "+12:00", "+12:45", "+13:00", "+14:00"]
-	});
+	            Object.keys(this.formats).forEach(function (key) {
+	                newState[key] = thisMoment.format(_this2.formats[key]);
+	            });
+	
+	            this.setState(newState);
+	        }
+	    }, {
+	        key: 'buildDateFromState',
+	        value: function buildDateFromState() {
+	
+	            var thisMoment = (0, _moment2.default)({
+	                year: this.state.year,
+	                month: this.state.month - 1,
+	                date: this.state.date,
+	                hour: this.state.hour,
+	                minute: this.state.minute,
+	                second: 0
+	            });
+	
+	            return thisMoment.toDate();
+	        }
+	    }, {
+	        key: 'onValueChanged',
+	        value: function onValueChanged(field) {
+	            var _this3 = this;
+	
+	            return function (e) {
+	                var obj = {};
+	                obj[field] = e.target.value.trim();
+	                _this3.setState(obj, function () {
+	                    _this3.props.onChange(_this3.buildDateFromState());
+	                });
+	            };
+	        }
+	    }, {
+	        key: 'range',
+	        value: function range(start, end, func) {
+	            var results = [];
+	            for (var i = start; i <= end; i++) {
+	                results.push(func(i));
+	            }
+	            return results;
+	        }
+	    }, {
+	        key: 'formats',
+	        get: function get() {
+	            return {
+	                year: "YYYY",
+	                month: "M",
+	                date: "D",
+	                hour: "H",
+	                minute: "m",
+	                utcOffset: "Z"
+	            };
+	        }
+	    }, {
+	        key: 'listOfMonths',
+	        get: function get() {
+	            return ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	        }
+	    }, {
+	        key: 'listOfOffsets',
+	        get: function get() {
+	            return ["-12:00", "-11:00", "-10:00", "-09:30", "-09:00", "-08:00", "-07:00", "-06:00", "-05:00", "-04:30", "-04:00", "-03:30", "-03:00", "-02:00", "-01:00", "+00:00", "+01:00", "+02:00", "+03:00", "+03:30", "+04:00", "+04:30", "+05:00", "+05:30", "+05:45", "+06:00", "+06:30", "+07:00", "+08:00", "+08:30", "+08:45", "+09:00", "+09:30", "+10:00", "+10:30", "+11:00", "+12:00", "+12:45", "+13:00", "+14:00"];
+	        }
+	    }]);
+	
+	    return Datetime;
+	})(_react2.default.Component);
+	
+	Datetime.defaultProps = {
+	    id: "",
+	    className: "module-datetime",
+	    value: "",
+	    onChange: function onChange() {}
+	};
 	
 	exports.default = Datetime;
 
@@ -35864,6 +35926,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -35875,52 +35939,69 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Textarea = _react2.default.createClass({
-	    displayName: "Textarea",
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            className: "m-frf-textarea",
-	            value: "",
-	            onChange: function onChange() {}
-	        };
-	    },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	    getInitialState: function getInitialState() {
-	        return {
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Textarea = (function (_React$Component) {
+	    _inherits(Textarea, _React$Component);
+	
+	    function Textarea(props) {
+	        _classCallCheck(this, Textarea);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Textarea).call(this, props));
+	
+	        _this.state = {
 	            value: ""
 	        };
-	    },
-	
-	    componentWillMount: function componentWillMount() {
-	        this._props = Object.assign({}, this.props);
-	        this._props.onChange = this._onChange;
-	    },
-	
-	    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-	        this.setState({
-	            value: newProps.value
-	        });
-	    },
-	
-	    render: function render() {
-	        this._props.value = this.state.value;
-	        return _react2.default.createElement("textarea", this._props);
-	    },
-	
-	    _onChange: function _onChange(e) {
-	        var value = e.target.value;
-	
-	        if (this.props.onChange(value) === false) {
-	            e.preventDefault();
-	            return;
-	        }
-	
-	        this.setState({
-	            value: value
-	        });
+	        return _this;
 	    }
-	});
+	
+	    _createClass(Textarea, [{
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            this._props = Object.assign({}, this.props);
+	            this._props.onChange = this.onValueChanged.bind(this);
+	        }
+	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(newProps) {
+	            this.setState({
+	                value: newProps.value
+	            });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            this._props.value = this.state.value;
+	            return _react2.default.createElement("textarea", this._props);
+	        }
+	    }, {
+	        key: "onValueChanged",
+	        value: function onValueChanged(e) {
+	            var value = e.target.value;
+	
+	            if (this.props.onChange(value) === false) {
+	                e.preventDefault();
+	                return;
+	            }
+	
+	            this.setState({
+	                value: value
+	            });
+	        }
+	    }]);
+	
+	    return Textarea;
+	})(_react2.default.Component);
+	
+	Textarea.defaultProps = {
+	    className: "module-textarea",
+	    value: "",
+	    onChange: function onChange() {}
+	};
 	
 	exports.default = Textarea;
 
@@ -36300,6 +36381,8 @@
 
 	"use strict";
 	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -36310,71 +36393,83 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Confirmation = _react2.default.createClass({
-	    displayName: "Confirmation",
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            mode: "", // 'choose' or 'confirm'
-	            okayLabel: "Okay",
-	            cancelLabel: "Cancel",
-	            onApproved: function onApproved() {},
-	            onCanceled: function onCanceled() {}
-	        };
-	    },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "module-confirmation" },
-	            _react2.default.createElement(
-	                "p",
-	                { className: "m-cfm-message" },
-	                this.props.children
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                { className: "m-cfm-button-list" },
-	                _react2.default.createElement(
-	                    "li",
-	                    { className: "m-cfm-button-list-item" },
-	                    _react2.default.createElement(
-	                        "button",
-	                        { className: "module-button",
-	                            onClick: this.onClickOkay },
-	                        this.props.okayLabel
-	                    )
-	                ),
-	                this.props.mode === "choose" ? _react2.default.createElement(
-	                    "li",
-	                    { className: "m-cfm-button-list-item" },
-	                    _react2.default.createElement(
-	                        "button",
-	                        { ref: this._autoFocus, className: "module-button m-btn-alert",
-	                            onClick: this.onClickCancel },
-	                        this.props.cancelLabel
-	                    )
-	                ) : null
-	            )
-	        );
-	    },
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	    _autoFocus: function _autoFocus(input) {
-	        if (input != null) {
-	            input.focus();
-	        }
-	    },
+	var Confirmation = (function (_React$Component) {
+	    _inherits(Confirmation, _React$Component);
 	
-	    onClickOkay: function onClickOkay(e) {
-	        e.preventDefault();
-	        this.props.onApproved.call(null);
-	    },
+	    function Confirmation() {
+	        _classCallCheck(this, Confirmation);
 	
-	    onClickCancel: function onClickCancel(e) {
-	        e.preventDefault();
-	        this.props.onCanceled.call(null);
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Confirmation).apply(this, arguments));
 	    }
-	});
+	
+	    _createClass(Confirmation, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "module-confirmation" },
+	                _react2.default.createElement(
+	                    "p",
+	                    { className: "m-cfm-message" },
+	                    this.props.children
+	                ),
+	                _react2.default.createElement(
+	                    "ul",
+	                    { className: "m-cfm-button-list" },
+	                    _react2.default.createElement(
+	                        "li",
+	                        { className: "m-cfm-button-list-item" },
+	                        _react2.default.createElement(
+	                            "button",
+	                            { className: "module-button",
+	                                onClick: this.onClickOkay.bind(this) },
+	                            this.props.okayLabel
+	                        )
+	                    ),
+	                    this.props.mode === "choose" ? _react2.default.createElement(
+	                        "li",
+	                        { className: "m-cfm-button-list-item" },
+	                        _react2.default.createElement(
+	                            "button",
+	                            { autoFocus: true,
+	                                className: "module-button m-btn-alert",
+	                                onClick: this.onClickCancel.bind(this) },
+	                            this.props.cancelLabel
+	                        )
+	                    ) : null
+	                )
+	            );
+	        }
+	    }, {
+	        key: "onClickOkay",
+	        value: function onClickOkay(e) {
+	            e.preventDefault();
+	            this.props.onApproved.call(null);
+	        }
+	    }, {
+	        key: "onClickCancel",
+	        value: function onClickCancel(e) {
+	            e.preventDefault();
+	            this.props.onCanceled.call(null);
+	        }
+	    }]);
+	
+	    return Confirmation;
+	})(_react2.default.Component);
+	
+	Confirmation.defaultProps = {
+	    mode: "", // 'choose' or 'confirm'
+	    okayLabel: "Okay",
+	    cancelLabel: "Cancel",
+	    onApproved: function onApproved() {},
+	    onCanceled: function onCanceled() {}
+	};
 	
 	exports.default = Confirmation;
 

@@ -399,24 +399,17 @@
     display: block;
 }
 
-.module-form-field {
+.module-textarea {
+    width: 100%;
+    height: 10em;
+}
 
+.module-select {
+    display: block;
+}
 
-
-    .m-frf-textarea {
-        width: 100%;
-        height: 10em;
-    }
-
-    .m-frf-select {
-        display: block;
-    }
-
-    .m-frf-datetime {
-        display: block;
-    }
-
-
+.module-datetime {
+    display: block;
 }
 
 
