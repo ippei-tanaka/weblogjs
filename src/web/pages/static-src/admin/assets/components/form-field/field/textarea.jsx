@@ -7,6 +7,7 @@ class Textarea extends React.Component {
         return <textarea id={this.props.id}
                          value={this.props.value}
                          className={this.props.className}
+                         autoFocus={this.props.autoFocus}
                          onChange={this.wrapOnChange.call(this, this.props.onChange)}/>;
     }
 
@@ -20,9 +21,10 @@ class Textarea extends React.Component {
 
 
 Textarea.defaultProps = {
-    id: "",
+    id: null,
     className: "module-textarea",
-    value: "",
+    value: null,
+    autoFocus: false,
     onChange: function () {
     }
 };

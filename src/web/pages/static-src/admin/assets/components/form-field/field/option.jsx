@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 class Option extends React.Component {
 
     render() {
@@ -8,8 +9,5 @@ class Option extends React.Component {
 
 }
 
-Option.defaultProps = {
-    label: ""
-};
 
 export default Option;

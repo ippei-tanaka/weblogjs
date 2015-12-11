@@ -31,7 +31,7 @@ class Select extends React.Component {
 
 
 Select.defaultProps = {
-    id: "",
+    id: null,
     className: "module-select",
     value: null,
     autoFocus: false,

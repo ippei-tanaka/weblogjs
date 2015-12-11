@@ -11,16 +11,25 @@ class CheckboxList extends React.Component {
                 {React.Children.map(this.props.children,
                     (child, index) => {
                         if (child.type !== Checkbox) throw new Error("Each child has to be Checkbox.");
-                        var checkbox = this.createCheckBox(child.props);
+                        var checkbox = this.createCheckBox(child.props, index);
                         return <li key={index}>{checkbox}</li>
                     })}
             </ul>
         );
     }
 
-    createCheckBox (props) {
+    createCheckBox (props, index) {
         props = Object.assign({}, props);
         props.onChange = this.onCheckboxChanged.bind(this);
+
+        if (index === 0) {
+            props.id = this.props.id;
+            props.autoFocus = this.props.autoFocus;
+        } else {
+            props.id = null;
+            props.autoFocus = false;
+        }
+
         return React.createElement(Checkbox, props);
     }
 
@@ -41,6 +50,8 @@ class CheckboxList extends React.Component {
 
 
 CheckboxList.defaultProps = {
+    id: null,
+    autoFocus: false,
     className: "module-checkbox-list",
     onChange: function () {}
 };

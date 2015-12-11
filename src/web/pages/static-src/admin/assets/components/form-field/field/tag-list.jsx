@@ -55,6 +55,7 @@ class TagList extends React.Component {
                            placeholder="Add a new tag"
                            ref="newTag"
                            id={this.props.id}
+                           autoFocus={this.props.autoFocus}
                            onKeyDown={this.onKeyDowned.bind(this)}/>
                     <div className="e-tgl-add-button-container">
                         <button className="module-button m-btn-clear"
@@ -111,8 +112,9 @@ class TagList extends React.Component {
 
 
 TagList.defaultProps = {
-    id: "",
-    value: "",
+    id: null,
+    value: null,
+    autoFocus: false,
     onChange: function () {
     }
 };

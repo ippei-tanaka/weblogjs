@@ -33,6 +33,7 @@ class Datetime extends React.Component {
                     <label className="e-dtf-select-container">
                         <select className="e-dtf-select" value={this.state.month}
                                 id={this.props.id}
+                                autoFocus={this.props.autoFocus}
                                 onChange={this.onValueChanged.call(this, 'month')}>
                             {this.listOfMonths.map((name, index) =>
                             <option value={index + 1} key={index + 1}>{name}</option>
@@ -221,9 +222,10 @@ class Datetime extends React.Component {
 
 
 Datetime.defaultProps = {
-    id: "",
+    id: null,
     className: "module-datetime",
-    value: "",
+    value: null,
+    autoFocus: false,
     onChange: function () {
     }
 };

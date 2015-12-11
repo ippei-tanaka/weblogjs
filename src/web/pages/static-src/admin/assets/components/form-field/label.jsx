@@ -15,6 +15,7 @@ class Label extends React.Component {
 }
 
 Label.defaultProps = {
+    htmlFor: null,
     className: "module-field-label"
 };
 

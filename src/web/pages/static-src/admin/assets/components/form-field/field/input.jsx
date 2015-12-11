@@ -8,6 +8,7 @@ class Input extends React.Component {
                       type={this.props.type}
                       value={this.props.value}
                       className={this.props.className}
+                      autoFocus={this.props.autoFocus}
                       onChange={this.wrapOnChange.call(this, this.props.onChange)}/>;
     }
 
@@ -20,10 +21,11 @@ class Input extends React.Component {
 }
 
 Input.defaultProps = {
-    id: "",
+    id: null,
     type: "text",
     className: "module-field-text",
     value: null,
+    autoFocus: false,
     onChange: function () {
     }
 };
