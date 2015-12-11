@@ -5,6 +5,7 @@ class Checkbox extends React.Component {
     render() {
         return <label>
             <input
+                id={this.props.id}
                 type="checkbox"
                 name={this.props.name}
                 checked={this.props.value}
@@ -20,6 +21,7 @@ class Checkbox extends React.Component {
 }
 
 Checkbox.defaultProps = {
+    id: "",
     name: "",
     value: false,
     className: "module-checkbox",
