@@ -5,10 +5,6 @@ import Checkbox from './checkbox';
 
 class CheckboxList extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <ul className={this.props.className}>

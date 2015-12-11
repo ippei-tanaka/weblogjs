@@ -7,8 +7,8 @@ class Select extends React.Component {
 
     render() {
         return (
-            <select className={this.props.className}
-                    id={this.props.id}
+            <select id={this.props.id}
+                    className={this.props.className}
                     value={this.props.value}
                     autoFocus={this.props.autoFocus}
                     onChange={this.onSelectChanged.bind(this)}>
@@ -23,7 +23,7 @@ class Select extends React.Component {
         );
     }
 
-    onSelectChanged (e) {
+    onSelectChanged(e) {
         this.props.onChange(e.target.value);
     }
 
@@ -35,7 +35,8 @@ Select.defaultProps = {
     className: "module-select",
     value: null,
     autoFocus: false,
-    onChange: function () {}
+    onChange: function () {
+    }
 };
 
 

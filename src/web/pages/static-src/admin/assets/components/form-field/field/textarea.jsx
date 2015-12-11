@@ -3,46 +3,24 @@ import React from 'react';
 
 class Textarea extends React.Component {
 
-    constructor(props) {
-        super(props);
+    render() {
+        return <textarea id={this.props.id}
+                         value={this.props.value}
+                         className={this.props.className}
+                         onChange={this.wrapOnChange.call(this, this.props.onChange)}/>;
+    }
 
-        this.state = {
-            value: ""
+    wrapOnChange(onChange) {
+        return (e) => {
+            onChange(e.target.value);
         };
     }
 
-    componentWillMount() {
-        this._props = Object.assign({}, this.props);
-        this._props.onChange = this.onValueChanged.bind(this);
-    }
-
-    componentWillReceiveProps(newProps) {
-        this.setState({
-            value: newProps.value
-        });
-    }
-
-    render() {
-        this._props.value = this.state.value;
-        return React.createElement("textarea", this._props);
-    }
-
-    onValueChanged(e) {
-        var value = e.target.value;
-
-        if (this.props.onChange(value) === false) {
-            e.preventDefault();
-            return;
-        }
-
-        this.setState({
-            value: value
-        });
-    }
 }
 
 
 Textarea.defaultProps = {
+    id: "",
     className: "module-textarea",
     value: "",
     onChange: function () {
