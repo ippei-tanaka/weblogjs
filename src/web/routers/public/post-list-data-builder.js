@@ -12,6 +12,7 @@ class PostListDataBuilder {
         this._currentPage = args.currentPage;
         this._blog = args.blog;
         this._category = args.category;
+        this._tag = args.tag;
         this._post = args.post;
         this._publish_date = args.publishDate;
         this._paginationUrlBuilder = args.paginationUrlBuilder;
@@ -26,6 +27,10 @@ class PostListDataBuilder {
 
         if (this._category) {
             condition.category = this._category._id;
+        }
+
+        if (this._tag) {
+            condition.tags = this._tag;
         }
 
         if (this._post) {

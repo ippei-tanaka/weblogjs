@@ -21,6 +21,8 @@ exports.findBySlug = function (slug) {
  * @property {[string]} [tags] - The tags of the post.
  */
 
+
+
 exports.countByCategories = (condition, sort) =>
     new Promise((resolve, reject) => {
 
@@ -35,6 +37,43 @@ exports.countByCategories = (condition, sort) =>
                 $group: {
                     _id: "$category",
                     count: {$sum: 1}
+                }
+            },
+            {
+                $sort: sort
+            }
+        ]).exec((err, data) => {
+            if (err) return reject(err);
+            resolve(data);
+        });
+    });
+
+
+
+exports.countByTag = (condition, sort) =>
+    new Promise((resolve, reject) => {
+
+        condition = condition || {};
+        sort = sort || {};
+
+        Post.aggregate([
+            {
+                $match: condition
+            },
+            {
+                $unwind: "$tags"
+            },
+            {
+                $group: {
+                    _id: "$tags",
+                    count: {$sum: 1}
+                }
+            },
+            {
+                $project: {
+                    _id: false,
+                    tag: "$_id",
+                    count: true
                 }
             },
             {
