@@ -35064,6 +35064,7 @@
 	                type: this.props.type,
 	                value: this.props.value,
 	                className: this.props.className,
+	                autoFocus: this.props.autoFocus,
 	                onChange: this.wrapOnChange.call(this, this.props.onChange) });
 	        }
 	    }, {
@@ -35079,10 +35080,11 @@
 	})(_react2.default.Component);
 	
 	Input.defaultProps = {
-	    id: "",
+	    id: null,
 	    type: "text",
 	    className: "module-field-text",
 	    value: null,
+	    autoFocus: false,
 	    onChange: function onChange() {}
 	};
 	
@@ -35128,9 +35130,11 @@
 	                "label",
 	                null,
 	                _react2.default.createElement("input", {
+	                    id: this.props.id,
 	                    type: "checkbox",
 	                    name: this.props.name,
 	                    checked: this.props.value,
+	                    autoFocus: this.props.autoFocus,
 	                    className: this.props.className,
 	                    onChange: this.props.onChange
 	                }),
@@ -35147,9 +35151,11 @@
 	})(_react2.default.Component);
 	
 	Checkbox.defaultProps = {
-	    name: "",
+	    id: null,
+	    name: null,
 	    value: false,
 	    className: "module-checkbox",
+	    autoFocus: false,
 	    onChange: function onChange() {}
 	};
 	
@@ -35190,10 +35196,10 @@
 	var CheckboxList = (function (_React$Component) {
 	    _inherits(CheckboxList, _React$Component);
 	
-	    function CheckboxList(props) {
+	    function CheckboxList() {
 	        _classCallCheck(this, CheckboxList);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(CheckboxList).call(this, props));
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(CheckboxList).apply(this, arguments));
 	    }
 	
 	    _createClass(CheckboxList, [{
@@ -35206,7 +35212,7 @@
 	                { className: this.props.className },
 	                _react2.default.Children.map(this.props.children, function (child, index) {
 	                    if (child.type !== _checkbox2.default) throw new Error("Each child has to be Checkbox.");
-	                    var checkbox = _this2.createCheckBox(child.props);
+	                    var checkbox = _this2.createCheckBox(child.props, index);
 	                    return _react2.default.createElement(
 	                        'li',
 	                        { key: index },
@@ -35217,9 +35223,18 @@
 	        }
 	    }, {
 	        key: 'createCheckBox',
-	        value: function createCheckBox(props) {
+	        value: function createCheckBox(props, index) {
 	            props = Object.assign({}, props);
 	            props.onChange = this.onCheckboxChanged.bind(this);
+	
+	            if (index === 0) {
+	                props.id = this.props.id;
+	                props.autoFocus = this.props.autoFocus;
+	            } else {
+	                props.id = null;
+	                props.autoFocus = false;
+	            }
+	
 	            return _react2.default.createElement(_checkbox2.default, props);
 	        }
 	    }, {
@@ -35242,6 +35257,8 @@
 	})(_react2.default.Component);
 	
 	CheckboxList.defaultProps = {
+	    id: null,
+	    autoFocus: false,
 	    className: "module-checkbox-list",
 	    onChange: function onChange() {}
 	};
@@ -35316,7 +35333,7 @@
 	})(_react2.default.Component);
 	
 	Select.defaultProps = {
-	    id: "",
+	    id: null,
 	    className: "module-select",
 	    value: null,
 	    autoFocus: false,
@@ -35329,7 +35346,7 @@
 /* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
@@ -35359,10 +35376,10 @@
 	    }
 	
 	    _createClass(Option, [{
-	        key: "render",
+	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                "option",
+	                'option',
 	                { value: this.props.value },
 	                this.props.children
 	            );
@@ -35371,10 +35388,6 @@
 	
 	    return Option;
 	})(_react2.default.Component);
-	
-	Option.defaultProps = {
-	    label: ""
-	};
 	
 	exports.default = Option;
 
@@ -35482,6 +35495,7 @@
 	                        placeholder: 'Add a new tag',
 	                        ref: 'newTag',
 	                        id: this.props.id,
+	                        autoFocus: this.props.autoFocus,
 	                        onKeyDown: this.onKeyDowned.bind(this) }),
 	                    _react2.default.createElement(
 	                        'div',
@@ -35550,8 +35564,9 @@
 	})(_react2.default.Component);
 	
 	TagList.defaultProps = {
-	    id: "",
-	    value: "",
+	    id: null,
+	    value: null,
+	    autoFocus: false,
 	    onChange: function onChange() {}
 	};
 	
@@ -35634,6 +35649,7 @@
 	                            'select',
 	                            { className: 'e-dtf-select', value: this.state.month,
 	                                id: this.props.id,
+	                                autoFocus: this.props.autoFocus,
 	                                onChange: this.onValueChanged.call(this, 'month') },
 	                            this.listOfMonths.map(function (name, index) {
 	                                return _react2.default.createElement(
@@ -35850,9 +35866,10 @@
 	})(_react2.default.Component);
 	
 	Datetime.defaultProps = {
-	    id: "",
+	    id: null,
 	    className: "module-datetime",
-	    value: "",
+	    value: null,
+	    autoFocus: false,
 	    onChange: function onChange() {}
 	};
 	
@@ -35897,6 +35914,7 @@
 	            return _react2.default.createElement("textarea", { id: this.props.id,
 	                value: this.props.value,
 	                className: this.props.className,
+	                autoFocus: this.props.autoFocus,
 	                onChange: this.wrapOnChange.call(this, this.props.onChange) });
 	        }
 	    }, {
@@ -35912,9 +35930,10 @@
 	})(_react2.default.Component);
 	
 	Textarea.defaultProps = {
-	    id: "",
+	    id: null,
 	    className: "module-textarea",
-	    value: "",
+	    value: null,
+	    autoFocus: false,
 	    onChange: function onChange() {}
 	};
 	
@@ -35969,6 +35988,7 @@
 	})(_react2.default.Component);
 	
 	Label.defaultProps = {
+	    htmlFor: null,
 	    className: "module-field-label"
 	};
 	
@@ -36010,12 +36030,11 @@
 	    _createClass(ErrorMessage, [{
 	        key: "render",
 	        value: function render() {
-	            var errorMessage = this.props.error ? _react2.default.createElement(
+	            return this.props.error ? _react2.default.createElement(
 	                "span",
 	                { className: this.props.className },
 	                this.props.error.message
 	            ) : null;
-	            return errorMessage;
 	        }
 	    }]);
 	

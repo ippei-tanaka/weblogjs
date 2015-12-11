@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 class Checkbox extends React.Component {
 
     render() {
@@ -9,6 +10,7 @@ class Checkbox extends React.Component {
                 type="checkbox"
                 name={this.props.name}
                 checked={this.props.value}
+                autoFocus={this.props.autoFocus}
                 className={this.props.className}
                 onChange={this.props.onChange}
             />
@@ -21,10 +23,11 @@ class Checkbox extends React.Component {
 }
 
 Checkbox.defaultProps = {
-    id: "",
-    name: "",
+    id: null,
+    name: null,
     value: false,
     className: "module-checkbox",
+    autoFocus: false,
     onChange: function () {
     }
 };
