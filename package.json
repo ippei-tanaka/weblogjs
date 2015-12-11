@@ -1,6 +1,6 @@
 {
   "name": "weblogjs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "a library for weblogs",
   "main": "./src",
   "scripts": {
