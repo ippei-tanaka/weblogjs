@@ -45,8 +45,8 @@
 
     .m-bll-main {
         width: 100%;
-        border-top: 1px solid #cccccc;
-        border-bottom: 1px solid #cccccc;
+        border-top: 1px solid $border-color;
+        border-bottom: 1px solid $border-color;
 
         @include media-phone {
             border-bottom: 0;
@@ -55,7 +55,7 @@
 
     .m-bll-section {
         padding: 45px 40px 50px;
-        border-bottom: 1px solid #cccccc;
+        border-bottom: 1px solid $border-color;
 
         &:last-child {
             border-bottom: 0;
@@ -67,9 +67,9 @@
     }
 
     .m-bll-sidebar {
-        border-top: 1px solid #cccccc;
-        border-bottom: 1px solid #cccccc;
-        border-left: 1px solid #cccccc;
+        border-top: 1px solid $border-color;
+        border-bottom: 1px solid $border-color;
+        border-left: 1px solid $border-color;
 
         display: flex;
         flex-direction: column;
@@ -79,7 +79,7 @@
         @include media-phone {
             width: 100%;
             border-left: 0;
-            border-top: 1px solid #cccccc;
+            border-top: 1px solid $border-color;
         }
     }
 }
@@ -90,7 +90,7 @@
 .module-error-page {
     padding: 100px 40px;
     font-size: 26px;
-    background-color: #f0f0f0;
+    background-color: $error-page-bg-color;
 }
 
 /*----------------------------
@@ -98,7 +98,7 @@
 ----------------------------*/
 .module-post-list {
     .m-psl-post-section {
-        border-bottom: 1px solid #cccccc;
+        border-bottom: 1px solid $border-color;
 
         &:last-child {
             border-bottom: 0;
@@ -114,8 +114,7 @@
 
     .m-nan-title {
         margin-bottom: 15px;
-        text-transform: lowercase;
-        color: #cccccc;
+        color: $menu-title-color;
     }
 
     .m-nan-list {
@@ -130,7 +129,7 @@
     }
 
     .m-nan-link {
-        color: $color-default-font;
+        color: $link-color;
         white-space: nowrap;
         text-decoration: none;
 
@@ -163,9 +162,14 @@
     }
 
     .m-pgn-link {
-        color: $color-default-font;
+        color: $link-color;
         white-space: nowrap;
         font-size: 16px;
+        text-decoration: none;
+
+        &:hover {
+            @include opacity(0.7);
+        }
     }
 }
 
@@ -181,7 +185,7 @@
     }
 
     .m-pst-link {
-        color: $color-default-font;
+        color: $link-color;
         text-decoration: none;
 
         &:hover {
@@ -190,23 +194,32 @@
     }
 
     .m-pst-date {
-        font-size: 15px;
+        text-align: right;
+        font-size: 13px;
         margin-bottom: 10px;
         display: block;
     }
 
     .m-pst-author {
-        font-size: 15px;
+        text-align: right;
+        font-size: 13px;
         margin-bottom: 10px;
+        display: block;
     }
 
     .m-pst-category {
-        font-size: 15px;
+        text-align: right;
+        font-size: 13px;
         margin-bottom: 10px;
+        display: block;
+    }
+
+    .m-pst-content {
+        margin-bottom: 40px;
     }
 
     .m-pst-tag-container {
-        font-size: 15px;
+        text-align: right;
         margin-bottom: 10px;
     }
 
@@ -216,17 +229,23 @@
 
     .m-pst-tag {
         display: inline-block;
-        &:after {
-            content: ", ";
-        }
-        &:last-child:after {
-            content: '';
+        margin-right: 5px;
+        &:last-child {
+            margin-right: 0;
         }
     }
 
-    .m-pst-content {
-        margin-top: 40px;
+    .m-pst-category-link,
+    .m-pst-tag-link {
+        color: $link-color;
+        font-size: 13px;
+        text-decoration: none;
+
+        &:hover {
+            @include opacity(0.7);
+        }
     }
+
 }
 
 /*----------------------------

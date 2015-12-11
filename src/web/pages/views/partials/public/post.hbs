@@ -1,28 +1,29 @@
 <div class="module-post">
 
-    <h2 class="m-pst-title"><a class="m-pst-link" href="{{link}}">{{title}}</a></h2>
-
-    <date class="m-pst-date">{{publish_date}}</date>
-
-    <div class="m-pst-author">author: {{author.display_name}}</div>
-
-    {{#if category.name}}
-    <div class="m-pst-category">category: {{category.name}}</div>
-    {{/if}}
-
-    {{#if tags}}
-        <div class="m-pst-tag-container">
-            tags:
-            <ul class="m-pst-tags">
-                {{#each tags}}
-                    <li class="m-pst-tag">{{this}}</li>
-                {{/each}}
-            </ul>
-        </div>
-    {{/if}}
+    <h2 class="m-pst-title"><a class="m-pst-link" href="{{postLink}}">{{title}}</a></h2>
 
     <div class="m-pst-content">
         <article class="module-article">{{{blog_content content}}}</article>
     </div>
+
+    <date class="m-pst-date">Published on {{date_format publish_date}}</date>
+
+    {{#if author.display_name}}
+        <p class="m-pst-author">Written by {{author.display_name}}</p>
+    {{/if}}
+
+    {{#if category.name}}
+        <p class="m-pst-category">Category: <a class="m-pst-category-link" href={{category.link}}>{{category.name}}</a></p>
+    {{/if}}
+
+    {{#if tags}}
+        <div class="m-pst-tag-container">
+            <ul class="m-pst-tags">
+                {{#each tags}}
+                    <li class="m-pst-tag"><a class="m-pst-tag-link" href="{{link}}">#{{name}}</a></li>
+                {{/each}}
+            </ul>
+        </div>
+    {{/if}}
 
 </div>

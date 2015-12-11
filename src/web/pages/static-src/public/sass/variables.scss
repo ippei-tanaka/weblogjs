@@ -16,24 +16,10 @@ $device-desktop-width: 700px;
 
 
 /*----------------------------
- Button
+
 ----------------------------*/
-$color-btn-calm-text: #ffffff;
-$color-btn-calm-bg-start: #215382;
-$color-btn-calm-bg-end: #2a6aa6;
-$color-btn-calm-hover-bg-start: lighten($color-btn-calm-bg-start, 30%);
-$color-btn-calm-hover-bg-end: lighten($color-btn-calm-bg-end, 30%);
-
-$color-btn-alert-text: #ffffff;
-$color-btn-alert-bg-start: #862524;
-$color-btn-alert-bg-end: #af2f2e;
-$color-btn-alert-hover-bg-start: lighten($color-btn-alert-bg-start, 30%);
-$color-btn-alert-hover-bg-end: lighten($color-btn-alert-bg-end, 30%);
-
-$color-btn-plain-text: #333;
-$color-btn-plain-bg-start: #f9f9f9;
-$color-btn-plain-bg-end: #ccc;
-$color-btn-plain-hover-bg-start: lighten($color-btn-plain-bg-start, 30%);
-$color-btn-plain-hover-bg-end: lighten($color-btn-plain-bg-end, 30%);
-
+$border-color: #cccccc;
+$menu-title-color: #000000;
+$error-page-bg-color: #f0f0f0;
+$link-color: #000000;
 
