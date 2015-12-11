@@ -20388,20 +20388,22 @@
 	            mobileMenu: false
 	        };
 	
-	        _this._menuTimer = null;
+	        _this.menuTimer = null;
 	        return _this;
 	    }
 	
 	    _createClass(Navigation, [{
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+	
 	            return _react2.default.createElement(
 	                'nav',
 	                { className: 'module-navigation' },
 	                _react2.default.createElement(
 	                    'button',
-	                    { onClick: this._onToggleClicked.bind(this),
-	                        onBlur: this._onToggleBlurred.bind(this),
+	                    { onClick: this.onToggleClicked.bind(this),
+	                        onBlur: this.onToggleBlurred.bind(this),
 	                        tabIndex: '2',
 	                        'data-react': 'navigation-toggle',
 	                        className: 'module-button m-btn-clear m-nvg-button m-nvg-toggle' },
@@ -20410,7 +20412,7 @@
 	                _react2.default.createElement(
 	                    'menu',
 	                    { className: (0, _classnames2.default)("m-nvg-menu", { "m-nvg-mobile-menu-show": this.state.mobileMenu }) },
-	                    _navItems2.default.map((function (item, index) {
+	                    _navItems2.default.map(function (item, index) {
 	                        return _react2.default.createElement(
 	                            'li',
 	                            { className: 'm-nvg-menu-item',
@@ -20418,60 +20420,62 @@
 	                            _react2.default.createElement(
 	                                'a',
 	                                { className: 'module-button m-btn-clear m-nvg-button',
-	                                    href: this.props.hrefs[item.name],
+	                                    href: _this2.props.hrefs[item.name],
 	                                    tabIndex: index + 3,
 	                                    'data-react-navigation-link': true,
-	                                    onFocus: this._onLinkFocused.bind(this),
-	                                    onClick: this._onLinkClicked.bind(this),
-	                                    onBlur: this._onLinkBlurred.bind(this) },
+	                                    onFocus: _this2.onLinkFocused.bind(_this2),
+	                                    onClick: _this2.onLinkClicked.bind(_this2),
+	                                    onBlur: _this2.onLinkBlurred.bind(_this2) },
 	                                _react2.default.createElement('i', { className: (0, _classnames2.default)("fa", "m-nvg-icon", "fa-" + item.icon) }),
 	                                item.label
 	                            )
 	                        );
-	                    }).bind(this))
+	                    })
 	                )
 	            );
 	        }
 	    }, {
-	        key: '_onToggleClicked',
-	        value: function _onToggleClicked(e) {
+	        key: 'onToggleClicked',
+	        value: function onToggleClicked(e) {
 	            e.preventDefault();
 	            this.setState({
 	                mobileMenu: !this.state.mobileMenu
 	            });
 	        }
 	    }, {
-	        key: '_onToggleBlurred',
-	        value: function _onToggleBlurred() {
-	            this._throttleMobileMenuValue(false);
+	        key: 'onToggleBlurred',
+	        value: function onToggleBlurred() {
+	            this.throttleMobileMenuValue(false);
 	        }
 	    }, {
-	        key: '_onLinkClicked',
-	        value: function _onLinkClicked() {
-	            this._throttleMobileMenuValue(false);
+	        key: 'onLinkClicked',
+	        value: function onLinkClicked() {
+	            this.throttleMobileMenuValue(false);
 	        }
 	    }, {
-	        key: '_onLinkFocused',
-	        value: function _onLinkFocused() {
-	            this._throttleMobileMenuValue(true);
+	        key: 'onLinkFocused',
+	        value: function onLinkFocused() {
+	            this.throttleMobileMenuValue(true);
 	        }
 	    }, {
-	        key: '_onLinkBlurred',
-	        value: function _onLinkBlurred() {
-	            this._throttleMobileMenuValue(false);
+	        key: 'onLinkBlurred',
+	        value: function onLinkBlurred() {
+	            this.throttleMobileMenuValue(false);
 	        }
 	    }, {
-	        key: '_throttleMobileMenuValue',
-	        value: function _throttleMobileMenuValue(value) {
-	            if (this._menuTimer) {
-	                window.clearTimeout(this._menuTimer);
+	        key: 'throttleMobileMenuValue',
+	        value: function throttleMobileMenuValue(value) {
+	            var _this3 = this;
+	
+	            if (this.menuTimer) {
+	                window.clearTimeout(this.menuTimer);
 	            }
 	
-	            this._menuTimer = window.setTimeout((function () {
-	                this.setState({
+	            this.menuTimer = window.setTimeout(function () {
+	                _this3.setState({
 	                    mobileMenu: value
 	                });
-	            }).bind(this), 10);
+	            }, 10);
 	        }
 	    }]);
 	
