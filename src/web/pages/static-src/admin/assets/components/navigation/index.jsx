@@ -12,75 +12,73 @@ class Navigation extends React.Component {
             mobileMenu: false
         };
 
-        this._menuTimer = null;
+        this.menuTimer = null;
     }
 
     render() {
         return (
             <nav className="module-navigation">
-                <button onClick={this._onToggleClicked.bind(this)}
-                        onBlur={this._onToggleBlurred.bind(this)}
+                <button onClick={this.onToggleClicked.bind(this)}
+                        onBlur={this.onToggleBlurred.bind(this)}
                         tabIndex="2"
                         data-react="navigation-toggle"
                         className="module-button m-btn-clear m-nvg-button m-nvg-toggle">
-                    <i className="fa fa-bars m-nvg-icon"></i>
+                    <i className="fa fa-bars m-nvg-icon"/>
                 </button>
                 <menu className={classNames("m-nvg-menu", {"m-nvg-mobile-menu-show": this.state.mobileMenu})}>
-                    {NavItems.map(function (item, index) {
-                        return (
-                        <li className="m-nvg-menu-item"
-                            key={item.name}>
-                            <a className="module-button m-btn-clear m-nvg-button"
-                               href={this.props.hrefs[item.name]}
-                               tabIndex={index + 3}
-                               data-react-navigation-link
-                               onFocus={this._onLinkFocused.bind(this)}
-                               onClick={this._onLinkClicked.bind(this)}
-                               onBlur={this._onLinkBlurred.bind(this)}>
-                                <i className={classNames("fa", "m-nvg-icon", "fa-" + item.icon)} />
-                                {item.label}
-                            </a>
-                        </li>
-                            );
-                        }.bind(this))}
+                    {NavItems.map((item, index) =>
+                    <li className="m-nvg-menu-item"
+                        key={item.name}>
+                        <a className="module-button m-btn-clear m-nvg-button"
+                           href={this.props.hrefs[item.name]}
+                           tabIndex={index + 3}
+                           data-react-navigation-link
+                           onFocus={this.onLinkFocused.bind(this)}
+                           onClick={this.onLinkClicked.bind(this)}
+                           onBlur={this.onLinkBlurred.bind(this)}>
+                            <i className={classNames("fa", "m-nvg-icon", "fa-" + item.icon)}/>
+                            {item.label}
+                        </a>
+                    </li>
+                        )}
                 </menu>
             </nav>
         );
     }
 
-    _onToggleClicked(e) {
+    onToggleClicked(e) {
         e.preventDefault();
         this.setState({
             mobileMenu: !this.state.mobileMenu
         });
     }
 
-    _onToggleBlurred() {
-        this._throttleMobileMenuValue(false);
+    onToggleBlurred() {
+        this.throttleMobileMenuValue(false);
     }
 
-    _onLinkClicked() {
-        this._throttleMobileMenuValue(false);
+    onLinkClicked() {
+        this.throttleMobileMenuValue(false);
     }
 
-    _onLinkFocused() {
-        this._throttleMobileMenuValue(true);
+    onLinkFocused() {
+        this.throttleMobileMenuValue(true);
     }
 
-    _onLinkBlurred() {
-        this._throttleMobileMenuValue(false);
+    onLinkBlurred() {
+        this.throttleMobileMenuValue(false);
     }
 
-    _throttleMobileMenuValue(value) {
-        if (this._menuTimer) {
-            window.clearTimeout(this._menuTimer);
+    throttleMobileMenuValue(value) {
+        if (this.menuTimer) {
+            window.clearTimeout(this.menuTimer);
         }
 
-        this._menuTimer = window.setTimeout(function () {
+        this.menuTimer = window.setTimeout(() => {
             this.setState({
                 mobileMenu: value
             });
-        }.bind(this), 10);
+        }, 10);
     }
 }
 
