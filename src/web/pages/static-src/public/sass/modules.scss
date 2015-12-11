@@ -107,20 +107,21 @@
 }
 
 /*----------------------------
- Category List
+ Name And Number List
 ----------------------------*/
-.module-category-list {
+.module-name-and-number-list {
     font-family: 'Quattrocento', serif;
 
-    .m-ctl-title {
+    .m-nan-title {
         margin-bottom: 15px;
         text-transform: lowercase;
+        color: #cccccc;
     }
 
-    .m-ctl-list {
+    .m-nan-list {
     }
 
-    .m-ctl-list-item {
+    .m-nan-list-item {
         margin-bottom: 10px;
 
         &:last-child {
@@ -128,7 +129,7 @@
         }
     }
 
-    .m-ctl-link {
+    .m-nan-link {
         color: $color-default-font;
         white-space: nowrap;
         text-decoration: none;

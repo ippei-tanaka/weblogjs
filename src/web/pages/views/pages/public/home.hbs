@@ -25,5 +25,10 @@
                 {{> public/category-list categoryList}}
             </section>
         {{/if}}
+        {{#if tagList.length}}
+            <section class="m-bll-section">
+                {{> public/tag-list tagList}}
+            </section>
+        {{/if}}
     </aside>
 </div>

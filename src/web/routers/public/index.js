@@ -14,6 +14,8 @@ var BlogFinder = require('./blog-finder');
 var BlogInfoDataBuilder = require('./blog-info-data-builder');
 var CategoryListDataBuilder = require('./category-list-data-builder');
 var PostListDataBuilder = require('./post-list-data-builder');
+var TagListDataBuilder = require('./tag-list-data-builder');
+
 
 var observer = function (generator, response) {
     co(generator).catch((error) => {
@@ -37,27 +39,35 @@ var observer = function (generator, response) {
     });
 };
 
-var buildUrl = function (blogSlug, categorySlug, page, postSlug) {
+
+var buildUrl = function (options) {
     var url = baseRoute;
 
-    if (blogSlug) {
-        url += "blog/" + blogSlug + "/";
+    options = options || {};
+
+    if (options.blogSlug) {
+        url += "blog/" + options.blogSlug + "/";
     }
 
-    if (categorySlug) {
-        url += "category/" + categorySlug + "/";
+    if (options.categorySlug) {
+        url += "category/" + options.categorySlug + "/";
     }
 
-    if (page > 1) {
-        url += "page/" + page + "/";
+    if (options.tag) {
+        url += "tag/" + options.tag + "/";
     }
 
-    if (postSlug) {
-        url += "post/" + postSlug + "/";
+    if (options.page > 1) {
+        url += "page/" + options.page + "/";
+    }
+
+    if (options.postSlug) {
+        url += "post/" + options.postSlug + "/";
     }
 
     return url;
 };
+
 
 var parseParam = function (str, defaultValue) {
     var arr = str ? str.split('/') : [];
@@ -67,25 +77,32 @@ var parseParam = function (str, defaultValue) {
 
 // Routes
 
-routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(page\/[0-9]+\/?)?(post\/[^/]+\/?)?$/, (request, response) => {
+routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(tag\/[^/]+\/?)?(page\/[0-9]+\/?)?(post\/[^/]+\/?)?$/, (request, response) => {
 
     var blogSlug = parseParam(request.params[0], null);
     var categorySlug = parseParam(request.params[1], null);
-    var page = parseParam(request.params[2], 1);
-    var postSlug = parseParam(request.params[3], null);
+    var tag = parseParam(request.params[2], null);
+    var page = parseParam(request.params[3], 1);
+    var postSlug = parseParam(request.params[4], null);
 
     var blogSelector = new BlogFinder(blogSlug);
 
     observer(function* () {
 
         if (yield blogSelector.isDefaultSlug()) {
-            response.redirect(301, buildUrl(null, categorySlug, page));
+            response.redirect(301, buildUrl({categorySlug, page}));
             return;
         }
 
         let category = yield categoryManager.findBySlug(categorySlug);
 
         if (categorySlug && !category) {
+            throw new errors.WeblogJs404Error();
+        }
+
+        let post = yield postManager.findBySlug(postSlug);
+
+        if (postSlug && !post) {
             throw new errors.WeblogJs404Error();
         }
 
@@ -97,10 +114,11 @@ routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(page\/[0-9]+\/?)?(post\/[^
             currentPage         : page,
             blog                : blog,
             category            : category,
-            post                : yield postManager.findBySlug(postSlug),
+            tag                 : tag,
+            post                : post,
             publishDate         : publishDate,
-            paginationUrlBuilder: buildUrl.bind(null, blogSlug, categorySlug),
-            postUrlBuilder      : buildUrl.bind(null, blogSlug, null, 0)
+            paginationUrlBuilder: (_page) => buildUrl({blogSlug, categorySlug, page: _page}),
+            postUrlBuilder      : (_postSlug) => buildUrl({blogSlug, page: 0, postSlug:_postSlug})
         });
 
         let pagination = yield postListBuilder.buildPagination();
@@ -112,21 +130,26 @@ routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(page\/[0-9]+\/?)?(post\/[^
         let categoryListDataBuilder = new CategoryListDataBuilder({
             blogId              : blog._id,
             publishDate         : publishDate,
-            urlBuilder          : buildUrl.bind(null, blogSlug)/*,
-            uncategorizedLabel  : "Uncategorized",
-            uncategorizedSlug   : "uncategorized"*/
+            urlBuilder          : (_categorySlug) => buildUrl({blogSlug, categorySlug: _categorySlug})
+        });
+
+        let tagListDataBuilder = new TagListDataBuilder({
+            blogId              : blog._id,
+            publishDate         : publishDate,
+            urlBuilder          : (_tag) => buildUrl({blogSlug, tag: _tag})
         });
 
         let blogInfoDataBuilder = new BlogInfoDataBuilder({
             title               : blog.title,
             blogSlug            : blogSlug,
-            urlBuilder          : buildUrl.bind(null)
+            urlBuilder          : (_blogSlug) => buildUrl({blogSlug: _blogSlug})
         });
 
         let data = {
             blogInfo            : blogInfoDataBuilder.build(),
             postList            : yield postListBuilder.buildList(),
             categoryList        : yield categoryListDataBuilder.build(),
+            tagList             : yield tagListDataBuilder.build(),
             pagination          : pagination
         };
 
@@ -134,7 +157,9 @@ routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(page\/[0-9]+\/?)?(post\/[^
         renderer.viewName = "home";
         renderer.viewData = data;
         renderer.render();
+
     }, response);
+
 });
 
 routes.get("/*", (request, response) => {
