@@ -117,8 +117,10 @@ routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(tag\/[^/]+\/?)?(page\/[0-9
             tag                 : tag,
             post                : post,
             publishDate         : publishDate,
-            paginationUrlBuilder: (_page) => buildUrl({blogSlug, categorySlug, page: _page}),
-            postUrlBuilder      : (_postSlug) => buildUrl({blogSlug, page: 0, postSlug:_postSlug})
+            paginationUrlBuilder: (_page) => buildUrl({blogSlug, categorySlug, tag, page: _page}),
+            postUrlBuilder      : (_postSlug) => buildUrl({blogSlug, postSlug:_postSlug}),
+            tagUrlBuilder       : (_tag) => buildUrl({blogSlug, tag: _tag}),
+            categoryUrlBuilder  : (_categorySlug) => buildUrl({blogSlug, categorySlug: _categorySlug})
         });
 
         let pagination = yield postListBuilder.buildPagination();

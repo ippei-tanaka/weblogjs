@@ -61,7 +61,7 @@ table {
  Media Query
 ----------------------------*/
 /*----------------------------
- Button
+
 ----------------------------*/
 /*----------------------------
  Font Base
@@ -70,7 +70,7 @@ table {
  Media Query
 ----------------------------*/
 /*----------------------------
- Button
+
 ----------------------------*/
 body {
   font-family: 'Libre Baskerville', serif;
@@ -98,7 +98,7 @@ body {
  Media Query
 ----------------------------*/
 /*----------------------------
- Button
+
 ----------------------------*/
 /*----------------------------
  Font Base
@@ -107,7 +107,7 @@ body {
  Media Query
 ----------------------------*/
 /*----------------------------
- Button
+
 ----------------------------*/
 /*----------------------------
  Header Footer Layout
@@ -195,8 +195,7 @@ body {
   font-family: 'Quattrocento', serif; }
   .module-name-and-number-list .m-nan-title {
     margin-bottom: 15px;
-    text-transform: lowercase;
-    color: #cccccc; }
+    color: #000000; }
   .module-name-and-number-list .m-nan-list-item {
     margin-bottom: 10px; }
     .module-name-and-number-list .m-nan-list-item:last-child {
@@ -235,7 +234,17 @@ body {
 .module-pagination .m-pgn-link {
   color: #000000;
   white-space: nowrap;
-  font-size: 16px; }
+  font-size: 16px;
+  text-decoration: none; }
+  .module-pagination .m-pgn-link:hover {
+    filter: alpha(opacity=70);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+    -webkit-opacity: 0.7;
+    -khtml-opacity: 0.7;
+    -moz-opacity: 0.7;
+    -ms-opacity: 0.7;
+    -o-opacity: 0.7;
+    opacity: 0.7; }
 
 /*----------------------------
  Post
@@ -258,28 +267,47 @@ body {
       -o-opacity: 0.7;
       opacity: 0.7; }
   .module-post .m-pst-date {
-    font-size: 15px;
+    text-align: right;
+    font-size: 13px;
     margin-bottom: 10px;
     display: block; }
   .module-post .m-pst-author {
-    font-size: 15px;
-    margin-bottom: 10px; }
+    text-align: right;
+    font-size: 13px;
+    margin-bottom: 10px;
+    display: block; }
   .module-post .m-pst-category {
-    font-size: 15px;
-    margin-bottom: 10px; }
+    text-align: right;
+    font-size: 13px;
+    margin-bottom: 10px;
+    display: block; }
+  .module-post .m-pst-content {
+    margin-bottom: 40px; }
   .module-post .m-pst-tag-container {
-    font-size: 15px;
+    text-align: right;
     margin-bottom: 10px; }
   .module-post .m-pst-tags {
     display: inline-block; }
   .module-post .m-pst-tag {
-    display: inline-block; }
-    .module-post .m-pst-tag:after {
-      content: ", "; }
-    .module-post .m-pst-tag:last-child:after {
-      content: ''; }
-  .module-post .m-pst-content {
-    margin-top: 40px; }
+    display: inline-block;
+    margin-right: 5px; }
+    .module-post .m-pst-tag:last-child {
+      margin-right: 0; }
+  .module-post .m-pst-category-link,
+  .module-post .m-pst-tag-link {
+    color: #000000;
+    font-size: 13px;
+    text-decoration: none; }
+    .module-post .m-pst-category-link:hover,
+    .module-post .m-pst-tag-link:hover {
+      filter: alpha(opacity=70);
+      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+      -webkit-opacity: 0.7;
+      -khtml-opacity: 0.7;
+      -moz-opacity: 0.7;
+      -ms-opacity: 0.7;
+      -o-opacity: 0.7;
+      opacity: 0.7; }
 
 /*----------------------------
  Article
@@ -318,7 +346,7 @@ body {
  Media Query
 ----------------------------*/
 /*----------------------------
- Button
+
 ----------------------------*/
 /*----------------------------
  Font Base
@@ -327,5 +355,5 @@ body {
  Media Query
 ----------------------------*/
 /*----------------------------
- Button
+
 ----------------------------*/

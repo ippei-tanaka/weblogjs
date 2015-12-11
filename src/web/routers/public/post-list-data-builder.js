@@ -4,6 +4,7 @@ var api = require('../../../api');
 var postManager = api.postManager;
 var Pagination = require('./pagination');
 var co = require('co');
+var moment = require('moment');
 
 
 class PostListDataBuilder {
@@ -17,6 +18,8 @@ class PostListDataBuilder {
         this._publish_date = args.publishDate;
         this._paginationUrlBuilder = args.paginationUrlBuilder;
         this._postUrlBuilder = args.postUrlBuilder;
+        this._tagUrlBuilder = args.tagUrlBuilder;
+        this._categoryUrlBuilder = args.categoryUrlBuilder;
     }
 
     buildCondition () {
@@ -56,10 +59,24 @@ class PostListDataBuilder {
             var postList = [];
 
             for (let post of posts) {
-                let linkObj = {
-                    link: this._postUrlBuilder(post.slug)
+
+                let extraProperties = {
+                    postLink: this._postUrlBuilder(post.slug),
+
+                    tags: post.tags.map(tag => {
+                        return {
+                            name: tag,
+                            link: this._tagUrlBuilder(tag)
+                        };
+                    }),
+
+                    category: this._category ? {
+                        name: this._category.name,
+                        link: this._categoryUrlBuilder(this._category.slug)
+                    } : {}
                 };
-                postList.push(Object.assign({}, linkObj, post.toObject()));
+
+                postList.push(Object.assign({}, post.toObject(), extraProperties));
             }
 
             return postList;
