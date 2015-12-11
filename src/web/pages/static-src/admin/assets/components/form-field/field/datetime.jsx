@@ -2,20 +2,13 @@ import React from 'react';
 import moment from 'moment';
 import classnames from 'classnames';
 
-var Datetime = React.createClass({
 
-    getDefaultProps: function () {
-        return {
-            id: "",
-            className: "",
-            value: "",
-            onChange: function () {
-            }
-        };
-    },
+class Datetime extends React.Component {
 
-    getInitialState: function () {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             year: "",
             month: "",
             date: "",
@@ -23,47 +16,47 @@ var Datetime = React.createClass({
             minute: "",
             utcOffset: ""
         };
-    },
+    }
 
-    componentWillMount: function () {
-        this._setDateTimeState(this.props.value);
-    },
+    componentWillMount() {
+        this.setDateTimeState(this.props.value);
+    }
 
-    componentWillReceiveProps: function (newProps) {
-        this._setDateTimeState(newProps.value);
-    },
+    componentWillReceiveProps(newProps) {
+        this.setDateTimeState(newProps.value);
+    }
 
-    render: function () {
+    render() {
         return (
             <div className={classnames(this.props.className, "element-datetime-field")}>
                 <fieldset className="e-dtf-field-set">
                     <label className="e-dtf-select-container">
                         <select className="e-dtf-select" value={this.state.month}
                                 id={this.props.id}
-                                onChange={this._onChange('month')}>
-                            {this._listOfMonths.map(function (name, index) {
-                                return <option value={index + 1} key={index + 1}>{name}</option>
-                                })}
+                                onChange={this.onValueChanged.call(this, 'month')}>
+                            {this.listOfMonths.map((name, index) =>
+                            <option value={index + 1} key={index + 1}>{name}</option>
+                                )}
                         </select>
                         <small className="e-dtf-label">Month</small>
                     </label>
 
                     <label className="e-dtf-select-container">
                         <select className="e-dtf-select" value={this.state.date}
-                                onChange={this._onChange('date')}>
-                            {this._range(1, 31, function (i) {
-                                return <option value={i} key={i}>{i}</option>
-                                })}
+                                onChange={this.onValueChanged.call(this, 'date')}>
+                            {this.range(1, 31, i =>
+                            <option value={i} key={i}>{i}</option>
+                                )}
                         </select>
                         <small className="e-dtf-label">Date</small>
                     </label>
 
                     <label className="e-dtf-select-container">
                         <select className="e-dtf-select" value={this.state.year}
-                                onChange={this._onChange('year')}>
-                            {this._range(1970, 2100, function (i) {
-                                return <option value={i} key={i}>{i}</option>
-                                })}
+                                onChange={this.onValueChanged.call(this, 'year')}>
+                            {this.range(1970, 2100, i =>
+                            <option value={i} key={i}>{i}</option>
+                                )}
                         </select>
                         <small className="e-dtf-label">Year</small>
                     </label>
@@ -72,20 +65,20 @@ var Datetime = React.createClass({
                 <fieldset className="e-dtf-field-set">
                     <label className="e-dtf-select-container">
                         <select className="e-dtf-select" value={this.state.hour}
-                                onChange={this._onChange('hour')}>
-                            {this._range(0, 23, function (i) {
-                                return <option value={i} key={i}>{i}</option>
-                                })}
+                                onChange={this.onValueChanged.call(this, 'hour')}>
+                            {this.range(0, 23, i =>
+                            <option value={i} key={i}>{i}</option>
+                                )}
                         </select>
                         <small className="e-dtf-label">Hour</small>
                     </label>
                     <span className="e-dtf-separator">:</span>
                     <label className="e-dtf-select-container">
                         <select className="e-dtf-select" value={this.state.minute}
-                                onChange={this._onChange('minute')}>
-                            {this._range(0, 59, function (i) {
-                                return <option value={i} key={i}>{i}</option>
-                                })}
+                                onChange={this.onValueChanged.call(this, 'minute')}>
+                            {this.range(0, 59, i =>
+                            <option value={i} key={i}>{i}</option>
+                                )}
                         </select>
                         <small className="e-dtf-label">Minute</small>
                     </label>
@@ -96,38 +89,41 @@ var Datetime = React.createClass({
                         <select className="e-dtf-select"
                                 value={this.state.utcOffset}
                                 disabled="true">
-                            {this._listOfOffsets.map(function (offset, index) {
-                                return <option value={offset} key={index}>{offset}</option>
-                                })}
+                            {this.listOfOffsets.map((offset, index) =>
+                            <option value={offset} key={index}>{offset}</option>
+                                )}
                         </select>
                         <small className="e-dtf-label">UTC Offset</small>
                     </label>
                 </fieldset>
             </div>
         );
-    },
+    }
 
-    _formats: {
-        year: "YYYY",
-        month: "M",
-        date: "D",
-        hour: "H",
-        minute: "m",
-        utcOffset: "Z"
-    },
 
-    _setDateTimeState: function (dateTimeString) {
+    get formats() {
+        return {
+            year: "YYYY",
+            month: "M",
+            date: "D",
+            hour: "H",
+            minute: "m",
+            utcOffset: "Z"
+        }
+    }
+
+    setDateTimeState(dateTimeString) {
         var thisMoment = moment(dateTimeString);
         var newState = {};
 
-        Object.keys(this._formats).forEach(function (key) {
-            newState[key] = thisMoment.format(this._formats[key]);
-        }.bind(this));
+        Object.keys(this.formats).forEach(key => {
+            newState[key] = thisMoment.format(this.formats[key]);
+        });
 
         this.setState(newState);
-    },
+    }
 
-    _buildDateFromState: function () {
+    buildDateFromState() {
 
         var thisMoment = moment({
             year: this.state.year,
@@ -139,83 +135,98 @@ var Datetime = React.createClass({
         });
 
         return thisMoment.toDate();
-    },
+    }
 
-    _onChange: function (field) {
-        return function (e) {
+    onValueChanged(field) {
+        return e => {
             var obj = {};
             obj[field] = e.target.value.trim();
-            this.setState(obj, function () {
-                this.props.onChange(this._buildDateFromState());
-            }.bind(this));
-        }.bind(this);
-    },
+            this.setState(obj, () => {
+                this.props.onChange(this.buildDateFromState());
+            });
+        };
+    }
 
-    _range: function (start, end, func) {
+    range(start, end, func) {
         var results = [];
         for (var i = start; i <= end; i++) {
             results.push(func(i));
         }
         return results;
-    },
+    }
 
-    _listOfMonths: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-    ],
+    get listOfMonths() {
+        return [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ];
+    }
 
-    _listOfOffsets: [
-        "-12:00",
-        "-11:00",
-        "-10:00",
-        "-09:30",
-        "-09:00",
-        "-08:00",
-        "-07:00",
-        "-06:00",
-        "-05:00",
-        "-04:30",
-        "-04:00",
-        "-03:30",
-        "-03:00",
-        "-02:00",
-        "-01:00",
-        "+00:00",
-        "+01:00",
-        "+02:00",
-        "+03:00",
-        "+03:30",
-        "+04:00",
-        "+04:30",
-        "+05:00",
-        "+05:30",
-        "+05:45",
-        "+06:00",
-        "+06:30",
-        "+07:00",
-        "+08:00",
-        "+08:30",
-        "+08:45",
-        "+09:00",
-        "+09:30",
-        "+10:00",
-        "+10:30",
-        "+11:00",
-        "+12:00",
-        "+12:45",
-        "+13:00",
-        "+14:00"
-    ]
-});
+    get listOfOffsets() {
+        return [
+            "-12:00",
+            "-11:00",
+            "-10:00",
+            "-09:30",
+            "-09:00",
+            "-08:00",
+            "-07:00",
+            "-06:00",
+            "-05:00",
+            "-04:30",
+            "-04:00",
+            "-03:30",
+            "-03:00",
+            "-02:00",
+            "-01:00",
+            "+00:00",
+            "+01:00",
+            "+02:00",
+            "+03:00",
+            "+03:30",
+            "+04:00",
+            "+04:30",
+            "+05:00",
+            "+05:30",
+            "+05:45",
+            "+06:00",
+            "+06:30",
+            "+07:00",
+            "+08:00",
+            "+08:30",
+            "+08:45",
+            "+09:00",
+            "+09:30",
+            "+10:00",
+            "+10:30",
+            "+11:00",
+            "+12:00",
+            "+12:45",
+            "+13:00",
+            "+14:00"
+        ]
+    }
+
+}
+
+
+Datetime.defaultProps = {
+    id: "",
+    className: "module-datetime",
+    value: "",
+    onChange: function () {
+    }
+};
+
 
 export default Datetime;

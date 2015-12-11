@@ -1,39 +1,33 @@
 import React from 'react';
 
 
-var Textarea = React.createClass({
+class Textarea extends React.Component {
 
-    getDefaultProps: function () {
-        return {
-            className: "m-frf-textarea",
-            value: "",
-            onChange: function () {}
-        };
-    },
+    constructor(props) {
+        super(props);
 
-    getInitialState: function () {
-        return {
+        this.state = {
             value: ""
         };
-    },
+    }
 
-    componentWillMount: function () {
+    componentWillMount() {
         this._props = Object.assign({}, this.props);
-        this._props.onChange = this._onChange;
-    },
+        this._props.onChange = this.onValueChanged.bind(this);
+    }
 
-    componentWillReceiveProps: function (newProps) {
+    componentWillReceiveProps(newProps) {
         this.setState({
             value: newProps.value
         });
-    },
+    }
 
-    render: function () {
+    render() {
         this._props.value = this.state.value;
         return React.createElement("textarea", this._props);
-    },
+    }
 
-    _onChange: function (e) {
+    onValueChanged(e) {
         var value = e.target.value;
 
         if (this.props.onChange(value) === false) {
@@ -45,7 +39,15 @@ var Textarea = React.createClass({
             value: value
         });
     }
-});
+}
+
+
+Textarea.defaultProps = {
+    className: "module-textarea",
+    value: "",
+    onChange: function () {
+    }
+};
 
 
 export default Textarea;
