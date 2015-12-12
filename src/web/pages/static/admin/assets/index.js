@@ -34807,89 +34807,15 @@
 	        value: function render() {
 	            var _this3 = this;
 	
-	            var fields = Object.keys(this.fieldSettings).map(function (key, index) {
+	            var fields = Object.keys(this.fieldSettings).map(function (key) {
 	                var setting = _this3.fieldSettings[key];
-	                var val = _this3.state.values[key];
-	                var list = _this3.state.lists[key];
 	                var error = _this3.state.errors[key];
-	                var element = null;
-	
-	                switch (setting.type) {
-	                    case "text":
-	                    case "email":
-	                    case "password":
-	                    default:
-	                        element = _react2.default.createElement(_input2.default, {
-	                            id: setting.id,
-	                            type: setting.type,
-	                            value: val,
-	                            onChange: function onChange(v) {
-	                                return _this3.setValueState(key, v);
-	                            }
-	                        });
-	                        break;
-	                    case "textarea":
-	                        element = _react2.default.createElement(_textarea2.default, { onChange: function onChange(v) {
-	                                return _this3.setValueState(key, v);
-	                            },
-	                            value: val });
-	                        break;
-	                    case "checkbox-list":
-	                        element = _react2.default.createElement(
-	                            _checkboxList2.default,
-	                            { onChange: function onChange(v) {
-	                                    return _this3.setValueState(key, v);
-	                                } },
-	                            list.map(function (item, index) {
-	                                return _react2.default.createElement(_checkbox2.default, { key: index,
-	                                    name: item.value,
-	                                    value: val ? val.indexOf(item.value) !== -1 : false,
-	                                    label: item.label });
-	                            })
-	                        );
-	                        break;
-	                    case "select":
-	                        element = _react2.default.createElement(
-	                            _select2.default,
-	                            { onChange: function onChange(v) {
-	                                    return _this3.setValueState(key, v);
-	                                },
-	                                value: val },
-	                            list.map(function (item, index) {
-	                                return _react2.default.createElement(
-	                                    _option2.default,
-	                                    { key: index,
-	                                        value: item.value },
-	                                    item.label
-	                                );
-	                            })
-	                        );
-	                        break;
-	                    case "tag-list":
-	                        element = _react2.default.createElement(_tagList2.default, { onChange: function onChange(v) {
-	                                return _this3.setValueState(key, v);
-	                            },
-	                            value: val });
-	                        break;
-	                    case "datetime":
-	                        element = _react2.default.createElement(_datetime2.default, { onChange: function onChange(v) {
-	                                return _this3.setValueState(key, v);
-	                            },
-	                            value: val });
-	                        break;
-	                }
-	
-	                return _react2.default.createElement(
-	                    'div',
-	                    { key: index, className: 'm-dte-field-container' },
-	                    _react2.default.createElement(
-	                        _label2.default,
-	                        { htmlFor: setting.id },
-	                        setting.label
-	                    ),
-	                    element,
-	                    _react2.default.createElement(_errorMessage2.default, { error: error })
-	                );
+	                return {
+	                    element: _this3.buildFieldComponent(key, setting.type, setting.id),
+	                    label: setting.label,
+	                    id: setting.id,
+	                    error: error
+	                };
 	            });
 	
 	            return _react2.default.createElement(
@@ -34900,7 +34826,19 @@
 	                    { className: 'm-dte-title' },
 	                    this.title
 	                ),
-	                fields,
+	                fields.map(function (field, index) {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        { key: index, className: 'm-dte-field-container' },
+	                        _react2.default.createElement(
+	                            _label2.default,
+	                            { htmlFor: field.id },
+	                            field.label
+	                        ),
+	                        field.element,
+	                        _react2.default.createElement(_errorMessage2.default, { error: field.error })
+	                    );
+	                }),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'm-dte-field-container' },
@@ -34932,15 +34870,76 @@
 	            );
 	        }
 	    }, {
+	        key: 'buildFieldComponent',
+	        value: function buildFieldComponent(path, type, id) {
+	            var _this4 = this;
+	
+	            var list = this.state.lists[path];
+	            var props = {
+	                id: id,
+	                type: type,
+	                value: this.state.values[path],
+	                onChange: function onChange(v) {
+	                    return _this4.setValueState(path, v);
+	                }
+	            };
+	            var element = null;
+	
+	            switch (type) {
+	                case "text":
+	                case "email":
+	                case "password":
+	                default:
+	                    element = _react2.default.createElement(_input2.default, props);
+	                    break;
+	                case "textarea":
+	                    element = _react2.default.createElement(_textarea2.default, props);
+	                    break;
+	                case "checkbox-list":
+	                    element = _react2.default.createElement(
+	                        _checkboxList2.default,
+	                        props,
+	                        list.map(function (item, index) {
+	                            return _react2.default.createElement(_checkbox2.default, { key: index,
+	                                name: item.value,
+	                                label: item.label });
+	                        })
+	                    );
+	                    break;
+	                case "select":
+	                    element = _react2.default.createElement(
+	                        _select2.default,
+	                        props,
+	                        list.map(function (item, index) {
+	                            return _react2.default.createElement(
+	                                _option2.default,
+	                                { key: index,
+	                                    value: item.value },
+	                                item.label
+	                            );
+	                        })
+	                    );
+	                    break;
+	                case "tag-list":
+	                    element = _react2.default.createElement(_tagList2.default, props);
+	                    break;
+	                case "datetime":
+	                    element = _react2.default.createElement(_datetime2.default, props);
+	                    break;
+	            }
+	
+	            return element;
+	        }
+	    }, {
 	        key: 'onSubmit',
 	        value: function onSubmit(e) {
-	            var _this4 = this;
+	            var _this5 = this;
 	
 	            e.preventDefault();
 	            this.sendToServer(this.state.values, this.props.id).then(function () {
-	                _this4.props.onComplete();
+	                _this5.props.onComplete();
 	            }).catch(function (data) {
-	                return _this4.setState({
+	                return _this5.setState({
 	                    errors: data.errors
 	                });
 	            });
@@ -35187,19 +35186,21 @@
 	        }
 	    }, {
 	        key: 'createCheckBox',
-	        value: function createCheckBox(props, index) {
-	            props = Object.assign({}, props);
-	            props.onChange = this.onCheckboxChanged.bind(this);
+	        value: function createCheckBox(childProps, index) {
+	            childProps = Object.assign({}, childProps);
+	            childProps.onChange = this.onCheckboxChanged.bind(this);
 	
 	            if (index === 0) {
-	                props.id = this.props.id;
-	                props.autoFocus = this.props.autoFocus;
+	                childProps.id = this.props.id;
+	                childProps.autoFocus = this.props.autoFocus;
 	            } else {
-	                props.id = null;
-	                props.autoFocus = false;
+	                childProps.id = null;
+	                childProps.autoFocus = false;
 	            }
 	
-	            return _react2.default.createElement(_checkbox2.default, props);
+	            childProps.value = this.props.value ? this.props.value.indexOf(childProps.name) !== -1 : false;
+	
+	            return _react2.default.createElement(_checkbox2.default, childProps);
 	        }
 	    }, {
 	        key: 'onCheckboxChanged',
@@ -35222,8 +35223,9 @@
 	
 	CheckboxList.defaultProps = {
 	    id: null,
-	    autoFocus: false,
 	    className: "module-checkbox-list",
+	    value: false,
+	    autoFocus: false,
 	    onChange: function onChange() {}
 	};
 	
@@ -35352,6 +35354,10 @@
 	
 	    return Option;
 	})(_react2.default.Component);
+	
+	Option.defaultProps = {
+	    value: null
+	};
 	
 	exports.default = Option;
 
