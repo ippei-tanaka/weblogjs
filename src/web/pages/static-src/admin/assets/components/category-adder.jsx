@@ -1,11 +1,15 @@
 import ServerFacade from '../services/server-facade';
-import Adder from './adder';
+import Editor from './editor';
 
 
-class CategoryAdder extends Adder {
+class CategoryAdder extends Editor {
 
     get title() {
         return "Create a New Category";
+    }
+
+    get okayButtonLabel() {
+        return "Create";
     }
 
     get fieldSettings() {

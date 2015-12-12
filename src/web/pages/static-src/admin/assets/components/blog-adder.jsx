@@ -1,11 +1,15 @@
 import ServerFacade from '../services/server-facade';
-import Adder from './adder';
+import Editor from './editor';
 
 
-class BlogAdder extends Adder {
+class BlogAdder extends Editor {
 
     get title() {
         return "Create a New Blog";
+    }
+
+    get okayButtonLabel() {
+        return "Create";
     }
 
     get fieldSettings() {

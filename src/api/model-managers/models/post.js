@@ -82,12 +82,18 @@ var PostSchema = new mongoose.Schema({
 
     "tags": [{
         type: String,
+        default: [],
         validate: tagValidator
     }],
 
     "publish_date": {
         type: Date,
         required: 'A publish date is required.'
+    },
+
+    "is_draft": {
+        type: Boolean,
+        default: false
     },
 
     "created": {

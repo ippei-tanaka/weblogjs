@@ -41,11 +41,11 @@ class Editor extends React.Component {
     }
 
     get title() {
-        return "Edit Something";
+        return "";
     }
 
     get okayButtonLabel() {
-        return "Edit";
+        return "";
     }
 
     get cancelButtonLabel() {

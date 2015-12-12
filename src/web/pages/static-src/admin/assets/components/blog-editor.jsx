@@ -8,6 +8,10 @@ class BlogEditor extends BlogAdder {
         return "Edit the Blog";
     }
 
+    get okayButtonLabel() {
+        return "Edit";
+    }
+
     retrieveModel(id) {
         return ServerFacade.getBlog(id).then(data => {
             return {

@@ -8,6 +8,10 @@ class PostEditor extends PostAdder {
         return "Edit the Post";
     }
 
+    get okayButtonLabel() {
+        return "Edit";
+    }
+
     get fieldSettings() {
         var settings = super.fieldSettings;
 
