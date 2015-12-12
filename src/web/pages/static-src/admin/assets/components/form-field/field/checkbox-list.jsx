@@ -18,19 +18,21 @@ class CheckboxList extends React.Component {
         );
     }
 
-    createCheckBox (props, index) {
-        props = Object.assign({}, props);
-        props.onChange = this.onCheckboxChanged.bind(this);
+    createCheckBox (childProps, index) {
+        childProps = Object.assign({}, childProps);
+        childProps.onChange = this.onCheckboxChanged.bind(this);
 
         if (index === 0) {
-            props.id = this.props.id;
-            props.autoFocus = this.props.autoFocus;
+            childProps.id = this.props.id;
+            childProps.autoFocus = this.props.autoFocus;
         } else {
-            props.id = null;
-            props.autoFocus = false;
+            childProps.id = null;
+            childProps.autoFocus = false;
         }
 
-        return React.createElement(Checkbox, props);
+        childProps.value = this.props.value ? this.props.value.indexOf(childProps.name) !== -1 : false;
+
+        return React.createElement(Checkbox, childProps);
     }
 
     onCheckboxChanged () {
@@ -51,8 +53,9 @@ class CheckboxList extends React.Component {
 
 CheckboxList.defaultProps = {
     id: null,
-    autoFocus: false,
     className: "module-checkbox-list",
+    value: false,
+    autoFocus: false,
     onChange: function () {}
 };
 

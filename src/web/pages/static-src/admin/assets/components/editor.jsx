@@ -86,89 +86,34 @@ class Editor extends React.Component {
     render() {
 
         var fields = Object.keys(this.fieldSettings).map(
-            (key, index) => {
+            (key) => {
                 var setting = this.fieldSettings[key];
-                var val = this.state.values[key];
-                var list = this.state.lists[key];
                 var error = this.state.errors[key];
-                var element = null;
-
-                switch (setting.type) {
-                    case "text":
-                    case "email":
-                    case "password":
-                    default:
-                        element = (
-                            <Input
-                                id={setting.id}
-                                type={setting.type}
-                                value={val}
-                                onChange={v => this.setValueState(key, v)}
-                            />
-                        );
-                        break;
-                    case "textarea":
-                        element = (
-                            <Textarea onChange={v => this.setValueState(key, v) }
-                                      value={val} />
-                        );
-                        break;
-                    case "checkbox-list":
-                        element = (
-                            <CheckboxList onChange={v => this.setValueState(key, v) }>
-                                {list.map(
-                                    (item, index) =>
-                                    <Checkbox key={index}
-                                              name={item.value}
-                                              value={val ? val.indexOf(item.value) !== -1 : false}
-                                              label={item.label}/>)}
-                            </CheckboxList>
-                        );
-                        break;
-                    case "select":
-                        element = (
-                            <Select onChange={v => this.setValueState(key, v) }
-                                    value={val}>
-                                {list.map(
-                                    (item, index) =>
-                                    <Option key={index}
-                                            value={item.value}>
-                                        {item.label}
-                                    </Option>
-                                    )}
-                            </Select>
-                        );
-                        break;
-                    case "tag-list":
-                        element = (
-                            <TagList onChange={v => this.setValueState(key, v) }
-                                     value={val} />
-                        );
-                        break;
-                    case "datetime":
-                        element = (
-                            <Datetime onChange={v => this.setValueState(key, v) }
-                                      value={val} />
-                        );
-                        break;
-                }
-
-                return (
-                    <div key={index} className="m-dte-field-container">
-                        <Label htmlFor={setting.id}>
-                            {setting.label}
-                        </Label>
-                        {element}
-                        <ErrorMessage error={error}/>
-                    </div>
-                );
+                return {
+                    element: this.buildFieldComponent(key, setting.type, setting.id),
+                    label: setting.label,
+                    id: setting.id,
+                    error
+                };
             }
         );
 
         return (
             <form className="module-data-editor" onSubmit={this.onSubmit.bind(this)}>
                 <h2 className="m-dte-title">{this.title}</h2>
-                {fields}
+
+                {fields.map((field, index) => {
+                    return (
+                    <div key={index} className="m-dte-field-container">
+                        <Label htmlFor={field.id}>
+                            {field.label}
+                        </Label>
+                        {field.element}
+                        <ErrorMessage error={field.error}/>
+                    </div>
+                        );
+                    })}
+
                 <div className="m-dte-field-container">
                     <ul className="m-dte-button-list">
                         <li className="m-dte-button-list-item">
@@ -181,8 +126,72 @@ class Editor extends React.Component {
                         </li>
                     </ul>
                 </div>
+
             </form>
         );
+    }
+
+    buildFieldComponent(path, type, id) {
+        var list = this.state.lists[path];
+        var props = {
+            id: id,
+            type: type,
+            value: this.state.values[path],
+            onChange: v => this.setValueState(path, v)
+        };
+        var element = null;
+
+        switch (type) {
+            case "text":
+            case "email":
+            case "password":
+            default:
+                element = (
+                    <Input {...props} />
+                );
+                break;
+            case "textarea":
+                element = (
+                    <Textarea {...props} />
+                );
+                break;
+            case "checkbox-list":
+                element = (
+                    <CheckboxList {...props} >
+                        {list.map(
+                            (item, index) =>
+                            <Checkbox key={index}
+                                      name={item.value}
+                                      label={item.label}/>)}
+                    </CheckboxList>
+                );
+                break;
+            case "select":
+                element = (
+                    <Select {...props} >
+                        {list.map(
+                            (item, index) =>
+                            <Option key={index}
+                                    value={item.value}>
+                                {item.label}
+                            </Option>
+                            )}
+                    </Select>
+                );
+                break;
+            case "tag-list":
+                element = (
+                    <TagList {...props} />
+                );
+                break;
+            case "datetime":
+                element = (
+                    <Datetime {...props} />
+                );
+                break;
+        }
+
+        return element;
     }
 
     onSubmit(e) {

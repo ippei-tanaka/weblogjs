@@ -9,5 +9,8 @@ class Option extends React.Component {
 
 }
 
+Option.defaultProps = {
+    value: null
+};
 
 export default Option;
