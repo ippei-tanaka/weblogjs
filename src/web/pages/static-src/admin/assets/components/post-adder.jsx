@@ -1,11 +1,15 @@
 import ServerFacade from '../services/server-facade';
-import Adder from './adder';
+import Editor from './editor';
 
 
-class PostAdder extends Adder {
+class PostAdder extends Editor {
 
     get title() {
         return "Create a New Post";
+    }
+
+    get okayButtonLabel() {
+        return "Create";
     }
 
     get fieldSettings() {

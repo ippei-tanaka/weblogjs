@@ -8,6 +8,10 @@ class CategoryEditor extends CategoryAdder {
         return "Edit the Category";
     }
 
+    get okayButtonLabel() {
+        return "Edit";
+    }
+
     retrieveModel(id) {
         return ServerFacade.getCategory(id).then(data => {
             return {

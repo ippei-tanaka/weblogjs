@@ -50,7 +50,7 @@
 	
 	var _homeController2 = _interopRequireDefault(_homeController);
 	
-	var _loginController = __webpack_require__(305);
+	var _loginController = __webpack_require__(304);
 	
 	var _loginController2 = _interopRequireDefault(_loginController);
 	
@@ -102,19 +102,19 @@
 	
 	var _userController2 = _interopRequireDefault(_userController);
 	
-	var _categoryController = __webpack_require__(287);
+	var _categoryController = __webpack_require__(286);
 	
 	var _categoryController2 = _interopRequireDefault(_categoryController);
 	
-	var _postController = __webpack_require__(292);
+	var _postController = __webpack_require__(291);
 	
 	var _postController2 = _interopRequireDefault(_postController);
 	
-	var _blogController = __webpack_require__(297);
+	var _blogController = __webpack_require__(296);
 	
 	var _blogController2 = _interopRequireDefault(_blogController);
 	
-	var _settingController = __webpack_require__(302);
+	var _settingController = __webpack_require__(301);
 	
 	var _settingController2 = _interopRequireDefault(_settingController);
 	
@@ -22426,11 +22426,11 @@
 	
 	var _userAdder2 = _interopRequireDefault(_userAdder);
 	
-	var _userEditor = __webpack_require__(283);
+	var _userEditor = __webpack_require__(282);
 	
 	var _userEditor2 = _interopRequireDefault(_userEditor);
 	
-	var _userDeleter = __webpack_require__(284);
+	var _userDeleter = __webpack_require__(283);
 	
 	var _userDeleter2 = _interopRequireDefault(_userDeleter);
 	
@@ -34572,9 +34572,9 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _adder = __webpack_require__(271);
+	var _editor = __webpack_require__(271);
 	
-	var _adder2 = _interopRequireDefault(_adder);
+	var _editor2 = _interopRequireDefault(_editor);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -34584,8 +34584,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var UserAdder = (function (_Adder) {
-	    _inherits(UserAdder, _Adder);
+	var UserAdder = (function (_Editor) {
+	    _inherits(UserAdder, _Editor);
 	
 	    function UserAdder() {
 	        _classCallCheck(this, UserAdder);
@@ -34619,6 +34619,11 @@
 	        key: 'title',
 	        get: function get() {
 	            return "Create a New User";
+	        }
+	    }, {
+	        key: 'okayButtonLabel',
+	        get: function get() {
+	            return "Create";
 	        }
 	    }, {
 	        key: 'fieldSettings',
@@ -34661,57 +34666,12 @@
 	    }]);
 	
 	    return UserAdder;
-	})(_adder2.default);
+	})(_editor2.default);
 	
 	exports.default = UserAdder;
 
 /***/ },
 /* 271 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _editor = __webpack_require__(272);
-	
-	var _editor2 = _interopRequireDefault(_editor);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var Adder = (function (_Editor) {
-	    _inherits(Adder, _Editor);
-	
-	    function Adder() {
-	        _classCallCheck(this, Adder);
-	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Adder).apply(this, arguments));
-	    }
-	
-	    _createClass(Adder, [{
-	        key: "okayButtonLabel",
-	        get: function get() {
-	            return "Create";
-	        }
-	    }]);
-	
-	    return Adder;
-	})(_editor2.default);
-	
-	exports.default = Adder;
-
-/***/ },
-/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34726,43 +34686,43 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _input = __webpack_require__(273);
+	var _input = __webpack_require__(272);
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	var _checkbox = __webpack_require__(274);
+	var _checkbox = __webpack_require__(273);
 	
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 	
-	var _checkboxList = __webpack_require__(275);
+	var _checkboxList = __webpack_require__(274);
 	
 	var _checkboxList2 = _interopRequireDefault(_checkboxList);
 	
-	var _select = __webpack_require__(276);
+	var _select = __webpack_require__(275);
 	
 	var _select2 = _interopRequireDefault(_select);
 	
-	var _option = __webpack_require__(277);
+	var _option = __webpack_require__(276);
 	
 	var _option2 = _interopRequireDefault(_option);
 	
-	var _tagList = __webpack_require__(278);
+	var _tagList = __webpack_require__(277);
 	
 	var _tagList2 = _interopRequireDefault(_tagList);
 	
-	var _datetime = __webpack_require__(279);
+	var _datetime = __webpack_require__(278);
 	
 	var _datetime2 = _interopRequireDefault(_datetime);
 	
-	var _textarea = __webpack_require__(280);
+	var _textarea = __webpack_require__(279);
 	
 	var _textarea2 = _interopRequireDefault(_textarea);
 	
-	var _label = __webpack_require__(281);
+	var _label = __webpack_require__(280);
 	
 	var _label2 = _interopRequireDefault(_label);
 	
-	var _errorMessage = __webpack_require__(282);
+	var _errorMessage = __webpack_require__(281);
 	
 	var _errorMessage2 = _interopRequireDefault(_errorMessage);
 	
@@ -35004,12 +34964,12 @@
 	    }, {
 	        key: 'title',
 	        get: function get() {
-	            return "Edit Something";
+	            return "";
 	        }
 	    }, {
 	        key: 'okayButtonLabel',
 	        get: function get() {
-	            return "Edit";
+	            return "";
 	        }
 	    }, {
 	        key: 'cancelButtonLabel',
@@ -35029,7 +34989,7 @@
 	exports.default = Editor;
 
 /***/ },
-/* 273 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35095,7 +35055,7 @@
 	exports.default = Input;
 
 /***/ },
-/* 274 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35166,7 +35126,7 @@
 	exports.default = Checkbox;
 
 /***/ },
-/* 275 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35185,7 +35145,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _checkbox = __webpack_require__(274);
+	var _checkbox = __webpack_require__(273);
 	
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 	
@@ -35270,7 +35230,7 @@
 	exports.default = CheckboxList;
 
 /***/ },
-/* 276 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35289,7 +35249,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _option = __webpack_require__(277);
+	var _option = __webpack_require__(276);
 	
 	var _option2 = _interopRequireDefault(_option);
 	
@@ -35347,7 +35307,7 @@
 	exports.default = Select;
 
 /***/ },
-/* 277 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35396,7 +35356,7 @@
 	exports.default = Option;
 
 /***/ },
-/* 278 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35577,7 +35537,7 @@
 	exports.default = TagList;
 
 /***/ },
-/* 279 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35880,7 +35840,7 @@
 	exports.default = Datetime;
 
 /***/ },
-/* 280 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35944,7 +35904,7 @@
 	exports.default = Textarea;
 
 /***/ },
-/* 281 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35999,7 +35959,7 @@
 	exports.default = Label;
 
 /***/ },
-/* 282 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36052,7 +36012,7 @@
 	exports.default = ErrorMessage;
 
 /***/ },
-/* 283 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36117,6 +36077,11 @@
 	            return "Edit the User";
 	        }
 	    }, {
+	        key: 'okayButtonLabel',
+	        get: function get() {
+	            return "Edit";
+	        }
+	    }, {
 	        key: 'fieldSettings',
 	        get: function get() {
 	            var settings = _get(Object.getPrototypeOf(UserEditor.prototype), 'fieldSettings', this);
@@ -36133,7 +36098,7 @@
 	exports.default = UserEditor;
 
 /***/ },
-/* 284 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36144,7 +36109,7 @@
 	    value: true
 	});
 	
-	var _deleter = __webpack_require__(285);
+	var _deleter = __webpack_require__(284);
 	
 	var _deleter2 = _interopRequireDefault(_deleter);
 	
@@ -36194,7 +36159,7 @@
 	exports.default = UserDeleter;
 
 /***/ },
-/* 285 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36209,7 +36174,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _confirmation = __webpack_require__(286);
+	var _confirmation = __webpack_require__(285);
 	
 	var _confirmation2 = _interopRequireDefault(_confirmation);
 	
@@ -36314,7 +36279,7 @@
 	exports.default = Deleter;
 
 /***/ },
-/* 286 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36412,7 +36377,7 @@
 	exports.default = Confirmation;
 
 /***/ },
-/* 287 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36427,19 +36392,19 @@
 	
 	var _modelController2 = _interopRequireDefault(_modelController);
 	
-	var _categoryList = __webpack_require__(288);
+	var _categoryList = __webpack_require__(287);
 	
 	var _categoryList2 = _interopRequireDefault(_categoryList);
 	
-	var _categoryAdder = __webpack_require__(289);
+	var _categoryAdder = __webpack_require__(288);
 	
 	var _categoryAdder2 = _interopRequireDefault(_categoryAdder);
 	
-	var _categoryEditor = __webpack_require__(290);
+	var _categoryEditor = __webpack_require__(289);
 	
 	var _categoryEditor2 = _interopRequireDefault(_categoryEditor);
 	
-	var _categoryDeleter = __webpack_require__(291);
+	var _categoryDeleter = __webpack_require__(290);
 	
 	var _categoryDeleter2 = _interopRequireDefault(_categoryDeleter);
 	
@@ -36493,7 +36458,7 @@
 	exports.default = CategoryController;
 
 /***/ },
-/* 288 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36578,7 +36543,7 @@
 	exports.default = CategoryList;
 
 /***/ },
-/* 289 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36593,9 +36558,9 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _adder = __webpack_require__(271);
+	var _editor = __webpack_require__(271);
 	
-	var _adder2 = _interopRequireDefault(_adder);
+	var _editor2 = _interopRequireDefault(_editor);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -36605,8 +36570,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var CategoryAdder = (function (_Adder) {
-	    _inherits(CategoryAdder, _Adder);
+	var CategoryAdder = (function (_Editor) {
+	    _inherits(CategoryAdder, _Editor);
 	
 	    function CategoryAdder() {
 	        _classCallCheck(this, CategoryAdder);
@@ -36638,6 +36603,11 @@
 	            return "Create a New Category";
 	        }
 	    }, {
+	        key: 'okayButtonLabel',
+	        get: function get() {
+	            return "Create";
+	        }
+	    }, {
 	        key: 'fieldSettings',
 	        get: function get() {
 	            return {
@@ -36657,12 +36627,12 @@
 	    }]);
 	
 	    return CategoryAdder;
-	})(_adder2.default);
+	})(_editor2.default);
 	
 	exports.default = CategoryAdder;
 
 /***/ },
-/* 290 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36677,7 +36647,7 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _categoryAdder = __webpack_require__(289);
+	var _categoryAdder = __webpack_require__(288);
 	
 	var _categoryAdder2 = _interopRequireDefault(_categoryAdder);
 	
@@ -36723,6 +36693,11 @@
 	        get: function get() {
 	            return "Edit the Category";
 	        }
+	    }, {
+	        key: 'okayButtonLabel',
+	        get: function get() {
+	            return "Edit";
+	        }
 	    }]);
 	
 	    return CategoryEditor;
@@ -36731,7 +36706,7 @@
 	exports.default = CategoryEditor;
 
 /***/ },
-/* 291 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36742,7 +36717,7 @@
 	    value: true
 	});
 	
-	var _deleter = __webpack_require__(285);
+	var _deleter = __webpack_require__(284);
 	
 	var _deleter2 = _interopRequireDefault(_deleter);
 	
@@ -36792,7 +36767,7 @@
 	exports.default = CategoryDeleter;
 
 /***/ },
-/* 292 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36807,19 +36782,19 @@
 	
 	var _modelController2 = _interopRequireDefault(_modelController);
 	
-	var _postList = __webpack_require__(293);
+	var _postList = __webpack_require__(292);
 	
 	var _postList2 = _interopRequireDefault(_postList);
 	
-	var _postAdder = __webpack_require__(294);
+	var _postAdder = __webpack_require__(293);
 	
 	var _postAdder2 = _interopRequireDefault(_postAdder);
 	
-	var _postEditor = __webpack_require__(295);
+	var _postEditor = __webpack_require__(294);
 	
 	var _postEditor2 = _interopRequireDefault(_postEditor);
 	
-	var _postDeleter = __webpack_require__(296);
+	var _postDeleter = __webpack_require__(295);
 	
 	var _postDeleter2 = _interopRequireDefault(_postDeleter);
 	
@@ -36873,7 +36848,7 @@
 	exports.default = PostController;
 
 /***/ },
-/* 293 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37080,7 +37055,7 @@
 	exports.default = PostList;
 
 /***/ },
-/* 294 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37095,9 +37070,9 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _adder = __webpack_require__(271);
+	var _editor = __webpack_require__(271);
 	
-	var _adder2 = _interopRequireDefault(_adder);
+	var _editor2 = _interopRequireDefault(_editor);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -37107,8 +37082,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var PostAdder = (function (_Adder) {
-	    _inherits(PostAdder, _Adder);
+	var PostAdder = (function (_Editor) {
+	    _inherits(PostAdder, _Editor);
 	
 	    function PostAdder() {
 	        _classCallCheck(this, PostAdder);
@@ -37150,6 +37125,11 @@
 	        key: 'title',
 	        get: function get() {
 	            return "Create a New Post";
+	        }
+	    }, {
+	        key: 'okayButtonLabel',
+	        get: function get() {
+	            return "Create";
 	        }
 	    }, {
 	        key: 'fieldSettings',
@@ -37241,12 +37221,12 @@
 	    }]);
 	
 	    return PostAdder;
-	})(_adder2.default);
+	})(_editor2.default);
 	
 	exports.default = PostAdder;
 
 /***/ },
-/* 295 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37263,7 +37243,7 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _postAdder = __webpack_require__(294);
+	var _postAdder = __webpack_require__(293);
 	
 	var _postAdder2 = _interopRequireDefault(_postAdder);
 	
@@ -37322,6 +37302,11 @@
 	            return "Edit the Post";
 	        }
 	    }, {
+	        key: 'okayButtonLabel',
+	        get: function get() {
+	            return "Edit";
+	        }
+	    }, {
 	        key: 'fieldSettings',
 	        get: function get() {
 	            var settings = _get(Object.getPrototypeOf(PostEditor.prototype), 'fieldSettings', this);
@@ -37338,7 +37323,7 @@
 	exports.default = PostEditor;
 
 /***/ },
-/* 296 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37349,7 +37334,7 @@
 	    value: true
 	});
 	
-	var _deleter = __webpack_require__(285);
+	var _deleter = __webpack_require__(284);
 	
 	var _deleter2 = _interopRequireDefault(_deleter);
 	
@@ -37399,7 +37384,7 @@
 	exports.default = PostDeleter;
 
 /***/ },
-/* 297 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37414,19 +37399,19 @@
 	
 	var _modelController2 = _interopRequireDefault(_modelController);
 	
-	var _blogList = __webpack_require__(298);
+	var _blogList = __webpack_require__(297);
 	
 	var _blogList2 = _interopRequireDefault(_blogList);
 	
-	var _blogAdder = __webpack_require__(299);
+	var _blogAdder = __webpack_require__(298);
 	
 	var _blogAdder2 = _interopRequireDefault(_blogAdder);
 	
-	var _blogEditor = __webpack_require__(300);
+	var _blogEditor = __webpack_require__(299);
 	
 	var _blogEditor2 = _interopRequireDefault(_blogEditor);
 	
-	var _blogDeleter = __webpack_require__(301);
+	var _blogDeleter = __webpack_require__(300);
 	
 	var _blogDeleter2 = _interopRequireDefault(_blogDeleter);
 	
@@ -37480,7 +37465,7 @@
 	exports.default = BlogController;
 
 /***/ },
-/* 298 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37569,7 +37554,7 @@
 	exports.default = BlogList;
 
 /***/ },
-/* 299 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37584,9 +37569,9 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _adder = __webpack_require__(271);
+	var _editor = __webpack_require__(271);
 	
-	var _adder2 = _interopRequireDefault(_adder);
+	var _editor2 = _interopRequireDefault(_editor);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -37596,8 +37581,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var BlogAdder = (function (_Adder) {
-	    _inherits(BlogAdder, _Adder);
+	var BlogAdder = (function (_Editor) {
+	    _inherits(BlogAdder, _Editor);
 	
 	    function BlogAdder() {
 	        _classCallCheck(this, BlogAdder);
@@ -37629,6 +37614,11 @@
 	        key: 'title',
 	        get: function get() {
 	            return "Create a New Blog";
+	        }
+	    }, {
+	        key: 'okayButtonLabel',
+	        get: function get() {
+	            return "Create";
 	        }
 	    }, {
 	        key: 'fieldSettings',
@@ -37668,12 +37658,12 @@
 	    }]);
 	
 	    return BlogAdder;
-	})(_adder2.default);
+	})(_editor2.default);
 	
 	exports.default = BlogAdder;
 
 /***/ },
-/* 300 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37688,7 +37678,7 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _blogAdder = __webpack_require__(299);
+	var _blogAdder = __webpack_require__(298);
 	
 	var _blogAdder2 = _interopRequireDefault(_blogAdder);
 	
@@ -37736,6 +37726,11 @@
 	        get: function get() {
 	            return "Edit the Blog";
 	        }
+	    }, {
+	        key: 'okayButtonLabel',
+	        get: function get() {
+	            return "Edit";
+	        }
 	    }]);
 	
 	    return BlogEditor;
@@ -37744,7 +37739,7 @@
 	exports.default = BlogEditor;
 
 /***/ },
-/* 301 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37755,7 +37750,7 @@
 	    value: true
 	});
 	
-	var _deleter = __webpack_require__(285);
+	var _deleter = __webpack_require__(284);
 	
 	var _deleter2 = _interopRequireDefault(_deleter);
 	
@@ -37805,7 +37800,7 @@
 	exports.default = BlogDeleter;
 
 /***/ },
-/* 302 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37824,7 +37819,7 @@
 	
 	var _reactComponentMounter2 = _interopRequireDefault(_reactComponentMounter);
 	
-	var _settingEditor = __webpack_require__(303);
+	var _settingEditor = __webpack_require__(302);
 	
 	var _settingEditor2 = _interopRequireDefault(_settingEditor);
 	
@@ -37864,7 +37859,7 @@
 	exports.default = SettingController;
 
 /***/ },
-/* 303 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37887,23 +37882,23 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _stringFormatter = __webpack_require__(304);
+	var _stringFormatter = __webpack_require__(303);
 	
 	var _stringFormatter2 = _interopRequireDefault(_stringFormatter);
 	
-	var _select = __webpack_require__(276);
+	var _select = __webpack_require__(275);
 	
 	var _select2 = _interopRequireDefault(_select);
 	
-	var _option = __webpack_require__(277);
+	var _option = __webpack_require__(276);
 	
 	var _option2 = _interopRequireDefault(_option);
 	
-	var _label = __webpack_require__(281);
+	var _label = __webpack_require__(280);
 	
 	var _label2 = _interopRequireDefault(_label);
 	
-	var _errorMessage = __webpack_require__(282);
+	var _errorMessage = __webpack_require__(281);
 	
 	var _errorMessage2 = _interopRequireDefault(_errorMessage);
 	
@@ -38037,7 +38032,7 @@
 	exports.default = SettingEditor;
 
 /***/ },
-/* 304 */
+/* 303 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38083,7 +38078,7 @@
 	exports.default = StringFormatter;
 
 /***/ },
-/* 305 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38102,7 +38097,7 @@
 	
 	var _globalEvents2 = _interopRequireDefault(_globalEvents);
 	
-	var _loginForm = __webpack_require__(306);
+	var _loginForm = __webpack_require__(305);
 	
 	var _loginForm2 = _interopRequireDefault(_loginForm);
 	
@@ -38131,7 +38126,7 @@
 	exports.default = LoginController;
 
 /***/ },
-/* 306 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38150,15 +38145,15 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _input = __webpack_require__(273);
+	var _input = __webpack_require__(272);
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	var _label = __webpack_require__(281);
+	var _label = __webpack_require__(280);
 	
 	var _label2 = _interopRequireDefault(_label);
 	
-	var _errorMessage = __webpack_require__(282);
+	var _errorMessage = __webpack_require__(281);
 	
 	var _errorMessage2 = _interopRequireDefault(_errorMessage);
 	

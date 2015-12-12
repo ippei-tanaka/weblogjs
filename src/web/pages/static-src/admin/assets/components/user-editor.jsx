@@ -8,6 +8,10 @@ class UserEditor extends UserAdder {
         return "Edit the User";
     }
 
+    get okayButtonLabel() {
+        return "Edit";
+    }
+
     get fieldSettings() {
         var settings = super.fieldSettings;
 
