@@ -12,12 +12,12 @@ var passwordValidator = [
     validate({
         validator: 'matches',
         arguments: /^[a-zA-Z0-9#!@%&\*]*$/,
-        message: 'Only alphabets, numbers and some symbols (#, !, @, %, &, *) are allowed for a password.'
+        message: 'Only alphabets, numbers and some symbols (#, !, @, %, &, *) are allowed for Password.'
     }),
     validate({
         validator: 'isLength',
         arguments: [8, 16],
-        message: 'A password should be between {ARGS[0]} and {ARGS[1]} characters.'
+        message: 'Password should be between {ARGS[0]} and {ARGS[1]} characters.'
     })
 ];
 
@@ -25,12 +25,12 @@ var displayNameValidator = [
     validate({
         validator: 'matches',
         arguments: /^[a-zA-Z0-9_\-#!@%&\* ]*$/,
-        message: 'Only alphabets, numbers, spaces and some symbols (_, -, #, !, @, %, &, *) are allowed for a display name.'
+        message: 'Only alphabets, numbers, spaces and some symbols (_, -, #, !, @, %, &, *) are allowed for Display Name.'
     }),
     validate({
         validator: 'isLength',
         arguments: [1, 20],
-        message: 'A display Name should be between {ARGS[0]} and {ARGS[1]} characters.'
+        message: 'Display Name should be between {ARGS[0]} and {ARGS[1]} characters.'
     })
 ];
 
@@ -61,21 +61,21 @@ var UserSchema = new mongoose.Schema({
     email: {
         type: String,
         validate: emailValidator,
-        required: 'An email is required.',
+        required: 'Email is required.',
         index: true,
         unique: true
     },
 
     password: {
         type: String,
-        required: 'A password is required.',
+        required: 'Password is required.',
         validate: passwordValidator,
         select: false
     },
 
     display_name: {
         type: String,
-        required: 'A display name is required.',
+        required: 'Display Name is required.',
         validate: displayNameValidator
     },
 

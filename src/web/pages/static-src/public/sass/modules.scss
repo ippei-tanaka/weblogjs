@@ -1,10 +1,25 @@
 @import "mixins";
 @import "variables";
 
+
+
+.link-style {
+    color: $link-color;
+    text-decoration: none;
+
+    &:hover {
+        @include opacity(0.7);
+    }
+}
+
+
 /*----------------------------
  Header Footer Layout
 ----------------------------*/
 .module-header-footer-layout {
+
+    margin: 0 auto;
+    max-width: $max-width;
 
     .m-hfl-header {
         padding: 130px 40px 40px;
@@ -38,15 +53,13 @@
 .module-blog-layout {
     display: flex;
     align-items: stretch;
-
+    flex-wrap: wrap;
     @include media-phone {
-        flex-wrap: wrap;
+
     }
 
     .m-bll-main {
         width: 100%;
-        border-top: 1px solid $border-color;
-        border-bottom: 1px solid $border-color;
 
         @include media-phone {
             border-bottom: 0;
@@ -55,7 +68,6 @@
 
     .m-bll-section {
         padding: 45px 40px 50px;
-        border-bottom: 1px solid $border-color;
 
         &:last-child {
             border-bottom: 0;
@@ -67,20 +79,12 @@
     }
 
     .m-bll-sidebar {
-        border-top: 1px solid $border-color;
-        border-bottom: 1px solid $border-color;
-        border-left: 1px solid $border-color;
-
         display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        align-content: stretch;
-
-        @include media-phone {
-            width: 100%;
-            border-left: 0;
-            border-top: 1px solid $border-color;
-        }
+        flex-direction: row;
+        //align-items: stretch;
+        //align-content: stretch;
+        //width: 100%;
+        //border-top: 1px solid $border-color;
     }
 }
 
@@ -129,9 +133,8 @@
     }
 
     .m-nan-link {
-        color: $link-color;
+        @extend .link-style;
         white-space: nowrap;
-        text-decoration: none;
 
         &:hover {
             @include opacity(0.7);
@@ -162,10 +165,9 @@
     }
 
     .m-pgn-link {
-        color: $link-color;
+        @extend .link-style;
         white-space: nowrap;
         font-size: 16px;
-        text-decoration: none;
 
         &:hover {
             @include opacity(0.7);
@@ -185,12 +187,7 @@
     }
 
     .m-pst-link {
-        color: $link-color;
-        text-decoration: none;
-
-        &:hover {
-            @include opacity(0.7);
-        }
+        @extend .link-style;
     }
 
     .m-pst-date {
@@ -237,13 +234,8 @@
 
     .m-pst-category-link,
     .m-pst-tag-link {
-        color: $link-color;
+        @extend .link-style;
         font-size: 13px;
-        text-decoration: none;
-
-        &:hover {
-            @include opacity(0.7);
-        }
     }
 
 }

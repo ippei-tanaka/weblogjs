@@ -8,12 +8,12 @@ var slugValidator = [
     validate({
         validator: 'matches',
         arguments: /^[a-zA-Z0-9\-_]*$/,
-        message: 'Only alphabets, numbers and some symbols (-, _) are allowed for a slug.'
+        message: 'Only alphabets, numbers and some symbols (-, _) are allowed for Slug.'
     }),
     validate({
         validator: 'isLength',
         arguments: [1, 1000],
-        message: 'A slug should be between {ARGS[0]} and {ARGS[1]} characters.'
+        message: 'Slug should be between {ARGS[0]} and {ARGS[1]} characters.'
     })
 ];
 
@@ -21,7 +21,7 @@ var titleValidator = [
     validate({
         validator: 'isLength',
         arguments: [1, 200],
-        message: 'A title should be between {ARGS[0]} and {ARGS[1]} characters.'
+        message: 'Title should be between {ARGS[0]} and {ARGS[1]} characters.'
     })
 ];
 
@@ -29,13 +29,13 @@ var BlogSchema = new mongoose.Schema({
     "title": {
         type: String,
         validate: titleValidator,
-        required: 'A title is required.'
+        required: 'Title is required.'
     },
 
     "slug": {
         type: String,
         validate: slugValidator,
-        required: 'A slug is required.',
+        required: 'Slug is required.',
         unique: true
     },
 

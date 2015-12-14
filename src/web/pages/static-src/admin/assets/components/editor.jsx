@@ -76,6 +76,10 @@ class Editor extends React.Component {
         });
     }
 
+    getValueState(name) {
+        return this.state.values[name];
+    }
+
     setListState(name, value) {
         this.setState((previousState) => {
             previousState.lists[name] = value;
@@ -90,7 +94,7 @@ class Editor extends React.Component {
                 var setting = this.fieldSettings[key];
                 var error = this.state.errors[key];
                 return {
-                    element: this.buildFieldComponent(key, setting.type, setting.id),
+                    element: this.buildFieldElement(key, setting.type, setting.id),
                     label: setting.label,
                     id: setting.id,
                     error
@@ -99,12 +103,15 @@ class Editor extends React.Component {
         );
 
         return (
-            <form className="module-data-editor" onSubmit={this.onSubmit.bind(this)}>
+            <form className="module-data-editor"
+                  onSubmit={this.onSubmit.bind(this)}>
+
                 <h2 className="m-dte-title">{this.title}</h2>
 
                 {fields.map((field, index) => {
                     return (
-                    <div key={index} className="m-dte-field-container">
+                    <div key={index}
+                         className="m-dte-field-container">
                         <Label htmlFor={field.id}>
                             {field.label}
                         </Label>
@@ -115,23 +122,14 @@ class Editor extends React.Component {
                     })}
 
                 <div className="m-dte-field-container">
-                    <ul className="m-dte-button-list">
-                        <li className="m-dte-button-list-item">
-                            <button className="module-button"
-                                    type="submit">{this.okayButtonLabel}</button>
-                        </li>
-                        <li className="m-dte-button-list-item">
-                            <button className="module-button m-btn-alert"
-                                    onClick={this.onCancelButtonClicked.bind(this)}>{this.cancelButtonLabel}</button>
-                        </li>
-                    </ul>
+                    {this.buttonListElement}
                 </div>
 
             </form>
         );
     }
 
-    buildFieldComponent(path, type, id) {
+    buildFieldElement(path, type, id) {
         var list = this.state.lists[path];
         var props = {
             id: id,
@@ -192,6 +190,21 @@ class Editor extends React.Component {
         }
 
         return element;
+    }
+
+    get buttonListElement() {
+        return (
+            <ul className="m-dte-button-list">
+                <li className="m-dte-button-list-item">
+                    <button className="module-button"
+                            type="submit">{this.okayButtonLabel}</button>
+                </li>
+                <li className="m-dte-button-list-item">
+                    <button className="module-button m-btn-alert"
+                            onClick={this.onCancelButtonClicked.bind(this)}>{this.cancelButtonLabel}</button>
+                </li>
+            </ul>
+        );
     }
 
     onSubmit(e) {
