@@ -9,7 +9,7 @@ var titleValidator = [
     validate({
         validator: 'isLength',
         arguments: [1, 200],
-        message: 'A title should be between {ARGS[0]} and {ARGS[1]} characters.'
+        message: 'Title should be between {ARGS[0]} and {ARGS[1]} characters.'
     })
 ];
 
@@ -30,7 +30,7 @@ var slugValidator = [
     validate({
         validator: 'isLength',
         arguments: [1, 200],
-        message: 'A slug should be between {ARGS[0]} and {ARGS[1]} characters.'
+        message: 'Slug should be between {ARGS[0]} and {ARGS[1]} characters.'
     })
 ];
 
@@ -38,7 +38,7 @@ var tagValidator = [
     validate({
         validator: 'isLength',
         arguments: [1, 50],
-        message: 'A tag should be between {ARGS[0]} and {ARGS[1]} characters.'
+        message: 'Tag should be between {ARGS[0]} and {ARGS[1]} characters.'
     })
 ];
 
@@ -46,7 +46,7 @@ var PostSchema = new mongoose.Schema({
     "title": {
         type: String,
         validate: titleValidator,
-        required: 'A title is required.'
+        required: 'Title is required.'
     },
 
     "content": {
@@ -58,25 +58,25 @@ var PostSchema = new mongoose.Schema({
     "slug": {
         type: String,
         validate: slugValidator,
-        required: 'A slug is required.',
+        required: 'Slug is required.',
         unique: true
     },
 
     "author": {
         type: mongoose.Schema.Types.ObjectId,
-        required: 'An author is required.',
+        required: 'Author is required.',
         ref: 'User'
     },
 
     "category": {
         type: mongoose.Schema.Types.ObjectId,
-        required: 'A category is required.',
+        required: 'Category is required.',
         ref: 'Category'
     },
 
     "blog": {
         type: mongoose.Schema.Types.ObjectId,
-        required: 'A blog is required.',
+        required: 'Blog is required.',
         ref: 'Blog'
     },
 
@@ -88,12 +88,12 @@ var PostSchema = new mongoose.Schema({
 
     "publish_date": {
         type: Date,
-        required: 'A publish date is required.'
+        required: 'Publish date is required.'
     },
 
     "is_draft": {
         type: Boolean,
-        default: false
+        required: '"is_draft" field is required.'
     },
 
     "created": {

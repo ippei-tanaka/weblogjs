@@ -858,10 +858,11 @@ table tbody tr {
   margin-top: 30px; }
 
 .module-data-editor .m-dte-button-list-item {
-  display: inline-block; }
+  display: inline-block;
+  margin-left: 20px; }
 
 .module-data-editor .m-dte-button-list-item:first-child {
-  margin-right: 20px; }
+  margin-left: 0; }
 
 .module-data-editor .m-dte-flush-message {
   display: inline-block;

@@ -7,7 +7,7 @@ var uniqueValidatorPlugin = require('mongoose-unique-validator');
 var SettingSchema = new mongoose.Schema({
     "front": {
         type: mongoose.Schema.Types.ObjectId,
-        required: 'A front blog is required.',
+        required: 'Front blog is required.',
         ref: 'Blog',
         unique: true
     },

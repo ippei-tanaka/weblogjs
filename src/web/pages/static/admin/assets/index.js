@@ -34795,6 +34795,11 @@
 	            });
 	        }
 	    }, {
+	        key: 'getValueState',
+	        value: function getValueState(name) {
+	            return this.state.values[name];
+	        }
+	    }, {
 	        key: 'setListState',
 	        value: function setListState(name, value) {
 	            this.setState(function (previousState) {
@@ -34811,7 +34816,7 @@
 	                var setting = _this3.fieldSettings[key];
 	                var error = _this3.state.errors[key];
 	                return {
-	                    element: _this3.buildFieldComponent(key, setting.type, setting.id),
+	                    element: _this3.buildFieldElement(key, setting.type, setting.id),
 	                    label: setting.label,
 	                    id: setting.id,
 	                    error: error
@@ -34820,7 +34825,8 @@
 	
 	            return _react2.default.createElement(
 	                'form',
-	                { className: 'module-data-editor', onSubmit: this.onSubmit.bind(this) },
+	                { className: 'module-data-editor',
+	                    onSubmit: this.onSubmit.bind(this) },
 	                _react2.default.createElement(
 	                    'h2',
 	                    { className: 'm-dte-title' },
@@ -34829,7 +34835,8 @@
 	                fields.map(function (field, index) {
 	                    return _react2.default.createElement(
 	                        'div',
-	                        { key: index, className: 'm-dte-field-container' },
+	                        { key: index,
+	                            className: 'm-dte-field-container' },
 	                        _react2.default.createElement(
 	                            _label2.default,
 	                            { htmlFor: field.id },
@@ -34842,36 +34849,13 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'm-dte-field-container' },
-	                    _react2.default.createElement(
-	                        'ul',
-	                        { className: 'm-dte-button-list' },
-	                        _react2.default.createElement(
-	                            'li',
-	                            { className: 'm-dte-button-list-item' },
-	                            _react2.default.createElement(
-	                                'button',
-	                                { className: 'module-button',
-	                                    type: 'submit' },
-	                                this.okayButtonLabel
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'li',
-	                            { className: 'm-dte-button-list-item' },
-	                            _react2.default.createElement(
-	                                'button',
-	                                { className: 'module-button m-btn-alert',
-	                                    onClick: this.onCancelButtonClicked.bind(this) },
-	                                this.cancelButtonLabel
-	                            )
-	                        )
-	                    )
+	                    this.buttonListElement
 	                )
 	            );
 	        }
 	    }, {
-	        key: 'buildFieldComponent',
-	        value: function buildFieldComponent(path, type, id) {
+	        key: 'buildFieldElement',
+	        value: function buildFieldElement(path, type, id) {
 	            var _this4 = this;
 	
 	            var list = this.state.lists[path];
@@ -34974,6 +34958,34 @@
 	        key: 'cancelButtonLabel',
 	        get: function get() {
 	            return "Cancel";
+	        }
+	    }, {
+	        key: 'buttonListElement',
+	        get: function get() {
+	            return _react2.default.createElement(
+	                'ul',
+	                { className: 'm-dte-button-list' },
+	                _react2.default.createElement(
+	                    'li',
+	                    { className: 'm-dte-button-list-item' },
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'module-button',
+	                            type: 'submit' },
+	                        this.okayButtonLabel
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    { className: 'm-dte-button-list-item' },
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'module-button m-btn-alert',
+	                            onClick: this.onCancelButtonClicked.bind(this) },
+	                        this.cancelButtonLabel
+	                    )
+	                )
+	            );
 	        }
 	    }]);
 	
@@ -37020,6 +37032,14 @@
 	                    }
 	                },
 	
+	                is_draft: {
+	                    label: "Is Draft",
+	                    stringify: function stringify(value) {
+	                        return value ? "Yes" : "No";
+	                    }
+	
+	                },
+	
 	                created: {
 	                    label: "Created Date",
 	                    stringify: function stringify(value) {
@@ -37245,6 +37265,10 @@
 	    value: true
 	});
 	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
 	var _serverFacade = __webpack_require__(171);
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
@@ -37271,6 +37295,16 @@
 	    }
 	
 	    _createClass(PostEditor, [{
+	        key: 'onPublishButtonClicked',
+	        value: function onPublishButtonClicked() {
+	            this.setValueState('___id_draft', false);
+	        }
+	    }, {
+	        key: 'onDraftButtonClicked',
+	        value: function onDraftButtonClicked() {
+	            this.setValueState('___id_draft', true);
+	        }
+	    }, {
 	        key: 'retrieveModel',
 	        value: function retrieveModel(id) {
 	            return _serverFacade2.default.getPost(id).then(function (data) {
@@ -37282,7 +37316,9 @@
 	                    author: data.author,
 	                    blog: data.blog,
 	                    tags: data.tags,
-	                    publish_date: data.publish_date
+	                    publish_date: data.publish_date,
+	                    is_draft: data.is_draft,
+	                    ___id_draft: null
 	                };
 	            });
 	        }
@@ -37297,7 +37333,8 @@
 	                author: values.author || null,
 	                blog: values.blog || null,
 	                tags: values.tags,
-	                publish_date: values.publish_date
+	                publish_date: values.publish_date,
+	                is_draft: values.___id_draft
 	            };
 	
 	            return _serverFacade2.default.updatePost(id, data);
@@ -37320,6 +37357,49 @@
 	            delete settings.password;
 	
 	            return settings;
+	        }
+	    }, {
+	        key: 'buttonListElement',
+	        get: function get() {
+	
+	            var isDraft = this.getValueState('is_draft');
+	
+	            return _react2.default.createElement(
+	                'ul',
+	                { className: 'm-dte-button-list' },
+	                _react2.default.createElement(
+	                    'li',
+	                    { className: 'm-dte-button-list-item' },
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'module-button',
+	                            type: 'submit',
+	                            onClick: this.onPublishButtonClicked.bind(this) },
+	                        isDraft ? 'Publish' : 'Update'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    { className: 'm-dte-button-list-item' },
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'module-button',
+	                            type: 'submit',
+	                            onClick: this.onDraftButtonClicked.bind(this) },
+	                        isDraft ? 'Save as Draft' : 'Save & Unpublish'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    { className: 'm-dte-button-list-item' },
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'module-button m-btn-alert',
+	                            onClick: this.onCancelButtonClicked.bind(this) },
+	                        this.cancelButtonLabel
+	                    )
+	                )
+	            );
 	        }
 	    }]);
 	

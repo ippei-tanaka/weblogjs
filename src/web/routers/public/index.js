@@ -142,7 +142,10 @@ routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(tag\/[^/]+\/?)?(page\/[0-9
         });
 
         let blogInfoDataBuilder = new BlogInfoDataBuilder({
-            title               : blog.title,
+            categoryName        : category ? category.name : null,
+            tagName             : tag,
+            postTitle           : post ? post.title : null,
+            blogTitle           : blog ? blog.title : null,
             blogSlug            : blogSlug,
             urlBuilder          : (_blogSlug) => buildUrl({blogSlug: _blogSlug})
         });

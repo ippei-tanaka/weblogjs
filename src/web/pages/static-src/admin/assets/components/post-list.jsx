@@ -100,6 +100,12 @@ class PostList extends List {
                     Moment(value).format("YYYY-MM-DD HH:mm Z")
             },
 
+            is_draft: {
+                label: "Is Draft",
+                stringify: value => value ? "Yes" : "No"
+
+            },
+
             created: {
                 label: "Created Date",
                 stringify: value =>

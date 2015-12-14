@@ -365,9 +365,10 @@
 
     .m-dte-button-list-item {
         display: inline-block;
+        margin-left: 20px;
     }
     .m-dte-button-list-item:first-child {
-        margin-right: 20px;
+        margin-left: 0;
     }
 
     .m-dte-flush-message {

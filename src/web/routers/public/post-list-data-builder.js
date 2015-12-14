@@ -25,6 +25,7 @@ class PostListDataBuilder {
     buildCondition () {
         var condition = {
             blog: this._blog._id,
+            is_draft: false,
             publish_date: {$lt: this._publish_date}
         };
 
