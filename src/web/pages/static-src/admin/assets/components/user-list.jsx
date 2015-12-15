@@ -19,6 +19,10 @@ class UserList extends List {
                 label: "Name"
             },
 
+            slug: {
+                label: "Slug"
+            },
+
             email: {
                 label: "Email"
             },

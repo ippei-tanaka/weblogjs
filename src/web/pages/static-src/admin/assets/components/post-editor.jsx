@@ -1,4 +1,3 @@
-import React from 'react';
 import ServerFacade from '../services/server-facade';
 import PostAdder from './post-adder';
 
@@ -10,7 +9,7 @@ class PostEditor extends PostAdder {
     }
 
     get okayButtonLabel() {
-        return "Edit";
+        return "Update";
     }
 
     get fieldSettings() {
@@ -19,38 +18,6 @@ class PostEditor extends PostAdder {
         delete settings.password;
 
         return settings;
-    }
-
-    get buttonListElement() {
-
-        var isDraft = this.getValueState('is_draft');
-
-        return (
-            <ul className="m-dte-button-list">
-                <li className="m-dte-button-list-item">
-                    <button className="module-button"
-                            type="submit"
-                            onClick={this.onPublishButtonClicked.bind(this)}>{isDraft ? 'Publish' : 'Update'}</button>
-                </li>
-                <li className="m-dte-button-list-item">
-                    <button className="module-button"
-                            type="submit"
-                            onClick={this.onDraftButtonClicked.bind(this)}>{isDraft ? 'Save as Draft' : 'Save & Unpublish'}</button>
-                </li>
-                <li className="m-dte-button-list-item">
-                    <button className="module-button m-btn-alert"
-                            onClick={this.onCancelButtonClicked.bind(this)}>{this.cancelButtonLabel}</button>
-                </li>
-            </ul>
-        );
-    }
-
-    onPublishButtonClicked() {
-        this.setValueState('___id_draft', false);
-    }
-
-    onDraftButtonClicked() {
-        this.setValueState('___id_draft', true);
     }
 
     retrieveModel(id) {

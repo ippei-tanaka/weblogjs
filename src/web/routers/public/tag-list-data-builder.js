@@ -2,7 +2,6 @@
 
 var api = require('../../../api');
 var postManager = api.postManager;
-var categoryManager = api.categoryManager;
 var co = require('co');
 
 
@@ -18,6 +17,7 @@ class TagListDataBuilder {
         return co(function* () {
             var condition = {
                 blog: this._blogId,
+                is_draft: false,
                 publish_date: {$lt: this._publish_date}
             };
             var sort = {name: 1};

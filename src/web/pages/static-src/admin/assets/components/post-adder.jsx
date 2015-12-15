@@ -1,5 +1,6 @@
 import ServerFacade from '../services/server-facade';
 import Editor from './editor';
+import React from 'react';
 
 
 class PostAdder extends Editor {
@@ -92,6 +93,38 @@ class PostAdder extends Editor {
         }
     }
 
+    get buttonListElement() {
+
+        var isDraft = this.getValueState('is_draft');
+
+        return (
+            <ul className="m-dte-button-list">
+                <li className="m-dte-button-list-item">
+                    <button className="module-button"
+                            type="submit"
+                            onClick={this.onPublishButtonClicked.bind(this)}>{isDraft ? 'Publish' : this.okayButtonLabel}</button>
+                </li>
+                <li className="m-dte-button-list-item">
+                    <button className="module-button"
+                            type="submit"
+                            onClick={this.onDraftButtonClicked.bind(this)}>{isDraft ? 'Save as Draft' : 'Save & Unpublish'}</button>
+                </li>
+                <li className="m-dte-button-list-item">
+                    <button className="module-button m-btn-alert"
+                            onClick={this.onCancelButtonClicked.bind(this)}>{this.cancelButtonLabel}</button>
+                </li>
+            </ul>
+        );
+    }
+
+    onPublishButtonClicked() {
+        this.setValueState('___id_draft', false);
+    }
+
+    onDraftButtonClicked() {
+        this.setValueState('___id_draft', true);
+    }
+
     retrieveModel() {
         return Promise.resolve({
             title: "",
@@ -101,7 +134,9 @@ class PostAdder extends Editor {
             author: "",
             blog: "",
             tags: [],
-            publish_date: new Date()
+            publish_date: new Date(),
+            is_draft: null,
+            ___id_draft: null
         });
     }
 
@@ -114,7 +149,8 @@ class PostAdder extends Editor {
             author: values.author || null,
             blog: values.blog || null,
             tags: values.tags,
-            publish_date: values.publish_date
+            publish_date: values.publish_date,
+            is_draft: values.___id_draft
         };
 
         return ServerFacade.createPost(data);

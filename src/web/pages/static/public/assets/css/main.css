@@ -109,11 +109,13 @@ body {
 /*----------------------------
 
 ----------------------------*/
-.link-style, .module-name-and-number-list .m-nan-link, .module-pagination .m-pgn-link, .module-post .m-pst-link, .module-post .m-pst-category-link,
+.link-style, .module-name-and-number-list .m-nan-link, .module-pagination .m-pgn-link, .module-post .m-pst-link, .module-post .m-pst-author-link,
+.module-post .m-pst-category-link,
 .module-post .m-pst-tag-link {
   color: #00a6c0;
   text-decoration: none; }
-  .link-style:hover, .module-name-and-number-list .m-nan-link:hover, .module-pagination .m-pgn-link:hover, .module-post .m-pst-link:hover, .module-post .m-pst-category-link:hover,
+  .link-style:hover, .module-name-and-number-list .m-nan-link:hover, .module-pagination .m-pgn-link:hover, .module-post .m-pst-link:hover, .module-post .m-pst-author-link:hover,
+  .module-post .m-pst-category-link:hover,
   .module-post .m-pst-tag-link:hover {
     filter: alpha(opacity=70);
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
@@ -278,6 +280,7 @@ body {
     margin-right: 5px; }
     .module-post .m-pst-tag:last-child {
       margin-right: 0; }
+  .module-post .m-pst-author-link,
   .module-post .m-pst-category-link,
   .module-post .m-pst-tag-link {
     font-size: 13px; }

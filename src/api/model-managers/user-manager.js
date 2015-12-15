@@ -14,6 +14,10 @@ exports.findByEmail = function (email) {
     return this.findOne({email: email});
 };
 
+exports.findBySlug = function (slug) {
+    return this.findOne({slug: slug});
+}.bind(exports);
+
 
 /**
  * @param {object} credential - Credential of the user.
@@ -47,13 +51,15 @@ exports.createAdminUser = function (userObject) {
     userObject = userObject || {
             email: config.admin_email,
             password: config.admin_password,
-            display_name: "Admin"
+            display_name: "Admin",
+            slug: "admin"
         };
 
     return this.create({
         email: userObject.email,
         password: userObject.password,
         display_name: userObject.display_name,
+        slug: userObject.slug,
         privileges: [privileges.READ, privileges.EDIT, privileges.CREATE, privileges.GRANTED]
     });
 };
@@ -62,6 +68,7 @@ exports.createRegularUser = function (userObject) {
     return this.create({
         email: userObject.email,
         display_name: userObject.display_name,
+        slug: userObject.slug,
         password: userObject.password,
         privileges: [privileges.READ, privileges.EDIT, privileges.CREATE]
     })
