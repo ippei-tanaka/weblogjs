@@ -253,26 +253,15 @@ body {
   .module-post .m-pst-title {
     font-size: 36px;
     margin-bottom: 44px; }
-  .module-post .m-pst-date {
-    text-align: right;
-    font-size: 13px;
-    margin-bottom: 10px;
-    display: block; }
-  .module-post .m-pst-author {
-    text-align: right;
-    font-size: 13px;
-    margin-bottom: 10px;
-    display: block; }
-  .module-post .m-pst-category {
-    text-align: right;
-    font-size: 13px;
-    margin-bottom: 10px;
-    display: block; }
   .module-post .m-pst-content {
     margin-bottom: 40px; }
+  .module-post .m-pst-date,
+  .module-post .m-pst-author,
+  .module-post .m-pst-category,
   .module-post .m-pst-tag-container {
-    text-align: right;
-    margin-bottom: 10px; }
+    font-size: 13px;
+    margin-bottom: 10px;
+    display: block; }
   .module-post .m-pst-tags {
     display: inline-block; }
   .module-post .m-pst-tag {
@@ -280,10 +269,6 @@ body {
     margin-right: 5px; }
     .module-post .m-pst-tag:last-child {
       margin-right: 0; }
-  .module-post .m-pst-author-link,
-  .module-post .m-pst-category-link,
-  .module-post .m-pst-tag-link {
-    font-size: 13px; }
 
 /*----------------------------
  Article
@@ -299,7 +284,8 @@ body {
     font-size: 27px; }
   .module-article h4 {
     font-size: 24px; }
-  .module-article h5, .module-article h6 {
+  .module-article h5,
+  .module-article h6 {
     font-size: 20px; }
 
 /* -------------------------------------------------------------
