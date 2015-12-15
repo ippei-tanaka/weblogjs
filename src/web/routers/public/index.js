@@ -9,6 +9,7 @@ var errors = require('../../../api/errors');
 var api = require('../../../api');
 var categoryManager = api.categoryManager;
 var postManager = api.postManager;
+var userManager = api.userManager;
 var Renderer = require('./renderer');
 var BlogFinder = require('./blog-finder');
 var BlogInfoDataBuilder = require('./blog-info-data-builder');
@@ -53,6 +54,10 @@ var buildUrl = function (options) {
         url += "category/" + options.categorySlug + "/";
     }
 
+    if (options.authorSlug) {
+        url += "author/" + options.authorSlug + "/";
+    }
+
     if (options.tag) {
         url += "tag/" + options.tag + "/";
     }
@@ -77,13 +82,14 @@ var parseParam = function (str, defaultValue) {
 
 // Routes
 
-routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(tag\/[^/]+\/?)?(page\/[0-9]+\/?)?(post\/[^/]+\/?)?$/, (request, response) => {
+routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(author\/[^/]+\/?)?(tag\/[^/]+\/?)?(page\/[0-9]+\/?)?(post\/[^/]+\/?)?$/, (request, response) => {
 
     var blogSlug = parseParam(request.params[0], null);
     var categorySlug = parseParam(request.params[1], null);
-    var tag = parseParam(request.params[2], null);
-    var page = parseParam(request.params[3], 1);
-    var postSlug = parseParam(request.params[4], null);
+    var authorSlug = parseParam(request.params[2], null);
+    var tag = parseParam(request.params[3], null);
+    var page = parseParam(request.params[4], 1);
+    var postSlug = parseParam(request.params[5], null);
 
     var blogSelector = new BlogFinder(blogSlug);
 
@@ -110,17 +116,25 @@ routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(tag\/[^/]+\/?)?(page\/[0-9
 
         let publishDate = new Date();
 
+        let author = yield userManager.findBySlug(authorSlug);
+
+        if (authorSlug && !author) {
+            throw new errors.WeblogJs404Error();
+        }
+
         let postListBuilder = new PostListDataBuilder({
             currentPage         : page,
             blog                : blog,
+            author              : author,
             category            : category,
             tag                 : tag,
             post                : post,
             publishDate         : publishDate,
-            paginationUrlBuilder: (_page) => buildUrl({blogSlug, categorySlug, tag, page: _page}),
+            paginationUrlBuilder: (_page) => buildUrl({blogSlug, categorySlug, authorSlug, tag, page: _page}),
             postUrlBuilder      : (_postSlug) => buildUrl({blogSlug, postSlug:_postSlug}),
             tagUrlBuilder       : (_tag) => buildUrl({blogSlug, tag: _tag}),
-            categoryUrlBuilder  : (_categorySlug) => buildUrl({blogSlug, categorySlug: _categorySlug})
+            categoryUrlBuilder  : (_categorySlug) => buildUrl({blogSlug, categorySlug: _categorySlug}),
+            authorUrlBuilder    : (_authorSlug) => buildUrl({blogSlug, authorSlug: _authorSlug})
         });
 
         let pagination = yield postListBuilder.buildPagination();
@@ -147,6 +161,7 @@ routes.get(/^\/(blog\/[^/]+\/?)?(category\/[^/]+\/?)?(tag\/[^/]+\/?)?(page\/[0-9
             postTitle           : post ? post.title : null,
             blogTitle           : blog ? blog.title : null,
             blogSlug            : blogSlug,
+            authorName          : author ? author.display_name : null,
             urlBuilder          : (_blogSlug) => buildUrl({blogSlug: _blogSlug})
         });
 

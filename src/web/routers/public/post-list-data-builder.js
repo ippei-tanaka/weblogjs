@@ -13,6 +13,7 @@ class PostListDataBuilder {
         this._currentPage = args.currentPage;
         this._blog = args.blog;
         this._category = args.category;
+        this._author = args.author;
         this._tag = args.tag;
         this._post = args.post;
         this._publish_date = args.publishDate;
@@ -20,6 +21,7 @@ class PostListDataBuilder {
         this._postUrlBuilder = args.postUrlBuilder;
         this._tagUrlBuilder = args.tagUrlBuilder;
         this._categoryUrlBuilder = args.categoryUrlBuilder;
+        this._authorUrlBuilder = args.authorUrlBuilder;
     }
 
     buildCondition () {
@@ -35,6 +37,10 @@ class PostListDataBuilder {
 
         if (this._tag) {
             condition.tags = this._tag;
+        }
+
+        if (this._author) {
+            condition.author = this._author._id;
         }
 
         if (this._post) {
@@ -71,9 +77,14 @@ class PostListDataBuilder {
                         };
                     }),
 
-                    category: this._category ? {
-                        name: this._category.name,
-                        link: this._categoryUrlBuilder(this._category.slug)
+                    category: post.category ? {
+                        name: post.category.name,
+                        link: this._categoryUrlBuilder(post.category.slug)
+                    } : {},
+
+                    author: post.author ? {
+                        display_name: post.author.display_name,
+                        link: this._authorUrlBuilder(post.author.slug)
                     } : {}
                 };
 

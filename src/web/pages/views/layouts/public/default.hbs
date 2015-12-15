@@ -18,7 +18,9 @@
         {{{body}}}
     </div>
     <header class="m-hfl-footer">
-        <span>&copy;{{blogInfo.blogTitle}}</span>
+        {{#if blogInfo.blogTitle}}
+            <span>&copy;{{blogInfo.blogTitle}}</span>
+        {{/if}}
     </header>
 </div>
 

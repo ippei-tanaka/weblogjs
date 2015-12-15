@@ -41,6 +41,19 @@ var emailValidator = [
     })
 ];
 
+var slugValidator = [
+    validate({
+        validator: 'matches',
+        arguments: /^[a-zA-Z0-9\-_]*$/,
+        message: 'Only alphabets, numbers and some symbols (-, _) are allowed for a slug.'
+    }),
+    validate({
+        validator: 'isLength',
+        arguments: [1, 200],
+        message: 'Slug should be between {ARGS[0]} and {ARGS[1]} characters.'
+    })
+];
+
 var allPrivileges = Object.keys(privileges).map((privilege) => privileges[privilege]);
 
 var allPrivilegeReversed = {};
@@ -57,49 +70,58 @@ var privilegeValidator = [
     })
 ];
 
-var UserSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        validate: emailValidator,
-        required: 'Email is required.',
-        index: true,
-        unique: true
-    },
+var UserSchema = new mongoose.Schema(
+    {
+        email: {
+            type: String,
+            validate: emailValidator,
+            required: 'Email is required.',
+            index: true,
+            unique: true
+        },
 
-    password: {
-        type: String,
-        required: 'Password is required.',
-        validate: passwordValidator,
-        select: false
-    },
+        password: {
+            type: String,
+            required: 'Password is required.',
+            validate: passwordValidator,
+            select: false
+        },
 
-    display_name: {
-        type: String,
-        required: 'Display Name is required.',
-        validate: displayNameValidator
-    },
+        display_name: {
+            type: String,
+            required: 'Display Name is required.',
+            validate: displayNameValidator
+        },
 
-    privileges: [{
-        type: String,
-        validate: privilegeValidator,
-        required: 'Privileges are required.'
-    }],
+        slug: {
+            type: String,
+            required: 'Slug is required.',
+            validate: slugValidator,
+            unique: true
+        },
 
-    created: {
-        type: Date
-    },
+        privileges: [{
+            type: String,
+            validate: privilegeValidator,
+            required: 'Privileges are required.'
+        }],
 
-    updated: {
-        type: Date
-    }
-}, {
-    toObject: {
-        virtuals: true
+        created: {
+            type: Date
+        },
+
+        updated: {
+            type: Date
+        }
     },
-    toJSON: {
-        virtuals: true
-    }
-});
+    {
+        toObject: {
+            virtuals: true
+        },
+        toJSON: {
+            virtuals: true
+        }
+    });
 
 
 UserSchema

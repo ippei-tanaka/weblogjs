@@ -81,10 +81,6 @@
     .m-bll-sidebar {
         display: flex;
         flex-direction: row;
-        //align-items: stretch;
-        //align-content: stretch;
-        //width: 100%;
-        //border-top: 1px solid $border-color;
     }
 }
 
@@ -232,6 +228,7 @@
         }
     }
 
+    .m-pst-author-link,
     .m-pst-category-link,
     .m-pst-tag-link {
         @extend .link-style;

@@ -102,7 +102,7 @@ class PostList extends List {
 
             is_draft: {
                 label: "Is Draft",
-                stringify: value => value ? "Yes" : "No"
+                stringify: value => (value === true) ? "Yes" : "No"
 
             },
 

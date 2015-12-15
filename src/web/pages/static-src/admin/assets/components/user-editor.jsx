@@ -25,7 +25,8 @@ class UserEditor extends UserAdder {
             return {
                 email: data.email,
                 display_name: data.display_name,
-                privileges: data.privileges
+                privileges: data.privileges,
+                slug: data.slug
             }
         });
     }
@@ -33,7 +34,8 @@ class UserEditor extends UserAdder {
     sendToServer(values, id) {
         var data = {
             display_name: values.display_name.trim(),
-            privileges: values.privileges
+            privileges: values.privileges,
+            slug: values.slug
         };
 
         return ServerFacade.updateUser(id, data);

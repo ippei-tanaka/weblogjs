@@ -9,7 +9,7 @@
     <date class="m-pst-date">Published on {{date_format publish_date}}</date>
 
     {{#if author.display_name}}
-        <p class="m-pst-author">Written by {{author.display_name}}</p>
+        <p class="m-pst-author">Written by <a class="m-pst-author-link" href={{author.link}}>{{author.display_name}}</a></p>
     {{/if}}
 
     {{#if category.name}}

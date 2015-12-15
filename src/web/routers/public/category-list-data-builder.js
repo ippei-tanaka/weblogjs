@@ -16,6 +16,7 @@ class CategoryListDataBuilder {
         return co(function* () {
             var condition = {
                 blog: this._blogId,
+                is_draft: false,
                 publish_date: {$lt: this._publish_date}
             };
             var sort = {name: 1};

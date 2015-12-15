@@ -4,6 +4,7 @@
 class BlogDataBuilder {
     constructor(args) {
         this._categoryName = args.categoryName;
+        this._authorName = args.authorName;
         this._tagName = args.tagName;
         this._postTitle = args.postTitle;
         this._blogTitle = args.blogTitle;
@@ -28,6 +29,10 @@ class BlogDataBuilder {
 
         if (this._categoryName) {
             str = this._categoryName + " category - " + str;
+        }
+
+        if (this._authorName) {
+            str = this._authorName + " - " + str;
         }
 
         if (this._postTitle) {

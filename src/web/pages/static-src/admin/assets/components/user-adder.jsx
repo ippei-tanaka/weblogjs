@@ -32,6 +32,12 @@ class UserAdder extends Editor {
                 label: "Display Name"
             },
 
+            slug: {
+                id: "UserAdderSlugField",
+                type: "text",
+                label: "Slug"
+            },
+
             privileges: {
                 type: "checkbox-list",
                 label: "Privileges",
@@ -52,6 +58,7 @@ class UserAdder extends Editor {
             email: "",
             password: "",
             display_name: "",
+            slug: "",
             privileges: []
         });
     }
@@ -61,6 +68,7 @@ class UserAdder extends Editor {
             email: values.email.trim(),
             password: values.password.trim(),
             display_name: values.display_name.trim(),
+            slug: values.slug.trim(),
             privileges: values.privileges
         };
 
