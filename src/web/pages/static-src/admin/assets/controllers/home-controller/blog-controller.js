@@ -1,8 +1,8 @@
 import ModelController  from './model-controller';
-import BlogList     from '../../components/blog-list';
-import BlogAdder    from '../../components/blog-adder';
-import BlogEditor   from '../../components/blog-editor';
-import BlogDeleter  from '../../components/blog-deleter';
+import BlogList     from '../../components/blog/blog-list';
+import BlogAdder    from '../../components/blog/blog-adder';
+import BlogEditor   from '../../components/blog/blog-editor';
+import BlogDeleter  from '../../components/blog/blog-deleter';
 
 
 class BlogController extends ModelController {

@@ -1,7 +1,6 @@
 import React from 'react';
 import GlobalEvents from '../services/global-events';
 import ServerFacade from '../services/server-facade';
-import StringFormatter from '../services/string-formatter';
 import Select from './form-field/field/select';
 import Option from './form-field/field/option';
 import Label from './form-field/label';
@@ -43,14 +42,9 @@ class SettingEditor extends React.Component {
                     <Select id="SettingEditorFrontPageField"
                             value={this.state.setting.front}
                             autoFocus={true}
-                            onChange={val => this.setState((state) => { state.setting.front = val || null })}>
-
-                        <Option key="null" value="">-----</Option>
-
-                        {this.state.blogs.map(blog => {
-                        return <Option key={blog._id} value={blog._id}>{blog.title}</Option>}
-                            )}
-
+                            onChange={val => this.setState((state) => { state.setting.front = val || null })}
+                    >
+                        {this.state.blogs.map(blog => <Option key={blog._id} value={blog._id}>{blog.title}</Option>)}
                     </Select>
                     <ErrorMessage error={this.state.errors.front}/>
                 </div>
