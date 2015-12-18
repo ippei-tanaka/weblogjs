@@ -9,7 +9,7 @@ class BlogAdder extends BlogEditor {
         super(props);
         this.state.slugPristine = true;
     }
-    
+
     $showFlushMessage () {}
 
     $retrieveModelData () {}

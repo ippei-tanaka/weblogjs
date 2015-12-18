@@ -1,5 +1,5 @@
-import Deleter from './deleter';
-import ServerFacade from '../services/server-facade';
+import Deleter from '../deleter';
+import ServerFacade from '../../services/server-facade';
 
 class UserDeleter extends Deleter {
 
