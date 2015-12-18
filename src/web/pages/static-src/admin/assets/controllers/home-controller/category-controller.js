@@ -1,8 +1,8 @@
 import ModelController  from './model-controller';
-import CategoryList     from '../../components/category-list';
-import CategoryAdder    from '../../components/category-adder';
-import CategoryEditor   from '../../components/category-editor';
-import CategoryDeleter  from '../../components/category-deleter';
+import CategoryList     from '../../components/category/category-list';
+import CategoryAdder    from '../../components/category/category-adder';
+import CategoryEditor   from '../../components/category/category-editor';
+import CategoryDeleter  from '../../components/category/category-deleter';
 
 
 class CategoryController extends ModelController {

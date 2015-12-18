@@ -23,6 +23,7 @@ class Dashboard extends React.Component {
         return (
             <div className="module-dashboard">
                 <p>Today, {this.state.myName} will feel {Math.random() > 0.5 ? "lucky!" : "unlucky..."}</p>
+                <p><a href="/" target="_black">Public Page</a></p>
             </div>
         );
     }

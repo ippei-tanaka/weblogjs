@@ -1,30 +1,26 @@
 import Moment from 'moment';
-import List from './list';
-import ServerFacade from '../services/server-facade';
+import List from '../list';
+import ServerFacade from '../../services/server-facade';
 
 
-class BlogList extends List {
+class CategoryList extends List {
 
     retrieveModels() {
-        return ServerFacade.getBlogs();
+        return ServerFacade.getCategories();
     }
 
     get title() {
-        return "Blog List";
+        return "Category List";
     }
 
     get fields() {
         return {
-            title: {
-                label: "Title"
+            name: {
+                label: "Name"
             },
 
             slug: {
                 label: "Slug"
-            },
-
-            posts_per_page: {
-                label: "Posts Per Page"
             },
 
             created: {
@@ -43,4 +39,4 @@ class BlogList extends List {
 
 }
 
-export default BlogList;
+export default CategoryList;
