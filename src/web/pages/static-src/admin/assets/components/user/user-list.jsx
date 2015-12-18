@@ -1,6 +1,6 @@
 import Moment from 'moment';
-import List from './list';
-import ServerFacade from '../services/server-facade';
+import List from '../list';
+import ServerFacade from '../../services/server-facade';
 
 
 class UserList extends List {

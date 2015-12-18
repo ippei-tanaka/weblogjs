@@ -1,8 +1,8 @@
 import ModelController  from './model-controller';
-import UserList         from '../../components/user-list';
-import UserAdder        from '../../components/user-adder';
-import UserEditor       from '../../components/user-editor';
-import UserDeleter      from '../../components/user-deleter';
+import UserList         from '../../components/user/user-list';
+import UserAdder        from '../../components/user/user-adder';
+import UserEditor       from '../../components/user/user-editor';
+import UserDeleter      from '../../components/user/user-deleter';
 
 
 class UserController extends ModelController {
