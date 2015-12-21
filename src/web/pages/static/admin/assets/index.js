@@ -50,7 +50,7 @@
 	
 	var _homeController2 = _interopRequireDefault(_homeController);
 	
-	var _loginController = __webpack_require__(316);
+	var _loginController = __webpack_require__(318);
 	
 	var _loginController2 = _interopRequireDefault(_loginController);
 	
@@ -110,11 +110,11 @@
 	
 	var _postController2 = _interopRequireDefault(_postController);
 	
-	var _blogController = __webpack_require__(304);
+	var _blogController = __webpack_require__(306);
 	
 	var _blogController2 = _interopRequireDefault(_blogController);
 	
-	var _settingController = __webpack_require__(310);
+	var _settingController = __webpack_require__(312);
 	
 	var _settingController2 = _interopRequireDefault(_settingController);
 	
@@ -147,7 +147,13 @@
 	                this.userController.completeAddEvent.on(function () {
 	                        return _router2.default.changeHash("/users");
 	                });
+	                this.userController.cancelAddEvent.on(function () {
+	                        return _router2.default.changeHash("/users");
+	                });
 	                this.userController.completeEditEvent.on(function () {
+	                        return _router2.default.changeHash("/users");
+	                });
+	                this.userController.cancelEditEvent.on(function () {
 	                        return _router2.default.changeHash("/users");
 	                });
 	                this.userController.completeDeleteEvent.on(function () {
@@ -169,7 +175,13 @@
 	                this.categoryController.completeAddEvent.on(function () {
 	                        return _router2.default.changeHash("/categories");
 	                });
+	                this.categoryController.cancelAddEvent.on(function () {
+	                        return _router2.default.changeHash("/categories");
+	                });
 	                this.categoryController.completeEditEvent.on(function () {
+	                        return _router2.default.changeHash("/categories");
+	                });
+	                this.categoryController.cancelEditEvent.on(function () {
 	                        return _router2.default.changeHash("/categories");
 	                });
 	                this.categoryController.completeDeleteEvent.on(function () {
@@ -191,7 +203,13 @@
 	                this.postController.completeAddEvent.on(function () {
 	                        return _router2.default.changeHash("/posts");
 	                });
+	                this.postController.cancelAddEvent.on(function () {
+	                        return _router2.default.changeHash("/posts");
+	                });
 	                this.postController.completeEditEvent.on(function () {
+	                        return _router2.default.changeHash("/posts");
+	                });
+	                this.postController.cancelEditEvent.on(function () {
 	                        return _router2.default.changeHash("/posts");
 	                });
 	                this.postController.completeDeleteEvent.on(function () {
@@ -213,7 +231,13 @@
 	                this.blogController.completeAddEvent.on(function () {
 	                        return _router2.default.changeHash("/blogs");
 	                });
+	                this.blogController.cancelAddEvent.on(function () {
+	                        return _router2.default.changeHash("/blogs");
+	                });
 	                this.blogController.completeEditEvent.on(function () {
+	                        return _router2.default.changeHash("/blogs");
+	                });
+	                this.blogController.cancelEditEvent.on(function () {
 	                        return _router2.default.changeHash("/blogs");
 	                });
 	                this.blogController.completeDeleteEvent.on(function () {
@@ -22531,7 +22555,9 @@
 	        this.clickEditEvent = new _event2.default();
 	        this.clickDeleteEvent = new _event2.default();
 	        this.completeAddEvent = new _event2.default();
+	        this.cancelAddEvent = new _event2.default();
 	        this.completeEditEvent = new _event2.default();
+	        this.cancelEditEvent = new _event2.default();
 	        this.completeDeleteEvent = new _event2.default();
 	        this._listMounter = new _reactComponentMounter2.default(this.List, 'main-content-container');
 	        this._adderMounter = new _reactComponentMounter2.default(this.Adder, 'main-content-container');
@@ -22556,6 +22582,11 @@
 	            onComplete: function onComplete() {
 	                _this._adderMounter.unmount();
 	                _this.completeAddEvent.fire();
+	            },
+	
+	            onBackButtonClicked: function onBackButtonClicked() {
+	                _this._adderMounter.unmount();
+	                _this.cancelAddEvent.fire();
 	            }
 	        };
 	
@@ -22563,6 +22594,11 @@
 	            onComplete: function onComplete() {
 	                _this._editorMounter.unmount();
 	                _this.completeEditEvent.fire();
+	            },
+	
+	            onBackButtonClicked: function onBackButtonClicked() {
+	                _this._adderMounter.unmount();
+	                _this.cancelEditEvent.fire();
 	            }
 	        };
 	
@@ -37148,7 +37184,7 @@
 	
 	var _postEditor2 = _interopRequireDefault(_postEditor);
 	
-	var _postDeleter = __webpack_require__(303);
+	var _postDeleter = __webpack_require__(305);
 	
 	var _postDeleter2 = _interopRequireDefault(_postDeleter);
 	
@@ -37457,6 +37493,8 @@
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PostAdder).call(this, props));
 	
 	        _this.state.slugPristine = true;
+	        _this.state.values.publish_date = new Date();
+	        _this.state.values.is_draft = false;
 	        return _this;
 	    }
 	
@@ -37476,11 +37514,11 @@
 	        get: function get() {
 	            return "Create a New Post";
 	        }
-	    }, {
-	        key: '$submitButtonLabel',
-	        get: function get() {
-	            return "Create";
-	        }
+	        //
+	        //get $submitButtonLabel () {
+	        //    return "Create";
+	        //}
+	
 	    }]);
 	
 	    return PostAdder;
@@ -37512,6 +37550,14 @@
 	
 	var _utilities = __webpack_require__(290);
 	
+	var _popup = __webpack_require__(303);
+	
+	var _popup2 = _interopRequireDefault(_popup);
+	
+	var _postPreview = __webpack_require__(304);
+	
+	var _postPreview2 = _interopRequireDefault(_postPreview);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37535,7 +37581,8 @@
 	            flushMessage: "",
 	            categoryList: [],
 	            authorList: [],
-	            blogList: []
+	            blogList: [],
+	            preview: null
 	        };
 	        return _this;
 	    }
@@ -37576,15 +37623,90 @@
 	                    s.values.blog = setting.front;
 	                });
 	            });
-	
-	            this.setState(function (s) {
-	                s.values.publish_date = new Date();
-	            });
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            return this.form; //!this.state.preview ? this.form : this.preview;
+	        }
+	    }, {
+	        key: 'retrieveModelData',
+	        value: function retrieveModelData() {
 	            var _this3 = this;
+	
+	            var modelPromise = this.$retrieveModelData();
+	
+	            if (modelPromise) {
+	                modelPromise.then(function (v) {
+	                    return _this3.setState(function (s) {
+	                        s.values = v;
+	                    });
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'onTitleChanged',
+	        value: function onTitleChanged(value) {
+	            this.setState(function (state) {
+	                state.values.title = value;
+	                if (state.slugPristine) {
+	                    state.values.slug = (0, _utilities.slugfy)(value);
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'onSlugChanged',
+	        value: function onSlugChanged(value) {
+	            this.setState(function (state) {
+	                state.values.slug = value;
+	                state.slugPristine = !value;
+	            });
+	        }
+	    }, {
+	        key: 'onSubmit',
+	        value: function onSubmit(event) {
+	            var _this4 = this;
+	
+	            event.preventDefault();
+	
+	            this.$sendModelData((0, _utilities.trimObjValues)(this.state.values)).then(function (post) {
+	                //console.log(d);
+	                //var promise = this.$showFlushMessage(this.$successMessage);
+	                //return promise || Promise.resolve();
+	                //this.setState(s => { s.preview = post });
+	            }).then(this.props.onComplete).catch(function (data) {
+	                return _this4.setState(function (state) {
+	                    state.errors = data.errors;
+	                    state.flushMessage = "";
+	                });
+	            });
+	        }
+	    }, {
+	        key: '$showFlushMessage',
+	        value: function $showFlushMessage(message) {
+	            var _this5 = this;
+	
+	            return new Promise(function (resolve, reject) {
+	                return _this5.setState(function (state) {
+	                    state.errors = {};
+	                    state.flushMessage = message;
+	                }, resolve);
+	            });
+	        }
+	    }, {
+	        key: '$retrieveModelData',
+	        value: function $retrieveModelData() {
+	            return _serverFacade2.default.getPost(this.props.id);
+	        }
+	    }, {
+	        key: '$sendModelData',
+	        value: function $sendModelData(data) {
+	            return _serverFacade2.default.updatePost(this.props.id, data);
+	        }
+	    }, {
+	        key: 'form',
+	        get: function get() {
+	            var _this6 = this;
 	
 	            return _react2.default.createElement(
 	                _form.Form,
@@ -37614,7 +37736,7 @@
 	                        error: this.state.errors.content },
 	                    _react2.default.createElement(_form.Textarea, { value: this.state.values.content,
 	                        onChange: function onChange(v) {
-	                            return _this3.setState(function (s) {
+	                            return _this6.setState(function (s) {
 	                                s.values.content = v;
 	                            });
 	                        } })
@@ -37627,7 +37749,7 @@
 	                        _form.Select,
 	                        { value: this.state.values.category,
 	                            onChange: function onChange(v) {
-	                                return _this3.setState(function (s) {
+	                                return _this6.setState(function (s) {
 	                                    s.values.category = v || null;
 	                                });
 	                            } },
@@ -37648,7 +37770,7 @@
 	                        _form.Select,
 	                        { value: this.state.values.author,
 	                            onChange: function onChange(v) {
-	                                return _this3.setState(function (s) {
+	                                return _this6.setState(function (s) {
 	                                    s.values.author = v || null;
 	                                });
 	                            } },
@@ -37669,7 +37791,7 @@
 	                        _form.Select,
 	                        { value: this.state.values.blog,
 	                            onChange: function onChange(v) {
-	                                return _this3.setState(function (s) {
+	                                return _this6.setState(function (s) {
 	                                    s.values.blog = v || null;
 	                                });
 	                            } },
@@ -37688,7 +37810,7 @@
 	                        error: this.state.errors.tags },
 	                    _react2.default.createElement(_form.TagList, { value: this.state.values.tags,
 	                        onChange: function onChange(v) {
-	                            return _this3.setState(function (s) {
+	                            return _this6.setState(function (s) {
 	                                s.values.tags = v;
 	                            });
 	                        } })
@@ -37699,7 +37821,7 @@
 	                        error: this.state.errors.publish_date },
 	                    _react2.default.createElement(_form.Datetime, { value: this.state.values.publish_date,
 	                        onChange: function onChange(v) {
-	                            return _this3.setState(function (s) {
+	                            return _this6.setState(function (s) {
 	                                s.values.publish_date = v;
 	                            });
 	                        } })
@@ -37726,76 +37848,9 @@
 	            );
 	        }
 	    }, {
-	        key: 'retrieveModelData',
-	        value: function retrieveModelData() {
-	            var _this4 = this;
-	
-	            var modelPromise = this.$retrieveModelData();
-	
-	            if (modelPromise) {
-	                modelPromise.then(function (v) {
-	                    return _this4.setState(function (s) {
-	                        s.values = v;
-	                    });
-	                });
-	            }
-	        }
-	    }, {
-	        key: 'onTitleChanged',
-	        value: function onTitleChanged(value) {
-	            this.setState(function (state) {
-	                state.values.title = value;
-	                if (state.slugPristine) {
-	                    state.values.slug = (0, _utilities.slugfy)(value);
-	                }
-	            });
-	        }
-	    }, {
-	        key: 'onSlugChanged',
-	        value: function onSlugChanged(value) {
-	            this.setState(function (state) {
-	                state.values.slug = value;
-	                state.slugPristine = !value;
-	            });
-	        }
-	    }, {
-	        key: 'onSubmit',
-	        value: function onSubmit(event) {
-	            var _this5 = this;
-	
-	            event.preventDefault();
-	
-	            this.$sendModelData((0, _utilities.trimObjValues)(this.state.values)).then(function () {
-	                var promise = _this5.$showFlushMessage(_this5.$successMessage);
-	                return promise || Promise.resolve();
-	            }).then(this.props.onComplete).catch(function (data) {
-	                return _this5.setState(function (state) {
-	                    state.errors = data.errors;
-	                    state.flushMessage = "";
-	                });
-	            });
-	        }
-	    }, {
-	        key: '$showFlushMessage',
-	        value: function $showFlushMessage(message) {
-	            var _this6 = this;
-	
-	            return new Promise(function (resolve, reject) {
-	                return _this6.setState(function (state) {
-	                    state.errors = {};
-	                    state.flushMessage = message;
-	                }, resolve);
-	            });
-	        }
-	    }, {
-	        key: '$retrieveModelData',
-	        value: function $retrieveModelData() {
-	            return _serverFacade2.default.getPost(this.props.id);
-	        }
-	    }, {
-	        key: '$sendModelData',
-	        value: function $sendModelData(data) {
-	            return _serverFacade2.default.updatePost(this.props.id, data);
+	        key: 'preview',
+	        get: function get() {
+	            return _react2.default.createElement(_postPreview2.default, { slug: this.state.preview.slug });
 	        }
 	    }, {
 	        key: '$title',
@@ -37810,7 +37865,7 @@
 	    }, {
 	        key: '$submitButtonLabel',
 	        get: function get() {
-	            return "Save";
+	            return "Preview";
 	        }
 	    }], [{
 	        key: 'defaultProps',
@@ -37830,6 +37885,154 @@
 
 /***/ },
 /* 303 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var PopUp = (function (_React$Component) {
+	    _inherits(PopUp, _React$Component);
+	
+	    function PopUp() {
+	        _classCallCheck(this, PopUp);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(PopUp).apply(this, arguments));
+	    }
+	
+	    _createClass(PopUp, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "module-popup" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "m-ppp-wrapper1" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "m-ppp-wrapper2" },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "m-ppp-frame" },
+	                            _react2.default.createElement(
+	                                "button",
+	                                { className: "module-button m-btn-clear m-ppp-close-button",
+	                                    onClick: this.onClickCloseButton.bind(this) },
+	                                _react2.default.createElement("i", { className: "fa fa-times m-ppp-close-icon" })
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "m-ppp-content-container" },
+	                                this.props.children
+	                            )
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement("div", { className: "m-ppp-background", onClick: this.onClickBackground.bind(this) })
+	            );
+	        }
+	    }, {
+	        key: "onClickBackground",
+	        value: function onClickBackground(e) {
+	            e.preventDefault();
+	            this.close();
+	        }
+	    }, {
+	        key: "onClickCloseButton",
+	        value: function onClickCloseButton(e) {
+	            e.preventDefault();
+	            this.close();
+	        }
+	    }, {
+	        key: "close",
+	        value: function close() {
+	            this.props.onClosed.call(null);
+	        }
+	    }], [{
+	        key: "defaultProps",
+	        get: function get() {
+	            return {
+	                onClosed: function onClosed() {}
+	            };
+	        }
+	    }]);
+	
+	    return PopUp;
+	})(_react2.default.Component);
+	
+	exports.default = PopUp;
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var PostPreview = (function (_React$Component) {
+	    _inherits(PostPreview, _React$Component);
+	
+	    function PostPreview(props) {
+	        _classCallCheck(this, PostPreview);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(PostPreview).call(this, props));
+	    }
+	
+	    _createClass(PostPreview, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement('iframe', { src: '/post/' + this.props.slug });
+	        }
+	    }], [{
+	        key: 'defaultProps',
+	        get: function get() {
+	            return {
+	                slug: null
+	            };
+	        }
+	    }]);
+	
+	    return PostPreview;
+	})(_react2.default.Component);
+	
+	exports.default = PostPreview;
+
+/***/ },
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37890,7 +38093,7 @@
 	exports.default = PostDeleter;
 
 /***/ },
-/* 304 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37905,19 +38108,19 @@
 	
 	var _modelController2 = _interopRequireDefault(_modelController);
 	
-	var _blogList = __webpack_require__(305);
+	var _blogList = __webpack_require__(307);
 	
 	var _blogList2 = _interopRequireDefault(_blogList);
 	
-	var _blogAdder = __webpack_require__(306);
+	var _blogAdder = __webpack_require__(308);
 	
 	var _blogAdder2 = _interopRequireDefault(_blogAdder);
 	
-	var _blogEditor = __webpack_require__(307);
+	var _blogEditor = __webpack_require__(309);
 	
 	var _blogEditor2 = _interopRequireDefault(_blogEditor);
 	
-	var _blogDeleter = __webpack_require__(309);
+	var _blogDeleter = __webpack_require__(311);
 	
 	var _blogDeleter2 = _interopRequireDefault(_blogDeleter);
 	
@@ -37971,7 +38174,7 @@
 	exports.default = BlogController;
 
 /***/ },
-/* 305 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38060,7 +38263,7 @@
 	exports.default = BlogList;
 
 /***/ },
-/* 306 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38079,7 +38282,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _blogEditor = __webpack_require__(307);
+	var _blogEditor = __webpack_require__(309);
 	
 	var _blogEditor2 = _interopRequireDefault(_blogEditor);
 	
@@ -38132,7 +38335,7 @@
 	exports.default = BlogAdder;
 
 /***/ },
-/* 307 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38155,7 +38358,7 @@
 	
 	var _utilities = __webpack_require__(290);
 	
-	var _postsPerPageList = __webpack_require__(308);
+	var _postsPerPageList = __webpack_require__(310);
 	
 	var _postsPerPageList2 = _interopRequireDefault(_postsPerPageList);
 	
@@ -38363,7 +38566,7 @@
 	exports.default = BlogEditor;
 
 /***/ },
-/* 308 */
+/* 310 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38374,7 +38577,7 @@
 	exports.default = Object.freeze([1, 3, 5, 10, 15]);
 
 /***/ },
-/* 309 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38435,7 +38638,7 @@
 	exports.default = BlogDeleter;
 
 /***/ },
-/* 310 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38454,7 +38657,7 @@
 	
 	var _reactComponentMounter2 = _interopRequireDefault(_reactComponentMounter);
 	
-	var _settingEditor = __webpack_require__(311);
+	var _settingEditor = __webpack_require__(313);
 	
 	var _settingEditor2 = _interopRequireDefault(_settingEditor);
 	
@@ -38494,7 +38697,7 @@
 	exports.default = SettingController;
 
 /***/ },
-/* 311 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38517,19 +38720,19 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _select = __webpack_require__(312);
+	var _select = __webpack_require__(314);
 	
 	var _select2 = _interopRequireDefault(_select);
 	
-	var _option = __webpack_require__(313);
+	var _option = __webpack_require__(315);
 	
 	var _option2 = _interopRequireDefault(_option);
 	
-	var _label = __webpack_require__(314);
+	var _label = __webpack_require__(316);
 	
 	var _label2 = _interopRequireDefault(_label);
 	
-	var _errorMessage = __webpack_require__(315);
+	var _errorMessage = __webpack_require__(317);
 	
 	var _errorMessage2 = _interopRequireDefault(_errorMessage);
 	
@@ -38659,7 +38862,7 @@
 	exports.default = SettingEditor;
 
 /***/ },
-/* 312 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38678,7 +38881,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _option = __webpack_require__(313);
+	var _option = __webpack_require__(315);
 	
 	var _option2 = _interopRequireDefault(_option);
 	
@@ -38742,7 +38945,7 @@
 	exports.default = Select;
 
 /***/ },
-/* 313 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38795,7 +38998,7 @@
 	exports.default = Option;
 
 /***/ },
-/* 314 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38828,7 +39031,7 @@
 	exports.default = Label;
 
 /***/ },
-/* 315 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38884,7 +39087,7 @@
 	exports.default = _class;
 
 /***/ },
-/* 316 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38903,7 +39106,7 @@
 	
 	var _globalEvents2 = _interopRequireDefault(_globalEvents);
 	
-	var _loginForm = __webpack_require__(317);
+	var _loginForm = __webpack_require__(319);
 	
 	var _loginForm2 = _interopRequireDefault(_loginForm);
 	
@@ -38932,7 +39135,7 @@
 	exports.default = LoginController;
 
 /***/ },
-/* 317 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38951,15 +39154,15 @@
 	
 	var _serverFacade2 = _interopRequireDefault(_serverFacade);
 	
-	var _input = __webpack_require__(318);
+	var _input = __webpack_require__(320);
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	var _label = __webpack_require__(314);
+	var _label = __webpack_require__(316);
 	
 	var _label2 = _interopRequireDefault(_label);
 	
-	var _errorMessage = __webpack_require__(315);
+	var _errorMessage = __webpack_require__(317);
 	
 	var _errorMessage2 = _interopRequireDefault(_errorMessage);
 	
@@ -39088,7 +39291,7 @@
 	exports.default = LoginForm;
 
 /***/ },
-/* 318 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

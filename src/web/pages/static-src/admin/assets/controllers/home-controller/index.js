@@ -24,7 +24,9 @@ class HomeController {
         this.userController.clickEditEvent.on(id => Router.changeHash("/users/" + id));
         this.userController.clickDeleteEvent.on(id => Router.changeHash("/users/" + id + "/delete"));
         this.userController.completeAddEvent.on(() => Router.changeHash("/users"));
+        this.userController.cancelAddEvent.on(() => Router.changeHash("/users"));
         this.userController.completeEditEvent.on(() => Router.changeHash("/users"));
+        this.userController.cancelEditEvent.on(() => Router.changeHash("/users"));
         this.userController.completeDeleteEvent.on(() => Router.changeHash("/users"));
         this.userController.clickListLocation.on(() => Router.changeHash("/users"));
 
@@ -32,7 +34,9 @@ class HomeController {
         this.categoryController.clickEditEvent.on(id => Router.changeHash("/categories/" + id));
         this.categoryController.clickDeleteEvent.on(id => Router.changeHash("/categories/" + id + "/delete"));
         this.categoryController.completeAddEvent.on(() => Router.changeHash("/categories"));
+        this.categoryController.cancelAddEvent.on(() => Router.changeHash("/categories"));
         this.categoryController.completeEditEvent.on(() => Router.changeHash("/categories"));
+        this.categoryController.cancelEditEvent.on(() => Router.changeHash("/categories"));
         this.categoryController.completeDeleteEvent.on(() => Router.changeHash("/categories"));
         this.categoryController.clickListLocation.on(() => Router.changeHash("/categories"));
 
@@ -40,7 +44,9 @@ class HomeController {
         this.postController.clickEditEvent.on(id => Router.changeHash("/posts/" + id));
         this.postController.clickDeleteEvent.on(id => Router.changeHash("/posts/" + id + "/delete"));
         this.postController.completeAddEvent.on(() => Router.changeHash("/posts"));
+        this.postController.cancelAddEvent.on(() => Router.changeHash("/posts"));
         this.postController.completeEditEvent.on(() => Router.changeHash("/posts"));
+        this.postController.cancelEditEvent.on(() => Router.changeHash("/posts"));
         this.postController.completeDeleteEvent.on(() => Router.changeHash("/posts"));
         this.postController.clickListLocation.on(() => Router.changeHash("/posts"));
 
@@ -48,7 +54,9 @@ class HomeController {
         this.blogController.clickEditEvent.on(id => Router.changeHash("/blogs/" + id));
         this.blogController.clickDeleteEvent.on(id => Router.changeHash("/blogs/" + id + "/delete"));
         this.blogController.completeAddEvent.on(() => Router.changeHash("/blogs"));
+        this.blogController.cancelAddEvent.on(() => Router.changeHash("/blogs"));
         this.blogController.completeEditEvent.on(() => Router.changeHash("/blogs"));
+        this.blogController.cancelEditEvent.on(() => Router.changeHash("/blogs"));
         this.blogController.completeDeleteEvent.on(() => Router.changeHash("/blogs"));
         this.blogController.clickListLocation.on(() => Router.changeHash("/blogs"));
 

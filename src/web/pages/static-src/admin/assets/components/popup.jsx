@@ -38,13 +38,14 @@ class PopUp extends React.Component {
         this.props.onClosed.call(null);
     }
 
-}
-
-
-PopUp.defaultProps = {
-    onClosed: function () {
+    static get defaultProps() {
+        return {
+            onClosed: function () {
+            }
+        }
     }
-};
+
+}
 
 
 export default PopUp;
