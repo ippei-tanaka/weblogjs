@@ -10,7 +10,9 @@ class ModelController {
         this.clickEditEvent = new Event();
         this.clickDeleteEvent = new Event();
         this.completeAddEvent = new Event();
+        this.cancelAddEvent = new Event();
         this.completeEditEvent = new Event();
+        this.cancelEditEvent = new Event();
         this.completeDeleteEvent = new Event();
         this._listMounter = new Mounter(this.List, 'main-content-container');
         this._adderMounter = new Mounter(this.Adder, 'main-content-container');
@@ -37,6 +39,11 @@ class ModelController {
             onComplete: () => {
                 this._adderMounter.unmount();
                 this.completeAddEvent.fire();
+            },
+
+            onBackButtonClicked: () => {
+                this._adderMounter.unmount();
+                this.cancelAddEvent.fire();
             }
         };
 
@@ -45,6 +52,11 @@ class ModelController {
             onComplete: () => {
                 this._editorMounter.unmount();
                 this.completeEditEvent.fire();
+            },
+
+            onBackButtonClicked: () => {
+                this._adderMounter.unmount();
+                this.cancelEditEvent.fire();
             }
         };
 

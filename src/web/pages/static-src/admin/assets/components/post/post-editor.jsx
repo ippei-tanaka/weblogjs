@@ -6,7 +6,8 @@ import {
     Input, Select, Option, Textarea, TagList, Datetime
 } from '../form';
 import { trimObjValues, slugfy } from '../../utilities';
-
+import PopUp from '../popup';
+import PostPreview from './post-preview';
 
 class PostEditor extends React.Component {
 
@@ -20,7 +21,8 @@ class PostEditor extends React.Component {
             flushMessage: "",
             categoryList: [],
             authorList: [],
-            blogList: []
+            blogList: [],
+            preview: null
         };
     }
 
@@ -41,11 +43,13 @@ class PostEditor extends React.Component {
 
         ServerFacade.getSetting()
             .then(setting => this.setState(s => { s.values.blog = setting.front }));
-
-        this.setState(s => { s.values.publish_date = new Date() });
     }
 
     render() {
+        return this.form;//!this.state.preview ? this.form : this.preview;
+    }
+
+    get form() {
         return (
             <Form onSubmit={this.onSubmit.bind(this)}>
 
@@ -117,6 +121,10 @@ class PostEditor extends React.Component {
         );
     }
 
+    get preview() {
+        return <PostPreview slug={this.state.preview.slug} />
+    }
+
     retrieveModelData () {
         var modelPromise = this.$retrieveModelData();
 
@@ -146,9 +154,11 @@ class PostEditor extends React.Component {
         event.preventDefault();
 
         this.$sendModelData(trimObjValues(this.state.values))
-            .then(() => {
-                var promise = this.$showFlushMessage(this.$successMessage);
-                return promise || Promise.resolve();
+            .then((post) => {
+                //console.log(d);
+                //var promise = this.$showFlushMessage(this.$successMessage);
+                //return promise || Promise.resolve();
+                //this.setState(s => { s.preview = post });
             })
             .then(this.props.onComplete)
             .catch((data) => this.setState(state => {
@@ -181,7 +191,7 @@ class PostEditor extends React.Component {
     }
 
     get $submitButtonLabel () {
-        return "Save";
+        return "Preview";
     }
 
     static get defaultProps() {

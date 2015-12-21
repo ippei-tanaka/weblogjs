@@ -8,6 +8,8 @@ class PostAdder extends PostEditor {
     constructor(props) {
         super(props);
         this.state.slugPristine = true;
+        this.state.values.publish_date = new Date();
+        this.state.values.is_draft = false;
     }
 
     $showFlushMessage () {}
@@ -21,10 +23,10 @@ class PostAdder extends PostEditor {
     get $title () {
         return "Create a New Post";
     }
-
-    get $submitButtonLabel () {
-        return "Create";
-    }
+    //
+    //get $submitButtonLabel () {
+    //    return "Create";
+    //}
 }
 
 export default PostAdder;
