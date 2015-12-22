@@ -5,7 +5,7 @@ var mocha = require('gulp-mocha');
 var path = require('path');
 var sass = require('gulp-sass');
 var runSequence = require('run-sequence');
-var webpack = require('webpack');
+var run = require('gulp-run');
 
 const TEST_DIR = path.resolve(__dirname, "./test");
 const WEB_STATIC_SRC_DIR = path.resolve(__dirname, "./src/web/pages/static-src");
@@ -44,39 +44,4 @@ gulp.task('sass:watch', function () {
 
 gulp.task('sass', function (callback) {
     runSequence('sass:public', 'sass:admin', callback);
-});
-
-gulp.task('webpack', function (callback) {
-    webpack({
-        entry: {
-            index: WEB_STATIC_SRC_DIR + '/admin/assets/main/index.js'
-        },
-        output: {
-            path: WEB_STATIC_DIR + "/admin/assets",
-            filename: "[name].js"
-        },
-        devtool: 'source-map',
-        module: {
-            loaders: [
-                {
-                    test: /\.jsx?$/,
-                    loader: 'babel-loader',
-                    exclude: /node_modules/,
-                    query: {
-                        presets: ['es2015', 'react']
-                    }
-                }
-            ]
-        },
-        resolve: {
-            extensions: ['', '.js', '.jsx']
-        }
-    }, callback);
-});
-
-gulp.task('webpack:watch', function () {
-    gulp.watch([
-        WEB_STATIC_SRC_DIR + '/admin/assets/**/*.js',
-        WEB_STATIC_SRC_DIR + '/admin/assets/**/*.jsx'
-    ], {debounceDelay: 500}, ['webpack']);
 });
