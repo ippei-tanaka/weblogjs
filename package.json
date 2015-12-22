@@ -9,8 +9,8 @@
     "test:model-managers": "./node_modules/.bin/gulp test:model-managers",
     "sass": "./node_modules/.bin/gulp sass",
     "sass:watch": "./node_modules/.bin/gulp sass:watch",
-    "webpack": "./node_modules/.bin/gulp webpack",
-    "webpack:watch": "./node_modules/.bin/gulp webpack:watch"
+    "webpack": "./node_modules/.bin/webpack",
+    "webpack-server": "./node_modules/.bin/webpack-dev-server --inline --hot"
   },
   "author": {
     "name": "Ippei Tanaka",
@@ -30,14 +30,17 @@
     "chai": "*",
     "gulp": "*",
     "gulp-mocha": "*",
+    "gulp-run": "^1.6.12",
     "gulp-sass": "*",
     "request": "*",
     "rimraf": "^2.4.4",
     "run-sequence": "*",
     "vinyl-source-stream": "*",
-    "webpack": "^1.12.9"
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
+    "babel-register": "^6.3.13",
     "bcrypt": "*",
     "body-parser": "*",
     "classnames": "^2.2.1",
@@ -46,6 +49,7 @@
     "express": "*",
     "express-hbs": "*",
     "express-session": "*",
+    "history": "^1.13.1",
     "jquery": "^2.1.4",
     "moment": "^2.10.6",
     "mongoose": "*",
@@ -57,6 +61,7 @@
     "passport-local": "*",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
+    "react-router": "^1.0.2",
     "serve-favicon": "*",
     "superagent": "^1.5.0",
     "superagent-no-cache": "^0.1.0"
