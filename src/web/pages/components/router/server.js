@@ -9,7 +9,7 @@ export default ({location}) => new Promise((resolve, reject) => {
         if (error) {
             reject(error);
         } else if (redirectLocation) {
-            resolve({status: 302, redirectLocation});
+            resolve({status: 302, redirectLocation: redirectLocation.pathname});
         } else if (renderProps) {
             let body = ReactDOMServer.renderToString(<RoutingContext {...renderProps} />);
             resolve({status: 200, body});

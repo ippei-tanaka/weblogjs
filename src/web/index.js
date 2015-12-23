@@ -4,7 +4,7 @@ var config = require('../config-manager').load();
 var api = require('../api');
 var restfulApiRouter = require('./routers/restful-api');
 var publicPageRouter = require('./routers/public');
-var adminPageRouter = require('./routers/admin');
+var webpageRouter = require('./routers/pages');
 var passport = require('./passport-manager').passport;
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -57,8 +57,8 @@ expressApp.set('views', __dirname + '/pages/views/pages');
 expressApp.use(express.static(__dirname + '/pages/static'));
 
 // Web Pages
-expressApp.use(adminPageRouter.baseRoute, adminPageRouter.routes);
-expressApp.use(publicPageRouter.baseRoute, publicPageRouter.routes);
+expressApp.use(webpageRouter.baseRoute, webpageRouter.routes);
+//expressApp.use(publicPageRouter.baseRoute, publicPageRouter.routes);
 
 /*
  // catch 404 and forward to error handler

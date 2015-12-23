@@ -7,7 +7,7 @@ const WEB_STATIC_DIR = path.resolve(__dirname, "./src/web/pages/static");
 
 module.exports = {
     entry: {
-        index: path.resolve(__dirname, "./src/web/pages/components/bootstraps/browser.js")
+        index: path.resolve(__dirname, "./src/web/pages/components/router/browser.js")
     },
     output: {
         path: WEB_STATIC_DIR + "/admin/assets",
