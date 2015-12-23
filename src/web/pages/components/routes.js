@@ -1,40 +1,29 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Route, Link } from 'react-router'
+import { Route, IndexRoute } from 'react-router';
+import Router from 'react-router-component';
+import App from "./app";
+import Admin from "./app/admin";
+import DashBoard from "./app/admin/dashboard";
+//import Login from "./app/login";
+//import Logout from "./app/logout";
 
-class App extends React.Component {
 
-    render () {
-        return <div>
-            App<br />
-            <Link to="/admin/test">Test</Link>
-            {this.props.children}
-        </div>
-    }
-
-}
-
-class Test extends React.Component {
-
-    render () {
-        return <div>Test</div>
-    }
-
-}
-
-class NoMatch extends React.Component {
-
-    render () {
-        return <div>NoMatch</div>
-    }
-
-}
+/*
+var requireAuth = (nextState, replaceState) => {
+    //transition.to('/login');
+    //callback();
+    //console.log(nextState);
+    //console.log(replaceState);
+    //replaceState(null, '/login');h
+    replaceState({nextPathname: nextState.location.pathname});
+};
+*/
 
 export default (
     <Route path="/" component={App}>
-        <Route path="admin" component={Test}>
-            <Route path="test" component={Test}/>
+        <Route path="admin" component={Admin}>
+            <IndexRoute component={DashBoard} />
         </Route>
-        <Route path="*" component={NoMatch}/>
     </Route>
 );
