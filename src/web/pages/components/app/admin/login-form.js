@@ -2,8 +2,6 @@ import React from 'react';
 import ServerFacade from '../../../services/server-facade';
 import { Input, ErrorMessage, Label } from '../../form';
 
-var successUrl = "/admin/";
-
 
 export default class LoginForm extends React.Component {
 
@@ -26,7 +24,7 @@ export default class LoginForm extends React.Component {
 
         ServerFacade.login(email, password)
             .then(() => {
-                this.context.history.replace(successUrl);
+                this.props.onLoggedIn();
             })
             .catch(function () {
                 this.setState({
@@ -77,6 +75,18 @@ export default class LoginForm extends React.Component {
             </form>
         );
     }
+
+    static get propTypes () {
+        return {
+            onLoggedIn: React.PropTypes.func
+        };
+    };
+
+    static get defaultProps () {
+        return {
+            onLoggedIn: null
+        };
+    };
 
     static get contextTypes () {
         return {

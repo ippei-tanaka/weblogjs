@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import { match, RoutingContext } from 'react-router'
-import routes from '../routes';
+import routes from './routes';
 
 export default ({location}) => new Promise((resolve, reject) => {
 
