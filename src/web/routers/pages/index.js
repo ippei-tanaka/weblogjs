@@ -25,7 +25,7 @@ routes.get('*', (request, response) => {
         var redirectLocation = data.redirectLocation;
 
         if (status === 200) {
-            response.status(status).render('admin/index', {content: body});
+            response.status(status).send(body);
         } else if (status === 302) {
             response.redirect(status, redirectLocation);
         } else if (status === 404) {
