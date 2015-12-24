@@ -11,7 +11,7 @@ module.exports = {
     },
     output: {
         path: WEB_STATIC_DIR + "/admin/assets",
-        filename: "index2.js"
+        filename: "index.js"
     },
     devtool: 'source-map',
     module: {

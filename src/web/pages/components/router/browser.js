@@ -8,5 +8,5 @@ ReactDOM.render(
     <Router history={createBrowserHistory()}>
         {routes}
     </Router>,
-    document.getElementById('Content')
+    document.getElementById('App')
 );
