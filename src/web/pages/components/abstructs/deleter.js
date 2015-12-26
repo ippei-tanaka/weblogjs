@@ -1,5 +1,5 @@
 import React from 'react';
-import Confirmation from '../../partials/confirmation';
+import Confirmation from '../partials/confirmation';
 
 
 class Deleter extends React.Component {

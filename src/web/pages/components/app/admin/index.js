@@ -1,5 +1,5 @@
 import React from "react";
-import Page from "../_page";
+import Page from "../../abstructs/page";
 import ServerFacade from '../../../services/server-facade';
 import LoginForm from '../../partials/login-form';
 import { Link, IndexLink } from 'react-router';
@@ -81,7 +81,7 @@ export default class Admin extends Page {
             });
     }
 
-    static get pageTitle () {
+    get pageTitle () {
         return "Admin Index";
     };
 

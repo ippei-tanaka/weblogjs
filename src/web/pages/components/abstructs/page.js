@@ -5,7 +5,7 @@ export default class Page extends React.Component {
 
     componentDidMount () {
         if (typeof document !== "undefined") {
-            document.title = this.constructor.pageTitle;
+            document.title = this.pageTitle;
         }
     }
 

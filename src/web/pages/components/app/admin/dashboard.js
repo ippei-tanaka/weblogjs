@@ -1,5 +1,5 @@
 import React from 'react';
-import Page from '../_page';
+import Page from '../../abstructs/page';
 import ServerFacade from '../../../services/server-facade';
 
 
@@ -30,7 +30,7 @@ class Dashboard extends Page {
         );
     }
 
-    static get pageTitle () {
+    get pageTitle () {
         return "Dashboard";
     };
 

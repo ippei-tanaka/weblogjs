@@ -1,4 +1,4 @@
-import Deleter from '../_deleter';
+import Deleter from '../../../abstructs/deleter';
 import ServerFacade from '../../../../services/server-facade';
 
 class UserDeleter extends Deleter {
@@ -9,14 +9,17 @@ class UserDeleter extends Deleter {
         });
     }
 
-    get title() {
-        return "Delete User";
-    }
-
     deleteModel(id) {
         return ServerFacade.deleteUser(id);
     }
 
+    get title() {
+        return "Delete User";
+    }
+
+    get pageTitle() {
+        return "Delete User";
+    }
 }
 
 

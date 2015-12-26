@@ -1,7 +1,7 @@
 import React from 'react';
 import Moment from 'moment';
 import { Link } from 'react-router';
-import Page from '../_page';
+import Page from './page';
 
 
 class List extends Page {
@@ -63,21 +63,16 @@ class List extends Page {
         );
     }
 
-    retrieveModels() {
-        return Promise.reject("Implement retrieveModel().");
-    }
-
-    onAddButtonClicked(e) {
-        e.preventDefault();
-        this.props.onAddButtonClicked();
-    }
-
     get title() {
         return "Something";
     }
 
     get fields() {
         return Promise.reject("Implement fields.");
+    }
+
+    retrieveModels() {
+        return Promise.reject("Implement retrieveModel().");
     }
 
     buildAdderLocation() {
@@ -95,6 +90,17 @@ class List extends Page {
 
 
 class ListItem extends React.Component {
+
+    static get propTypes() {
+        return {
+            editorLocation: React.PropTypes.string.isRequired,
+            deleterLocation: React.PropTypes.string.isRequired,
+            fields: React.PropTypes.object.isRequired,
+            values: React.PropTypes.object.isRequired,
+            id: React.PropTypes.string.isRequired,
+            number: React.PropTypes.number.isRequired
+        };
+    };
 
     render() {
         return (
@@ -127,18 +133,6 @@ class ListItem extends React.Component {
 
             </tr>
         );
-    }
-
-    static get defaultProps() {
-        return {
-            editorLocation: null,
-            deleterLocation: null,
-            model: null,
-            fields: null,
-            values: null,
-            id: null,
-            number: null
-        }
     }
 
 }

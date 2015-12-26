@@ -1,5 +1,5 @@
 import Moment from 'moment';
-import List from '../_list';
+import List from '../../../abstructs/list';
 import ServerFacade from '../../../../services/server-facade';
 
 
@@ -7,10 +7,6 @@ class UserList extends List {
 
     retrieveModels() {
         return ServerFacade.getUsers();
-    }
-
-    get title() {
-        return "User List";
     }
 
     buildAdderLocation () {
@@ -59,7 +55,11 @@ class UserList extends List {
         }
     }
 
-    static get pageTitle() {
+    get title() {
+        return "User List";
+    }
+
+    get pageTitle() {
         return "User List";
     }
 

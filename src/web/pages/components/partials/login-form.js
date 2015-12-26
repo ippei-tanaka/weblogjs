@@ -5,7 +5,13 @@ import { Input, ErrorMessage, Label } from '../form';
 
 export default class LoginForm extends React.Component {
 
-    constructor (props) {
+    static get propTypes() {
+        return {
+            onLoggedIn: React.PropTypes.func.isRequired
+        };
+    };
+
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -16,7 +22,7 @@ export default class LoginForm extends React.Component {
 
     }
 
-    onSubmit (e) {
+    onSubmit(e) {
         e.preventDefault();
 
         var email = this.state.email.trim();
@@ -33,7 +39,7 @@ export default class LoginForm extends React.Component {
             }.bind(this));
     }
 
-    render () {
+    render() {
         return (
             <form className="module-login-form" method="post" onSubmit={this.onSubmit.bind(this)}>
                 <div className="m-lgf-wrapper">
@@ -76,16 +82,4 @@ export default class LoginForm extends React.Component {
         );
     }
 
-    static get propTypes () {
-        return {
-            onLoggedIn: React.PropTypes.func.isRequired
-        };
-    };
-
-    static get contextTypes () {
-        return {
-            history: React.PropTypes.object,
-            location: React.PropTypes.object
-        };
-    };
 }
