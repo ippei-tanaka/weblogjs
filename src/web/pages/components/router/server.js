@@ -14,8 +14,7 @@ var appMatch = (location) => new Promise((resolve, reject) => {
         } else if (redirectLocation) {
             resolve({status: 302, data: redirectLocation.pathname});
         } else if (renderProps) {
-            let element = <RoutingContext {...renderProps} />;
-            let content = ReactDOMServer.renderToString(element);
+            let content = ReactDOMServer.renderToString(<RoutingContext {...renderProps} />);
             let html = ReactDOMServer.renderToStaticMarkup(<Layout />);
             html = html.replace("[CONTENT_PLACE_HOLDER]", content);
             resolve({status: 200, data: "<!DOCTYPE html>" + html});
