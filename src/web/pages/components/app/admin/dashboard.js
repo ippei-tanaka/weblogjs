@@ -22,6 +22,8 @@ class Dashboard extends Page {
     }
 
     render() {
+        this.setPageTitle("Dashboard");
+
         return (
             <div className="module-dashboard">
                 <p>Today, {this.state.myName} will feel {Math.random() > 0.5 ? "lucky!" : "unlucky..."}</p>
@@ -29,10 +31,6 @@ class Dashboard extends Page {
             </div>
         );
     }
-
-    get pageTitle () {
-        return "Dashboard";
-    };
 
 }
 

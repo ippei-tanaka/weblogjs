@@ -5,6 +5,11 @@ import ServerFacade from '../../../../services/server-facade';
 
 class UserList extends List {
 
+    render () {
+        this.setPageTitle(this.title);
+        return super.render();
+    }
+
     retrieveModels() {
         return ServerFacade.getUsers();
     }
@@ -56,10 +61,6 @@ class UserList extends List {
     }
 
     get title() {
-        return "User List";
-    }
-
-    get pageTitle() {
         return "User List";
     }
 
