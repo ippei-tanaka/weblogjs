@@ -4,6 +4,7 @@ require('babel-register')({
     presets: ['es2015', 'react'],
     extensions: [".jsx", ".js"]
 });
+require('babel-polyfill');
 
 var routes = require('express').Router();
 var baseRoute = '/';
@@ -19,15 +20,14 @@ routes.get('*', (request, response) => {
     var location = baseRoute + request.url;
 
     co(function* () {
-        var data = yield router({location});
-        var status = data.status;
-        var body = data.body;
-        var redirectLocation = data.redirectLocation;
+        var ret = yield router({location});
+        var status = ret.status;
+        var data = ret.data;
 
         if (status === 200) {
-            response.status(status).send(body);
+            response.status(status).send(data);
         } else if (status === 302) {
-            response.redirect(status, redirectLocation);
+            response.redirect(status, data);
         } else if (status === 404) {
             response.status(status).send("Not Found!");
         }

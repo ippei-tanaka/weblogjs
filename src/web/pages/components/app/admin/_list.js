@@ -1,9 +1,10 @@
 import React from 'react';
 import Moment from 'moment';
 import { Link } from 'react-router';
+import Page from '../_page';
 
 
-class List extends React.Component {
+class List extends Page {
 
     constructor(props) {
         super(props);
