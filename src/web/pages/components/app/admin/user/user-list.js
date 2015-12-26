@@ -59,6 +59,10 @@ class UserList extends List {
         }
     }
 
+    static get pageTitle() {
+        return "User List";
+    }
+
 }
 
 export default UserList;

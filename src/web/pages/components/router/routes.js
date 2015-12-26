@@ -11,7 +11,7 @@ import UserEditor from "../app/admin/user/user-editor";
 import UserDeleter from "../app/admin/user/user-deleter";
 
 
-export default (
+var appRoutes = (
     <Route path="/" component={App}>
         <Route path="admin" component={Admin}>
             <IndexRoute component={DashBoard} />
@@ -24,3 +24,6 @@ export default (
         </Route>
     </Route>
 );
+
+
+export { appRoutes };

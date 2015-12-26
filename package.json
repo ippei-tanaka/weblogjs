@@ -39,6 +39,7 @@
     "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
+    "babel-polyfill": "^6.3.14",
     "babel-register": "^6.3.13",
     "bcrypt": "*",
     "body-parser": "*",

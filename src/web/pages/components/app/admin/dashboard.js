@@ -1,11 +1,13 @@
 import React from 'react';
+import Page from '../_page';
 import ServerFacade from '../../../services/server-facade';
 
 
-class Dashboard extends React.Component {
+class Dashboard extends Page {
 
     constructor(props) {
         super(props);
+
         this.state = {
             myName: ""
         };
@@ -27,6 +29,10 @@ class Dashboard extends React.Component {
             </div>
         );
     }
+
+    static get pageTitle () {
+        return "Dashboard";
+    };
 
 }
 

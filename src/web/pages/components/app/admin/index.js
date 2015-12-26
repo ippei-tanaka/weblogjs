@@ -1,13 +1,14 @@
 import React from "react";
+import Page from "../_page";
 import ServerFacade from '../../../services/server-facade';
-import LoginForm from './login-form';
+import LoginForm from '../../partials/login-form';
 import { Link, IndexLink } from 'react-router';
 
 const PENDING = 'pending';
 const IS_LOGGED_IN = 'is-logged-in';
 const IS_NOT_LOGGED_IN = 'is-not-logged-in';
 
-export default class Admin extends React.Component {
+export default class Admin extends Page {
 
     constructor (props) {
         super(props);
@@ -18,6 +19,7 @@ export default class Admin extends React.Component {
     }
 
     componentDidMount () {
+        super.componentDidMount();
         this.updateAuthState();
     }
 
@@ -30,9 +32,12 @@ export default class Admin extends React.Component {
         var menu = null;
         var content = null;
 
-        if (this.state.authentication === IS_NOT_LOGGED_IN) {
+        if (this.state.authentication === IS_NOT_LOGGED_IN)
+        {
             content = <LoginForm onLoggedIn={() => this.updateAuthState()} />;
-        } else if (this.state.authentication === IS_LOGGED_IN) {
+        }
+        else if (this.state.authentication === IS_LOGGED_IN)
+        {
             content = this.props.children;
             menu = (
                 <menu>
@@ -76,11 +81,8 @@ export default class Admin extends React.Component {
             });
     }
 
-    static get contextTypes () {
-        return {
-            history: React.PropTypes.object,
-            location: React.PropTypes.object
-        };
+    static get pageTitle () {
+        return "Admin Index";
     };
 
 };

@@ -1,6 +1,6 @@
 import React from 'react';
-import ServerFacade from '../../../services/server-facade';
-import { Input, ErrorMessage, Label } from '../../form';
+import ServerFacade from '../../services/server-facade';
+import { Input, ErrorMessage, Label } from '../form';
 
 
 export default class LoginForm extends React.Component {
@@ -78,13 +78,7 @@ export default class LoginForm extends React.Component {
 
     static get propTypes () {
         return {
-            onLoggedIn: React.PropTypes.func
-        };
-    };
-
-    static get defaultProps () {
-        return {
-            onLoggedIn: null
+            onLoggedIn: React.PropTypes.func.isRequired
         };
     };
 
