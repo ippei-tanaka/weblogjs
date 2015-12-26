@@ -1,10 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router';
+import Page from '../../../abstructs/page';
 import ServerFacade from '../../../../services/server-facade';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, FlushMessage, Title, Form } from '../../../form';
 import { trimObjValues, slugfy } from '../../../../utilities';
 
 
-class UserEditor extends React.Component {
+class UserEditor extends Page {
 
     constructor(props) {
         super(props);
@@ -18,14 +20,16 @@ class UserEditor extends React.Component {
     }
 
     componentWillMount() {
-        this.retrieveModelData();
+        this.setRetrievedModelData();
     }
 
     render() {
+        this.setPageTitle(this.title);
+
         return (
             <Form onSubmit={this.onSubmit.bind(this)}>
 
-                <Title>{this.$title}</Title>
+                <Title>{this.title}</Title>
 
                 <FieldSet label="Email"
                           error={this.state.errors.email}>
@@ -34,7 +38,7 @@ class UserEditor extends React.Component {
                            onChange={v => this.setState(s => { s.values.email = v })}/>
                 </FieldSet>
 
-                {this.$passwordElement}
+                {this.passwordElement}
 
                 <FieldSet label="Display Name"
                           error={this.state.errors.display_name}>
@@ -53,19 +57,27 @@ class UserEditor extends React.Component {
                 </FlushMessage>
 
                 <ButtonList>
-                    <SubmitButton>{this.$submitButtonLabel}</SubmitButton>
-                    <Button onClick={this.props.onBackButtonClicked}>Back</Button>
+                    <SubmitButton>{this.submitButtonLabel}</SubmitButton>
+                    <Button>
+                        <Link to="/admin/users"
+                              className="module-button">
+                            Back
+                        </Link>
+                    </Button>
                 </ButtonList>
+
             </Form>
         );
     }
 
-    retrieveModelData () {
-        var modelPromise = this.$retrieveModelData();
+    setRetrievedModelData() {
+        var modelPromise = this.retrieveModelData();
 
         if (modelPromise) {
             modelPromise
-                .then(v => this.setState(s => { s.values = v }));
+                .then(v => this.setState(s => {
+                    s.values = v
+                }));
         }
     }
 
@@ -88,56 +100,53 @@ class UserEditor extends React.Component {
     onSubmit(event) {
         event.preventDefault();
 
-        this.$sendModelData(trimObjValues(this.state.values))
+        this.sendModelData(trimObjValues(this.state.values))
             .then(() => {
-                var promise = this.$showFlushMessage(this.$successMessage);
+                var promise = this.showFlushMessage(this.successMessage);
                 return promise || Promise.resolve();
             })
-            .then(this.props.onComplete)
             .catch((data) => this.setState(state => {
                 state.errors = data.errors;
                 state.flushMessage = "";
             }));
     }
 
-    $showFlushMessage (message) {
+    showFlushMessage(message) {
         return new Promise((resolve, reject) => this.setState(state => {
             state.errors = {};
             state.flushMessage = message;
         }, resolve));
     }
 
-    $retrieveModelData () {
+    retrieveModelData() {
         return ServerFacade.getUser(this.props.params.id);
     }
 
-    $sendModelData (data) {
+    sendModelData(data) {
         return ServerFacade.updateUser(this.props.params.id, data);
     }
 
-    get $passwordElement () {
+    get passwordElement() {
         return null;
     }
 
-    get $title () {
-        return "Edit the User";
+    get title() {
+        return `Edit the User "${this.state.values.display_name}"`;
     }
 
-    get $successMessage () {
+    get successMessage() {
         return "It is successfully updated!";
     }
 
-    get $submitButtonLabel () {
+    get submitButtonLabel() {
         return "Save";
     }
 
-    static get defaultProps() {
+    static get propTypes() {
         return {
-            params: null,
-            onComplete: () => {},
-            onBackButtonClicked: () => {}
-        }
-    };
+            params: React.PropTypes.object
+        };
+    }
 
 }
 

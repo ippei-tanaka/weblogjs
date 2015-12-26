@@ -19,7 +19,6 @@ export default class Admin extends Page {
     }
 
     componentDidMount () {
-        super.componentDidMount();
         this.updateAuthState();
     }
 
@@ -80,9 +79,5 @@ export default class Admin extends Page {
                 this.updateAuthState();
             });
     }
-
-    get pageTitle () {
-        return "Admin Index";
-    };
 
 };

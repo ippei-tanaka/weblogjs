@@ -3,9 +3,9 @@ import React from "react";
 
 export default class Page extends React.Component {
 
-    componentDidMount () {
+    setPageTitle (title) {
         if (typeof document !== "undefined") {
-            document.title = this.pageTitle;
+            document.title = title;
         }
     }
 

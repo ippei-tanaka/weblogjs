@@ -5,12 +5,6 @@ import { Input, ErrorMessage, Label } from '../form';
 
 export default class LoginForm extends React.Component {
 
-    static get propTypes() {
-        return {
-            onLoggedIn: React.PropTypes.func.isRequired
-        };
-    };
-
     constructor(props) {
         super(props);
 
@@ -80,6 +74,12 @@ export default class LoginForm extends React.Component {
                 </div>
             </form>
         );
+    }
+
+    static get propTypes() {
+        return {
+            onLoggedIn: React.PropTypes.func.isRequired
+        };
     }
 
 }

@@ -11,15 +11,15 @@ class UserAdder extends UserEditor {
         this.state.slugPristine = true;
     }
 
-    $showFlushMessage () {}
+    showFlushMessage () {}
 
-    $retrieveModelData () {}
+    retrieveModelData () {}
 
-    $sendModelData (data) {
+    sendModelData (data) {
         return ServerFacade.createUser(data);
     }
 
-    get $passwordElement () {
+    get passwordElement () {
         return (
             <FieldSet label="Password"
                       error={this.state.errors.password}>
@@ -30,11 +30,11 @@ class UserAdder extends UserEditor {
         );
     }
 
-    get $title () {
+    get title () {
         return "Create a New User";
     }
 
-    get $submitButtonLabel () {
+    get submitButtonLabel () {
         return "Create";
     }
 }
