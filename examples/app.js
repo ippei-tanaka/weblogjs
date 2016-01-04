@@ -10,5 +10,14 @@ try {
 }
 
 weblogjs.web.startServer().then(function () {
-    weblogjs.api.userManager.createAdminUser();
+    console.log("Web Server has started...");
+
+    weblogjs.api.userManager.createAdminUser().then(function () {
+        console.log("Admin Account was created...");
+    }).catch(function (error) {
+        console.error("Error occurred when creating the Admin Account: ", error);
+    });
+
+}).catch(function (error) {
+    console.error("Error occurred when starting the web server: ", error);
 });
