@@ -9,7 +9,7 @@ export default class Html extends React.Component {
                 <meta charSet="utf-8"/>
                 <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-                <title>[TITLE_PLACE_HOLDER]</title>
+                <title></title>
             </head>
             <body>
             <div id="App">
