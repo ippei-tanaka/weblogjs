@@ -48,7 +48,7 @@ export default class Admin extends Page {
         }
 
         return (
-            <div>
+            <div className="module-admin">
                 {menu}
                 {content}
             </div>
