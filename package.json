@@ -10,7 +10,7 @@
     "sass": "./node_modules/.bin/gulp sass",
     "sass:watch": "./node_modules/.bin/gulp sass:watch",
     "webpack": "./node_modules/.bin/webpack",
-    "webpack-server": "./node_modules/.bin/webpack-dev-server --inline --hot"
+    "webpack-server": "NODE_ENV=webpack-development ./node_modules/.bin/webpack-dev-server --inline --hot"
   },
   "author": {
     "name": "Ippei Tanaka",
@@ -28,15 +28,21 @@
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "chai": "*",
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^1.0.0",
     "gulp": "*",
     "gulp-mocha": "*",
     "gulp-run": "^1.6.12",
     "gulp-sass": "*",
+    "node-sass": "^3.4.2",
     "rimraf": "^2.4.4",
     "run-sequence": "*",
+    "sass-loader": "^3.1.2",
+    "style-loader": "^0.13.0",
     "vinyl-source-stream": "*",
     "webpack": "^1.12.9",
-    "webpack-dev-server": "^1.14.0"
+    "webpack-dev-server": "^1.14.0",
+    "webpack-sources": "^0.1.0"
   },
   "dependencies": {
     "babel-polyfill": "^6.3.14",
