@@ -15,7 +15,6 @@ export default class Html extends React.Component {
             <div id="App" className="module-app">
                 [CONTENT_PLACE_HOLDER]
             </div>
-            <script src="http://localhost:8080/index.js"></script>
             </body>
             </html>
         )
