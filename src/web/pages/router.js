@@ -8,7 +8,7 @@ require('babel-polyfill');
 
 var routes = require('express').Router();
 var baseRoute = '/';
-var router = require('../../pages/components/router/server').default;
+var router = require('./components/router/server').default;
 var co = require("co");
 
 

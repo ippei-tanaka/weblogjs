@@ -2,9 +2,8 @@
 
 var config = require('../config-manager').load();
 var api = require('../api');
-var restfulApiRouter = require('./routers/restful-api');
-var publicPageRouter = require('./routers/public');
-var webpageRouter = require('./routers/pages');
+var restfulApiRouter = require('./restful-api/router');
+var webpageRouter = require('./pages/router');
 var passport = require('./passport-manager').passport;
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -14,7 +13,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var hbs = require('express-hbs');
 var expressSession = require('express-session');
-var helpers = require('./pages/views/helpers');
 var webServer;
 
 
@@ -38,50 +36,11 @@ expressApp.use(passport.session());
 // Restful API
 expressApp.use(restfulApiRouter.baseRoute, restfulApiRouter.routes);
 
-// Set up helpers
-Object.keys(helpers).forEach(function (key) {
-    hbs.registerHelper(key, function () {
-        var str = helpers[key].apply(null, arguments);
-        return new hbs.SafeString(str);
-    });
-});
-
-// HandleBar Template Settings
-expressApp.engine('hbs', hbs.express4({
-    partialsDir: __dirname + '/pages/views/partials'
-}));
-expressApp.set('view engine', 'hbs');
-expressApp.set('views', __dirname + '/pages/views/pages');
-
 // Static Files in pages dir
 expressApp.use(express.static(__dirname + '/pages/static'));
 
 // Web Pages
 expressApp.use(webpageRouter.baseRoute, webpageRouter.routes);
-//expressApp.use(publicPageRouter.baseRoute, publicPageRouter.routes);
-
-/*
- // catch 404 and forward to error handler
- app.use(function(req, res, next) {
- var err = new Error('Not Found');
- err.status = 404;
- next(err);
- });
-
- // error handlers
-
- // development error handler
- // will print stacktrace
- if (app.get('env') === 'development') {
- app.use(function(err, req, res, next) {
- res.status(err.status || 500);
- res.render('error', {
- message: err.message,
- error: err
- });
- });
- }
- */
 
 
 /**
