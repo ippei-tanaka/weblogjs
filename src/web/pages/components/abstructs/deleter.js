@@ -1,8 +1,10 @@
 import React from 'react';
 import Confirmation from '../partials/confirmation';
+import { FlushMessage } from '../form';
+import Page from './page';
 
 
-class Deleter extends React.Component {
+class Deleter extends Page {
 
     constructor(props) {
         super(props);
@@ -19,6 +21,8 @@ class Deleter extends React.Component {
     }
 
     render() {
+        this.setPageTitle(this.pageTitle);
+
         return (
             <div className="module-data-editor">
                 <h2 className="m-dte-title">{this.title}</h2>
@@ -37,29 +41,40 @@ class Deleter extends React.Component {
         return Promise.reject("Implement retrieveLabel(id).");
     }
 
+    buildSuccessLocation(id) {
+    }
+
+    buildCancelLocation(id) {
+    }
+
     get title() {
-        return "Delete Something";
+        throw new Error("Implement get title()");
+    }
+
+    get pageTitle() {
+        throw new Error("Implement get pageTitle()");
     }
 
     onDeleteApproved() {
         this.deleteModel(this.props.params.id)
-            .then(() => this.props.onComplete())
+            .then(() => {
+                this.context.history.pushState(null, this.buildSuccessLocation(this.props.params.id));
+            })
             .catch(data => console.error(data));
     }
 
     onDeleteCanceled() {
-        this.props.onComplete();
+        this.context.history.pushState(null, this.buildCancelLocation(this.props.params.id));
     }
 
     deleteModel(id) {
         return Promise.reject("Implement deleteUser(id).");
     }
 
-    static get defaultProps() {
+    static get propTypes() {
         return {
-            params: null,
-            onComplete: () => {}
-        }
+            params: React.PropTypes.object
+        };
     }
 
 }

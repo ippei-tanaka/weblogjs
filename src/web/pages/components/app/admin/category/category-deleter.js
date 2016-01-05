@@ -1,6 +1,7 @@
 import Deleter from '../../../abstructs/deleter';
 import ServerFacade from '../../../../services/server-facade';
 
+
 class CategoryDeleter extends Deleter {
 
     retrieveLabel(id) {
@@ -14,11 +15,19 @@ class CategoryDeleter extends Deleter {
     }
 
     get title() {
-        return "Delete Category";
+        return "Delete the Category";
     }
 
     get pageTitle() {
-        return "Delete User";
+        return "Delete the Category";
+    }
+
+    buildSuccessLocation(id) {
+        return "/admin/categories"
+    }
+
+    buildCancelLocation(id) {
+        return "/admin/categories"
     }
 
 }
