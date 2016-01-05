@@ -32,7 +32,7 @@ export default class Admin extends Page {
         var menu = null;
         var content = null;
         var jsFile = null;
-        var cssFile = null;
+        var cssFiles = null;
 
         if (this.state.authentication === IS_NOT_LOGGED_IN) {
             content = <LoginForm onLoggedIn={() => this.updateAuthState()}/>;
@@ -52,16 +52,20 @@ export default class Admin extends Page {
 
         if (PRODUCTION_MODE) {
             jsFile = <script src="/admin/index.js"></script>;
-            cssFile = <link href="/admin/style.css" media="all" rel="stylesheet" />
+            cssFiles = [
+                <link href="/admin/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet" />,
+                <link href="/admin/style.css" media="all" rel="stylesheet" />
+            ];
         } else {
             jsFile = <script src="http://localhost:8080/index.js"></script>;
+            cssFiles = <link href="/admin/vendors/font-awesome/css/font-awesome.css" media="all" rel="stylesheet" />;
         }
 
         return (
             <div className="module-admin">
                 {menu}
                 {content}
-                {cssFile}
+                {cssFiles}
                 {jsFile}
             </div>
         );
