@@ -1,7 +1,8 @@
 "use strict";
 
 require('babel-register')({
-    presets: ['es2015', 'react'],
+    plugins: ['transform-decorators-legacy'],
+    presets: ['es2015', 'stage-0', 'react'],
     extensions: [".jsx", ".js"]
 });
 require('babel-polyfill');
