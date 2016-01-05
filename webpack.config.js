@@ -1,22 +1,26 @@
 "use strict";
 
 var path = require('path');
+var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const WEB_STATIC_DIR = path.resolve(__dirname, "./src/web/pages/static");
 
 // Configured in package.json
-const DEVELOPMENT_MODE = process.env.NODE_ENV === 'webpack-development';
+const PRODUCTION_MODE = process.env.NODE_ENV === 'production';
 
 module.exports = {
     entry: {
-        index: path.resolve(__dirname, "./src/web/pages/components/router/browser.js"),
+        index: path.resolve(__dirname, "./src/web/pages/components/router/browser.js")
     },
+
     output: {
-        path: WEB_STATIC_DIR + "/admin/assets",
-        filename: "[name].js"
+        path: WEB_STATIC_DIR + "/admin/",
+        filename: "index.js"
     },
-    devtool: DEVELOPMENT_MODE ? 'source-map' : null,
+
+    devtool: PRODUCTION_MODE ? null : 'source-map',
+
     module: {
         loaders: [
             {
@@ -29,17 +33,25 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                loader: DEVELOPMENT_MODE ? null : ExtractTextPlugin.extract("style", "css!sass"),
-                loaders: DEVELOPMENT_MODE ? ["style", "css", "sass"] : null
+                loader: PRODUCTION_MODE ? ExtractTextPlugin.extract("style", "css!sass") : null,
+                loaders: PRODUCTION_MODE ? null : ["style", "css", "sass"]
             }
         ]
     },
+
     resolve: {
         extensions: ['', '.js', '.jsx']
     },
-    plugins: DEVELOPMENT_MODE ? null : [
-        new ExtractTextPlugin('public/style.css', {
+
+    plugins: PRODUCTION_MODE ? [
+        new ExtractTextPlugin('style.css', {
             allChunks: true
-        })
-    ]
+        }),
+        new webpack.DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify("production")
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({minimize: true})
+    ] : null
 };
