@@ -46,6 +46,7 @@ export default class Admin extends Page {
                     </li>
                     <li><IndexLink to="/admin">Dashboard</IndexLink></li>
                     <li><Link to="/admin/users">Users</Link></li>
+                    <li><Link to="/admin/categories">Categories</Link></li>
                 </menu>
             );
         }
