@@ -1,29 +1,46 @@
+import React from 'react';
 import Moment from 'moment';
-import List from '../../../abstructs/list';
+import List from '../../../abstructs/_list';
 import ServerFacade from '../../../../services/server-facade';
+import UserStore from '../../../../stores/user-store';
+import Page from '../../../abstructs/page';
 
 
-class UserList extends List {
+class UserList extends Page {
 
-    render () {
+    constructor(props) {
+        super(props);
+
+        this.state = {models: []};
+    }
+
+    componentWillMount() {
+        this.updateModels();
+    }
+
+    render() {
         this.setPageTitle(this.title);
-        return super.render();
+
+        return <List title={this.title}
+                     adderLocation="/admin/users/adder"
+                     fields={this.fields}
+                     models={this.state.models}
+                     editorLocationBuilder={id => `/admin/users/${id}/editor`}
+                     deleterLocationBuilder={id => `/admin/users/${id}/deleter`}/>;
     }
 
-    retrieveModels() {
-        return ServerFacade.getUsers();
+    componentDidMount() {
+        UserStore.addChangeListener(() => this.updateModels());
     }
 
-    buildAdderLocation () {
-        return "/admin/users/adder";
+    componentWillUnmount() {
+        UserStore.removeChangeListener(() => this.updateModels());
     }
 
-    buildEditorLocation (id) {
-        return `/admin/users/${id}/editor`;
-    }
-
-    buildDeleterLocation (id) {
-        return `/admin/users/${id}/deleter`;
+    updateModels() {
+        UserStore.getAll()
+            .then(value => this.setState({models: value}))
+            .catch(data => console.error(data));
     }
 
     get fields() {

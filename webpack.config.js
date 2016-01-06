@@ -10,9 +10,14 @@ const WEB_STATIC_DIR = path.resolve(__dirname, "./src/web/pages/static");
 const PRODUCTION_MODE = process.env.NODE_ENV === 'production';
 
 module.exports = {
-    entry: {
+    /*entry: {
         index: path.resolve(__dirname, "./src/web/pages/components/router/browser.js")
     },
+    */
+    entry: [
+        "babel-polyfill",
+        path.resolve(__dirname, "./src/web/pages/components/router/browser.js")
+    ],
 
     output: {
         path: WEB_STATIC_DIR + "/admin/",
