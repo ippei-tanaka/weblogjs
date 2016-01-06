@@ -1,29 +1,44 @@
+import React from 'react';
 import Moment from 'moment';
-import List from '../../../abstructs/list';
+import List from '../../../partials/list';
 import ServerFacade from '../../../../services/server-facade';
+//import UserStore from '../../../../stores/user-store';
+import Page from '../../../abstructs/page';
 
 
-class CategoryList extends List {
+class CategoryList extends Page {
+    constructor(props) {
+        super(props);
+        this.state = {models: []};
+    }
 
-    render () {
+    componentWillMount() {
+        this.updateModels();
+    }
+
+    render() {
         this.setPageTitle(this.title);
-        return super.render();
+
+        return <List title={this.title}
+                     adderLocation="/admin/categories/adder"
+                     fields={this.fields}
+                     models={this.state.models}
+                     editorLocationBuilder={id => `/admin/categories/${id}/editor`}
+                     deleterLocationBuilder={id => `/admin/categories/${id}/deleter`}/>;
     }
 
-    retrieveModels() {
-        return ServerFacade.getCategories();
-    }
+    //componentDidMount() {
+    //    UserStore.addChangeListener(() => this.updateModels());
+    //}
+    //
+    //componentWillUnmount() {
+    //    UserStore.removeChangeListener(() => this.updateModels());
+    //}
 
-    buildAdderLocation () {
-        return "/admin/categories/adder";
-    }
-
-    buildEditorLocation (id) {
-        return `/admin/categories/${id}/editor`;
-    }
-
-    buildDeleterLocation (id) {
-        return `/admin/categories/${id}/deleter`;
+    updateModels() {
+        ServerFacade.getCategories()
+            .then(value => this.setState({models: value}))
+            .catch(data => console.error(data));
     }
 
     get fields() {

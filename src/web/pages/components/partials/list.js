@@ -1,7 +1,6 @@
 import React from 'react';
 import Moment from 'moment';
 import { Link } from 'react-router';
-import Page from './page';
 
 
 class List extends React.Component {
