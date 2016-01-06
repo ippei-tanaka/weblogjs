@@ -1,6 +1,6 @@
 import React from 'react';
 import Moment from 'moment';
-import List from '../../../abstructs/_list';
+import List from '../../../partials/list';
 import ServerFacade from '../../../../services/server-facade';
 import UserStore from '../../../../stores/user-store';
 import Page from '../../../abstructs/page';
@@ -10,7 +10,6 @@ class UserList extends Page {
 
     constructor(props) {
         super(props);
-
         this.state = {models: []};
     }
 
