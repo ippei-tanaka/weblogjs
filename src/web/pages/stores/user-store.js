@@ -1,67 +1,94 @@
 import EventEmitter from "events";
-import appDispatcher from "../dispatcher/app-dispatcher";
+import AppDispatcher from "../dispatcher/app-dispatcher";
 import ServerFacade from '../services/server-facade';
+import { USER_CREATE, USER_UPDATE, USER_DELETE } from '../constants';
+
+var users = [];
+
+var emitter = new EventEmitter();
+
+var dispatcherToken = AppDispatcher.register(payload => {
+    var action = payload.action;
+
+    switch (action.actionType) {
+        case USER_CREATE:
+            ServerFacade
+                .createUser(action.data)
+                .then(() => emitter.emit(CREATE_SUCCESS_EVENT, action))
+                .catch(obj => emitter.emit(CREATE_FAIL_EVENT, action, obj.errors));
+            break;
+
+        case USER_UPDATE:
+            ServerFacade
+                .updateUser(action.id, action.data)
+                .then(() => emitter.emit(UPDATE_SUCCESS_EVENT, action))
+                .catch(obj => emitter.emit(UPDATE_FAIL_EVENT, action, obj.errors));
+            break;
+
+        case USER_DELETE:
+            //destroy(action.id);
+            //this.emit(DESTROY_EVENT);
+            break;
+
+        // add more cases for other actionTypes, like TODO_UPDATE, etc.
+    }
+
+    return true; // No errors. Needed by promise in Dispatcher.
+});
 
 
-const CHANGE_EVENT = 'change';
+export const CREATE_SUCCESS_EVENT = 'create-success';
+export const CREATE_FAIL_EVENT = 'create-fail';
+export const UPDATE_SUCCESS_EVENT = 'update-success';
+export const UPDATE_FAIL_EVENT = 'user-update-fail';
+export const DELETE_SUCCESS_EVENT = 'delete-success';
+export const DELETE_FAIL_EVENT = 'delete-fail';
 
 
-class UserStore extends EventEmitter {
+class UserStore {
 
-    constructor () {
-        super();
-
-        this.dispatcherIndex = appDispatcher.register(payload => {
-            var action = payload.action;
-            var text;
-
-            switch(action.actionType) {
-                case TodoConstants.TODO_CREATE:
-                    text = action.text.trim();
-                    if (text !== '') {
-                        create(text);
-                        TodoStore.emitChange();
-                    }
-                    break;
-
-                case TodoConstants.TODO_DESTROY:
-                    destroy(action.id);
-                    TodoStore.emitChange();
-                    break;
-
-                // add more cases for other actionTypes, like TODO_UPDATE, etc.
-            }
-
-            return true; // No errors. Needed by promise in Dispatcher.
-        });
+    get dispatcherToken () {
+        return dispatcherToken;
     }
 
     /**
      * Get the entire collection of users.
+     * @public
      * @return {Promise}
      */
-    getAll () {
+    getAll() {
         return ServerFacade.getUsers();
     }
 
-    emitChange() {
-        this.emit(CHANGE_EVENT);
+    /**
+     * Get the user by Id
+     * @public
+     * @param id
+     * @returns {Promise}
+     */
+    getById(id) {
+        return ServerFacade.getUser(id);
     }
 
     /**
-     * @param {function} callback
+     * @public
+     * @param eventName
+     * @param callback
      */
-    addChangeListener(callback) {
-        this.on(CHANGE_EVENT, callback);
+    addEventListener(eventName, callback) {
+        emitter.on(eventName, callback);
     }
 
     /**
-     * @param {function} callback
+     * @public
+     * @param eventName
+     * @param callback
      */
-    removeChangeListener(callback) {
-        this.removeListener(CHANGE_EVENT, callback);
+    removeEventListener(eventName, callback) {
+        emitter.removeListener(eventName, callback);
     }
 
 }
+
 
 export default new UserStore();

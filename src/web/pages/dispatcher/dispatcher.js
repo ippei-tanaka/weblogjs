@@ -7,6 +7,7 @@ export default class Dispatcher {
 
     /**
      * Register a Store's callback so that it may be invoked by an action.
+     * @protected
      * @param {function} callback The callback to be registered.
      * @return {number} The index of the callback within the _callbacks array.
      */
@@ -17,6 +18,7 @@ export default class Dispatcher {
 
     /**
      * dispatch
+     * @protected
      * @param  {object} payload The data from the action.
      */
     dispatch(payload) {
