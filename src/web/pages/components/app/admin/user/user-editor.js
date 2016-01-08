@@ -2,12 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
 import UserActions from '../../../../actions/user-actions';
-import { default as UserStore, UPDATE_SUCCESS_EVENT, UPDATE_FAIL_EVENT } from '../../../../stores/user-store';
-import UserForm from './partials/user-form';
-import hat from 'hat';
-
-
-var rack = hat.rack();
+import UserStore from '../../../../stores/user-store';
+import UserForm from '../../../partials/user-form';
 
 
 class UserEditor extends Page {
@@ -20,7 +16,7 @@ class UserEditor extends Page {
             values: {}
         };
 
-        this.token = rack();
+        this.token = this.generateToken();
 
         this.updateSuccessCallback = this.onUpdateSuccess.bind(this);
         this.updateFailCallback = this.onUpdateFail.bind(this);
@@ -33,13 +29,13 @@ class UserEditor extends Page {
     }
 
     componentDidMount() {
-        UserStore.addEventListener(UPDATE_SUCCESS_EVENT, this.updateSuccessCallback);
-        UserStore.addEventListener(UPDATE_FAIL_EVENT, this.updateFailCallback);
+        UserStore.addUpdateSuccessEventListener(this.updateSuccessCallback);
+        UserStore.addUpdateFailEventListener(this.updateFailCallback);
     }
 
     componentWillUnmount() {
-        UserStore.removeEventListener(UPDATE_SUCCESS_EVENT, this.updateSuccessCallback);
-        UserStore.removeEventListener(UPDATE_FAIL_EVENT, this.updateFailCallback);
+        UserStore.removeUpdateSuccessEventListener(this.updateSuccessCallback);
+        UserStore.removeUpdateFailEventListener(this.updateFailCallback);
     }
 
     render() {
@@ -67,6 +63,7 @@ class UserEditor extends Page {
     onUpdateSuccess(action) {
         if (action.token === this.token) {
             this.setState(s => { s.errors = {} });
+            this.context.history.pushState(null, "/admin/users");
         }
     }
 

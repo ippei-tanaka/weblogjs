@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
-import ServerFacade from '../../../../services/server-facade';
-import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, FlushMessage, Title, Form } from '../../../form';
-import { trimObjValues, slugfy } from '../../../../utilities';
+import CategoryForm from '../../../partials/category-form';
 
 
 class CategoryEditor extends Page {
@@ -13,9 +11,7 @@ class CategoryEditor extends Page {
 
         this.state = {
             errors: {},
-            values: {},
-            slugPristine: false,
-            flushMessage: ""
+            values: {}
         };
     }
 

@@ -32,9 +32,10 @@ class UserActions {
      * @public
      * @param {string} id
      */
-    del(id) {
+    del({id, token}) {
         AppDispatcher.handleViewAction({
             actionType: USER_DELETE,
+            token: token,
             id: id
         });
     }
