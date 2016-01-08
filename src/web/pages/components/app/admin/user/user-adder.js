@@ -1,42 +1,79 @@
-import React        from 'react';
-import ServerFacade from '../../../../services/server-facade';
-import { FieldSet, Input } from '../../../form';
-import UserEditor   from './user-editor';
+import React from 'react';
+import { Link } from 'react-router';
+import Page from '../../../abstructs/page';
+import UserActions from '../../../../actions/user-actions';
+import { default as UserStore, CREATE_SUCCESS_EVENT, CREATE_FAIL_EVENT } from '../../../../stores/user-store';
+import UserForm from './partials/user-form';
+import hat from 'hat';
 
 
-class UserAdder extends UserEditor {
+var rack = hat.rack();
+
+
+class UserAdder extends Page {
+
 
     constructor(props) {
         super(props);
-        this.state.slugPristine = true;
+
+        this.state = {
+            errors: {},
+            values: {}
+        };
+
+        this.token = rack();
+
+        this.createSuccessCallback = this.onCreateSuccess.bind(this);
+        this.createFailCallback = this.onCreateFail.bind(this);
     }
 
-    showFlushMessage () {}
-
-    retrieveModelData () {}
-
-    sendModelData (data) {
-        return ServerFacade.createUser(data);
+    componentDidMount() {
+        UserStore.addEventListener(CREATE_SUCCESS_EVENT, this.createSuccessCallback);
+        UserStore.addEventListener(CREATE_FAIL_EVENT, this.createFailCallback);
     }
 
-    get passwordElement () {
+    componentWillUnmount() {
+        UserStore.removeEventListener(CREATE_SUCCESS_EVENT, this.createSuccessCallback);
+        UserStore.removeEventListener(CREATE_FAIL_EVENT, this.createFailCallback);
+    }
+
+    render() {
+        this.setPageTitle(this.title);
+
         return (
-            <FieldSet label="Password"
-                      error={this.state.errors.password}>
-                <Input value={this.state.values.password}
-                       type="password"
-                       onChange={v => this.setState(s => { s.values.password = v })}/>
-            </FieldSet>
+            <UserForm title={this.title}
+                      errors={this.state.errors}
+                      values={this.state.values}
+                      autoSlugfy={true}
+                      passwordField={true}
+                      onSubmit={this.onSubmit.bind(this)}
+                      submitButtonLabel="Create"/>
         );
     }
 
-    get title () {
+    onSubmit(values) {
+        UserActions.create({
+            token: this.token,
+            data: values
+        });
+    }
+
+    onCreateSuccess(action) {
+        if (action.token === this.token) {
+            this.setState(s => { s.errors = {} });
+        }
+    }
+
+    onCreateFail(action, errors) {
+        if (action.token === this.token) {
+            this.setState(s => { s.errors = errors });
+        }
+    }
+
+    get title() {
         return "Create a New User";
     }
 
-    get submitButtonLabel () {
-        return "Create";
-    }
 }
 
 

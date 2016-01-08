@@ -60,6 +60,7 @@
     "express": "*",
     "express-hbs": "*",
     "express-session": "*",
+    "hat": "0.0.3",
     "history": "^1.13.1",
     "jquery": "^2.1.4",
     "moment": "^2.10.6",

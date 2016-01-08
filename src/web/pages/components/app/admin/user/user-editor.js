@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
-import ServerFacade from '../../../../services/server-facade';
-import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, FlushMessage, Title, Form } from '../../../form';
-import { trimObjValues, slugfy } from '../../../../utilities';
+import UserActions from '../../../../actions/user-actions';
+import { default as UserStore, UPDATE_SUCCESS_EVENT, UPDATE_FAIL_EVENT } from '../../../../stores/user-store';
+import UserForm from './partials/user-form';
+import hat from 'hat';
+
+
+var rack = hat.rack();
 
 
 class UserEditor extends Page {
@@ -13,131 +17,67 @@ class UserEditor extends Page {
 
         this.state = {
             errors: {},
-            values: {},
-            slugPristine: false,
-            flushMessage: ""
+            values: {}
         };
+
+        this.token = rack();
+
+        this.updateSuccessCallback = this.onUpdateSuccess.bind(this);
+        this.updateFailCallback = this.onUpdateFail.bind(this);
     }
 
     componentWillMount() {
-        this.setRetrievedModelData();
+        UserStore
+            .getById(this.props.params.id)
+            .then(v => this.setState(s => {s.values = v}));
+    }
+
+    componentDidMount() {
+        UserStore.addEventListener(UPDATE_SUCCESS_EVENT, this.updateSuccessCallback);
+        UserStore.addEventListener(UPDATE_FAIL_EVENT, this.updateFailCallback);
+    }
+
+    componentWillUnmount() {
+        UserStore.removeEventListener(UPDATE_SUCCESS_EVENT, this.updateSuccessCallback);
+        UserStore.removeEventListener(UPDATE_FAIL_EVENT, this.updateFailCallback);
     }
 
     render() {
         this.setPageTitle(this.title);
 
         return (
-            <Form onSubmit={this.onSubmit.bind(this)}>
-
-                <Title>{this.title}</Title>
-
-                <FieldSet label="Email"
-                          error={this.state.errors.email}>
-                    <Input value={this.state.values.email}
-                           type="email"
-                           onChange={v => this.setState(s => { s.values.email = v })}/>
-                </FieldSet>
-
-                {this.passwordElement}
-
-                <FieldSet label="Display Name"
-                          error={this.state.errors.display_name}>
-                    <Input value={this.state.values.display_name}
-                           onChange={this.onDisplayNameChanged.bind(this)}/>
-                </FieldSet>
-
-                <FieldSet label="Slug"
-                          error={this.state.errors.slug}>
-                    <Input value={this.state.values.slug}
-                           onChange={this.onSlugChanged.bind(this)}/>
-                </FieldSet>
-
-                <FlushMessage>
-                    {this.state.flushMessage}
-                </FlushMessage>
-
-                <ButtonList>
-                    <SubmitButton>{this.submitButtonLabel}</SubmitButton>
-                    <Link to="/admin/users"
-                          className="module-button">
-                        Back
-                    </Link>
-                </ButtonList>
-
-            </Form>
+            <UserForm title={this.title}
+                      errors={this.state.errors}
+                      values={this.state.values}
+                      autoSlugfy={false}
+                      passwordField={false}
+                      onSubmit={this.onSubmit.bind(this)}
+                      submitButtonLabel="Update"/>
         );
     }
 
-    setRetrievedModelData() {
-        var modelPromise = this.retrieveModelData();
+    onSubmit(values) {
+        UserActions.update({
+            id: this.props.params.id,
+            token: this.token,
+            data: values
+        });
+    }
 
-        if (modelPromise) {
-            modelPromise
-                .then(v => this.setState(s => {
-                    s.values = v
-                }));
+    onUpdateSuccess(action) {
+        if (action.token === this.token) {
+            this.setState(s => { s.errors = {} });
         }
     }
 
-    onDisplayNameChanged(value) {
-        this.setState(state => {
-            state.values.display_name = value;
-            if (state.slugPristine) {
-                state.values.slug = slugfy(value);
-            }
-        });
-    }
-
-    onSlugChanged(value) {
-        this.setState(state => {
-            state.values.slug = value;
-            state.slugPristine = !value;
-        });
-    }
-
-    onSubmit(event) {
-        event.preventDefault();
-
-        this.sendModelData(trimObjValues(this.state.values))
-            .then(() => {
-                var promise = this.showFlushMessage(this.successMessage);
-                return promise || Promise.resolve();
-            })
-            .catch((data) => this.setState(state => {
-                state.errors = data.errors;
-                state.flushMessage = "";
-            }));
-    }
-
-    showFlushMessage(message) {
-        return new Promise((resolve, reject) => this.setState(state => {
-            state.errors = {};
-            state.flushMessage = message;
-        }, resolve));
-    }
-
-    retrieveModelData() {
-        return ServerFacade.getUser(this.props.params.id);
-    }
-
-    sendModelData(data) {
-        return ServerFacade.updateUser(this.props.params.id, data);
-    }
-
-    get passwordElement() {
-        return null;
+    onUpdateFail(action, errors) {
+        if (action.token === this.token) {
+            this.setState(s => { s.errors = errors });
+        }
     }
 
     get title() {
         return `Edit the User "${this.state.values.display_name}"`;
-    }
-
-    get successMessage() {
-        return "It is successfully updated!";
-    }
-
-    get submitButtonLabel() {
-        return "Save";
     }
 
     static get propTypes() {

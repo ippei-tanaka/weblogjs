@@ -29,11 +29,11 @@ class UserList extends Page {
     }
 
     componentDidMount() {
-        UserStore.addChangeListener(() => this.updateModels());
+        //UserStore.addChangeListener(() => this.updateModels());
     }
 
     componentWillUnmount() {
-        UserStore.removeChangeListener(() => this.updateModels());
+        //UserStore.removeChangeListener(() => this.updateModels());
     }
 
     updateModels() {
