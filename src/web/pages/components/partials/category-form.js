@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form } from '../../../../form';
-import { trimObjValues, slugfy } from '../../../../../utilities';
+import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form } from '../form';
+import { trimObjValues, slugfy } from '../../utilities';
 
 
-export default class UserForm extends React.Component {
+export default class CategoryForm extends React.Component {
 
     constructor(props) {
         super(props);

@@ -2,16 +2,11 @@ import React from 'react';
 import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
 import UserActions from '../../../../actions/user-actions';
-import { default as UserStore, CREATE_SUCCESS_EVENT, CREATE_FAIL_EVENT } from '../../../../stores/user-store';
-import UserForm from './partials/user-form';
-import hat from 'hat';
-
-
-var rack = hat.rack();
+import UserStore from '../../../../stores/user-store';
+import UserForm from '../../../partials/user-form';
 
 
 class UserAdder extends Page {
-
 
     constructor(props) {
         super(props);
@@ -21,20 +16,20 @@ class UserAdder extends Page {
             values: {}
         };
 
-        this.token = rack();
+        this.token = this.generateToken();
 
         this.createSuccessCallback = this.onCreateSuccess.bind(this);
         this.createFailCallback = this.onCreateFail.bind(this);
     }
 
     componentDidMount() {
-        UserStore.addEventListener(CREATE_SUCCESS_EVENT, this.createSuccessCallback);
-        UserStore.addEventListener(CREATE_FAIL_EVENT, this.createFailCallback);
+        UserStore.addCreateSuccessEventListener(this.createSuccessCallback);
+        UserStore.addCreateFailEventListener(this.createFailCallback);
     }
 
     componentWillUnmount() {
-        UserStore.removeEventListener(CREATE_SUCCESS_EVENT, this.createSuccessCallback);
-        UserStore.removeEventListener(CREATE_FAIL_EVENT, this.createFailCallback);
+        UserStore.removeCreateSuccessEventListener(this.createSuccessCallback);
+        UserStore.removeCreateFailEventListener(this.createFailCallback);
     }
 
     render() {
@@ -61,6 +56,7 @@ class UserAdder extends Page {
     onCreateSuccess(action) {
         if (action.token === this.token) {
             this.setState(s => { s.errors = {} });
+            this.context.history.pushState(null, "/admin/users");
         }
     }
 
