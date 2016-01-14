@@ -1,6 +1,6 @@
 import React from 'react';
 import UserStore from '../../../../stores/user-store';
-import ViewActions from '../../../../actions/view-actions';
+import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import Page from '../../../abstructs/page';
 import Deleter from '../../../partials/deleter';
 import hat from 'hat';
@@ -23,7 +23,7 @@ class UserDeleter extends Page {
 
     componentDidMount() {
         this.updateValues();
-        ViewActions.requestLoadingUsers();
+        ViewActionCreator.requestLoadingUsers();
         UserStore.addChangeListener(this.callback);
     }
 
@@ -43,7 +43,7 @@ class UserDeleter extends Page {
     }
 
     onApproved () {
-        ViewActions.requestDeleteUser({
+        ViewActionCreator.requestDeleteUser({
             token: this.token,
             id: this.props.params.id
         });
