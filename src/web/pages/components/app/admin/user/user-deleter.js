@@ -2,7 +2,7 @@ import React from 'react';
 import UserStore from '../../../../stores/user-store';
 import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import Page from '../../../abstructs/page';
-import Deleter from '../../../partials/deleter';
+import Confirmation from '../../../partials/confirmation';
 import hat from 'hat';
 
 var rack = hat.rack();
@@ -34,10 +34,14 @@ class UserDeleter extends Page {
         this.setPageTitle(this.title);
 
         return (
-            <Deleter title={this.title}
-                     label={this.label}
-                     onApproved={this.onApproved.bind(this)}
-                     onCanceled={this.goToListPage.bind(this)}/>
+            <div className="module-data-editor">
+                <h2 className="m-dte-title">{this.title}</h2>
+                <Confirmation
+                    mode="choose"
+                    onApproved={this.onApproved.bind(this)}
+                    onCanceled={this.onCanceled.bind(this)}
+                >{this.label}</Confirmation>
+            </div>
         );
     }
 
@@ -46,6 +50,10 @@ class UserDeleter extends Page {
             token: this.token,
             id: this.props.params.id
         });
+    }
+
+    onCanceled () {
+        this.goToListPage();
     }
 
     onStoreChanged() {
