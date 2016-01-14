@@ -31,8 +31,22 @@ const constants = Object.freeze({
 
         CATEGORY_DELETE_REQUEST: null,
         CATEGORY_DELETE_FAILED: null,
-        CATEGORY_DELETED: null
+        CATEGORY_DELETED: null,
 
+
+        BLOGS_LOADED: null,
+
+        BLOG_CREATE_REQUEST: null,
+        BLOG_CREATE_FAILED: null,
+        BLOG_CREATED: null,
+
+        BLOG_UPDATE_REQUEST: null,
+        BLOG_UPDATE_FAILED: null,
+        BLOG_UPDATED: null,
+
+        BLOG_DELETE_REQUEST: null,
+        BLOG_DELETE_FAILED: null,
+        BLOG_DELETED: null
     }),
 
     PayloadSources: keyMirror({

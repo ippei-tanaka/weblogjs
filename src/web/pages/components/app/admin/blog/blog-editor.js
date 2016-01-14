@@ -2,15 +2,15 @@ import React from 'react';
 import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
 import ViewActionCreator from '../../../../action-creators/view-action-creator';
-import CategoryStore from '../../../../stores/category-store';
-import CategoryForm from './partials/category-form';
+import BlogStore from '../../../../stores/blog-store';
+import BlogForm from './partials/blog-form';
 import hat from 'hat';
 
 
 var rack = hat.rack();
 
 
-class CategoryEditor extends Page {
+class BlogEditor extends Page {
 
     constructor(props) {
         super(props);
@@ -27,30 +27,30 @@ class CategoryEditor extends Page {
 
     componentDidMount() {
         this.updateValues();
-        CategoryStore.addChangeListener(this.callback);
+        BlogStore.addChangeListener(this.callback);
     }
 
     componentWillUnmount() {
-        CategoryStore.removeChangeListener(this.callback);
+        BlogStore.removeChangeListener(this.callback);
     }
 
     render() {
         this.setPageTitle(this.title);
 
         return (
-            <CategoryForm title={this.title}
-                          errors={this.state.errors}
-                          values={this.state.values}
-                          autoSlugfy={false}
-                          onSubmit={this.onSubmit.bind(this)}
-                          submitButtonLabel="Update"
-                          locationForBackButton="/admin/categories"
+            <BlogForm title={this.title}
+                      errors={this.state.errors}
+                      values={this.state.values}
+                      autoSlugfy={false}
+                      onSubmit={this.onSubmit.bind(this)}
+                      submitButtonLabel="Update"
+                      locationForBackButton="/admin/blogs"
             />
         );
     }
 
     onSubmit(values) {
-        ViewActionCreator.requestUpdateCategory({
+        ViewActionCreator.requestUpdateBlog({
             id: this.props.params.id,
             token: this.token,
             data: values
@@ -58,7 +58,7 @@ class CategoryEditor extends Page {
     }
 
     onStoreChanged() {
-        var action = CategoryStore.latestAction;
+        var action = BlogStore.latestAction;
 
         this.updateValues();
 
@@ -68,19 +68,19 @@ class CategoryEditor extends Page {
                     s.errors = action.data.errors
                 });
             } else {
-                this.context.history.pushState(null, "/admin/categories");
+                this.context.history.pushState(null, "/admin/blogs");
             }
         }
     }
 
     updateValues() {
         this.setState(s => {
-            s.values = CategoryStore.get(this.props.params.id) || {};
+            s.values = BlogStore.get(this.props.params.id) || {};
         });
     }
 
     get title() {
-        return `Edit the Category "${this.state.values.display_name}"`;
+        return `Edit the Blog "${this.state.values.display_name}"`;
     }
 
     static get propTypes() {
@@ -92,4 +92,4 @@ class CategoryEditor extends Page {
 }
 
 
-export default CategoryEditor;
+export default BlogEditor;

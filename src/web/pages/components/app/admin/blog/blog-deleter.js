@@ -1,5 +1,5 @@
 import React from 'react';
-import CategoryStore from '../../../../stores/category-store';
+import BlogStore from '../../../../stores/blog-store';
 import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import Page from '../../../abstructs/page';
 import Confirmation from '../../../partials/confirmation';
@@ -7,7 +7,7 @@ import hat from 'hat';
 
 var rack = hat.rack();
 
-class CategoryDeleter extends Page {
+class BlogDeleter extends Page {
 
     constructor(props) {
         super(props);
@@ -23,11 +23,11 @@ class CategoryDeleter extends Page {
 
     componentDidMount() {
         this.updateValues();
-        CategoryStore.addChangeListener(this.callback);
+        BlogStore.addChangeListener(this.callback);
     }
 
     componentWillUnmount() {
-        CategoryStore.removeChangeListener(this.callback);
+        BlogStore.removeChangeListener(this.callback);
     }
 
     render() {
@@ -46,7 +46,7 @@ class CategoryDeleter extends Page {
     }
 
     onApproved () {
-        ViewActionCreator.requestDeleteCategory({
+        ViewActionCreator.requestDeleteBlog({
             token: this.token,
             id: this.props.params.id
         });
@@ -57,7 +57,7 @@ class CategoryDeleter extends Page {
     }
 
     onStoreChanged() {
-        var action = CategoryStore.latestAction;
+        var action = BlogStore.latestAction;
 
         this.updateValues();
 
@@ -71,23 +71,23 @@ class CategoryDeleter extends Page {
     }
 
     goToListPage () {
-        this.context.history.pushState(null, "/admin/categories");
+        this.context.history.pushState(null, "/admin/blogs");
     }
 
     updateValues () {
         this.setState(s => {
-            s.values = CategoryStore.get(this.props.params.id) || {};
+            s.values = BlogStore.get(this.props.params.id) || {};
         });
     }
 
     get title() {
-        return `Delete the Category "${this.state.values.name}"`;
+        return `Delete the Blog "${this.state.values.title}"`;
     }
 
     get label() {
-        return `Do you want to delete "${this.state.values.name}"?`;
+        return `Do you want to delete "${this.state.values.title}"?`;
     }
 }
 
 
-export default CategoryDeleter;
+export default BlogDeleter;

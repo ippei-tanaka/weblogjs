@@ -1,7 +1,6 @@
 import React from 'react';
 import Moment from 'moment';
 import List from '../../../partials/list';
-import ServerFacade from '../../../../services/server-facade';
 import CategoryStore from '../../../../stores/category-store';
 import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import Page from '../../../abstructs/page';

@@ -41,11 +41,32 @@ export default {
         WebApiUtils.updateCategory({token, id, data});
     },
 
-    requestDeleteCateogry: ({token, id}) => {
+    requestDeleteCategory: ({token, id}) => {
         Dispatcher.handleViewAction({
             actionType: Actions.CATEGORY_DELETE_REQUEST
         });
         WebApiUtils.deleteCategory({token, id});
+    },
+
+    requestCreateBlog: ({token, data}) => {
+        Dispatcher.handleViewAction({
+            actionType: Actions.BLOG_CREATE_REQUEST
+        });
+        WebApiUtils.createBlog({token, data});
+    },
+
+    requestUpdateBlog: ({token, id, data}) => {
+        Dispatcher.handleViewAction({
+            actionType: Actions.BLOG_UPDATE_REQUEST
+        });
+        WebApiUtils.updateBlog({token, id, data});
+    },
+
+    requestDeleteBlog: ({token, id}) => {
+        Dispatcher.handleViewAction({
+            actionType: Actions.BLOG_DELETE_REQUEST
+        });
+        WebApiUtils.deleteBlog({token, id});
     }
 
 };

@@ -13,6 +13,10 @@ import CategoryList from "../app/admin/category/category-list";
 import CategoryAdder from "../app/admin/category/category-adder";
 import CategoryEditor from "../app/admin/category/category-editor";
 import CategoryDeleter from "../app/admin/category/category-deleter";
+import BlogList from "../app/admin/blog/blog-list";
+import BlogAdder from "../app/admin/blog/blog-adder";
+import BlogEditor from "../app/admin/blog/blog-editor";
+import BlogDeleter from "../app/admin/blog/blog-deleter";
 
 
 var appRoutes = (
@@ -30,6 +34,12 @@ var appRoutes = (
                 <Route path="adder" component={CategoryAdder} />
                 <Route path=":id/editor" component={CategoryEditor}/>
                 <Route path=":id/deleter" component={CategoryDeleter}/>
+            </Route>
+            <Route path="blogs">
+                <IndexRoute component={BlogList} />
+                <Route path="adder" component={BlogAdder} />
+                <Route path=":id/editor" component={BlogEditor}/>
+                <Route path=":id/deleter" component={BlogDeleter}/>
             </Route>
         </Route>
     </Route>

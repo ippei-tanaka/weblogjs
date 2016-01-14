@@ -62,6 +62,8 @@ export default {
         });
     },
 
+
+
     receiveCategories: categories => {
         Dispatcher.handleServerAction({
             actionType: Actions.CATEGORIES_LOADED,
@@ -115,6 +117,63 @@ export default {
             data: errors,
             token: token
         });
-    }
+    },
+
+
+
+    receiveBlogs: blogs => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.BLOGS_LOADED,
+            data: blogs
+        });
+    },
+
+    receiveCreatedBlog: ({blog, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.BLOG_CREATED,
+            data: blog,
+            token: token
+        });
+    },
+
+    receiveErrorOnCreatingBlog: ({error, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.BLOG_CREATE_FAILED,
+            data: error,
+            token: token
+        });
+    },
+
+    receiveUpdatedBlog: ({blog, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.BLOG_UPDATED,
+            data: blog,
+            token: token
+        });
+    },
+
+    receiveErrorOnUpdatingBlog: ({error, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.BLOG_UPDATE_FAILED,
+            data: error,
+            token: token
+        });
+    },
+
+    receiveDeletedBlog: ({id, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.BLOG_DELETED,
+            data: id,
+            token: token
+        });
+    },
+
+    receiveErrorOnDeletingBlog: ({errors, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.BLOG_DELETE_FAILED,
+            data: errors,
+            token: token
+        });
+    },
 
 };

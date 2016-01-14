@@ -3,7 +3,7 @@ import { Actions } from '../constants';
 import WebApiUtils from '../utilities/web-api-utils';
 
 
-class CategoryStore extends Store {
+class BlogStore extends Store {
 
     constructor(...args) {
         super(...args);
@@ -29,35 +29,35 @@ class CategoryStore extends Store {
      */
     get _actionCallbackList() {
         return {
-            [Actions.CATEGORIES_LOADED]: function ({action}) {
-                for (let category of action.data) {
-                    this._items[category._id] = category;
+            [Actions.BLOGS_LOADED]: function ({action}) {
+                for (let blog of action.data) {
+                    this._items[blog._id] = blog;
                 }
                 this._initialized = true;
                 this._latestAction = action;
             },
 
-            [Actions.CATEGORY_CREATED]: function ({action}) {
-                var category = action.data;
-                this._items[category._id] = category;
+            [Actions.BLOG_CREATED]: function ({action}) {
+                var blog = action.data;
+                this._items[blog._id] = blog;
                 this._latestAction = action;
             },
 
-            [Actions.CATEGORY_CREATE_FAILED]: function ({action}) {
+            [Actions.BLOG_CREATE_FAILED]: function ({action}) {
                 this._latestAction = action;
             },
 
-            [Actions.CATEGORY_UPDATED]: function ({action}) {
-                var category = action.data;
-                this._items[category._id] = category;
+            [Actions.BLOG_UPDATED]: function ({action}) {
+                var blog = action.data;
+                this._items[blog._id] = blog;
                 this._latestAction = action;
             },
 
-            [Actions.CATEGORY_UPDATE_FAILED]: function ({action}) {
+            [Actions.BLOG_UPDATE_FAILED]: function ({action}) {
                 this._latestAction = action;
             },
 
-            [Actions.CATEGORY_DELETED]: function ({action}) {
+            [Actions.BLOG_DELETED]: function ({action}) {
                 var id = action.data;
 
                 if (this._items[id]) {
@@ -67,7 +67,7 @@ class CategoryStore extends Store {
                 this._latestAction = action;
             },
 
-            [Actions.CATEGORY_DELETE_FAILED]: function ({action}) {
+            [Actions.BLOG_DELETE_FAILED]: function ({action}) {
                 this._latestAction = action;
             }
         }
@@ -79,11 +79,11 @@ class CategoryStore extends Store {
      */
     getAll() {
         if (!this._initialized) {
-            WebApiUtils.loadCategories();
+            WebApiUtils.loadBlogs();
         }
 
         return Object.keys(this._items).map(key => this._items[key]);
-   }
+    }
 
     /**
      * @public
@@ -92,7 +92,7 @@ class CategoryStore extends Store {
      */
     get(id) {
         if (!this._initialized) {
-            WebApiUtils.loadCategories();
+            WebApiUtils.loadBlogs();
         }
 
         return this._items[id];
@@ -108,4 +108,4 @@ class CategoryStore extends Store {
 }
 
 
-export default new CategoryStore();
+export default new BlogStore();
