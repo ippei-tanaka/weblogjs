@@ -1,11 +1,12 @@
 import React from 'react';
 import Moment from 'moment';
 import List from '../../../partials/list';
-import UserStore from '../../../../stores/user-store';
+import BlogStore from '../../../../stores/blog-store';
 import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import Page from '../../../abstructs/page';
 
-class UserList extends Page {
+
+class BlogList extends Page {
 
     constructor(props) {
         super(props);
@@ -14,51 +15,45 @@ class UserList extends Page {
             models: []
         };
 
-        this.updateModelsCallback = this.updateModels.bind(this);
+        this.callback = this.updateModels.bind(this);
     }
 
     componentDidMount() {
         this.updateModels();
-        UserStore.addChangeListener(this.updateModelsCallback);
+        BlogStore.addChangeListener(this.callback);
     }
 
     componentWillUnmount() {
-        UserStore.removeChangeListener(this.updateModelsCallback);
+        BlogStore.removeChangeListener(this.callback);
     }
 
     render() {
         this.setPageTitle(this.title);
 
         return <List title={this.title}
-                     adderLocation="/admin/users/adder"
+                     adderLocation="/admin/blogs/adder"
                      fields={this.fields}
                      models={this.state.models}
-                     editorLocationBuilder={id => `/admin/users/${id}/editor`}
-                     deleterLocationBuilder={id => `/admin/users/${id}/deleter`}/>;
+                     editorLocationBuilder={id => `/admin/blogs/${id}/editor`}
+                     deleterLocationBuilder={id => `/admin/blogs/${id}/deleter`}/>;
     }
 
     updateModels() {
-        this.setState({models: UserStore.getAll()});
+        this.setState({models: BlogStore.getAll()});
     }
 
     get fields() {
         return {
-            display_name: {
-                label: "Name"
+            title: {
+                label: "Title"
             },
 
             slug: {
                 label: "Slug"
             },
 
-            email: {
-                label: "Email"
-            },
-
-            readable_privileges: {
-                label: "Privileges",
-                stringify: value =>
-                    value.map(p => p.toLowerCase()).join(', ')
+            posts_per_page: {
+                label: "Posts Per Page"
             },
 
             created: {
@@ -76,9 +71,9 @@ class UserList extends Page {
     }
 
     get title() {
-        return "User List";
+        return "Blog List";
     }
 
 }
 
-export default UserList;
+export default BlogList;

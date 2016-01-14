@@ -11,6 +11,11 @@ class UserStore extends Store {
         /**
          * @private
          */
+        this._initialized = false;
+
+        /**
+         * @private
+         */
         this._items = {};
 
         /**
@@ -24,19 +29,11 @@ class UserStore extends Store {
      */
     get _actionCallbackList() {
         return {
-            /*
-            [Actions.USERS_LOAD_REQUEST]: function ({action}) {
-                if (Object.keys(this._items).length === 0) {
-                    WebApiUtils.loadUsers();
-                }
-                this._latestAction = action;
-            },
-            */
-
             [Actions.USERS_LOADED]: function ({action}) {
                 for (let user of action.data) {
                     this._items[user._id] = user;
                 }
+                this._initialized = true;
                 this._latestAction = action;
             },
 
@@ -81,8 +78,7 @@ class UserStore extends Store {
      * @returns {Array}
      */
     getAll() {
-
-        if (Object.keys(this._items).length === 0) {
+        if (!this._initialized) {
             WebApiUtils.loadUsers();
         }
 
@@ -95,13 +91,11 @@ class UserStore extends Store {
      * @returns {T}
      */
     get(id) {
-        var user = this._items[id];
-
-        if (!user) {
+        if (!this._initialized) {
             WebApiUtils.loadUsers();
         }
 
-        return user;
+        return this._items[id];
     }
 
     /**

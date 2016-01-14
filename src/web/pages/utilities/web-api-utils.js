@@ -75,7 +75,40 @@ export default {
             .then(() => ServerActionCreator.receiveDeletedCategory({id, token}))
             .catch(error => ServerActionCreator.receiveErrorOnDeletingCategory({error, token}));
 
+    },
+
+    loadBlogs: () => {
+        ajaxRestfulAPI("/blogs")
+            .then(data => ServerActionCreator.receiveBlogs(data.items));
+    },
+
+    createBlog: ({token, data}) => {
+        ajaxRestfulAPI("/blogs", {
+            data: data,
+            method: 'post'
+        })
+            .then(blog => ServerActionCreator.receiveCreatedBlog({blog, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnCreatingBlog({error, token}));
+    },
+
+    updateBlog: ({token, id, data}) => {
+        ajaxRestfulAPI("/blogs/" + id, {
+            data: data,
+            method: 'put'
+        })
+            .then(blog => ServerActionCreator.receiveUpdatedBlog({blog, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnUpdatingBlog({error, token}));
+    },
+
+    deleteBlog: ({token, id}) => {
+        ajaxRestfulAPI("/blogs/" + id, {
+            method: 'delete'
+        })
+            .then(() => ServerActionCreator.receiveDeletedBlog({id, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnDeletingBlog({error, token}));
+
     }
+
 
 };
 
