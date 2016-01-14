@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
 import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import UserStore from '../../../../stores/user-store';
-import UserForm from '../../../partials/user-form';
+import UserForm from './partials/user-form';
 import hat from 'hat';
 
 

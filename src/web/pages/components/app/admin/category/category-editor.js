@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
 import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import CategoryStore from '../../../../stores/category-store';
-import CategoryForm from '../../../partials/category-form';
+import CategoryForm from './partials/category-form';
 import hat from 'hat';
 
 
