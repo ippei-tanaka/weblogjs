@@ -3,18 +3,28 @@ import Moment from 'moment';
 import List from '../../../partials/list';
 import ServerFacade from '../../../../services/server-facade';
 import UserStore from '../../../../stores/user-store';
+import ViewActions from '../../../../actions/view-actions';
 import Page from '../../../abstructs/page';
-
 
 class UserList extends Page {
 
     constructor(props) {
         super(props);
-        this.state = {models: []};
+
+        this.state = {
+            models: UserStore.getAll()
+        };
+
+        this.updateModelsCallback = this.updateModels.bind(this);
     }
 
-    componentWillMount() {
-        this.updateModels();
+    componentDidMount() {
+        UserStore.addChangeListener(this.updateModelsCallback);
+        ViewActions.requestLoadingUsers();
+    }
+
+    componentWillUnmount() {
+        UserStore.removeChangeListener(this.updateModelsCallback);
     }
 
     render() {
@@ -28,18 +38,8 @@ class UserList extends Page {
                      deleterLocationBuilder={id => `/admin/users/${id}/deleter`}/>;
     }
 
-    componentDidMount() {
-        //UserStore.addChangeListener(() => this.updateModels());
-    }
-
-    componentWillUnmount() {
-        //UserStore.removeChangeListener(() => this.updateModels());
-    }
-
     updateModels() {
-        UserStore.getAll()
-            .then(value => this.setState({models: value}))
-            .catch(data => console.error(data));
+        this.setState({models: UserStore.getAll()});
     }
 
     get fields() {

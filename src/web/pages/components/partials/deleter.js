@@ -13,9 +13,7 @@ class Deleter extends React.Component {
                     mode="choose"
                     onApproved={this.props.onApproved}
                     onCanceled={this.props.onCanceled}
-                >
-                    Do you want to delete "{this.props.label}"?
-                </Confirmation>
+                >{this.props.label}</Confirmation>
             </div>
         );
     }

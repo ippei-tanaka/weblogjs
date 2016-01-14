@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
-import UserActions from '../../../../actions/user-actions';
+import ViewActions from '../../../../actions/view-actions';
 import UserStore from '../../../../stores/user-store';
 import UserForm from '../../../partials/user-form';
+import hat from 'hat';
+
+
+var rack = hat.rack();
 
 
 class UserEditor extends Page {
@@ -16,26 +20,19 @@ class UserEditor extends Page {
             values: {}
         };
 
-        this.token = this.generateToken();
+        this.token = rack();
 
-        this.updateSuccessCallback = this.onUpdateSuccess.bind(this);
-        this.updateFailCallback = this.onUpdateFail.bind(this);
-    }
-
-    componentWillMount() {
-        UserStore
-            .getById(this.props.params.id)
-            .then(v => this.setState(s => {s.values = v}));
+        this.callback = this.onStoreChanged.bind(this);
     }
 
     componentDidMount() {
-        UserStore.addUpdateSuccessEventListener(this.updateSuccessCallback);
-        UserStore.addUpdateFailEventListener(this.updateFailCallback);
+        this.updateValues();
+        ViewActions.requestLoadingUsers();
+        UserStore.addChangeListener(this.callback);
     }
 
     componentWillUnmount() {
-        UserStore.removeUpdateSuccessEventListener(this.updateSuccessCallback);
-        UserStore.removeUpdateFailEventListener(this.updateFailCallback);
+        UserStore.removeChangeListener(this.callback);
     }
 
     render() {
@@ -53,24 +50,31 @@ class UserEditor extends Page {
     }
 
     onSubmit(values) {
-        UserActions.update({
+        ViewActions.requestUpdateUser({
             id: this.props.params.id,
             token: this.token,
             data: values
         });
     }
 
-    onUpdateSuccess(action) {
-        if (action.token === this.token) {
-            this.setState(s => { s.errors = {} });
-            this.context.history.pushState(null, "/admin/users");
+    onStoreChanged() {
+        var action = UserStore.latestAction;
+
+        this.updateValues();
+
+        if (action && action.token === this.token) {
+            if (action.data && action.data.errors) {
+                this.setState(s => { s.errors = action.data.errors });
+            } else {
+                this.context.history.pushState(null, "/admin/users");
+            }
         }
     }
 
-    onUpdateFail(action, errors) {
-        if (action.token === this.token) {
-            this.setState(s => { s.errors = errors });
-        }
+    updateValues () {
+        this.setState(s => {
+            s.values = UserStore.get(this.props.params.id) || {};
+        });
     }
 
     get title() {
