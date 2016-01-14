@@ -2,18 +2,30 @@ import React from 'react';
 import Moment from 'moment';
 import List from '../../../partials/list';
 import ServerFacade from '../../../../services/server-facade';
-//import UserStore from '../../../../stores/user-store';
+import CategoryStore from '../../../../stores/category-store';
+import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import Page from '../../../abstructs/page';
 
 
 class CategoryList extends Page {
+
     constructor(props) {
         super(props);
-        this.state = {models: []};
+
+        this.state = {
+            models: []
+        };
+
+        this.callback = this.updateModels.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.updateModels();
+        CategoryStore.addChangeListener(this.callback);
+    }
+
+    componentWillUnmount() {
+        CategoryStore.removeChangeListener(this.callback);
     }
 
     render() {
@@ -27,18 +39,8 @@ class CategoryList extends Page {
                      deleterLocationBuilder={id => `/admin/categories/${id}/deleter`}/>;
     }
 
-    //componentDidMount() {
-    //    UserStore.addChangeListener(() => this.updateModels());
-    //}
-    //
-    //componentWillUnmount() {
-    //    UserStore.removeChangeListener(() => this.updateModels());
-    //}
-
     updateModels() {
-        ServerFacade.getCategories()
-            .then(value => this.setState({models: value}))
-            .catch(data => console.error(data));
+        this.setState({models: CategoryStore.getAll()});
     }
 
     get fields() {

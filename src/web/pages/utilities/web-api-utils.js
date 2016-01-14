@@ -43,6 +43,38 @@ export default {
             .then(() => ServerActionCreator.receiveDeletedUser({id, token}))
             .catch(error => ServerActionCreator.receiveErrorOnDeletingUser({error, token}));
 
+    },
+
+    loadCategories: () => {
+        ajaxRestfulAPI("/categories")
+            .then(data => ServerActionCreator.receiveCategories(data.items));
+    },
+
+    createCategory: ({token, data}) => {
+        ajaxRestfulAPI("/categories", {
+            data: data,
+            method: 'post'
+        })
+            .then(category => ServerActionCreator.receiveCreatedCategory({category, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnCreatingCategory({error, token}));
+    },
+
+    updateCategory: ({token, id, data}) => {
+        ajaxRestfulAPI("/categories/" + id, {
+            data: data,
+            method: 'put'
+        })
+            .then(category => ServerActionCreator.receiveUpdatedCategory({category, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnUpdatingCategory({error, token}));
+    },
+
+    deleteCategory: ({token, id}) => {
+        ajaxRestfulAPI("/categories/" + id, {
+            method: 'delete'
+        })
+            .then(() => ServerActionCreator.receiveDeletedCategory({id, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnDeletingCategory({error, token}));
+
     }
 
 };

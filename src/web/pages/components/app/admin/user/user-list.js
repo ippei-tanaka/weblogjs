@@ -12,15 +12,15 @@ class UserList extends Page {
         super(props);
 
         this.state = {
-            models: UserStore.getAll()
+            models: []
         };
 
         this.updateModelsCallback = this.updateModels.bind(this);
     }
 
     componentDidMount() {
+        this.updateModels();
         UserStore.addChangeListener(this.updateModelsCallback);
-        ViewActionCreator.requestLoadingUsers();
     }
 
     componentWillUnmount() {
