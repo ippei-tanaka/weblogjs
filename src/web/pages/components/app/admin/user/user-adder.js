@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
-import UserActions from '../../../../actions/user-actions';
+import ViewActions from '../../../../actions/view-actions';
 import UserStore from '../../../../stores/user-store';
 import UserForm from '../../../partials/user-form';
+import hat from 'hat';
+
+
+var rack = hat.rack();
 
 
 class UserAdder extends Page {
@@ -16,20 +20,17 @@ class UserAdder extends Page {
             values: {}
         };
 
-        this.token = this.generateToken();
+        this.token = rack();
 
-        this.createSuccessCallback = this.onCreateSuccess.bind(this);
-        this.createFailCallback = this.onCreateFail.bind(this);
+        this.callback = this.onStoreChanged.bind(this);
     }
 
     componentDidMount() {
-        UserStore.addCreateSuccessEventListener(this.createSuccessCallback);
-        UserStore.addCreateFailEventListener(this.createFailCallback);
+        UserStore.addChangeListener(this.callback);
     }
 
     componentWillUnmount() {
-        UserStore.removeCreateSuccessEventListener(this.createSuccessCallback);
-        UserStore.removeCreateFailEventListener(this.createFailCallback);
+        UserStore.removeChangeListener(this.callback);
     }
 
     render() {
@@ -47,22 +48,21 @@ class UserAdder extends Page {
     }
 
     onSubmit(values) {
-        UserActions.create({
+        ViewActions.requestCreateUser({
             token: this.token,
             data: values
         });
     }
 
-    onCreateSuccess(action) {
-        if (action.token === this.token) {
-            this.setState(s => { s.errors = {} });
-            this.context.history.pushState(null, "/admin/users");
-        }
-    }
+    onStoreChanged() {
+        var action = UserStore.latestAction;
 
-    onCreateFail(action, errors) {
-        if (action.token === this.token) {
-            this.setState(s => { s.errors = errors });
+        if (action && action.token === this.token) {
+            if (action.data && action.data.errors) {
+                this.setState(s => { s.errors = action.data.errors });
+            } else {
+                this.context.history.pushState(null, "/admin/users");
+            }
         }
     }
 

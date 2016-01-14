@@ -1,9 +1,11 @@
 import React from 'react';
 import UserStore from '../../../../stores/user-store';
-import UserActions from '../../../../actions/user-actions';
+import ViewActions from '../../../../actions/view-actions';
 import Page from '../../../abstructs/page';
 import Deleter from '../../../partials/deleter';
+import hat from 'hat';
 
+var rack = hat.rack();
 
 class UserDeleter extends Page {
 
@@ -11,26 +13,22 @@ class UserDeleter extends Page {
         super(props);
 
         this.state = {
-            label: ""
+            values: ""
         };
 
-        this.token = this.generateToken();
-        this.deleteSuccessCallback = this.onDeleteSuccess.bind(this);
-        this.deleteFailCallback = this.onDeleteFail.bind(this);
-    }
+        this.token = rack();
 
-    componentWillMount() {
-        this.updateLabel();
+        this.callback = this.onStoreChanged.bind(this);
     }
 
     componentDidMount() {
-        UserStore.addDeleteSuccessEventListener(this.deleteSuccessCallback);
-        UserStore.addDeleteFailEventListener(this.deleteFailCallback);
+        this.updateValues();
+        ViewActions.requestLoadingUsers();
+        UserStore.addChangeListener(this.callback);
     }
 
     componentWillUnmount() {
-        UserStore.removeDeleteSuccessEventListener(this.deleteSuccessCallback);
-        UserStore.removeDeleteFailEventListener(this.deleteFailCallback);
+        UserStore.removeChangeListener(this.callback);
     }
 
     render() {
@@ -38,50 +36,49 @@ class UserDeleter extends Page {
 
         return (
             <Deleter title={this.title}
-                     label={this.state.label}
+                     label={this.label}
                      onApproved={this.onApproved.bind(this)}
                      onCanceled={this.goToListPage.bind(this)}/>
         );
     }
 
     onApproved () {
-        UserActions.del({
-            id: this.props.params.id,
-            token: this.token
-        })
+        ViewActions.requestDeleteUser({
+            token: this.token,
+            id: this.props.params.id
+        });
     }
 
-    onDeleteSuccess(action) {
-        if (action.token === this.token) {
-            this.setState(s => { s.errors = {} });
-            this.goToListPage();
+    onStoreChanged() {
+        var action = UserStore.latestAction;
+
+        this.updateValues();
+
+        if (action && action.token === this.token) {
+            if (action.data && action.data.errors) {
+                this.setState(s => { s.errors = action.data.errors });
+            } else {
+                this.goToListPage();
+            }
         }
     }
 
-    onDeleteFail(action, errors) {
-        if (action.token === this.token) {
-            this.setState(s => { s.errors = errors });
-        }
-    }
-
-    goToListPage() {
+    goToListPage () {
         this.context.history.pushState(null, "/admin/users");
     }
 
-    updateLabel() {
-        /*
-        ServerFacade
-            .getUser(this.props.params.id)
-            .then(user => {
-                return user.display_name;
-            })
-            .then(values => this.setState({label: values}))
-            .catch(data => console.error(data));
-            */
+    updateValues () {
+        this.setState(s => {
+            s.values = UserStore.get(this.props.params.id) || {};
+        });
     }
 
     get title() {
-        return "Delete User";
+        return `Delete the User "${this.state.values.display_name}"`;
+    }
+
+    get label() {
+        return `Do you want to delete "${this.state.values.display_name}"?`;
     }
 }
 
