@@ -1,5 +1,5 @@
 import ajax from "./ajax";
-import ServerActions from "../actions/server-actions";
+import ServerActionCreator from "../action-creators/server-action-creator";
 
 const URL_BASE = "/api/v1";
 
@@ -15,7 +15,7 @@ export default {
 
     loadUsers: () => {
         ajaxRestfulAPI("/users")
-            .then(data => ServerActions.receiveUsers(data.items));
+            .then(data => ServerActionCreator.receiveUsers(data.items));
     },
 
     createUser: ({token, data}) => {
@@ -23,8 +23,8 @@ export default {
             data: data,
             method: 'post'
         })
-            .then(user => ServerActions.receiveCreatedUser({user, token}))
-            .catch(error => ServerActions.receiveErrorOnCreatingUser({error, token}));
+            .then(user => ServerActionCreator.receiveCreatedUser({user, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnCreatingUser({error, token}));
     },
 
     updateUser: ({token, id, data}) => {
@@ -32,16 +32,16 @@ export default {
             data: data,
             method: 'put'
         })
-            .then(user => ServerActions.receiveUpdatedUser({user, token}))
-            .catch(error => ServerActions.receiveErrorOnUpdatingUser({error, token}));
+            .then(user => ServerActionCreator.receiveUpdatedUser({user, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnUpdatingUser({error, token}));
     },
 
     deleteUser: ({token, id}) => {
         ajaxRestfulAPI("/users/" + id, {
             method: 'delete'
         })
-            .then(() => ServerActions.receiveDeletedUser({id, token}))
-            .catch(error => ServerActions.receiveErrorOnDeletingUser({error, token}));
+            .then(() => ServerActionCreator.receiveDeletedUser({id, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnDeletingUser({error, token}));
 
     }
 

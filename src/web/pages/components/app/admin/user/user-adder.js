@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
-import ViewActions from '../../../../actions/view-actions';
+import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import UserStore from '../../../../stores/user-store';
 import UserForm from '../../../partials/user-form';
 import hat from 'hat';
@@ -48,7 +48,7 @@ class UserAdder extends Page {
     }
 
     onSubmit(values) {
-        ViewActions.requestCreateUser({
+        ViewActionCreator.requestCreateUser({
             token: this.token,
             data: values
         });

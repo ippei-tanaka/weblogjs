@@ -21,6 +21,7 @@ const constants = Object.freeze({
 
     PayloadSources: keyMirror({
         VIEW: null,
+        MODEL: null,
         SERVER: null
     })
 

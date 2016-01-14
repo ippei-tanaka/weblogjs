@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
-import ViewActions from '../../../../actions/view-actions';
+import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import UserStore from '../../../../stores/user-store';
 import UserForm from '../../../partials/user-form';
 import hat from 'hat';
@@ -27,7 +27,7 @@ class UserEditor extends Page {
 
     componentDidMount() {
         this.updateValues();
-        ViewActions.requestLoadingUsers();
+        ViewActionCreator.requestLoadingUsers();
         UserStore.addChangeListener(this.callback);
     }
 
@@ -50,7 +50,7 @@ class UserEditor extends Page {
     }
 
     onSubmit(values) {
-        ViewActions.requestUpdateUser({
+        ViewActionCreator.requestUpdateUser({
             id: this.props.params.id,
             token: this.token,
             data: values

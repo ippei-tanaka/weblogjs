@@ -3,7 +3,7 @@ import Moment from 'moment';
 import List from '../../../partials/list';
 import ServerFacade from '../../../../services/server-facade';
 import UserStore from '../../../../stores/user-store';
-import ViewActions from '../../../../actions/view-actions';
+import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import Page from '../../../abstructs/page';
 
 class UserList extends Page {
@@ -20,7 +20,7 @@ class UserList extends Page {
 
     componentDidMount() {
         UserStore.addChangeListener(this.updateModelsCallback);
-        ViewActions.requestLoadingUsers();
+        ViewActionCreator.requestLoadingUsers();
     }
 
     componentWillUnmount() {
