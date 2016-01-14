@@ -62,7 +62,11 @@ class UserStore extends Store {
 
             [Actions.USER_DELETED]: function ({action}) {
                 var id = action.data;
-                delete this._items[id];
+
+                if (this._items[id]) {
+                    delete this._items[id];
+                }
+
                 this._latestAction = action;
             },
 

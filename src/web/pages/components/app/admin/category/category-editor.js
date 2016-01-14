@@ -1,7 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
+import ViewActionCreator from '../../../../action-creators/view-action-creator';
+import CategoryStore from '../../../../stores/category-store';
 import CategoryForm from '../../../partials/category-form';
+import hat from 'hat';
+
+
+var rack = hat.rack();
 
 
 class CategoryEditor extends Page {
@@ -13,112 +19,68 @@ class CategoryEditor extends Page {
             errors: {},
             values: {}
         };
+
+        this.token = rack();
+
+        this.callback = this.onStoreChanged.bind(this);
     }
 
-    componentWillMount() {
-        this.setRetrievedModelData();
+    componentDidMount() {
+        this.updateValues();
+        CategoryStore.addChangeListener(this.callback);
+    }
+
+    componentWillUnmount() {
+        CategoryStore.removeChangeListener(this.callback);
     }
 
     render() {
         this.setPageTitle(this.title);
 
         return (
-            <Form onSubmit={this.onSubmit.bind(this)}>
-
-                <Title>{this.title}</Title>
-
-                <FieldSet label="Name"
-                          error={this.state.errors.name}>
-                    <Input value={this.state.values.name}
-                           onChange={this.onNameChanged.bind(this)}/>
-                </FieldSet>
-
-                <FieldSet label="Slug"
-                          error={this.state.errors.slug}>
-                    <Input value={this.state.values.slug}
-                           onChange={this.onSlugChanged.bind(this)}/>
-                </FieldSet>
-
-                <FlushMessage>
-                    {this.state.flushMessage}
-                </FlushMessage>
-
-                <ButtonList>
-                    <SubmitButton>{this.submitButtonLabel}</SubmitButton>
-                    <Link to="/admin/categories"
-                          className="module-button">
-                        Back
-                    </Link>
-                </ButtonList>
-            </Form>
+            <CategoryForm title={this.title}
+                          errors={this.state.errors}
+                          values={this.state.values}
+                          autoSlugfy={false}
+                          onSubmit={this.onSubmit.bind(this)}
+                          submitButtonLabel="Update"
+                          locationForBackButton="/admin/categories"
+            />
         );
     }
 
-    setRetrievedModelData () {
-        var modelPromise = this.retrieveModelData();
+    onSubmit(values) {
+        ViewActionCreator.requestUpdateCategory({
+            id: this.props.params.id,
+            token: this.token,
+            data: values
+        });
+    }
 
-        if (modelPromise) {
-            modelPromise
-                .then(v => this.setState(s => { s.values = v }));
+    onStoreChanged() {
+        var action = CategoryStore.latestAction;
+
+        this.updateValues();
+
+        if (action && action.token === this.token) {
+            if (action.data && action.data.errors) {
+                this.setState(s => {
+                    s.errors = action.data.errors
+                });
+            } else {
+                this.context.history.pushState(null, "/admin/categories");
+            }
         }
     }
 
-    onNameChanged(value) {
-        this.setState(state => {
-            state.values.name = value;
-            if (state.slugPristine) {
-                state.values.slug = slugfy(value);
-            }
+    updateValues() {
+        this.setState(s => {
+            s.values = CategoryStore.get(this.props.params.id) || {};
         });
     }
 
-    onSlugChanged(value) {
-        this.setState(state => {
-            state.values.slug = value;
-            state.slugPristine = !value;
-        });
-    }
-
-    onSubmit(event) {
-        event.preventDefault();
-
-        this.sendModelData(trimObjValues(this.state.values))
-            .then(() => {
-                var promise = this.showFlushMessage(this.successMessage);
-                return promise || Promise.resolve();
-            })
-            .then(this.props.onComplete)
-            .catch((data) => this.setState(state => {
-                state.errors = data.errors;
-                state.flushMessage = "";
-            }));
-    }
-
-    showFlushMessage (message) {
-        return new Promise((resolve, reject) => this.setState(state => {
-            state.errors = {};
-            state.flushMessage = message;
-        }, resolve));
-    }
-
-    retrieveModelData () {
-        return ServerFacade.getCategory(this.props.params.id);
-    }
-
-    sendModelData (data) {
-        return ServerFacade.updateCategory(this.props.params.id, data);
-    }
-
-    get title () {
-        return "Edit the Category";
-    }
-
-    get successMessage () {
-        return "It is successfully updated!";
-    }
-
-    get submitButtonLabel () {
-        return "Save";
+    get title() {
+        return `Edit the User "${this.state.values.display_name}"`;
     }
 
     static get propTypes() {
