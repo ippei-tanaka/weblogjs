@@ -23,7 +23,6 @@ class UserDeleter extends Page {
 
     componentDidMount() {
         this.updateValues();
-        ViewActionCreator.requestLoadingUsers();
         UserStore.addChangeListener(this.callback);
     }
 

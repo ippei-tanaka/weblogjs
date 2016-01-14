@@ -5,8 +5,8 @@ import Flux from 'flux';
 class AppDispatcher extends Flux.Dispatcher {
 
     handleViewAction(action) {
-        console.log("View Action");
-        console.log(action);
+        console.log("View Action - " + action.actionType);
+
         this.dispatch({
             source: Constants.PayloadSources.VIEW,
             action: action
@@ -14,8 +14,7 @@ class AppDispatcher extends Flux.Dispatcher {
     }
 
     handleServerAction(action) {
-        console.log("Server Action");
-        console.log(action);
+        console.log("Server Action - " + action.actionType);
 
         this.dispatch({
             source: Constants.PayloadSources.VIEW,

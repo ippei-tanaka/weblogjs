@@ -41,7 +41,6 @@ class CategoryAdder extends Page {
                           errors={this.state.errors}
                           values={this.state.values}
                           autoSlugfy={true}
-                          passwordField={true}
                           onSubmit={this.onSubmit.bind(this)}
                           submitButtonLabel="Create"
                           locationForBackButton="/admin/categories"

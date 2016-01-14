@@ -44,7 +44,7 @@ class UserEditor extends Page {
                       autoSlugfy={false}
                       passwordField={false}
                       onSubmit={this.onSubmit.bind(this)}
-                      submitButtonLabel="Update"                      locationForBackButton="/admin/users"
+                      submitButtonLabel="Update"
                       locationForBackButton="/admin/users"
             />
         );
@@ -65,14 +65,16 @@ class UserEditor extends Page {
 
         if (action && action.token === this.token) {
             if (action.data && action.data.errors) {
-                this.setState(s => { s.errors = action.data.errors });
+                this.setState(s => {
+                    s.errors = action.data.errors
+                });
             } else {
                 this.context.history.pushState(null, "/admin/users");
             }
         }
     }
 
-    updateValues () {
+    updateValues() {
         this.setState(s => {
             s.values = UserStore.get(this.props.params.id) || {};
         });
