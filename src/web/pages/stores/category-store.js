@@ -3,7 +3,7 @@ import { Actions } from '../constants';
 import WebApiUtils from '../utilities/web-api-utils';
 
 
-class UserStore extends Store {
+class CategoryStore extends Store {
 
     constructor(...args) {
         super(...args);
@@ -24,49 +24,40 @@ class UserStore extends Store {
      */
     get _actionCallbackList() {
         return {
-            /*
-            [Actions.USERS_LOAD_REQUEST]: function ({action}) {
-                if (Object.keys(this._items).length === 0) {
-                    WebApiUtils.loadUsers();
-                }
-                this._latestAction = action;
-            },
-            */
-
-            [Actions.USERS_LOADED]: function ({action}) {
-                for (let user of action.data) {
-                    this._items[user._id] = user;
+            [Actions.CATEGORIES_LOADED]: function ({action}) {
+                for (let category of action.data) {
+                    this._items[category._id] = category;
                 }
                 this._latestAction = action;
             },
 
-            [Actions.USER_CREATED]: function ({action}) {
-                var user = action.data;
-                this._items[user._id] = user;
+            [Actions.CATEGORY_CREATED]: function ({action}) {
+                var category = action.data;
+                this._items[category._id] = category;
                 this._latestAction = action;
             },
 
-            [Actions.USER_CREATE_FAILED]: function ({action}) {
+            [Actions.CATEGORY_CREATE_FAILED]: function ({action}) {
                 this._latestAction = action;
             },
 
-            [Actions.USER_UPDATED]: function ({action}) {
-                var user = action.data;
-                this._items[user._id] = user;
+            [Actions.CATEGORY_UPDATED]: function ({action}) {
+                var category = action.data;
+                this._items[category._id] = category;
                 this._latestAction = action;
             },
 
-            [Actions.USER_UPDATE_FAILED]: function ({action}) {
+            [Actions.CATEGORY_UPDATE_FAILED]: function ({action}) {
                 this._latestAction = action;
             },
 
-            [Actions.USER_DELETED]: function ({action}) {
+            [Actions.CATEGORY_DELETED]: function ({action}) {
                 var id = action.data;
                 delete this._items[id];
                 this._latestAction = action;
             },
 
-            [Actions.USER_DELETE_FAILED]: function ({action}) {
+            [Actions.CATEGORY_DELETE_FAILED]: function ({action}) {
                 this._latestAction = action;
             }
         }
@@ -79,7 +70,7 @@ class UserStore extends Store {
     getAll() {
 
         if (Object.keys(this._items).length === 0) {
-            WebApiUtils.loadUsers();
+            WebApiUtils.loadCategories();
         }
 
         return Object.keys(this._items).map(key => this._items[key]);
@@ -91,13 +82,13 @@ class UserStore extends Store {
      * @returns {T}
      */
     get(id) {
-        var user = this._items[id];
+        var category = this._items[id];
 
-        if (!user) {
-            WebApiUtils.loadUsers();
+        if (!category) {
+            WebApiUtils.loadCategories();
         }
 
-        return user;
+        return category;
     }
 
     /**
@@ -110,4 +101,4 @@ class UserStore extends Store {
 }
 
 
-export default new UserStore();
+export default new CategoryStore();

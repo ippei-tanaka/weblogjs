@@ -43,7 +43,9 @@ class UserAdder extends Page {
                       autoSlugfy={true}
                       passwordField={true}
                       onSubmit={this.onSubmit.bind(this)}
-                      submitButtonLabel="Create"/>
+                      submitButtonLabel="Create"
+                      locationForBackButton="/admin/users"
+            />
         );
     }
 
@@ -59,7 +61,9 @@ class UserAdder extends Page {
 
         if (action && action.token === this.token) {
             if (action.data && action.data.errors) {
-                this.setState(s => { s.errors = action.data.errors });
+                this.setState(s => {
+                    s.errors = action.data.errors
+                });
             } else {
                 this.context.history.pushState(null, "/admin/users");
             }

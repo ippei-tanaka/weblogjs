@@ -60,6 +60,61 @@ export default {
             data: errors,
             token: token
         });
+    },
+
+    receiveCategories: categories => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.CATEGORIES_LOADED,
+            data: categories
+        });
+    },
+
+    receiveCreatedCategory: ({category, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.CATEGORY_CREATED,
+            data: category,
+            token: token
+        });
+    },
+
+    receiveErrorOnCreatingCategory: ({error, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.CATEGORY_CREATE_FAILED,
+            data: error,
+            token: token
+        });
+    },
+
+    receiveUpdatedCategory: ({category, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.CATEGORY_UPDATED,
+            data: category,
+            token: token
+        });
+    },
+
+    receiveErrorOnUpdatingCategory: ({error, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.CATEGORY_UPDATE_FAILED,
+            data: error,
+            token: token
+        });
+    },
+
+    receiveDeletedCategory: ({id, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.CATEGORY_DELETED,
+            data: id,
+            token: token
+        });
+    },
+
+    receiveErrorOnDeletingCategory: ({errors, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.CATEGORY_DELETE_FAILED,
+            data: errors,
+            token: token
+        });
     }
 
 };

@@ -60,7 +60,7 @@ export default class UserForm extends React.Component {
 
                 <ButtonList>
                     <SubmitButton>{this.props.submitButtonLabel}</SubmitButton>
-                    <Link to="/admin/users"
+                    <Link to={this.props.locationForBackButton}
                           className="module-button">
                         Back
                     </Link>
@@ -121,7 +121,8 @@ export default class UserForm extends React.Component {
             autoSlugfy: React.PropTypes.bool.isRequired,
             passwordField: React.PropTypes.bool.isRequired,
             onSubmit: React.PropTypes.func.isRequired,
-            submitButtonLabel: React.PropTypes.string.isRequired
+            submitButtonLabel: React.PropTypes.string.isRequired,
+            locationForBackButton: React.PropTypes.string.isRequired
         };
     }
 }

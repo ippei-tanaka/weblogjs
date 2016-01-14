@@ -30,26 +30,10 @@ export default class CategoryForm extends React.Component {
 
                 <Title>{this.props.title}</Title>
 
-                <FieldSet label="Email"
-                          error={this.state.errors.email}>
-                    <Input value={this.state.values.email}
-                           type="email"
-                           onChange={value => { this.updateValue('email', value)}}/>
-                </FieldSet>
-
-                {this.props.passwordField ? (
-                    <FieldSet label="Password"
-                              error={this.state.errors.password}>
-                        <Input value={this.state.values.password}
-                               type="text"
-                               onChange={value => { this.updateValue('password', value)}}/>
-                    </FieldSet>
-                ) : null}
-
-                <FieldSet label="Display Name"
-                          error={this.state.errors.display_name}>
-                    <Input value={this.state.values.display_name}
-                           onChange={this.onDisplayNameChanged.bind(this)}/>
+                <FieldSet label="Name"
+                          error={this.state.errors.name}>
+                    <Input value={this.state.values.name}
+                           onChange={this.onNameChanged.bind(this)}/>
                 </FieldSet>
 
                 <FieldSet label="Slug"
@@ -60,7 +44,7 @@ export default class CategoryForm extends React.Component {
 
                 <ButtonList>
                     <SubmitButton>{this.props.submitButtonLabel}</SubmitButton>
-                    <Link to="/admin/users"
+                    <Link to={this.props.locationForBackButton}
                           className="module-button">
                         Back
                     </Link>
@@ -70,8 +54,8 @@ export default class CategoryForm extends React.Component {
         );
     }
 
-    onDisplayNameChanged(value) {
-        this.updateValue('display_name', value);
+    onNameChanged(value) {
+        this.updateValue('name', value);
 
         if (this.state.autoSlugfy) {
             this.updateValue('slug', slugfy(value));
@@ -118,9 +102,9 @@ export default class CategoryForm extends React.Component {
             errors: React.PropTypes.object.isRequired,
             values: React.PropTypes.object.isRequired,
             autoSlugfy: React.PropTypes.bool.isRequired,
-            passwordField: React.PropTypes.bool.isRequired,
             onSubmit: React.PropTypes.func.isRequired,
-            submitButtonLabel: React.PropTypes.string.isRequired
+            submitButtonLabel: React.PropTypes.string.isRequired,
+            locationForBackButton: React.PropTypes.string.isRequired
         };
     }
 }

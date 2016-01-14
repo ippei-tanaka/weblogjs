@@ -6,12 +6,6 @@ var Actions = Constants.Actions;
 
 export default {
 
-    requestLoadingUsers: () => {
-        Dispatcher.handleViewAction({
-            actionType: Actions.USERS_LOAD_REQUEST
-        });
-    },
-
     requestCreateUser: ({token, data}) => {
         Dispatcher.handleViewAction({
             actionType: Actions.USER_CREATE_REQUEST
@@ -31,6 +25,27 @@ export default {
             actionType: Actions.USER_DELETE_REQUEST
         });
         WebApiUtils.deleteUser({token, id});
+    },
+
+    requestCreateCategory: ({token, data}) => {
+        Dispatcher.handleViewAction({
+            actionType: Actions.CATEGORY_CREATE_REQUEST
+        });
+        WebApiUtils.createCategory({token, data});
+    },
+
+    requestUpdateCategory: ({token, id, data}) => {
+        Dispatcher.handleViewAction({
+            actionType: Actions.CATEGORY_UPDATE_REQUEST
+        });
+        WebApiUtils.updateCategory({token, id, data});
+    },
+
+    requestDeleteCateogry: ({token, id}) => {
+        Dispatcher.handleViewAction({
+            actionType: Actions.CATEGORY_DELETE_REQUEST
+        });
+        WebApiUtils.deleteCategory({token, id});
     }
 
 };
