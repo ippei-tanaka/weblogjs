@@ -121,17 +121,17 @@ export default {
 
 
 
-    receiveBlogs: blogs => {
+    receiveBlogs: posts => {
         Dispatcher.handleServerAction({
             actionType: Actions.BLOGS_LOADED,
-            data: blogs
+            data: posts
         });
     },
 
-    receiveCreatedBlog: ({blog, token}) => {
+    receiveCreatedBlog: ({post, token}) => {
         Dispatcher.handleServerAction({
             actionType: Actions.BLOG_CREATED,
-            data: blog,
+            data: post,
             token: token
         });
     },
@@ -144,10 +144,10 @@ export default {
         });
     },
 
-    receiveUpdatedBlog: ({blog, token}) => {
+    receiveUpdatedBlog: ({post, token}) => {
         Dispatcher.handleServerAction({
             actionType: Actions.BLOG_UPDATED,
-            data: blog,
+            data: post,
             token: token
         });
     },
@@ -176,4 +176,60 @@ export default {
         });
     },
 
+
+
+    receivePosts: posts => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.POSTS_LOADED,
+            data: posts
+        });
+    },
+
+    receiveCreatedPost: ({post, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.POST_CREATED,
+            data: post,
+            token: token
+        });
+    },
+
+    receiveErrorOnCreatingPost: ({error, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.POST_CREATE_FAILED,
+            data: error,
+            token: token
+        });
+    },
+
+    receiveUpdatedPost: ({post, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.POST_UPDATED,
+            data: post,
+            token: token
+        });
+    },
+
+    receiveErrorOnUpdatingPost: ({error, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.POST_UPDATE_FAILED,
+            data: error,
+            token: token
+        });
+    },
+
+    receiveDeletedPost: ({id, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.POST_DELETED,
+            data: id,
+            token: token
+        });
+    },
+
+    receiveErrorOnDeletingPost: ({errors, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.POST_DELETE_FAILED,
+            data: errors,
+            token: token
+        });
+    }
 };

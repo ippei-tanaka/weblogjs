@@ -107,207 +107,239 @@ export default {
             .then(() => ServerActionCreator.receiveDeletedBlog({id, token}))
             .catch(error => ServerActionCreator.receiveErrorOnDeletingBlog({error, token}));
 
+    },
+
+    loadPosts: () => {
+        ajaxRestfulAPI("/posts")
+            .then(data => ServerActionCreator.receivePosts(data.items));
+    },
+
+    createPost: ({token, data}) => {
+        ajaxRestfulAPI("/posts", {
+            data: data,
+            method: 'post'
+        })
+            .then(post => ServerActionCreator.receiveCreatedPost({post, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnCreatingPost({error, token}));
+    },
+
+    updatePost: ({token, id, data}) => {
+        ajaxRestfulAPI("/posts/" + id, {
+            data: data,
+            method: 'put'
+        })
+            .then(post => ServerActionCreator.receiveUpdatedPost({post, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnUpdatingPost({error, token}));
+    },
+
+    deletePost: ({token, id}) => {
+        ajaxRestfulAPI("/posts/" + id, {
+            method: 'delete'
+        })
+            .then(() => ServerActionCreator.receiveDeletedPost({id, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnDeletingPost({error, token}));
+
     }
 
 
 };
 
 /*
-class WebApiUtils {
+ class WebApiUtils {
 
-    constructor() {
-        this.urlBase = "/api/v1";
-    }
+ constructor() {
+ this.urlBase = "/api/v1";
+ }
 
-    getBlogs() {
-        return this
-            .restfulAPI("/blogs")
-            .then(function (data) {
-                return data.items;
-            });
-    }
+ getBlogs() {
+ return this
+ .restfulAPI("/blogs")
+ .then(function (data) {
+ return data.items;
+ });
+ }
 
-    getBlog(id) {
-        return this
-            .restfulAPI("/blogs/" + id);
-    }
+ getBlog(id) {
+ return this
+ .restfulAPI("/blogs/" + id);
+ }
 
-    createBlog(blogObject) {
-        return this
-            .restfulAPI("/blogs/", {
-                data: blogObject,
-                method: 'post'
-            });
-    }
+ createBlog(blogObject) {
+ return this
+ .restfulAPI("/blogs/", {
+ data: blogObject,
+ method: 'post'
+ });
+ }
 
-    updateBlog(id, blogObject) {
-        return this
-            .restfulAPI("/blogs/" + id, {
-                data: blogObject,
-                method: 'put'
-            });
-    }
+ updateBlog(id, blogObject) {
+ return this
+ .restfulAPI("/blogs/" + id, {
+ data: blogObject,
+ method: 'put'
+ });
+ }
 
-    deleteBlog(id) {
-        return this
-            .restfulAPI("/blogs/" + id, {
-                method: 'delete'
-            });
-    }
+ deleteBlog(id) {
+ return this
+ .restfulAPI("/blogs/" + id, {
+ method: 'delete'
+ });
+ }
 
-    getCategories() {
-        return this
-            .restfulAPI("/categories")
-            .then(function (data) {
-                return data.items;
-            });
-    }
+ getCategories() {
+ return this
+ .restfulAPI("/categories")
+ .then(function (data) {
+ return data.items;
+ });
+ }
 
-    getCategory(id) {
-        return this
-            .restfulAPI("/categories/" + id);
-    }
+ getCategory(id) {
+ return this
+ .restfulAPI("/categories/" + id);
+ }
 
-    createCategory(categoryObject) {
-        return this
-            .restfulAPI("/categories/", {
-                data: categoryObject,
-                method: 'post'
-            });
-    }
+ createCategory(categoryObject) {
+ return this
+ .restfulAPI("/categories/", {
+ data: categoryObject,
+ method: 'post'
+ });
+ }
 
-    updateCategory(id, categoryObject) {
-        return this
-            .restfulAPI("/categories/" + id, {
-                data: categoryObject,
-                method: 'put'
-            });
-    }
+ updateCategory(id, categoryObject) {
+ return this
+ .restfulAPI("/categories/" + id, {
+ data: categoryObject,
+ method: 'put'
+ });
+ }
 
-    deleteCategory(id) {
-        return this
-            .restfulAPI("/categories/" + id, {
-                method: 'delete'
-            });
-    }
+ deleteCategory(id) {
+ return this
+ .restfulAPI("/categories/" + id, {
+ method: 'delete'
+ });
+ }
 
-    getPosts() {
-        return this
-            .restfulAPI("/posts")
-            .then(function (data) {
-                return data.items;
-            });
-    }
+ getPosts() {
+ return this
+ .restfulAPI("/posts")
+ .then(function (data) {
+ return data.items;
+ });
+ }
 
-    getPost(id) {
-        return this
-            .restfulAPI("/posts/" + id);
-    }
+ getPost(id) {
+ return this
+ .restfulAPI("/posts/" + id);
+ }
 
-    createPost(postObject) {
-        return this
-            .restfulAPI("/posts/", {
-                data: postObject,
-                method: 'post'
-            });
-    }
+ createPost(postObject) {
+ return this
+ .restfulAPI("/posts/", {
+ data: postObject,
+ method: 'post'
+ });
+ }
 
-    updatePost(id, postObject) {
-        return this
-            .restfulAPI("/posts/" + id, {
-                data: postObject,
-                method: 'put'
-            });
-    }
+ updatePost(id, postObject) {
+ return this
+ .restfulAPI("/posts/" + id, {
+ data: postObject,
+ method: 'put'
+ });
+ }
 
-    deletePost(id) {
-        return this
-            .restfulAPI("/posts/" + id, {
-                method: 'delete'
-            });
-    }
+ deletePost(id) {
+ return this
+ .restfulAPI("/posts/" + id, {
+ method: 'delete'
+ });
+ }
 
-    loadUsers() {
-        this
-            .restfulAPI("/users")
-            .then(function (data) {
-                return data.items;
-            });
-    }
+ loadUsers() {
+ this
+ .restfulAPI("/users")
+ .then(function (data) {
+ return data.items;
+ });
+ }
 
-    getUser(id) {
-        return this
-            .restfulAPI("/users/" + id);
-    }
+ getUser(id) {
+ return this
+ .restfulAPI("/users/" + id);
+ }
 
-    getMe() {
-        return this
-            .restfulAPI("/users/me");
-    }
+ getMe() {
+ return this
+ .restfulAPI("/users/me");
+ }
 
-    createUser(userObject) {
-        return this
-            .restfulAPI("/users/", {
-                data: userObject,
-                method: 'post'
-            });
-    }
+ createUser(userObject) {
+ return this
+ .restfulAPI("/users/", {
+ data: userObject,
+ method: 'post'
+ });
+ }
 
-    updateUser(id, userObject) {
-        return this
-            .restfulAPI("/users/" + id, {
-                data: userObject,
-                method: 'put'
-            });
-    }
+ updateUser(id, userObject) {
+ return this
+ .restfulAPI("/users/" + id, {
+ data: userObject,
+ method: 'put'
+ });
+ }
 
-    deleteUser(id) {
-        return this
-            .restfulAPI("/users/" + id, {
-                method: 'delete'
-            });
-    }
+ deleteUser(id) {
+ return this
+ .restfulAPI("/users/" + id, {
+ method: 'delete'
+ });
+ }
 
-    getSetting() {
-        return this
-            .restfulAPI("/setting");
-    }
+ getSetting() {
+ return this
+ .restfulAPI("/setting");
+ }
 
-    updateSetting(settingObject) {
-        return this
-            .restfulAPI("/setting", {
-                data: settingObject,
-                method: 'put'
-            });
-    }
+ updateSetting(settingObject) {
+ return this
+ .restfulAPI("/setting", {
+ data: settingObject,
+ method: 'put'
+ });
+ }
 
-    getPrivileges() {
-        return this
-            .restfulAPI("/privileges");
-    }
+ getPrivileges() {
+ return this
+ .restfulAPI("/privileges");
+ }
 
-    login(email, password) {
-        return this
-            .restfulAPI("/login", {
-                data: {
-                    email: email,
-                    password: password
-                },
-                method: 'post'
-            });
-    }
+ login(email, password) {
+ return this
+ .restfulAPI("/login", {
+ data: {
+ email: email,
+ password: password
+ },
+ method: 'post'
+ });
+ }
 
-    logout() {
-        return this.restfulAPI("/logout");
-    }
+ logout() {
+ return this.restfulAPI("/logout");
+ }
 
-    isLoggedIn() {
-        return this.getMe("/").then(() => null);
-    }
+ isLoggedIn() {
+ return this.getMe("/").then(() => null);
+ }
 
 
 
-}
+ }
 
-export default new WebApiUtils();
-*/
+ export default new WebApiUtils();
+ */

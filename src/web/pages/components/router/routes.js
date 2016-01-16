@@ -17,7 +17,10 @@ import BlogList from "../app/admin/blog/blog-list";
 import BlogAdder from "../app/admin/blog/blog-adder";
 import BlogEditor from "../app/admin/blog/blog-editor";
 import BlogDeleter from "../app/admin/blog/blog-deleter";
-
+import PostList from "../app/admin/post/post-list";
+import PostAdder from "../app/admin/post/post-adder";
+import PostEditor from "../app/admin/post/post-editor";
+import PostDeleter from "../app/admin/post/post-deleter";
 
 var appRoutes = (
     <Route path="/" component={App}>
@@ -40,6 +43,12 @@ var appRoutes = (
                 <Route path="adder" component={BlogAdder} />
                 <Route path=":id/editor" component={BlogEditor}/>
                 <Route path=":id/deleter" component={BlogDeleter}/>
+            </Route>
+            <Route path="posts">
+                <IndexRoute component={PostList} />
+                <Route path="adder" component={PostAdder} />
+                <Route path=":id/editor" component={PostEditor}/>
+                <Route path=":id/deleter" component={PostDeleter}/>
             </Route>
         </Route>
     </Route>
