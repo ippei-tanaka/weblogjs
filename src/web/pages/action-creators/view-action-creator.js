@@ -88,6 +88,12 @@ export default {
             actionType: Actions.POST_DELETE_REQUEST
         });
         WebApiUtils.deletePost({token, id});
-    }
+    },
 
+    requestUpdateSetting: ({token, data}) => {
+        Dispatcher.handleViewAction({
+            actionType: Actions.SETTING_UPDATE_REQUEST
+        });
+        WebApiUtils.updateSetting({token, data});
+    }
 };
