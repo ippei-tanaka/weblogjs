@@ -67,6 +67,27 @@ export default {
             actionType: Actions.BLOG_DELETE_REQUEST
         });
         WebApiUtils.deleteBlog({token, id});
+    },
+
+    requestCreatePost: ({token, data}) => {
+        Dispatcher.handleViewAction({
+            actionType: Actions.POST_CREATE_REQUEST
+        });
+        WebApiUtils.createPost({token, data});
+    },
+
+    requestUpdatePost: ({token, id, data}) => {
+        Dispatcher.handleViewAction({
+            actionType: Actions.POST_UPDATE_REQUEST
+        });
+        WebApiUtils.updatePost({token, id, data});
+    },
+
+    requestDeletePost: ({token, id}) => {
+        Dispatcher.handleViewAction({
+            actionType: Actions.POST_DELETE_REQUEST
+        });
+        WebApiUtils.deletePost({token, id});
     }
 
 };
