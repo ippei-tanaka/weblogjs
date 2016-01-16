@@ -231,5 +231,28 @@ export default {
             data: errors,
             token: token
         });
+    },
+
+    receiveSetting: setting => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.SETTING_LOADED,
+            data: setting
+        });
+    },
+
+    receiveUpdatedSetting: ({setting, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.SETTING_UPDATED,
+            data: setting,
+            token: token
+        });
+    },
+
+    receiveErrorOnUpdatingSetting: ({error, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.SETTING_UPDATE_FAILED,
+            data: error,
+            token: token
+        });
     }
 };

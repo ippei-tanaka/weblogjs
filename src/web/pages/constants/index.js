@@ -61,7 +61,14 @@ const constants = Object.freeze({
 
         POST_DELETE_REQUEST: null,
         POST_DELETE_FAILED: null,
-        POST_DELETED: null
+        POST_DELETED: null,
+
+
+        SETTING_LOADED: null,
+
+        SETTING_UPDATE_REQUEST: null,
+        SETTING_UPDATE_FAILED: null,
+        SETTING_UPDATED: null
     }),
 
     PayloadSources: keyMirror({

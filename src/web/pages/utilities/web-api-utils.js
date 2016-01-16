@@ -139,9 +139,22 @@ export default {
             .then(() => ServerActionCreator.receiveDeletedPost({id, token}))
             .catch(error => ServerActionCreator.receiveErrorOnDeletingPost({error, token}));
 
+    },
+
+
+    loadSetting: () => {
+        ajaxRestfulAPI("/setting")
+            .then(data => ServerActionCreator.receiveSetting(data));
+    },
+
+    updateSetting: ({data, token}) => {
+        ajaxRestfulAPI("/setting", {
+            data: data,
+            method: 'put'
+        })
+            .then(setting => ServerActionCreator.receiveUpdatedSetting({setting, token}))
+            .catch(error => ServerActionCreator.receiveErrorOnUpdatingSetting({error, token}));
     }
-
-
 };
 
 /*

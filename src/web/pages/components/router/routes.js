@@ -21,6 +21,7 @@ import PostList from "../app/admin/post/post-list";
 import PostAdder from "../app/admin/post/post-adder";
 import PostEditor from "../app/admin/post/post-editor";
 import PostDeleter from "../app/admin/post/post-deleter";
+import SettingEditor from "../app/admin/setting/setting-editor";
 
 var appRoutes = (
     <Route path="/" component={App}>
@@ -49,6 +50,9 @@ var appRoutes = (
                 <Route path="adder" component={PostAdder} />
                 <Route path=":id/editor" component={PostEditor}/>
                 <Route path=":id/deleter" component={PostDeleter}/>
+            </Route>
+            <Route path="setting">
+                <IndexRoute component={SettingEditor} />
             </Route>
         </Route>
     </Route>
