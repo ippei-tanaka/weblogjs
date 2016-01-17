@@ -128,10 +128,10 @@ export default {
         });
     },
 
-    receiveCreatedBlog: ({post, token}) => {
+    receiveCreatedBlog: ({blog, token}) => {
         Dispatcher.handleServerAction({
             actionType: Actions.BLOG_CREATED,
-            data: post,
+            data: blog,
             token: token
         });
     },
@@ -144,10 +144,10 @@ export default {
         });
     },
 
-    receiveUpdatedBlog: ({post, token}) => {
+    receiveUpdatedBlog: ({blog, token}) => {
         Dispatcher.handleServerAction({
             actionType: Actions.BLOG_UPDATED,
-            data: post,
+            data: blog,
             token: token
         });
     },
