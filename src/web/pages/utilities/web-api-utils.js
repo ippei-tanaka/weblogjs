@@ -97,7 +97,7 @@ export default {
             method: 'put'
         })
             .then(blog => ServerActionCreator.receiveUpdatedBlog({blog, token}))
-            .catch(error => ServerActionCreator.receiveErrorOnUpdatingBlog({error, token}));
+            .catch(error => {ServerActionCreator.receiveErrorOnUpdatingBlog({error, token})});
     },
 
     deleteBlog: ({token, id}) => {
