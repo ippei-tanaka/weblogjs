@@ -6,7 +6,7 @@
   "scripts": {
     "run-dev": "node ./examples/app",
     "run-prd": "NODE_ENV=production node ./examples/app",
-    "test": "./node_modules/.bin/gulp test",
+    "test": "./node_modules/.bin/mocha ./test/model-managers",
     "test:restful-api": "./node_modules/.bin/gulp test:restful-api",
     "test:model-managers": "./node_modules/.bin/gulp test:model-managers",
     "sass": "./node_modules/.bin/gulp sass",
@@ -39,6 +39,7 @@
     "gulp-mocha": "*",
     "gulp-run": "^1.6.12",
     "gulp-sass": "*",
+    "mocha": "^2.3.4",
     "node-sass": "^3.4.2",
     "rimraf": "^2.4.4",
     "run-sequence": "*",

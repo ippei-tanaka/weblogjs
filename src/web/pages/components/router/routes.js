@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Route, IndexRoute } from 'react-router';
-import Router from 'react-router-component';
 import App from "../app";
 import Admin from "../app/admin";
 import DashBoard from "../app/admin/dashboard";
