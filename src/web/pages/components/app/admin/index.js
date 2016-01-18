@@ -1,7 +1,8 @@
 import React from "react";
 import Page from "../../abstructs/page";
 import ServerFacade from '../../../services/server-facade';
-import LoginForm from '../../partials/login-form';
+import LoginForm from './partials/login-form';
+import AdminMenu from './partials/admin-menu';
 import { Link, IndexLink } from 'react-router';
 
 const PENDING = 'pending';
@@ -40,17 +41,7 @@ export default class Admin extends Page {
         else if (this.state.authentication === IS_LOGGED_IN) {
             content = this.props.children;
             menu = (
-                <menu>
-                    <li>
-                        <button onClick={this.onLogOutClicked.bind(this)}>Log out</button>
-                    </li>
-                    <li><IndexLink to="/admin">Dashboard</IndexLink></li>
-                    <li><Link to="/admin/users">Users</Link></li>
-                    <li><Link to="/admin/categories">Categories</Link></li>
-                    <li><Link to="/admin/blogs">Blogs</Link></li>
-                    <li><Link to="/admin/posts">Posts</Link></li>
-                    <li><Link to="/admin/setting">Setting</Link></li>
-                </menu>
+                <AdminMenu onLogoutClick={this.onLogOutClicked.bind(this)} />
             );
         }
 

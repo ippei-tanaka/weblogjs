@@ -73,10 +73,9 @@
     "passport": "*",
     "passport-http": "*",
     "passport-local": "*",
-    "react": "^0.14.3",
-    "react-dom": "^0.14.3",
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6",
     "react-router": "^1.0.2",
-    "react-router-component": "^0.28.0",
     "request": "*",
     "serve-favicon": "*",
     "superagent": "^1.6.1"

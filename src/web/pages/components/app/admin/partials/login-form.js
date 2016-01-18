@@ -1,6 +1,6 @@
 import React from 'react';
-import ServerFacade from '../../services/server-facade';
-import { Input, ErrorMessage, Label } from '../form';
+import ServerFacade from '../../../../services/server-facade';
+import { Input, ErrorMessage, Label } from '../../../form';
 
 
 export default class LoginForm extends React.Component {
