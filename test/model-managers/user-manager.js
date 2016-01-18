@@ -26,6 +26,7 @@ describe('User Manager', () => {
                 let u = yield weblogjs.api.userManager.createRegularUser({
                     email: `test${i}@test.com`,
                     display_name: `Test ${i}`,
+                    slug: `slug-${i}`,
                     password: `password${i}`
                 });
                 users.push(u);
@@ -50,6 +51,7 @@ describe('User Manager', () => {
                 let u = yield weblogjs.api.userManager.createRegularUser({
                     email: `test${i}@test.com`,
                     display_name: `Test ${i}`,
+                    slug: `slug-${i}`,
                     password: `password${i}`
                 });
                 users.push(u);
@@ -78,6 +80,7 @@ describe('User Manager', () => {
 
             expect(user.email).to.equal(admin.email);
             expect(user.display_name).to.equal(admin.display_name);
+            expect(user.slug).to.equal(admin.slug);
             expect(user.password).to.equal(undefined);
 
             done();

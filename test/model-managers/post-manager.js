@@ -24,6 +24,7 @@ describe('Post Manager', () => {
             var author = yield weblogjs.api.userManager.createRegularUser({
                 email: "test@test.com",
                 password: "12345678",
+                slug: "tester-da",
                 display_name: "Tester"
             });
 
@@ -48,7 +49,8 @@ describe('Post Manager', () => {
                 category: category.id,
                 slug: "my-slug",
                 tags: ["My Tag"],
-                blog: blog._id
+                blog: blog._id,
+                is_draft: true
             });
 
             expect(post.title).to.equal("My Title");
@@ -59,6 +61,7 @@ describe('Post Manager', () => {
             expect(post.publish_date.getTime()).to.equal(now.getTime());
             expect(post.tags.length).to.equal(1);
             expect(post.tags[0]).to.equal("My Tag");
+            expect(post.is_draft).to.equal(true);
 
             done();
         }).catch((error) => {
