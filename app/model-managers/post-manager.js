@@ -1,5 +1,5 @@
 import ModelManager from "./model-manager";
-import Post from "./models/post";
+import Post from "../models/post";
 
 
 class PostManager extends ModelManager {

@@ -1,5 +1,4 @@
 import co from "co";
-//import errors from "../errors";
 
 
 /**

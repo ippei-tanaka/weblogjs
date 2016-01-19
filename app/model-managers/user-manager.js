@@ -1,8 +1,8 @@
 import ModelManager from "./model-manager";
-import User from "./models/user";
-import Privileges from './models/privileges';
-import ConfigManager from '../../config-manager';
-import Errors from '../../../lib/errors';
+import User from "../models/user";
+import Privileges from '../models/privileges';
+import ConfigManager from '../../src/config-manager';
+import Errors from '../../lib/errors';
 import co from 'co';
 
 
