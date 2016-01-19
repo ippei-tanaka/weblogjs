@@ -1,26 +1,22 @@
-"use strict";
-
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const WEB_STATIC_DIR = path.resolve(__dirname, "./src/web/pages/static");
 
-// Configured in package.json
-const PRODUCTION_MODE = process.env.NODE_ENV === 'production';
+const PRODUCTION_MODE = process.env.NODE_ENV === 'production'; // Configured in package.json
+const STATIC_DIR = path.resolve(__dirname, "./app/web-pages/static");
+const ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/components/router/browser.js");
+
 
 module.exports = {
-    /*entry: {
-        index: path.resolve(__dirname, "./src/web/pages/components/router/browser.js")
-    },
-    */
+
     entry: [
         "babel-polyfill",
-        path.resolve(__dirname, "./src/web/pages/components/router/browser.js")
+        ENTRY_FILE
     ],
 
     output: {
-        path: WEB_STATIC_DIR + "/admin/",
+        path: STATIC_DIR + "/admin/",
         filename: "index.js"
     },
 
