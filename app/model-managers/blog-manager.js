@@ -1,11 +1,11 @@
 import ModelManager from "./model-manager";
-import Category from "./models/category";
+import Blog from "../models/blog";
 
 
-class CategoryManager extends ModelManager {
+class BlogManager extends ModelManager {
 
     constructor () {
-        super(Category);
+        super(Blog);
     }
 
     findBySlug(slug) {
@@ -14,4 +14,4 @@ class CategoryManager extends ModelManager {
 }
 
 
-export default new CategoryManager();
+export default new BlogManager();
