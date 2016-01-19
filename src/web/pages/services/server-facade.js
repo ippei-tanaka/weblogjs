@@ -5,7 +5,7 @@ import request from "superagent";
 class ServerFacade {
 
     constructor() {
-        this.urlBase = "/api/v1";
+        this.urlBase = "/api";
     }
 
     getBlogs() {

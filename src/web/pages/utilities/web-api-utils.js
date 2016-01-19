@@ -1,7 +1,7 @@
 import ajax from "./ajax";
 import ServerActionCreator from "../action-creators/server-action-creator";
 
-const URL_BASE = "/api/v1";
+const URL_BASE = "/api";
 
 var ajaxRestfulAPI = (uri, options) => {
     options = Object.assign({

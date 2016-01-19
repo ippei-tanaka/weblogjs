@@ -15,7 +15,7 @@ export default class WebpageRouter {
         var location = this._basePath + request.url;
 
         co(function* () {
-            var ret = yield router({location});
+            var ret = yield ClientRouter({location});
             var status = ret.status;
             var data = ret.data;
 
