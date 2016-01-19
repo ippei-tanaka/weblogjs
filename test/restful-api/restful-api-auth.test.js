@@ -1,9 +1,12 @@
-"use strict";
+import configFile from '../config.json';
+import WeblogJS from '../..';
+import co from 'co';
+import { expect } from 'chai';
+import testData from './test-data.json';
+import httpRequest from '../utils/http-request';
 
-var configFile = require('../config.json');
-var testData = require('./test-data.json');
-var weblogjs = require('../../')(configFile);
-var httpRequest = require('../utils/http-request');
+
+var weblogjs = WeblogJS(configFile);
 var config = weblogjs.config;
 var admin = Object.freeze(Object.assign({
     email: config.admin_email,
@@ -11,7 +14,6 @@ var admin = Object.freeze(Object.assign({
 }));
 var testUser = Object.freeze(Object.assign(testData["valid-users"][0]));
 const BASE_URL = `http://${config.web_server_host}:${config.web_server_port}/api/v${config.api_version}`;
-
 
 
 var clearDb = () => {
@@ -25,8 +27,6 @@ var clearDb = () => {
 
 describe('Restful API Auth', () => {
 
-
-
     before(clearDb);
     before(() => weblogjs.web.startServer());
     beforeEach(clearDb);
@@ -36,35 +36,28 @@ describe('Restful API Auth', () => {
     describe('/', () => {
 
         it('should return an empty object', (done) => {
-
-            httpRequest.get(`${BASE_URL}/`, testUser)
-                .then(() => {
-                    done();
-                })
-                .catch((err) => {
-                    console.error(err);
-                    done(new Error());
-                });
+            co(function* () {
+                yield httpRequest.get(`${BASE_URL}/`, testUser);
+                done();
+            }).catch((err) => {
+                console.error(err);
+                done(new Error());
+            });
         });
     });
 
     describe('/login & logout', () => {
 
         it('should let the user log in', (done) => {
-
-            httpRequest.post(`${BASE_URL}/login`, admin) // Login
-                .then(() => {
-                    return httpRequest.get(`${BASE_URL}/users`); // This request should be okay.
-                })
-                .then(() => {
-                    return httpRequest.get(`${BASE_URL}/logout`); // Logout
-                })
-                .then(() => {
-                    return httpRequest.get(`${BASE_URL}/users`); // This request should fail.
-                })
-                .catch(() => {
-                    done();
-                });
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/login`, admin); // Login
+                yield httpRequest.get(`${BASE_URL}/users`); // This request should be okay.
+                yield httpRequest.get(`${BASE_URL}/logout`); // Logout
+                yield httpRequest.get(`${BASE_URL}/users`); // This request should fail.
+                done(new Error());
+            }).catch(() => {
+                done();
+            });
         });
     });
 });
