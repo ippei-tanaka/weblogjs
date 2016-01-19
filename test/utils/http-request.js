@@ -1,8 +1,9 @@
-"use strict";
+import Request from "request";
 
-var request = require('request').defaults({jar: true});
+var request = Request.defaults({jar: true});
 
-var req = function (method, path, data, username, password) {
+
+export let req = function (method, path, data, username, password) {
     return new Promise((resolve, reject) => {
         var options = {
             method: method,
@@ -31,9 +32,12 @@ var req = function (method, path, data, username, password) {
     });
 };
 
-module.exports = {
-    get: req.bind(null, 'get'),
-    post: req.bind(null, 'post'),
-    put: req.bind(null, 'put'),
-    del: req.bind(null, 'delete')
-};
+export let get = req.bind(null, 'get');
+
+export let post = req.bind(null, 'post');
+
+export let put = req.bind(null, 'put');
+
+export let del = req.bind(null, 'delete');
+
+export default { get, post, put, del };
