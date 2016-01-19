@@ -1,10 +1,5 @@
 "use strict";
 
-require('babel-register')({
-    presets: ['es2015', 'react'],
-    extensions: [".jsx", ".js"]
-});
-require('babel-polyfill');
 
 var routes = require('express').Router();
 var baseRoute = '/';

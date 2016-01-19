@@ -1,5 +1,11 @@
 "use strict";
 
+require('babel-register')({
+    presets: ['es2015', 'react'],
+    extensions: [".jsx", ".js"]
+});
+require('babel-polyfill');
+
 
 var configManager = require('./config-manager');
 
