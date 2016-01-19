@@ -1,39 +1,41 @@
-"use strict";
+import express from "express";
+import co from 'co';
+import ClientRouter from '../../src/web/pages/components/router/server';
 
 
-var routes = require('express').Router();
-var baseRoute = '/';
-var router = require('../../src/web/pages/components/router/server').default;
-var co = require("co");
+export default class WebpageRouter {
 
+    constructor(basePath) {
+        this._basePath = basePath;
+        this._router = express.Router();
+        this._router.get('*', this._handler.bind(this));
+    }
 
-routes.get('*', (request, response) => {
+    _handler(request, response) {
+        var location = this._basePath + request.url;
 
-    // If you want to check if the user is authenticated:
-    // request.isAuthenticated()
+        co(function* () {
+            var ret = yield router({location});
+            var status = ret.status;
+            var data = ret.data;
 
-    var location = baseRoute + request.url;
+            if (status === 200) {
+                response.status(status).send(data);
+            } else if (status === 302) {
+                response.redirect(status, data);
+            } else if (status === 404) {
+                response.status(status).send("Not Found!");
+            }
+        }).catch(error => {
+            response.status(500).send(error.message);
+        });
+    }
 
-    co(function* () {
-        var ret = yield router({location});
-        var status = ret.status;
-        var data = ret.data;
+    get basePath () {
+        return this._basePath;
+    }
 
-        if (status === 200) {
-            response.status(status).send(data);
-        } else if (status === 302) {
-            response.redirect(status, data);
-        } else if (status === 404) {
-            response.status(status).send("Not Found!");
-        }
-    }).catch(error => {
-        response.status(500).send(error.message);
-    });
-});
-
-
-module.exports = {
-    routes,
-    baseRoute
-};
-
+    get router () {
+        return this._router;
+    }
+}

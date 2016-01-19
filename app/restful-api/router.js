@@ -1,7 +1,7 @@
 "use strict";
 
 
-var routes = require('express').Router();
+var router = require('express').Router();
 var url = require('url');
 var api = require('../api');
 var userManager = api.userManager;
@@ -12,7 +12,6 @@ var settingManager = api.settingManager;
 var privileges = api.privileges;
 var localAuth = require('../server/passport-manager').localAuth;
 var config = require('../config-manager').load();
-var baseRoute = `/api/v${config.api_version}`;
 var co = require('co');
 
 
@@ -66,25 +65,19 @@ var isLoggedIn = (request, response, next) => {
     response.sendStatus(401);
 };
 
-var redirectIfLoggedIn = (uri) => (request, response, next) => {
+
+var isLoggedOut = (request, response, next) => {
     if (!request.isAuthenticated())
         return next();
 
-    response.redirect(baseRoute + uri);
-};
-
-var redirectIfNotLoggedIn = (uri) => (request, response, next) => {
-    if (request.isAuthenticated())
-        return next();
-
-    response.redirect(baseRoute + uri);
+    response.sendStatus(401);
 };
 
 
 //-------------------------------------------------------
 // Home
 
-routes.get('/', response((ok) => {
+router.get('/', response((ok) => {
     ok({});
 }));
 
@@ -92,7 +85,7 @@ routes.get('/', response((ok) => {
 //-------------------------------------------------------
 // Login
 
-routes.post('/login', redirectIfLoggedIn('/'), localAuth, response((ok) => {
+router.post('/login', isLoggedOut, localAuth, response((ok) => {
     ok({});
 }));
 
@@ -100,7 +93,7 @@ routes.post('/login', redirectIfLoggedIn('/'), localAuth, response((ok) => {
 //-------------------------------------------------------
 // Logout
 
-routes.get('/logout', redirectIfNotLoggedIn('/'), response((ok, error, request) => {
+router.get('/logout', isLoggedIn, response((ok, error, request) => {
     request.logout();
     ok({});
 }));
@@ -109,7 +102,7 @@ routes.get('/logout', redirectIfNotLoggedIn('/'), response((ok, error, request) 
 //-------------------------------------------------------
 // User
 
-routes.get('/users', isLoggedIn, response((ok, error, request) => {
+router.get('/users', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
@@ -118,31 +111,31 @@ routes.get('/users', isLoggedIn, response((ok, error, request) => {
         .catch(error);
 }));
 
-routes.get('/users/me', isLoggedIn, response((ok, error, request) => {
+router.get('/users/me', isLoggedIn, response((ok, error, request) => {
     userManager.findById(request.user._id)
         .then(ok)
         .catch(error);
 }));
 
-routes.get('/users/:id', isLoggedIn, response((ok, error, request) => {
+router.get('/users/:id', isLoggedIn, response((ok, error, request) => {
     userManager.findById(request.params.id)
         .then(ok)
         .catch(error);
 }));
 
-routes.post('/users', isLoggedIn, response((ok, error, request) => {
+router.post('/users', isLoggedIn, response((ok, error, request) => {
     userManager.createRegularUser(request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.put('/users/:id', isLoggedIn, response((ok, error, request) => {
+router.put('/users/:id', isLoggedIn, response((ok, error, request) => {
     userManager.updateById(request.params.id, request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.delete('/users/:id', isLoggedIn, response((ok, error, request) => {
+router.delete('/users/:id', isLoggedIn, response((ok, error, request) => {
     userManager.removeById(request.params.id)
         .then(ok)
         .catch(error);
@@ -152,7 +145,7 @@ routes.delete('/users/:id', isLoggedIn, response((ok, error, request) => {
 //-------------------------------------------------------
 // Privileges
 
-routes.get('/privileges', isLoggedIn, response((ok) => {
+router.get('/privileges', isLoggedIn, response((ok) => {
     ok(privileges);
 }));
 
@@ -160,7 +153,7 @@ routes.get('/privileges', isLoggedIn, response((ok) => {
 //-------------------------------------------------------
 // Category
 
-routes.get('/categories', isLoggedIn, response((ok, error, request) => {
+router.get('/categories', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
@@ -169,25 +162,25 @@ routes.get('/categories', isLoggedIn, response((ok, error, request) => {
         .catch(error);
 }));
 
-routes.get('/categories/:id', isLoggedIn, response((ok, error, request) => {
+router.get('/categories/:id', isLoggedIn, response((ok, error, request) => {
     categoryManager.findById(request.params.id)
         .then(ok)
         .catch(error);
 }));
 
-routes.post('/categories', isLoggedIn, response((ok, error, request) => {
+router.post('/categories', isLoggedIn, response((ok, error, request) => {
     categoryManager.create(request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.put('/categories/:id', isLoggedIn, response((ok, error, request) => {
+router.put('/categories/:id', isLoggedIn, response((ok, error, request) => {
     categoryManager.updateById(request.params.id, request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.delete('/categories/:id', isLoggedIn, response((ok, error, request) => {
+router.delete('/categories/:id', isLoggedIn, response((ok, error, request) => {
     categoryManager.removeById(request.params.id)
         .then(ok)
         .catch(error);
@@ -197,7 +190,7 @@ routes.delete('/categories/:id', isLoggedIn, response((ok, error, request) => {
 //-------------------------------------------------------
 // Post
 
-routes.get('/posts', isLoggedIn, response((ok, error, request) => {
+router.get('/posts', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
@@ -208,25 +201,25 @@ routes.get('/posts', isLoggedIn, response((ok, error, request) => {
         .catch(error);
 }));
 
-routes.get('/posts/:id', isLoggedIn, response((ok, error, request) => {
+router.get('/posts/:id', isLoggedIn, response((ok, error, request) => {
     postManager.findById(request.params.id)
         .then(ok)
         .catch(error);
 }));
 
-routes.post('/posts', isLoggedIn, response((ok, error, request) => {
+router.post('/posts', isLoggedIn, response((ok, error, request) => {
     postManager.create(request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.put('/posts/:id', isLoggedIn, response((ok, error, request) => {
+router.put('/posts/:id', isLoggedIn, response((ok, error, request) => {
     postManager.updateById(request.params.id, request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.delete('/posts/:id', isLoggedIn, response((ok, error, request) => {
+router.delete('/posts/:id', isLoggedIn, response((ok, error, request) => {
     postManager.removeById(request.params.id)
         .then(ok)
         .catch(error);
@@ -236,7 +229,7 @@ routes.delete('/posts/:id', isLoggedIn, response((ok, error, request) => {
 //-------------------------------------------------------
 // Blogs
 
-routes.get('/blogs', isLoggedIn, response((ok, error, request) => {
+router.get('/blogs', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
@@ -247,25 +240,25 @@ routes.get('/blogs', isLoggedIn, response((ok, error, request) => {
         .catch(error);
 }));
 
-routes.get('/blogs/:id', isLoggedIn, response((ok, error, request) => {
+router.get('/blogs/:id', isLoggedIn, response((ok, error, request) => {
     blogManager.findById(request.params.id)
         .then(ok)
         .catch(error);
 }));
 
-routes.post('/blogs', isLoggedIn, response((ok, error, request) => {
+router.post('/blogs', isLoggedIn, response((ok, error, request) => {
     blogManager.create(request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.put('/blogs/:id', isLoggedIn, response((ok, error, request) => {
+router.put('/blogs/:id', isLoggedIn, response((ok, error, request) => {
     blogManager.updateById(request.params.id, request.body)
         .then(ok)
         .catch(error);
 }));
 
-routes.delete('/blogs/:id', isLoggedIn, response((ok, error, request) => {
+router.delete('/blogs/:id', isLoggedIn, response((ok, error, request) => {
     blogManager.removeById(request.params.id)
         .then(ok)
         .catch(error);
@@ -276,13 +269,13 @@ routes.delete('/blogs/:id', isLoggedIn, response((ok, error, request) => {
 // Setting
 
 
-routes.get('/setting', isLoggedIn, response((ok, error) => {
+router.get('/setting', isLoggedIn, response((ok, error) => {
     settingManager.getSetting()
         .then(ok)
         .catch(error);
 }));
 
-routes.put('/setting', isLoggedIn, response((ok, error, request) => {
+router.put('/setting', isLoggedIn, response((ok, error, request) => {
     settingManager.setFront(request.body ? request.body.front : null)
         .then(ok)
         .catch(error);
@@ -290,10 +283,20 @@ routes.put('/setting', isLoggedIn, response((ok, error, request) => {
 
 
 
-//-------------------------------------------------------
 
-module.exports = {
-    routes,
-    baseRoute
-};
+export default class RestfulApiRouter {
 
+    constructor(basePath) {
+        this._basePath = basePath;
+        this._router = router;
+    }
+
+    get basePath() {
+        return this._basePath;
+    }
+
+    get router() {
+        return this._router;
+    }
+
+}
