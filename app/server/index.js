@@ -4,7 +4,6 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
-import path from 'path';
 import WebpageRouter from '../web-pages/router';
 import RestfulApiRouter from '../restful-api/router';
 import ConfigManager from '../config-manager';
@@ -17,8 +16,6 @@ var passport = PassportManager.passport;
 var expressApp = express();
 var webServer;
 var config = ConfigManager.load();
-var faviconDir = path.resolve(__dirname, '../../src/web/pages/favicons/favicon.ico');
-var staticDir = path.resolve(__dirname, '../../src/web/pages/static');
 var webpageRouter = new WebpageRouter(config.web_page_root);
 var restfulApiRouter = new RestfulApiRouter(config.restful_api_root);
 var session = expressSession({
@@ -29,7 +26,7 @@ var session = expressSession({
 
 
 
-expressApp.use(favicon(faviconDir));
+expressApp.use(favicon(webpageRouter.faviconDir));
 expressApp.use(logger('dev'));
 expressApp.use(bodyParser.json());
 expressApp.use(bodyParser.urlencoded({extended: false}));
@@ -44,7 +41,7 @@ expressApp.use(passport.session());
 expressApp.use(config.restful_api_root, restfulApiRouter.router);
 
 // Static Files in pages dir
-expressApp.use(express.static(staticDir));
+expressApp.use(express.static(webpageRouter.staticDir));
 
 // Web Pages
 expressApp.use(config.web_page_root, webpageRouter.router);

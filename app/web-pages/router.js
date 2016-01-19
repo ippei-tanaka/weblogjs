@@ -1,6 +1,11 @@
 import express from "express";
 import co from 'co';
-import ClientRouter from '../../src/web/pages/components/router/server';
+import path from 'path';
+import ClientRouter from './components/router/server';
+
+
+const FAVICON_DIR = path.resolve(__dirname, './favicons/favicon.ico');
+const STATIC_DIR = path.resolve(__dirname, './static');
 
 
 export default class WebpageRouter {
@@ -37,5 +42,13 @@ export default class WebpageRouter {
 
     get router () {
         return this._router;
+    }
+
+    get faviconDir () {
+        return FAVICON_DIR;
+    }
+
+    get staticDir () {
+        return STATIC_DIR;
     }
 }
