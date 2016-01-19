@@ -11,7 +11,6 @@ var express = require('express');
 var expressApp = express();
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-var hbs = require('express-hbs');
 var expressSession = require('express-session');
 var path = require('path');
 

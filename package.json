@@ -13,7 +13,7 @@
   "author": {
     "name": "Ippei Tanaka",
     "email": "tanaka.ippei.jp@gmail.com",
-    "url": "http://ipe.club/"
+    "url": "http://www.ipe.club/"
   },
   "repository": {
     "type": "git",
@@ -47,7 +47,6 @@
     "co": "^4.6.0",
     "cookie-parser": "^1.4.1",
     "express": "^4.13.3",
-    "express-hbs": "^0.8.4",
     "express-session": "^1.13.0",
     "flux": "^2.1.1",
     "hat": "0.0.3",

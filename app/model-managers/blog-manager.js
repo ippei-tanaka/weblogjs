@@ -1,5 +1,5 @@
 import ModelManager from "./model-manager";
-import Blog from "../models/blog";
+import Blog from "./models/blog";
 
 
 class BlogManager extends ModelManager {

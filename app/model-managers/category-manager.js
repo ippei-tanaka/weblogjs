@@ -1,5 +1,5 @@
 import ModelManager from "./model-manager";
-import Category from "../models/category";
+import Category from "./models/category";
 
 
 class CategoryManager extends ModelManager {
