@@ -1,6 +1,6 @@
 "use strict";
 
-var Type = require('../../../utility').Type;
+var Type = require('../../../../utils/type');
 
 class Pagination {
     constructor(args) {
