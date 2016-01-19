@@ -1,13 +1,10 @@
-"use strict";
-
-
-var db = require('./services/db');
-var userManager = require('./model-managers/user-manager');
-var categoryManager = require('./model-managers/category-manager');
-var postManager = require('./model-managers/post-manager');
-var blogManager = require('./model-managers/blog-manager');
-var settingManager = require('./model-managers/setting-manager');
-var privileges = require('./model-managers/models/privileges');
+import db  from './services/db';
+import userManager  from './model-managers/user-manager';
+import categoryManager  from './model-managers/category-manager';
+import postManager  from './model-managers/post-manager';
+import blogManager  from './model-managers/blog-manager';
+import settingManager  from './model-managers/setting-manager';
+import privileges  from './model-managers/models/privileges';
 
 
 module.exports = {

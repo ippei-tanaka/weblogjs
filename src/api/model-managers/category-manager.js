@@ -1,14 +1,17 @@
-"use strict";
+import ModelManager from "./model-manager";
+import Category from "./models/category";
 
 
-var Category = require('./models/category');
-var modelManager = require('./model-manager');
-var exports = modelManager.applyTo(Category);
+class CategoryManager extends ModelManager {
+
+    constructor () {
+        super(Category);
+    }
+
+    findBySlug(slug) {
+        return this.findOne({slug: slug});
+    }
+}
 
 
-exports.findBySlug = function (slug) {
-    return this.findOne({slug: slug});
-}.bind(exports);
-
-
-module.exports = exports;
+export default new CategoryManager();

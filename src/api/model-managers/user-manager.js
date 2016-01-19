@@ -1,77 +1,84 @@
-"use strict";
+import ModelManager from "./model-manager";
+import User from "./models/user";
+import Privileges from './models/privileges';
+import ConfigManager from '../../config-manager';
+import Errors from '../errors';
+import co from 'co';
 
 
-var User = require('./models/user');
-var modelManager = require('./model-manager');
-var privileges = require('./models/privileges');
-var config = require('../../config-manager').load();
-var errors = require('../errors/index');
-var exports = modelManager.applyTo(User);
-var co = require('co');
+var config = ConfigManager.load();
 
 
-exports.findByEmail = function (email) {
-    return this.findOne({email: email});
-};
+class UserManager extends ModelManager {
 
-exports.findBySlug = function (slug) {
-    return this.findOne({slug: slug});
-}.bind(exports);
+    constructor() {
+        super(User);
+    }
+
+    findByEmail(email) {
+        return this.findOne({email: email});
+    }
+
+    findBySlug(slug) {
+        return this.findOne({slug: slug});
+    }
 
 
-/**
- * @param {object} credential - Credential of the user.
- * @param {string} credential.email - The email of the user.
- * @param {string} credential.password - The password of the user.
- * @returns {Promise}
- */
-exports.isValid = function (credential) {
+    /**
+     * @param {object} credential - Credential of the user.
+     * @param {string} credential.email - The email of the user.
+     * @param {string} credential.password - The password of the user.
+     * @returns {Promise}
+     */
+    isValid(credential) {
 
-    var condition = {email: credential.email};
-    var options = {select: ["password"]};
+        var condition = {email: credential.email};
+        var options = {select: ["password"]};
 
-    return co(function* () {
-        let user = yield this.findOne(condition, options);
+        return co(function* () {
+            let user = yield this.findOne(condition, options);
 
-        if (!user) {
-            throw new errors.WeblogJsAuthError();
-        }
+            if (!user) {
+                throw new Errors.WeblogJsAuthError();
+            }
 
-        let isMatch = user.verifyPassword(credential.password);
+            let isMatch = user.verifyPassword(credential.password);
 
-        if (!isMatch) {
-            throw new errors.WeblogJsAuthError();
-        }
+            if (!isMatch) {
+                throw new Errors.WeblogJsAuthError();
+            }
 
-        return this.findById(user.id);
-    }.bind(this));
-};
+            return this.findById(user.id);
+        }.bind(this));
+    }
 
-exports.createAdminUser = function (userObject) {
-    userObject = userObject || {
-            email: config.admin_email,
-            password: config.admin_password,
-            display_name: "Admin",
-            slug: "admin"
-        };
 
-    return this.create({
-        email: userObject.email,
-        password: userObject.password,
-        display_name: userObject.display_name,
-        slug: userObject.slug,
-        privileges: [privileges.READ, privileges.EDIT, privileges.CREATE, privileges.GRANTED]
-    });
-};
+    createAdminUser(userObject) {
+        userObject = userObject || {
+                email: config.admin_email,
+                password: config.admin_password,
+                display_name: "Admin",
+                slug: "admin"
+            };
 
-exports.createRegularUser = function (userObject) {
-    return this.create({
-        email: userObject.email,
-        display_name: userObject.display_name,
-        slug: userObject.slug,
-        password: userObject.password,
-        privileges: [privileges.READ, privileges.EDIT, privileges.CREATE]
-    })
-};
+        return this.create({
+            email: userObject.email,
+            password: userObject.password,
+            display_name: userObject.display_name,
+            slug: userObject.slug,
+            privileges: [Privileges.READ, Privileges.EDIT, Privileges.CREATE, Privileges.GRANTED]
+        });
+    }
 
-module.exports = exports;
+    createRegularUser(userObject) {
+        return this.create({
+            email: userObject.email,
+            display_name: userObject.display_name,
+            slug: userObject.slug,
+            password: userObject.password,
+            privileges: [Privileges.READ, Privileges.EDIT, Privileges.CREATE]
+        })
+    }
+}
+
+export default new UserManager();

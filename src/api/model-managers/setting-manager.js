@@ -1,11 +1,12 @@
-"use strict";
+import ModelManager from "./model-manager";
+import Setting from "./models/setting";
+import co from 'co';
 
 
-var Setting = require('./models/setting');
-var modelManager = require('./model-manager');
-var settingManager = modelManager.applyTo(Setting);
-var co = require('co');
-var exports = {
+var settingManager = new ModelManager(Setting);
+
+
+export default {
 
     getSetting: () => co(function* () {
         var docs = yield settingManager.find();
@@ -22,5 +23,3 @@ var exports = {
         return yield this.getSetting();
     }.bind(exports))
 };
-
-module.exports = exports;
