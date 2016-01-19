@@ -2,8 +2,8 @@
 
 var config = require('../config-manager').load();
 var api = require('../api');
-var restfulApiRouter = require('./restful-api.router');
-var webpageRouter = require('./web-pages.router');
+var restfulApiRouter = require('../restful-api/router');
+var webpageRouter = require('../web-pages/router');
 var passport = require('./passport-manager').passport;
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
