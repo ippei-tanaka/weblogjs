@@ -1,14 +1,20 @@
 import React from "react";
 import Page from "../../abstructs/page";
-import ServerFacade from '../../../services/server-facade';
 import LoginForm from './partials/login-form';
 import AdminMenu from './partials/admin-menu';
 import { Link, IndexLink } from 'react-router';
+import AuthStore from '../../../stores/auth-store';
+import ViewActionCreator from '../../../action-creators/view-action-creator';
+import hat from 'hat';
+
 
 const PENDING = 'pending';
 const IS_LOGGED_IN = 'is-logged-in';
 const IS_NOT_LOGGED_IN = 'is-not-logged-in';
 const PRODUCTION_MODE = process.env.NODE_ENV === 'production';
+
+var rack = hat.rack();
+
 
 export default class Admin extends Page {
 
@@ -16,16 +22,22 @@ export default class Admin extends Page {
         super(props);
 
         this.state = {
-            authentication: PENDING
+            authentication: PENDING,
+            loginFailed: false
         };
+
+        this.token = rack();
+
+        this.callback = this.onStoreChanged.bind(this);
     }
 
     componentDidMount() {
         this.updateAuthState();
+        AuthStore.addChangeListener(this.callback);
     }
 
-    componentWillReceiveProps() {
-        this.updateAuthState();
+    componentWillUnmount() {
+        AuthStore.removeChangeListener(this.callback);
     }
 
     render() {
@@ -36,24 +48,27 @@ export default class Admin extends Page {
         var cssFiles = null;
 
         if (this.state.authentication === IS_NOT_LOGGED_IN) {
-            content = <LoginForm onLoggedIn={() => this.updateAuthState()}/>;
+            content = <LoginForm
+                error={this.state.loginFailed}
+                onSubmit={this.onLoginFormSubmitted.bind(this)}
+            />;
         }
         else if (this.state.authentication === IS_LOGGED_IN) {
             content = this.props.children;
             menu = (
-                <AdminMenu onLogoutClick={this.onLogOutClicked.bind(this)} />
+                <AdminMenu onLogoutClick={this.onLogOutClicked.bind(this)}/>
             );
         }
 
         if (PRODUCTION_MODE) {
             jsFile = <script src="/admin/index.js"></script>;
             cssFiles = [
-                <link href="/admin/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet" />,
-                <link href="/admin/style.css" media="all" rel="stylesheet" />
+                <link href="/admin/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>,
+                <link href="/admin/style.css" media="all" rel="stylesheet"/>
             ];
         } else {
             jsFile = <script src="http://localhost:8080/index.js"></script>;
-            cssFiles = <link href="/admin/vendors/font-awesome/css/font-awesome.css" media="all" rel="stylesheet" />;
+            cssFiles = <link href="/admin/vendors/font-awesome/css/font-awesome.css" media="all" rel="stylesheet"/>;
         }
 
         return (
@@ -66,29 +81,31 @@ export default class Admin extends Page {
         );
     }
 
+    onStoreChanged() {
+        this.updateAuthState();
+    }
+
     updateAuthState() {
-        ServerFacade.isLoggedIn()
-            .then(() => {
-                this.setState({authentication: IS_LOGGED_IN});
-            })
-            .catch(() => {
-                this.setState({authentication: IS_NOT_LOGGED_IN});
-            });
+        if (AuthStore.isLoggedIn) {
+            this.setState({authentication: IS_LOGGED_IN});
+        } else {
+            this.setState({authentication: IS_NOT_LOGGED_IN});
+        }
+    }
+
+    onLoginFormSubmitted ({email, password}) {
+        ViewActionCreator.requestLogin({
+            email,
+            password,
+            token: this.token
+        });
     }
 
     onLogOutClicked(event) {
         event.preventDefault();
-        this.logout();
-    }
-
-    logout() {
-        ServerFacade.logout()
-            .then(() => {
-                this.updateAuthState();
-            })
-            .catch(() => {
-                this.updateAuthState();
-            });
+        ViewActionCreator.requestLogout({
+            token: this.token
+        });
     }
 
 };

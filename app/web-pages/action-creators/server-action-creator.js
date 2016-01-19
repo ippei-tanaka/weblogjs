@@ -254,5 +254,42 @@ export default {
             data: error,
             token: token
         });
+    },
+
+    receiveAuthStatus: loginUser => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.AUTH_STATUS_CHECKED,
+            data: loginUser
+        });
+    },
+
+    receiveLoginSuccess: ({token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.LOG_IN_SUCCEEDED,
+            token: token
+        });
+    },
+
+    receiveLoginFailure: ({error, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.LOG_IN_FAILED,
+            data: error,
+            token: token
+        });
+    },
+
+    receiveLogoutSuccess: ({token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.LOG_OUT_SUCCEEDED,
+            token: token
+        });
+    },
+
+    receiveLogoutFailure: ({error, token}) => {
+        Dispatcher.handleServerAction({
+            actionType: Actions.LOG_OUT_FAILED,
+            data: error,
+            token: token
+        });
     }
 };

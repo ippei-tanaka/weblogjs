@@ -95,5 +95,19 @@ export default {
             actionType: Actions.SETTING_UPDATE_REQUEST
         });
         WebApiUtils.updateSetting({token, data});
+    },
+
+    requestLogin ({token, email, password}) {
+        Dispatcher.handleViewAction({
+            actionType: Actions.LOG_IN_REQUEST
+        });
+        WebApiUtils.login({token, email, password});
+    },
+
+    requestLogout ({token}) {
+        Dispatcher.handleViewAction({
+            actionType: Actions.LOG_OUT_REQUEST
+        });
+        WebApiUtils.logout({token});
     }
 };
