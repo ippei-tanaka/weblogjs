@@ -1,14 +1,17 @@
-"use strict";
+import ModelManager from "./model-manager";
+import Blog from "./models/blog";
 
 
-var Blog = require('./models/blog');
-var modelManager = require('./model-manager');
-var exports = modelManager.applyTo(Blog);
+class BlogManager extends ModelManager {
+
+    constructor () {
+        super(Blog);
+    }
+
+    findBySlug(slug) {
+        return this.findOne({slug: slug});
+    }
+}
 
 
-exports.findBySlug = function (slug) {
-    return this.findOne({slug: slug});
-}.bind(exports);
-
-
-module.exports = exports;
+export default new BlogManager();

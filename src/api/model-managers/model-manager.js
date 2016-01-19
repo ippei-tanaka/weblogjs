@@ -1,9 +1,5 @@
-"use strict";
-
-
-var co = require('co');
-var errors = require('../errors/index');
-var methods = {};
+import co from "co";
+//import errors from "../errors";
 
 
 /**
@@ -14,8 +10,6 @@ var methods = {};
  * @property {Array<String>} [populate]
  * @property {Array<String>} [select]
  */
-
-
 var defaultQueryOptions = Object.freeze({
     sort: {},
     limit: 0,
@@ -52,138 +46,149 @@ var addQueryOptions = function (query, options) {
 };
 
 
-/**
- * @param {mongoose.Model} Model
- * @param {object} obj
- * @returns {Promise}
- */
-methods.create = function (Model, obj) {
-    var doc = new Model(obj);
+export default class ModelManager {
 
-    return co(function* () {
-        yield doc.save();
-        return yield this.findById(Model, doc.id);
-    }.bind(this));
-};
+    constructor (Model) {
+        /**
+         * @private
+         * @type {mongoose.Model}
+         */
+        this._Model = Model;
+    }
 
-
-/**
- * @param {mongoose.Model} Model
- * @param {Object} condition
- * @param {QueryOptions} [queryOptions]
- * @returns {Promise}
- */
-methods.find = function (Model, condition, queryOptions) {
-    return new Promise((resolve, reject) => {
-        var query = Model.find(condition);
-        query = addQueryOptions(query, queryOptions);
-        query.exec((err, docs) => {
-            if (err) return reject(err);
-            resolve(docs);
-        });
-    });
-};
-
-
-/**
- * @param {mongoose.Model} Model
- * @param {Object} condition
- * @param {QueryOptions} [queryOptions]
- * @returns {Promise}
- */
-methods.findOne = function (Model, condition, queryOptions) {
-    return this.find(Model, condition, queryOptions)
-        .then((data) => data.length > 0 ? data[0] : null);
-};
-
-
-/**
- * @param {mongoose.Model} Model
- * @param {string} id
- * @returns {Promise}
- */
-methods.findById = function (Model, id) {
-    return this.findOne(Model, {_id: id});
-};
-
-
-/**
- * @param {mongoose.Model} Model
- * @param {Object} condition
- * @param {Object} newValues
- * @returns {Promise}
- */
-methods.update = function (Model, condition, newValues) {
-
-    var self = this;
-
-    return this.find(Model, condition).then((docs) => {
-
-        var keys = Object.keys(newValues);
+    /**
+     * @public
+     * @param {object} obj
+     * @returns {Promise}
+     */
+    create(obj) {
+        var Model = this._Model;
+        var doc = new Model(obj);
 
         return co(function* () {
-            for (let doc of docs) {
-                for (var key of keys) {
-                    doc[key] = newValues[key];
+            yield doc.save();
+            return yield this.findById(doc.id);
+        }.bind(this));
+    }
+
+    /**
+     * @public
+     * @param {Object} condition
+     * @param {QueryOptions} [queryOptions]
+     * @returns {Promise}
+     */
+    find(condition, queryOptions) {
+        return new Promise((resolve, reject) => {
+            var query = this._Model.find(condition);
+            query = addQueryOptions(query, queryOptions);
+            query.exec((err, docs) => {
+                if (err) return reject(err);
+                resolve(docs);
+            });
+        });
+    }
+
+    /**
+     * @public
+     * @param {Object} condition
+     * @param {QueryOptions} [queryOptions]
+     * @returns {Promise}
+     */
+    findOne(condition, queryOptions) {
+        return this.find(condition, queryOptions)
+            .then((data) => data.length > 0 ? data[0] : null);
+    }
+
+
+    /**
+     * @public
+     * @param {string} id
+     * @returns {Promise}
+     */
+    findById(id) {
+        return this.findOne({_id: id});
+    }
+
+
+    /**
+     * @public
+     * @param {Object} condition
+     * @param {Object} newValues
+     * @returns {Promise}
+     */
+    update(condition, newValues) {
+
+        return this.find(condition).then((docs) => {
+
+            var keys = Object.keys(newValues);
+
+            return co(function* () {
+                for (let doc of docs) {
+                    for (var key of keys) {
+                        doc[key] = newValues[key];
+                    }
+                    yield doc.save();
                 }
-                yield doc.save();
-            }
-            return yield self.find(Model, condition);
+                return yield this.find(condition);
+            }.bind(this));
         });
-    });
-};
+    };
 
+    /**
+     * @public
+     * @param {string} id
+     * @param {object} newValues
+     * @returns {Promise}
+     */
+    updateById(id, newValues) {
+        return this.update({_id: id}, newValues)
+            .then((data) => data ? data[0] : null);
+    }
 
-/**
- * @param {mongoose.Model} Model
- * @param {string} id
- * @param {object} newValues
- * @returns {Promise}
- */
-methods.updateById = function (Model, id, newValues) {
-    return this.update(Model, {_id: id}, newValues)
-        .then((data) => data ? data[0] : null);
-};
-
-
-/**
- * @param {mongoose.Model} Model
- * @param {Object} condition
- * @returns {Promise}
- */
-methods.remove = (Model, condition) => new Promise((resolve, reject) => {
-    Model.remove(condition).exec((err, docs) => {
-        if (err) return reject(err);
-        resolve(docs);
-    });
-});
-
-
-/**
- * @param {mongoose.Model} Model
- * @param {string} id
- * @returns {Promise}
- */
-methods.removeById = function (Model, id) {
-    return this.remove(Model, {_id: id});
-};
-
-
-/**
- * @param {mongoose.Model} Model
- * @param {Object} condition
- * @returns {Promise}
- */
-methods.count = function (Model, condition) {
-    return new Promise((resolve, reject) => {
-        Model.count(condition).exec((err, data) => {
-            if (err) return reject(err);
-            resolve(data);
+    /**
+     * @public
+     * @param {Object} condition
+     * @returns {Promise}
+     */
+    remove(condition) {
+        return new Promise((resolve, reject) => {
+            this._Model.remove(condition).exec((err, docs) => {
+                if (err) return reject(err);
+                resolve(docs);
+            });
         });
-    });
-};
+    }
 
 
+    /**
+     * @public
+     * @param {string} id
+     * @returns {Promise}
+     */
+    removeById(id) {
+        return this.remove({_id: id});
+    }
+
+
+    /**
+     * @public
+     * @param {Object} condition
+     * @returns {Promise}
+     */
+    count (condition) {
+        return new Promise((resolve, reject) => {
+            this._Model.count(condition).exec((err, data) => {
+                if (err) return reject(err);
+                resolve(data);
+            });
+        });
+    }
+
+}
+
+
+
+/*
 module.exports = {
     applyTo: function (Model) {
         var obj = {};
@@ -196,3 +201,4 @@ module.exports = {
     },
     methods
 };
+    */
