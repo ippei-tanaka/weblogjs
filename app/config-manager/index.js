@@ -1,6 +1,6 @@
 "use strict";
 
-var errors = require('../lib/errors');
+var errors = require('../../lib/errors');
 var defaultSetting = require('./default.json');
 
 var settings;

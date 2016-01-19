@@ -1,7 +1,7 @@
 "use strict";
 
 var mongoose = require('mongoose');
-var config = require('../config-manager').load();
+var config = require('./config-manager').load();
 
 const DISCONNECTED = 0;
 const CONNECTED = 1;

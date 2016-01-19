@@ -1,6 +1,6 @@
 "use strict";
 
-var config = require('../../config-manager').load();
+var config = require('../../app/config-manager').load();
 var api = require('../../app/api');
 var restfulApiRouter = require('./restful-api/router');
 var webpageRouter = require('./pages/router');
