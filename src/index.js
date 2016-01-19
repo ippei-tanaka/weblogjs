@@ -4,7 +4,7 @@ require('babel-register');
 require('babel-polyfill');
 
 
-var configManager = require('./config-manager');
+var configManager = require('../config-manager');
 
 
 module.exports = (config) => {
