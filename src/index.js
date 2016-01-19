@@ -1,9 +1,6 @@
 "use strict";
 
-require('babel-register')({
-    presets: ['es2015', 'react'],
-    extensions: [".jsx", ".js"]
-});
+require('babel-register');
 require('babel-polyfill');
 
 
