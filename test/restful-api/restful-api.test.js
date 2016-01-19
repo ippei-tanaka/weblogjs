@@ -1,5 +1,6 @@
 "use strict";
 
+var co = require('co');
 var configFile = require('../config.json');
 var testData = require('./test-data.json');
 var weblogjs = require('../../')(configFile);

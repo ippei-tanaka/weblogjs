@@ -1,19 +1,21 @@
-"use strict";
+import configFile from '../config.json';
+import WeblogJS from '../..';
+import co from 'co';
+import { expect } from 'chai';
 
-var config = require('../config.json');
-var weblogjs = require('../../')(config);
-var co = require('co');
-var expect = require('chai').expect;
+
+var weblogjs = WeblogJS(configFile);
+
+var clearDb = () => {
+    return weblogjs.api.db.dropCollections()
+        .catch(() => {
+            //console.error(err);
+        });
+};
+
 
 
 describe('Post Manager', () => {
-
-    var clearDb = () => {
-        return weblogjs.api.db.dropCollections()
-            .catch(() => {
-                //console.error(err);
-            });
-    };
 
     before(clearDb);
     beforeEach(clearDb);
@@ -70,3 +72,4 @@ describe('Post Manager', () => {
     });
 
 });
+
