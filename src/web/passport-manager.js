@@ -4,7 +4,7 @@
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var LocalStrategy = require('passport-local').Strategy;
-var api = require('../api');
+var api = require('../../app/api');
 var authHandler;
 var basicAuth;
 var localAuth;

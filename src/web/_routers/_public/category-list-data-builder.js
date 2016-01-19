@@ -1,6 +1,6 @@
 "use strict";
 
-var api = require('../../../api');
+var api = require('../../../../app/api');
 var postManager = api.postManager;
 var categoryManager = api.categoryManager;
 var co = require('co');

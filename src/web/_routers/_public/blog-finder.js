@@ -1,7 +1,7 @@
 "use strict";
 
 var co = require('co');
-var api = require('../../../api');
+var api = require('../../../../app/api');
 var settingManager = api.settingManager;
 var blogManager = api.blogManager;
 

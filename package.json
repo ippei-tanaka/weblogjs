@@ -2,7 +2,7 @@
   "name": "weblogjs",
   "version": "0.0.4",
   "description": "a library for weblogs",
-  "main": "./src",
+  "main": "./app",
   "scripts": {
     "run-dev": "node ./examples/app",
     "run-prd": "NODE_ENV=production node ./examples/app",
