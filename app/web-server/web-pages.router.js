@@ -3,7 +3,7 @@
 
 var routes = require('express').Router();
 var baseRoute = '/';
-var router = require('./components/router/server').default;
+var router = require('../../src/web/pages/components/router/server').default;
 var co = require("co");
 
 

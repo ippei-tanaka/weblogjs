@@ -1,9 +1,9 @@
 "use strict";
 
-var config = require('../../app/config-manager').load();
-var api = require('../../app/api');
-var restfulApiRouter = require('./restful-api/router');
-var webpageRouter = require('./pages/router');
+var config = require('../config-manager').load();
+var api = require('../api');
+var restfulApiRouter = require('./restful-api.router');
+var webpageRouter = require('./web-pages.router');
 var passport = require('./passport-manager').passport;
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -13,7 +13,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var hbs = require('express-hbs');
 var expressSession = require('express-session');
+var path = require('path');
+
 var webServer;
+var faviconDir = path.resolve(__dirname, '../../src/web/pages/favicons/favicon.ico');
+var staticDir = path.resolve(__dirname, '../../src/web/pages/static');
 
 
 var session = expressSession({
@@ -22,7 +26,7 @@ var session = expressSession({
     saveUninitialized: false
 });
 
-expressApp.use(favicon(__dirname + '/pages/favicons/favicon.ico'));
+expressApp.use(favicon(faviconDir));
 expressApp.use(logger('dev'));
 expressApp.use(bodyParser.json());
 expressApp.use(bodyParser.urlencoded({extended: false}));
@@ -37,7 +41,7 @@ expressApp.use(passport.session());
 expressApp.use(restfulApiRouter.baseRoute, restfulApiRouter.routes);
 
 // Static Files in pages dir
-expressApp.use(express.static(__dirname + '/pages/static'));
+expressApp.use(express.static(staticDir));
 
 // Web Pages
 expressApp.use(webpageRouter.baseRoute, webpageRouter.routes);
