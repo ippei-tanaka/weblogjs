@@ -1,28 +1,33 @@
 "use strict";
 
-var config = require('../config.json');
+var configFile = require('../config.json');
 var testData = require('./test-data.json');
-var weblogjs = require('../../')(config);
+var weblogjs = require('../../')(configFile);
 var httpRequest = require('../utils/http-request');
 var expect = require('chai').expect;
-
+var config = weblogjs.config;
 var admin = Object.freeze(Object.assign({
     email: config.admin_email,
     password: config.admin_password
 }));
 var testUser = Object.freeze(Object.assign(testData["valid-users"][0]));
 var testCategory = Object.freeze(Object.assign(testData["valid-categories"][0]));
+const BASE_URL = `http://${config.web_server_host}:${config.web_server_port}/api/v${config.api_version}`;
 
-const BASE_URL = "http://localhost:8080/api/v1";
+
+
+var clearDb = () => {
+    return weblogjs.api.db.dropCollections()
+        .catch(() => {
+            //console.error(err);
+        });
+};
+
+
 
 describe('Restful API', () => {
 
-    var clearDb = () => {
-        return weblogjs.api.db.dropCollections()
-            .catch(() => {
-                //console.error(err);
-            });
-    };
+
 
     before(clearDb);
     before(() => weblogjs.web.startServer());
@@ -56,7 +61,8 @@ describe('Restful API', () => {
             httpRequest.post(`${BASE_URL}/users`, {
                 "email": "wrongemail",
                 "password": "aaa",
-                "display_name": ""
+                "display_name": "",
+                "slug": ""
             })
                 .then(() => {
                     done(new Error());
@@ -65,8 +71,9 @@ describe('Restful API', () => {
                     var errors = err.body.errors;
 
                     expect(errors["email"].message).to.equal("It is not a valid email address.");
-                    expect(errors["password"].message).to.equal("A password should be between 8 and 16 characters.");
-                    expect(errors["display_name"].message).to.equal("A display name is required.");
+                    expect(errors["password"].message).to.equal("Password should be between 8 and 16 characters.");
+                    expect(errors["display_name"].message).to.equal("Display Name is required.");
+                    expect(errors["slug"].message).to.equal("Slug is required.");
 
                     return httpRequest.post(`${BASE_URL}/users`, testUser);
                 })
@@ -382,7 +389,8 @@ describe('Restful API', () => {
                 "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
                 "slug": "testtset",
                 "publish_date": new Date("2011-1-11 11:11:11"),
-                "tags": ["tag1", "tag2"]
+                "tags": ["tag1", "tag2"],
+                "is_draft": false
             };
 
             var testPost2 = {
@@ -390,7 +398,8 @@ describe('Restful API', () => {
                 "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
                 "slug": "3fasd3ea",
                 "publish_date": new Date("2020-2-22 22:22:22"),
-                "category": undefined
+                "category": undefined,
+                "is_draft": false
             };
 
             var testPost3 = {
@@ -398,7 +407,8 @@ describe('Restful API', () => {
                 "content": "Lorem ipsum dolor sit amet, altera legendos voluptatum sea eu, his te tota congue vivendum. Ei vix molestie iracundia definitionem, eu duo errem sapientem. Sit brute vivendum cu, ne sed fuisset delectus, nobis impetus prompta vim ea. Per consul iisque ut, sea elitr vitae accumsan ei. Quo idque graecis senserit cu.",
                 "slug": "dsfsdfsd",
                 "publish_date": new Date("1990-9-19 9:00:00"),
-                "tags": ["tag1"]
+                "tags": ["tag1"],
+                "is_draft": true
             };
 
             httpRequest.post(`${BASE_URL}/categories`, testCategory)

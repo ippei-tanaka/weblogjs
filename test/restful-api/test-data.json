@@ -3,6 +3,7 @@
     {
       "email": "email1@example.com",
       "password": "test1234",
+      "slug": "slug-test1234",
       "display_name": "Test User 1"
     }
   ],
