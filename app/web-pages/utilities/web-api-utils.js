@@ -97,7 +97,9 @@ export default {
             method: 'put'
         })
             .then(blog => ServerActionCreator.receiveUpdatedBlog({blog, token}))
-            .catch(error => {ServerActionCreator.receiveErrorOnUpdatingBlog({error, token})});
+            .catch(error => {
+                ServerActionCreator.receiveErrorOnUpdatingBlog({error, token})
+            });
     },
 
     deleteBlog: ({token, id}) => {
@@ -154,6 +156,32 @@ export default {
         })
             .then(setting => ServerActionCreator.receiveUpdatedSetting({setting, token}))
             .catch(error => ServerActionCreator.receiveErrorOnUpdatingSetting({error, token}));
+    },
+
+    login: ({token, email, password}) => {
+
+        ajaxRestfulAPI("/login", {
+            data: {
+                email: email,
+                password: password
+            },
+            method: 'post'
+        })
+            .then(() => ServerActionCreator.receiveLoginSuccess({token}))
+            .catch(error => ServerActionCreator.receiveLoginFailure({error, token}));
+
+    },
+
+    logout: ({token}) => {
+        ajaxRestfulAPI("/logout")
+            .then(() => ServerActionCreator.receiveLogoutSuccess({token}))
+            .catch(error => ServerActionCreator.receiveLogoutFailure({error, token}));
+    },
+
+    checkAuthStatus: () => {
+        ajaxRestfulAPI("/users/me")
+            .then(loginUser => ServerActionCreator.receiveAuthStatus(loginUser))
+            .catch(() => ServerActionCreator.receiveAuthStatus(null));
     }
 };
 

@@ -68,7 +68,18 @@ const constants = Object.freeze({
 
         SETTING_UPDATE_REQUEST: null,
         SETTING_UPDATE_FAILED: null,
-        SETTING_UPDATED: null
+        SETTING_UPDATED: null,
+
+
+        AUTH_STATUS_CHECKED: null,
+
+        LOG_IN_REQUEST: null,
+        LOG_IN_SUCCEEDED: null,
+        LOG_IN_FAILED: null,
+
+        LOG_OUT_REQUEST: null,
+        LOG_OUT_SUCCEEDED: null,
+        LOG_OUT_FAILED: null
     }),
 
     PayloadSources: keyMirror({

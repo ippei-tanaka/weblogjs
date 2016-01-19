@@ -1,5 +1,4 @@
 import React from 'react';
-import ServerFacade from '../../../../services/server-facade';
 import { Input, ErrorMessage, Label } from '../../../form';
 
 
@@ -13,7 +12,12 @@ export default class LoginForm extends React.Component {
             email: "",
             password: ""
         };
+    }
 
+    componentWillReceiveProps (newProps) {
+        this.setState(s => {
+            s.error = newProps.error
+        });
     }
 
     onSubmit(e) {
@@ -22,15 +26,7 @@ export default class LoginForm extends React.Component {
         var email = this.state.email.trim();
         var password = this.state.password.trim();
 
-        ServerFacade.login(email, password)
-            .then(() => {
-                this.props.onLoggedIn();
-            })
-            .catch(function () {
-                this.setState({
-                    error: true
-                });
-            }.bind(this));
+        this.props.onSubmit({email, password});
     }
 
     render() {
@@ -78,7 +74,8 @@ export default class LoginForm extends React.Component {
 
     static get propTypes() {
         return {
-            onLoggedIn: React.PropTypes.func.isRequired
+            onSubmit: React.PropTypes.func.isRequired,
+            error: React.PropTypes.bool
         };
     }
 
