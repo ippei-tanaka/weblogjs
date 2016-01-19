@@ -6,9 +6,7 @@
   "scripts": {
     "run-dev": "node ./examples/app",
     "run-prd": "NODE_ENV=production node ./examples/app",
-    "test": "./node_modules/.bin/mocha ./test/model-managers",
-    "test:restful-api": "./node_modules/.bin/gulp test:restful-api",
-    "test:model-managers": "./node_modules/.bin/gulp test:model-managers",
+    "test": "./node_modules/.bin/mocha $(find test -name '*.js')",
     "sass": "./node_modules/.bin/gulp sass",
     "sass:watch": "./node_modules/.bin/gulp sass:watch",
     "webpack": "NODE_ENV=production ./node_modules/.bin/webpack",
@@ -36,7 +34,6 @@
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.0",
     "gulp": "*",
-    "gulp-mocha": "*",
     "gulp-run": "^1.6.12",
     "gulp-sass": "*",
     "mocha": "^2.3.4",

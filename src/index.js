@@ -12,6 +12,7 @@ module.exports = (config) => {
 
     return {
         api: require('./api'),
-        web: require('./web')
+        web: require('./web'),
+        config: configManager.load()
     };
 };

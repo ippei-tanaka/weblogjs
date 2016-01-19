@@ -1,30 +1,31 @@
 "use strict";
 
-var config = require('../config.json');
+var configFile = require('../config.json');
 var testData = require('./test-data.json');
-var weblogjs = require('../../')(config);
+var weblogjs = require('../../')(configFile);
 var httpRequest = require('../utils/http-request');
-var expect = require('chai').expect;
-
+var config = weblogjs.config;
 var admin = Object.freeze(Object.assign({
     email: config.admin_email,
     password: config.admin_password
 }));
-
 var testUser = Object.freeze(Object.assign(testData["valid-users"][0]));
+const BASE_URL = `http://${config.web_server_host}:${config.web_server_port}/api/v${config.api_version}`;
 
-var testCategory = Object.freeze(Object.assign(testData["valid-categories"][0]));
 
-const BASE_URL = "http://localhost:8080/api/v1";
+
+var clearDb = () => {
+    return weblogjs.api.db.dropCollections()
+        .catch(() => {
+            //console.error(err);
+        });
+};
+
+
 
 describe('Restful API Auth', () => {
 
-    var clearDb = () => {
-        return weblogjs.api.db.dropCollections()
-            .catch(() => {
-                //console.error(err);
-            });
-    };
+
 
     before(clearDb);
     before(() => weblogjs.web.startServer());
