@@ -3,21 +3,48 @@
 
 var routes = require('express').Router();
 var url = require('url');
-var api = require('../../../app/api');
+var api = require('../api');
 var userManager = api.userManager;
 var categoryManager = api.categoryManager;
 var postManager = api.postManager;
 var blogManager = api.blogManager;
 var settingManager = api.settingManager;
 var privileges = api.privileges;
-var localAuth = require('../passport-manager').localAuth;
-var config = require('../../../app/config-manager').load();
+var localAuth = require('./passport-manager').localAuth;
+var config = require('../config-manager').load();
 var baseRoute = `/api/v${config.api_version}`;
 var co = require('co');
-var helpers = require('../helpers');
+
+
 
 //-------------------------------------------------------
 // Utility Functions
+
+
+var parseParams = function (query) {
+
+    var ret = null;
+
+    if (!query) {
+        return ret;
+    }
+
+    ret = Object.assign({}, query);
+
+    if (query.sort) {
+        let sort = {};
+        for (let value of query.sort.split(/\s*,\s*/)) {
+            value = value.split(/\s+/);
+            let path = value[0];
+            let order = value[1];
+            sort[path] = order === '-1' || order === '1' ? order : 1;
+        }
+        ret.sort = sort;
+    }
+
+    return ret;
+};
+
 
 var response = (callback) => {
     return (request, response) => {
@@ -86,7 +113,7 @@ routes.get('/users', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    userManager.find({}, helpers.parseParams(query))
+    userManager.find({}, parseParams(query))
         .then((data) => ok({ items: data }))
         .catch(error);
 }));
@@ -137,7 +164,7 @@ routes.get('/categories', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    categoryManager.find({}, helpers.parseParams(query))
+    categoryManager.find({}, parseParams(query))
         .then((data) => ok({ items: data }))
         .catch(error);
 }));
@@ -174,7 +201,7 @@ routes.get('/posts', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    query = helpers.parseParams(query);
+    query = parseParams(query);
 
     postManager.find({}, query)
         .then((data) => ok({ items: data }))
@@ -213,7 +240,7 @@ routes.get('/blogs', isLoggedIn, response((ok, error, request) => {
     var urlParts = url.parse(request.url, true),
         query = urlParts.query;
 
-    query = helpers.parseParams(query);
+    query = parseParams(query);
 
     blogManager.find({}, query)
         .then((data) => ok({ items: data }))
