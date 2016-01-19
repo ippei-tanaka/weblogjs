@@ -12,9 +12,6 @@ import PassportManager from './passport-manager';
 import API from '../api';
 
 
-const WEBPAGE_ROOT_PATH = '/';
-const RESTFUL_API_ROOT_PATH = '/api/v1';
-
 
 var passport = PassportManager.passport;
 var expressApp = express();
@@ -22,8 +19,8 @@ var webServer;
 var config = ConfigManager.load();
 var faviconDir = path.resolve(__dirname, '../../src/web/pages/favicons/favicon.ico');
 var staticDir = path.resolve(__dirname, '../../src/web/pages/static');
-var webpageRouter = new WebpageRouter(WEBPAGE_ROOT_PATH);
-var restfulApiRouter = new RestfulApiRouter(RESTFUL_API_ROOT_PATH);
+var webpageRouter = new WebpageRouter(config.web_page_root);
+var restfulApiRouter = new RestfulApiRouter(config.restful_api_root);
 var session = expressSession({
     secret: config.session_secret,
     resave: false,
@@ -44,13 +41,13 @@ expressApp.use(passport.initialize());
 expressApp.use(passport.session());
 
 // Restful API
-expressApp.use(RESTFUL_API_ROOT_PATH, restfulApiRouter.router);
+expressApp.use(config.restful_api_root, restfulApiRouter.router);
 
 // Static Files in pages dir
 expressApp.use(express.static(staticDir));
 
 // Web Pages
-expressApp.use(WEBPAGE_ROOT_PATH, webpageRouter.router);
+expressApp.use(config.web_page_root, webpageRouter.router);
 
 
 /**

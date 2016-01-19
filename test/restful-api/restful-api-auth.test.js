@@ -13,7 +13,7 @@ var admin = Object.freeze(Object.assign({
     password: config.admin_password
 }));
 var testUser = Object.freeze(Object.assign(testData["valid-users"][0]));
-const BASE_URL = `http://${config.web_server_host}:${config.web_server_port}/api/v${config.api_version}`;
+const BASE_URL = `http://${config.web_server_host}:${config.web_server_port}${config.restful_api_root}`;
 
 
 var clearDb = () => {
