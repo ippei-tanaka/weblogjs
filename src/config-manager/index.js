@@ -1,6 +1,6 @@
 "use strict";
 
-var errors = require('../api/errors');
+var errors = require('../../lib/errors');
 
 var defaultSetting = require('./default.json');
 

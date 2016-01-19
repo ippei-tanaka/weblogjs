@@ -1,4 +1,4 @@
-import db  from './services/db';
+import db  from '../../lib/db';
 import userManager  from './model-managers/user-manager';
 import categoryManager  from './model-managers/category-manager';
 import postManager  from './model-managers/post-manager';
