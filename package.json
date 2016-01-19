@@ -6,7 +6,7 @@
   "scripts": {
     "run-dev": "node ./examples/app",
     "run-prd": "NODE_ENV=production node ./examples/app",
-    "test": "./node_modules/.bin/mocha $(find test -name '*.js')",
+    "test": "./node_modules/.bin/mocha $(find test -name '*.test.js') --compilers js:babel-core/register",
     "sass": "./node_modules/.bin/gulp sass",
     "sass:watch": "./node_modules/.bin/gulp sass:watch",
     "webpack": "NODE_ENV=production ./node_modules/.bin/webpack",
