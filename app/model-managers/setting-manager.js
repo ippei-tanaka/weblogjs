@@ -1,5 +1,5 @@
 import ModelManager from "./model-manager";
-import Setting from "../models/setting";
+import Setting from "./models/setting";
 import co from 'co';
 
 
