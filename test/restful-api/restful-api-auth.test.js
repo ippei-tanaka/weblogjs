@@ -3,7 +3,7 @@ import WeblogJS from '../..';
 import co from 'co';
 import { expect } from 'chai';
 import testData from './test-data.json';
-import httpRequest from '../utils/http-request';
+import httpRequest from '../../utils/http-request';
 
 
 var weblogjs = WeblogJS(configFile);
