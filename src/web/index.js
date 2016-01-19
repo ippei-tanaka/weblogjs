@@ -1,7 +1,7 @@
 "use strict";
 
 var config = require('../../config-manager').load();
-var api = require('../api');
+var api = require('../../app/api');
 var restfulApiRouter = require('./restful-api/router');
 var webpageRouter = require('./pages/router');
 var passport = require('./passport-manager').passport;
