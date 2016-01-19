@@ -6,6 +6,7 @@
     "web_server_host": "localhost",
     "admin_email": "admin@example.com",
     "admin_password": "AdminPassword",
-    "api_version": 1,
+    "web_page_root": "/",
+    "restful_api_root": "/api",
     "session_secret": "keyboard cat"
 }
