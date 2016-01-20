@@ -5,6 +5,7 @@ import AdminMenu from './partials/admin-menu';
 import { Link, IndexLink } from 'react-router';
 import AuthStore from '../../../stores/auth-store';
 import ViewActionCreator from '../../../action-creators/view-action-creator';
+import { Actions } from '../../../constants';
 import hat from 'hat';
 
 
@@ -82,6 +83,16 @@ export default class Admin extends Page {
     }
 
     onStoreChanged() {
+        var action = AuthStore.latestAction;
+
+        if (action && action.token === this.token) {
+            if (action.actionType === Actions.LOG_IN_FAILED) {
+                this.setState({loginFailed: true});
+            } else if (action.actionType === Actions.LOG_IN_SUCCEEDED) {
+                this.setState({loginFailed: false});
+            }
+        }
+
         this.updateAuthState();
     }
 

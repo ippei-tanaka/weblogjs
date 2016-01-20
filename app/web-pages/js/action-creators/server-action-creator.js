@@ -270,10 +270,9 @@ export default {
         });
     },
 
-    receiveLoginFailure: ({error, token}) => {
+    receiveLoginFailure: ({token}) => {
         Dispatcher.handleServerAction({
             actionType: Actions.LOG_IN_FAILED,
-            data: error,
             token: token
         });
     },
@@ -285,10 +284,9 @@ export default {
         });
     },
 
-    receiveLogoutFailure: ({error, token}) => {
+    receiveLogoutFailure: ({token}) => {
         Dispatcher.handleServerAction({
             actionType: Actions.LOG_OUT_FAILED,
-            data: error,
             token: token
         });
     }
