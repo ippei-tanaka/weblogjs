@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form } from '../../../../form';
+import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form } from '../../../../partials/form';
 import { trimObjValues, slugfy } from '../../../../../utilities';
 
 
