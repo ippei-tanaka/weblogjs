@@ -16,7 +16,7 @@ class AuthStore extends Store {
         /**
          * @private
          */
-        this._loginUser = false;
+        this._loginUser = null;
 
         /**
          * @private
@@ -29,12 +29,20 @@ class AuthStore extends Store {
      */
     get _actionCallbackList() {
         return {
-            [Actions.LOG_IN_SUCCEEDED]: function () {
-                this._initialized = true;
+            [Actions.LOG_IN_SUCCEEDED]: function ({action}) {
+                WebApiUtils.checkAuthStatus();
             },
 
             [Actions.LOG_IN_FAILED]: function () {
-                this._initialized = true;
+                WebApiUtils.checkAuthStatus();
+            },
+
+            [Actions.LOG_OUT_SUCCEEDED]: function () {
+                WebApiUtils.checkAuthStatus();
+            },
+
+            [Actions.LOG_OUT_FAILED]: function () {
+                WebApiUtils.checkAuthStatus();
             },
 
             [Actions.AUTH_STATUS_CHECKED]: function ({action}) {
@@ -44,6 +52,10 @@ class AuthStore extends Store {
         }
     }
 
+    /**
+     * @public
+     * @returns {boolean}
+     */
     get isLoggedIn() {
         if (!this._initialized) {
             WebApiUtils.checkAuthStatus();
@@ -52,6 +64,10 @@ class AuthStore extends Store {
         return !!this._loginUser;
     }
 
+    /**
+     * @public
+     * @returns {Object}
+     */
     get loginUser () {
         if (!this._initialized) {
             WebApiUtils.checkAuthStatus();
