@@ -1,7 +1,7 @@
 import express from "express";
 import co from 'co';
 import path from 'path';
-import ClientRouter from './components/router/server';
+import ClientRouter from './js/routers/server';
 
 
 const FAVICON_DIR = path.resolve(__dirname, './favicons/favicon.ico');

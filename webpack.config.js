@@ -5,7 +5,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const PRODUCTION_MODE = process.env.NODE_ENV === 'production'; // Configured in package.json
 const STATIC_DIR = path.resolve(__dirname, "./app/web-pages/static");
-const ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/components/router/browser.js");
+const ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/js/routers/browser.js");
 
 
 module.exports = {

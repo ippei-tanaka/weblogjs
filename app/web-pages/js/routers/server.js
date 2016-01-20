@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import { match, RoutingContext } from 'react-router'
 import { appRoutes as routes } from './routes';
-import Layout from '../layout/html'
+import Layout from '../components/layout/html'
 import co from 'co';
 
 
