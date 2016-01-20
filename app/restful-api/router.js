@@ -278,7 +278,10 @@ router.get('/setting', isLoggedIn, response((ok, error) => {
 router.put('/setting', isLoggedIn, response((ok, error, request) => {
     settingManager.setFront(request.body ? request.body.front : null)
         .then(ok)
-        .catch(error);
+        .catch((eee) => {
+            console.error(eee);
+            error(eee);
+        });
 }));
 
 

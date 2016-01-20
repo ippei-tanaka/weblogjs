@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { FieldSet, SubmitButton, ButtonList, Input, Select, Option, Title, Form } from '../../../partials/form';
+import { FieldSet, SubmitButton, ButtonList, Select, Option, Title, Form, FlushMessage } from '../../../partials/form';
 import Page from '../../../abstructs/page';
 import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import SettingStore from '../../../../stores/setting-store';
@@ -19,7 +19,8 @@ class SettingEditor extends Page {
         this.state = {
             errors: {},
             values: {},
-            blogList: []
+            blogList: [],
+            updateSucceeded: false
         };
 
         this.token = rack();
@@ -29,8 +30,8 @@ class SettingEditor extends Page {
     }
 
     componentDidMount() {
-        this.setCurrentValues();
         this.setLists();
+        this.setCurrentValues();
         SettingStore.addChangeListener(this.settingStoreCallback);
         BlogStore.addChangeListener(this.blogStoreCallback);
     }
@@ -60,6 +61,10 @@ class SettingEditor extends Page {
                     <SubmitButton>Update</SubmitButton>
                 </ButtonList>
 
+                {this.state.updateSucceeded ? (
+                    <FlushMessage>Successfully Updated!</FlushMessage>
+                ) : null}
+
             </Form>
         );
     }
@@ -81,11 +86,14 @@ class SettingEditor extends Page {
         if (action && action.token === this.token) {
             if (action.data && action.data.errors) {
                 this.setState(s => {
-                    s.errors = action.data.errors
+                    s.errors = action.data.errors;
+                    s.updateSucceeded = false;
                 });
             } else {
-                console.log("Hmm, やったぁ！");
-                //this.context.history.pushState(null, "/admin/users");
+                this.setState(s => {
+                    s.errors = {};
+                    s.updateSucceeded = true;
+                });
             }
         }
     }
@@ -93,6 +101,7 @@ class SettingEditor extends Page {
     updateValue(fieldName, value) {
         this.setState(s => {
             s.values[fieldName] = value;
+            s.updateSucceeded = false;
         });
     }
 
