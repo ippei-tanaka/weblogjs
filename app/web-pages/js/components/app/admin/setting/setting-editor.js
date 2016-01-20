@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { FieldSet, SubmitButton, ButtonList, Input, Select, Option, Title, Form } from '../../../form';
+import { FieldSet, SubmitButton, ButtonList, Input, Select, Option, Title, Form } from '../../../partials/form';
 import Page from '../../../abstructs/page';
 import ViewActionCreator from '../../../../action-creators/view-action-creator';
 import SettingStore from '../../../../stores/setting-store';

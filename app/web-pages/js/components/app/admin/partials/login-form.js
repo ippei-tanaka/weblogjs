@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, ErrorMessage, Label } from '../../../form';
+import { Input, ErrorMessage, Label } from '../../../partials/form';
 
 
 export default class LoginForm extends React.Component {
