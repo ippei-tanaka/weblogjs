@@ -39,16 +39,10 @@ class UserManager extends ModelManager {
             let user = yield this.findOne(condition, options);
 
             if (!user) {
-                throw new Errors.WeblogJsAuthError();
+                return false;
             }
 
-            let isMatch = user.verifyPassword(credential.password);
-
-            if (!isMatch) {
-                throw new Errors.WeblogJsAuthError();
-            }
-
-            return this.findById(user.id);
+            return user.verifyPassword(credential.password);
         }.bind(this));
     }
 

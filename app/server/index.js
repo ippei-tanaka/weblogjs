@@ -27,7 +27,7 @@ var session = expressSession({
 
 
 expressApp.use(favicon(webpageRouter.faviconDir));
-expressApp.use(logger('dev'));
+//expressApp.use(logger('dev'));
 expressApp.use(bodyParser.json());
 expressApp.use(bodyParser.urlencoded({extended: false}));
 expressApp.use(cookieParser());

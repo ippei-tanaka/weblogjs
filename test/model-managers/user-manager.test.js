@@ -46,7 +46,7 @@ describe('User Manager', () => {
         })
     });
 
-    it('should check if the credential is valid', (done) => {
+    it('should check whether or not the credential is valid', (done) => {
         co(function* () {
             var users = [];
             for (let i = 0; i < 10; i++) {
@@ -59,14 +59,18 @@ describe('User Manager', () => {
                 users.push(u);
             }
 
-            let user = yield weblogjs.api.userManager.isValid({
+            let validity1 = yield weblogjs.api.userManager.isValid({
                 email: "test5@test.com",
                 password: "password5"
             });
 
-            expect(user.email).to.equal("test5@test.com");
-            expect(user.display_name).to.equal("Test 5");
-            expect(user.password).to.equal(undefined);
+            let validity2 = yield weblogjs.api.userManager.isValid({
+                email: "something@wrong.com",
+                password: "somethingwrong"
+            });
+
+            expect(validity1).to.equal(true);
+            expect(validity2).to.equal(false);
 
             done();
         }).catch((error) => {
