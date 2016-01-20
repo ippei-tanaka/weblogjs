@@ -4,6 +4,7 @@
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var LocalStrategy = require('passport-local').Strategy;
+var co = require('co');
 var api = require('../../app/api');
 var authHandler;
 var basicAuth;
@@ -11,13 +12,17 @@ var localAuth;
 
 
 authHandler = (email, password, done) => {
-    api.userManager.isValid({email: email, password: password})
-        .then((user) => {
+    co(function* () {
+        var isValid = yield api.userManager.isValid({email: email, password: password});
+
+        if (isValid) {
+            let user = yield api.userManager.findByEmail(email);
             return done(null, user);
-        })
-        .catch(() => {
+        } else {
             return done();
-        });
+        }
+
+    });
 };
 
 
