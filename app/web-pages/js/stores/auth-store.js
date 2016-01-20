@@ -31,23 +31,28 @@ class AuthStore extends Store {
         return {
             [Actions.LOG_IN_SUCCEEDED]: function ({action}) {
                 WebApiUtils.checkAuthStatus();
+                this._latestAction = action;
             },
 
-            [Actions.LOG_IN_FAILED]: function () {
+            [Actions.LOG_IN_FAILED]: function ({action}) {
                 WebApiUtils.checkAuthStatus();
+                this._latestAction = action;
             },
 
-            [Actions.LOG_OUT_SUCCEEDED]: function () {
+            [Actions.LOG_OUT_SUCCEEDED]: function ({action}) {
                 WebApiUtils.checkAuthStatus();
+                this._latestAction = action;
             },
 
-            [Actions.LOG_OUT_FAILED]: function () {
+            [Actions.LOG_OUT_FAILED]: function ({action}) {
                 WebApiUtils.checkAuthStatus();
+                this._latestAction = action;
             },
 
             [Actions.AUTH_STATUS_CHECKED]: function ({action}) {
                 this._initialized = true;
                 this._loginUser = action.data;
+                this._latestAction = action;
             }
         }
     }

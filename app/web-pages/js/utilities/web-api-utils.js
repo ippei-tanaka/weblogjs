@@ -168,14 +168,14 @@ export default {
             method: 'post'
         })
             .then(() => ServerActionCreator.receiveLoginSuccess({token}))
-            .catch(error => ServerActionCreator.receiveLoginFailure({error, token}));
+            .catch(() => ServerActionCreator.receiveLoginFailure({token}));
 
     },
 
     logout: ({token}) => {
         ajaxRestfulAPI("/logout")
             .then(() => ServerActionCreator.receiveLogoutSuccess({token}))
-            .catch(error => ServerActionCreator.receiveLogoutFailure({error, token}));
+            .catch(() => ServerActionCreator.receiveLogoutFailure({token}));
     },
 
     checkAuthStatus: () => {
