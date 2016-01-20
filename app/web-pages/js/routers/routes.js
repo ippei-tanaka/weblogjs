@@ -21,9 +21,12 @@ import PostAdder from "../components/app/admin/post/post-adder";
 import PostEditor from "../components/app/admin/post/post-editor";
 import PostDeleter from "../components/app/admin/post/post-deleter";
 import SettingEditor from "../components/app/admin/setting/setting-editor";
+import Public from "../components/app/public";
+
 
 var appRoutes = (
     <Route path="/" component={App}>
+        <IndexRoute component={Public} />
         <Route path="admin" component={Admin}>
             <IndexRoute component={DashBoard} />
             <Route path="users">
