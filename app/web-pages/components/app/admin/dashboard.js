@@ -1,6 +1,6 @@
 import React from 'react';
 import Page from '../../abstructs/page';
-import ServerFacade from '../../../services/server-facade';
+import AuthStore from '../../../stores/auth-store';
 
 
 class Dashboard extends Page {
@@ -11,14 +11,17 @@ class Dashboard extends Page {
         this.state = {
             myName: ""
         };
+
+        this.callback = this.updateState.bind(this);
     }
 
-    componentWillMount () {
-        ServerFacade.getMe().then((me) => {
-            this.setState({
-                myName: me.display_name
-            });
-        });
+    componentDidMount() {
+        this.updateState();
+        AuthStore.addChangeListener(this.callback);
+    }
+
+    componentWillUnmount() {
+        AuthStore.removeChangeListener(this.callback);
     }
 
     render() {
@@ -30,6 +33,14 @@ class Dashboard extends Page {
                 <p><a href="/" target="_black">Public Page</a></p>
             </div>
         );
+    }
+
+    updateState () {
+        if (AuthStore.isLoggedIn) {
+            this.setState(s => {
+                s.myName = AuthStore.loginUser.display_name;
+            });
+        }
     }
 
 }
