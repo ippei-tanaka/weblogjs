@@ -1,87 +1,47 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router';
-import Page from '../../../abstructs/page';
-import ViewActionCreator from '../../../../action-creators/view-action-creator';
-import UserStore from '../../../../stores/user-store';
 import UserForm from './partials/user-form';
-import hat from 'hat';
+import * as userActions from '../../../../action-creators/user';
+import { connect } from 'react-redux';
+import {
+    UNINITIALIZED,
+    LOADING_USERS,
+    USERS_LOAD_SUCCEEDED,
+    USERS_LOAD_FAILED
+} from '../../../../constants/user-status';
 
 
-var rack = hat.rack();
-
-
-class UserEditor extends Page {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            errors: {},
-            values: {}
-        };
-
-        this.token = rack();
-
-        this.callback = this.onStoreChanged.bind(this);
-    }
+class UserEditor extends Component {
 
     componentDidMount() {
-        this.updateValues();
-        UserStore.addChangeListener(this.callback);
-    }
+        const { store, loadUsers }  = this.props;
+        const status = store.get('status');
 
-    componentWillUnmount() {
-        UserStore.removeChangeListener(this.callback);
+        if (status === UNINITIALIZED) {
+            loadUsers();
+        }
     }
 
     render() {
-        this.setPageTitle(this.title);
+        const { store, params : {id}, editUser }  = this.props;
+        let editedUser = store.get('users').find(u => u.get('_id') === id);
+        editedUser = editedUser ? editedUser.toJS() : {};
 
         return (
-            <UserForm title={this.title}
-                      errors={this.state.errors}
-                      values={this.state.values}
+            <UserForm title={this.createTitle(editedUser.display_name)}
+                      errors={{}}
+                      values={editedUser}
                       autoSlugfy={false}
                       passwordField={false}
-                      onSubmit={this.onSubmit.bind(this)}
+                      onSubmit={data => editUser({id, data})}
                       submitButtonLabel="Update"
                       locationForBackButton="/admin/users"
             />
         );
     }
 
-    onSubmit(values) {
-        ViewActionCreator.requestUpdateUser({
-            id: this.props.params.id,
-            token: this.token,
-            data: values
-        });
-    }
-
-    onStoreChanged() {
-        var action = UserStore.latestAction;
-
-        this.updateValues();
-
-        if (action && action.token === this.token) {
-            if (action.data && action.data.errors) {
-                this.setState(s => {
-                    s.errors = action.data.errors
-                });
-            } else {
-                this.context.history.pushState(null, "/admin/users");
-            }
-        }
-    }
-
-    updateValues() {
-        this.setState(s => {
-            s.values = UserStore.get(this.props.params.id) || {};
-        });
-    }
-
-    get title() {
-        return `Edit the User "${this.state.values.display_name}"`;
+    createTitle(username) {
+        return `Edit the User "${username}"`;
     }
 
     static get propTypes() {
@@ -92,5 +52,7 @@ class UserEditor extends Page {
 
 }
 
-
-export default UserEditor;
+export default connect(
+    state => ({store: state.user}),
+    userActions
+)(UserEditor);

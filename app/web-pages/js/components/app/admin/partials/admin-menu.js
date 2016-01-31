@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, IndexLink } from 'react-router';
 
-var AdminMenu = ({onLogoutClick}) => (
+const AdminMenu = ({onLogoutClick}) => (
     <menu>
         <li>
             <button onClick={onLogoutClick}>Log out</button>

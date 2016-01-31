@@ -1,47 +1,45 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Moment from 'moment';
 import List from '../../../partials/list';
-import UserStore from '../../../../stores/user-store';
-import ViewActionCreator from '../../../../action-creators/view-action-creator';
-import Page from '../../../abstructs/page';
+import * as userActions from '../../../../action-creators/user';
+import { connect } from 'react-redux';
+import {
+    UNINITIALIZED,
+    LOADING_USERS,
+    USERS_LOAD_SUCCEEDED,
+    USERS_LOAD_FAILED
+} from '../../../../constants/user-status';
 
-class UserList extends Page {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            models: []
-        };
-
-        this.updateModelsCallback = this.updateModels.bind(this);
-    }
+class UserList extends Component {
 
     componentDidMount() {
-        this.updateModels();
-        UserStore.addChangeListener(this.updateModelsCallback);
-    }
+        const { store, loadUsers }  = this.props;
+        const status = store.get('status');
 
-    componentWillUnmount() {
-        UserStore.removeChangeListener(this.updateModelsCallback);
+        if (status === UNINITIALIZED) {
+            loadUsers();
+        }
     }
 
     render() {
-        this.setPageTitle(this.title);
+        const { store } = this.props;
+        const status = store.get('status');
+        const users = store.get('users').toJS();
 
-        return <List title={this.title}
+        return <List title={this._title}
                      adderLocation="/admin/users/adder"
-                     fields={this.fields}
-                     models={this.state.models}
+                     fields={this._fields}
+                     models={users}
                      editorLocationBuilder={id => `/admin/users/${id}/editor`}
                      deleterLocationBuilder={id => `/admin/users/${id}/deleter`}/>;
     }
 
-    updateModels() {
-        this.setState({models: UserStore.getAll()});
+    get _title() {
+        return "User List";
     }
 
-    get fields() {
+    get _fields() {
         return {
             display_name: {
                 label: "Name"
@@ -75,10 +73,10 @@ class UserList extends Page {
         }
     }
 
-    get title() {
-        return "User List";
-    }
-
 }
 
-export default UserList;
+
+export default connect(
+    state => ({store: state.user}),
+    userActions
+)(UserList);
