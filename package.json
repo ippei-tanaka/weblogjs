@@ -51,6 +51,7 @@
     "flux": "^2.1.1",
     "hat": "0.0.3",
     "history": "^1.13.1",
+    "immutable": "^3.7.6",
     "jquery": "^2.1.4",
     "keymirror": "^0.1.1",
     "moment": "^2.10.6",
@@ -63,7 +64,9 @@
     "passport-local": "^1.0.0",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
+    "react-redux": "^4.0.6",
     "react-router": "^1.0.2",
+    "react-router-redux": "^2.1.0",
     "request": "^2.67.0",
     "serve-favicon": "^2.3.0",
     "superagent": "^1.6.1"

@@ -24,7 +24,7 @@ import SettingEditor from "../components/app/admin/setting/setting-editor";
 import Public from "../components/app/public";
 
 
-var appRoutes = (
+const appRoutes = (
     <Route path="/" component={App}>
         <IndexRoute component={Public} />
         <Route path="admin" component={Admin}>

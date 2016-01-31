@@ -2,81 +2,57 @@ import React from 'react';
 import { Input, ErrorMessage, Label } from '../../../partials/form';
 
 
-export default class LoginForm extends React.Component {
+const trimValue = (field, onChange) => {
+    return value => onChange({field, value: value.trim()});
+};
 
-    constructor(props) {
-        super(props);
+const preventSubmit = (onSubmit) => {
+    return event => {
+        event.preventDefault();
+        onSubmit();
+    };
+};
 
-        this.state = {
-            error: false,
-            email: "",
-            password: ""
-        };
-    }
+const LoginForm = ({ error, email, password, onSubmit, onChange }) => (
+    <form className="module-login-form" method="post" onSubmit={preventSubmit(onSubmit)}>
+        <div className="m-lgf-wrapper">
+            <div className="module-data-editor">
+                <h1 className="m-dte-title">WeblogJS Admin Site</h1>
 
-    componentWillReceiveProps (newProps) {
-        this.setState(s => {
-            s.error = newProps.error
-        });
-    }
-
-    onSubmit(e) {
-        e.preventDefault();
-
-        var email = this.state.email.trim();
-        var password = this.state.password.trim();
-
-        this.props.onSubmit({email, password});
-    }
-
-    render() {
-        return (
-            <form className="module-login-form" method="post" onSubmit={this.onSubmit.bind(this)}>
-                <div className="m-lgf-wrapper">
-                    <div className="module-data-editor">
-                        <h1 className="m-dte-title">WeblogJS Admin Site</h1>
-
-                        <div className="m-dte-field-container">
-                            <Label htmlFor="LoginFormEmailField">Email Address</Label>
-                            <Input
-                                id="LoginFormEmailField"
-                                type="email"
-                                value={this.state.email}
-                                onChange={value => this.setState({ email: value })}
-                            />
-                        </div>
-
-                        <div className="m-dte-field-container">
-                            <Label htmlFor="LoginFormPasswordField">Password</Label>
-                            <Input
-                                id="LoginFormPasswordField"
-                                type="password"
-                                value={this.state.password}
-                                onChange={value => this.setState({ password: value })}
-                            />
-                        </div>
-
-                        { this.state.error
-                            ? (
-                            <div className="m-dte-field-container">
-                                <span className="m-lgf-error">The email or password is incorrect.</span>
-                            </div>)
-                            : null }
-
-                        <div className="m-dte-field-container">
-                            <button className="module-button m-btn-plain" type="submit">Sign in</button>
-                        </div>
-                    </div>
+                <div className="m-dte-field-container">
+                    <Label htmlFor="LoginFormEmailField">Email Address</Label>
+                    <Input
+                        id="LoginFormEmailField"
+                        type="email"
+                        value={email}
+                        onChange={trimValue("email", onChange)}
+                    />
                 </div>
-            </form>
-        );
-    }
 
-    static get propTypes() {
-        return {
-            onSubmit: React.PropTypes.func.isRequired,
-            error: React.PropTypes.bool
-        };
-    }
+                <div className="m-dte-field-container">
+                    <Label htmlFor="LoginFormPasswordField">Password</Label>
+                    <Input
+                        id="LoginFormPasswordField"
+                        type="password"
+                        value={password}
+                        onChange={trimValue("password", onChange)}
+                    />
+                </div>
 
-}
+                { error
+                    ? (
+                    <div className="m-dte-field-container">
+                        <span className="m-lgf-error">The email or password is incorrect.</span>
+                    </div>)
+                    : null }
+
+                <div className="m-dte-field-container">
+                    <button className="module-button m-btn-plain" type="submit">Sign in</button>
+                </div>
+            </div>
+        </div>
+    </form>
+);
+
+
+export default LoginForm;

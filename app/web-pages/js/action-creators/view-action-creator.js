@@ -6,6 +6,32 @@ var Actions = Constants.Actions;
 
 export default {
 
+    doSomething: () => (dispatch) => {
+        var promise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve({
+                    type: 'SAY_SOMETHING'
+                });
+            }, 2000);
+        });
+        dispatch(promise);
+    },
+
+    /*
+
+    requestCreateUser: ({token, data}) => (dispatch) => {
+        //Dispatcher.handleViewAction({
+        //    actionType: Actions.USER_CREATE_REQUEST
+        //});
+        console.log(1234);
+        dispatch(WebApiUtils.createUser(data).then(user => ({
+
+        })).catch(errors => ({
+
+        })));
+    },
+    */
+
     requestCreateUser: ({token, data}) => {
         Dispatcher.handleViewAction({
             actionType: Actions.USER_CREATE_REQUEST
