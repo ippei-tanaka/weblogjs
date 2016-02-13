@@ -31,9 +31,11 @@ export const loadUsers = () => (dispatch, getState) => {
         return;
     }
 
+    /*
     dispatch({
         type: USERS_LOAD_REQUEST
     });
+    */
 
     co(function* () {
         var users = yield loadUsersFromServer();
@@ -63,9 +65,11 @@ export const editUser = ({id, data}) => (dispatch, getState) => {
         return;
     }
 
+    /*
     dispatch({
         type: USERS_EDIT_REQUEST
     });
+    */
 
     co(function* () {
         const { user, errors } = yield editUserOnServer({id, data});

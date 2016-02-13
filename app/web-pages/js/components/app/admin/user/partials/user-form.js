@@ -4,6 +4,66 @@ import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Titl
 import { trimObjValues, slugfy } from '../../../../../utilities';
 
 
+const trimValue = (field, onChange) => {
+    return value => onChange({field, value: value.trim()});
+};
+
+const preventSubmit = (onSubmit) => {
+    return event => {
+        event.preventDefault();
+        onSubmit();
+    };
+};
+
+
+const UserForm = ({ title, errors, values, onSubmit, onChange, passwordField, submitButtonLabel, locationForBackButton }) => (
+    <Form onSubmit={preventSubmit(onSubmit)}>
+
+        <Title>{title}</Title>
+
+        <FieldSet label="Email"
+                  error={errors.email}>
+            <Input value={values.email}
+                   type="email"
+                   onChange={trimValue("email", onChange)}/>
+        </FieldSet>
+
+        {passwordField ? (
+            <FieldSet label="Password"
+                      error={errors.password}>
+                <Input value={values.password}
+                       type="text"
+                       onChange={trimValue("password", onChange)}/>
+            </FieldSet>
+        ) : null}
+
+        <FieldSet label="Display Name"
+                  error={errors.display_name}>
+            <Input value={values.display_name}
+                   onChange={trimValue("display_name", onChange)}/>
+        </FieldSet>
+
+        <FieldSet label="Slug"
+                  error={errors.slug}>
+            <Input value={values.slug}
+                   onChange={trimValue("slug", onChange)}/>
+        </FieldSet>
+
+        <ButtonList>
+            <SubmitButton>{submitButtonLabel}</SubmitButton>
+            <Link to={locationForBackButton}
+                  className="module-button">
+                Back
+            </Link>
+        </ButtonList>
+
+    </Form>
+);
+
+
+export default UserForm;
+
+/*
 export default class UserForm extends React.Component {
 
     constructor(props) {
@@ -126,3 +186,4 @@ export default class UserForm extends React.Component {
         };
     }
 }
+    */

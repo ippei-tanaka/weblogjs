@@ -28,9 +28,11 @@ export const checkStatus = () => (dispatch, getState) => {
         return;
     }
 
+    /*
     dispatch({
         type: AUTH_STATUS_CHECK_REQUEST
     });
+    */
 
     co(function* () {
         var user = yield getLoginUser();
@@ -61,9 +63,11 @@ export const requestLogin = ({email, password}) => (dispatch, getState) => {
         return;
     }
 
+    /*
     dispatch({
         type: LOGIN_REQUEST
     });
+    */
 
     co(function* () {
         let user = yield getLoginUser();
@@ -97,9 +101,11 @@ export const requestLogout = () => (dispatch, getState) => {
         return;
     }
 
+    /*
     dispatch({
         type: LOGOUT_REQUEST
     });
+    */
 
     co(function* () {
         let user = yield getLoginUser();
