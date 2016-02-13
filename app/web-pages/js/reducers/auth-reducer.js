@@ -29,27 +29,35 @@ const initialState = Immutable.Map({
 
 
 export default (state = initialState, action) => {
+
     switch (action.type) {
+
         case AUTH_STATUS_CHECK_REQUEST:
             return state
                 .set('status', WAITING_FOR_STATUS_CHECK);
+
         case AUTH_STATUS_RECEIVED:
             return state
                 .set('status', action.user ? LOGIN_CONFIRMED : LOGOUT_CONFIRMED)
                 .set('user', action.user || null);
+
         case LOGIN_REQUEST:
             return state
                 .set('status', WAITING_FOR_LOGIN)
                 .set('user', null);
+
         case LOGIN_RESULT_RECEIVED:
             return state
                 .set('status', action.user ? LOGIN_SUCCEEDED : LOGIN_FAILED)
                 .set('user', action.user);
+
         case LOGOUT_RESULT_RECEIVED:
             return state
                 .set('status', action.result ? LOGOUT_SUCCEEDED : LOGOUT_FAILED)
                 .set('user', null);
+
         default:
             return state;
+
     }
 };

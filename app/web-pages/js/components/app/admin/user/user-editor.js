@@ -12,8 +12,44 @@ import {
 
 
 class UserEditor extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            values: {}
+        }
+    }
+
 
     componentDidMount() {
+        this._updateStoreValues();
+        this._updateStateValues();
+    }
+
+    componentWillReceiveProps () {
+        this._updateStateValues();
+    }
+
+    render() {
+        const { params : {id}, editUser }  = this.props;
+        //let editedUser = store.get('users').find(u => u.get('_id') === id);
+        //editedUser = editedUser ? editedUser.toJS() : {};
+
+        return (
+            <UserForm title={this._createTitle(this.state.values.display_name)}
+                      errors={{}}
+                      values={this.state.values}
+                      autoSlugfy={false}
+                      passwordField={false}
+                      onChange={({field, value}) => this.setState(state => {state.values[field] = value})}
+                      onSubmit={data => editUser({id, data})}
+                      submitButtonLabel="Update"
+                      locationForBackButton="/admin/users"
+            />
+        );
+    }
+
+    _updateStoreValues () {
         const { store, loadUsers }  = this.props;
         const status = store.get('status');
 
@@ -22,25 +58,14 @@ class UserEditor extends Component {
         }
     }
 
-    render() {
-        const { store, params : {id}, editUser }  = this.props;
+    _updateStateValues () {
+        const { store, params : {id} }  = this.props;
         let editedUser = store.get('users').find(u => u.get('_id') === id);
         editedUser = editedUser ? editedUser.toJS() : {};
-
-        return (
-            <UserForm title={this.createTitle(editedUser.display_name)}
-                      errors={{}}
-                      values={editedUser}
-                      autoSlugfy={false}
-                      passwordField={false}
-                      onSubmit={data => editUser({id, data})}
-                      submitButtonLabel="Update"
-                      locationForBackButton="/admin/users"
-            />
-        );
+        this.setState(state => { state.values = editedUser });
     }
 
-    createTitle(username) {
+    _createTitle(username) {
         return `Edit the User "${username}"`;
     }
 
