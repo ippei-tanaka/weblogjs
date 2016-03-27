@@ -4,7 +4,7 @@ import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Titl
 import { trimObjValues, slugfy } from '../../../../../utilities';
 
 
-const trimValue = (field, onChange) => {
+const onChange = (field, onChange) => {
     return value => onChange({field, value: value.trim()});
 };
 
@@ -15,8 +15,8 @@ const preventSubmit = (onSubmit) => {
     };
 };
 
-
-const UserForm = ({ title, errors, values, onSubmit, onChange, passwordField, submitButtonLabel, locationForBackButton }) => (
+/*
+const StateLessUserForm = ({ title, errors, values, onSubmit, onChange, passwordField, submitButtonLabel, locationForBackButton }) => (
     <Form onSubmit={preventSubmit(onSubmit)}>
 
         <Title>{title}</Title>
@@ -25,7 +25,7 @@ const UserForm = ({ title, errors, values, onSubmit, onChange, passwordField, su
                   error={errors.email}>
             <Input value={values.email}
                    type="email"
-                   onChange={trimValue("email", onChange)}/>
+                   onChange={onChange("email", onChange)}/>
         </FieldSet>
 
         {passwordField ? (
@@ -33,20 +33,20 @@ const UserForm = ({ title, errors, values, onSubmit, onChange, passwordField, su
                       error={errors.password}>
                 <Input value={values.password}
                        type="text"
-                       onChange={trimValue("password", onChange)}/>
+                       onChange={onChange("password", onChange)}/>
             </FieldSet>
         ) : null}
 
         <FieldSet label="Display Name"
                   error={errors.display_name}>
             <Input value={values.display_name}
-                   onChange={trimValue("display_name", onChange)}/>
+                   onChange={onChange("display_name", onChange)}/>
         </FieldSet>
 
         <FieldSet label="Slug"
                   error={errors.slug}>
             <Input value={values.slug}
-                   onChange={trimValue("slug", onChange)}/>
+                   onChange={onChange("slug", onChange)}/>
         </FieldSet>
 
         <ButtonList>
@@ -59,7 +59,92 @@ const UserForm = ({ title, errors, values, onSubmit, onChange, passwordField, su
 
     </Form>
 );
+*/
 
+class UserForm extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            values: this.props.values,
+            errors: this.props.errors
+        }
+    }
+
+    componentWillReceiveProps (nextProps) {
+        this.setState(s => {
+            s.values = nextProps.values;
+            s.errors = nextProps.errors;
+        });
+    }
+
+    render() {
+        const {
+            title,
+            onSubmit,
+            passwordField,
+            submitButtonLabel,
+            locationForBackButton
+            } = this.props;
+
+        const values = this.state.values;
+        const errors = this.state.errors;
+        const onChange = this._onChange.bind(this);
+
+        return (
+            <Form onSubmit={preventSubmit(onSubmit)}>
+
+                <Title>{title}</Title>
+
+                <FieldSet label="Email"
+                          error={errors.email}>
+                    <Input value={values.email}
+                           type="email"
+                           onChange={onChange("email")}/>
+                </FieldSet>
+
+                {passwordField ? (
+                    <FieldSet label="Password"
+                              error={errors.password}>
+                        <Input value={values.password}
+                               type="text"
+                               onChange={onChange("password")}/>
+                    </FieldSet>
+                ) : null}
+
+                <FieldSet label="Display Name"
+                          error={errors.display_name}>
+                    <Input value={values.display_name}
+                           onChange={onChange("display_name")}/>
+                </FieldSet>
+
+                <FieldSet label="Slug"
+                          error={errors.slug}>
+                    <Input value={values.slug}
+                           onChange={onChange("slug")}/>
+                </FieldSet>
+
+                <ButtonList>
+                    <SubmitButton>{submitButtonLabel}</SubmitButton>
+                    <Link to={locationForBackButton}
+                          className="module-button">
+                        Back
+                    </Link>
+                </ButtonList>
+
+            </Form>
+        )
+    }
+
+    _onChange (field) {
+        return value => {
+            //console.log(field);
+            //console.log(value);
+        }
+    }
+
+}
 
 export default UserForm;
 

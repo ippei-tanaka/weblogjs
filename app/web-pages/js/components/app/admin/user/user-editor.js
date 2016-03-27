@@ -31,18 +31,18 @@ class UserEditor extends Component {
     }
 
     render() {
-        const { params : {id}, editUser }  = this.props;
-        //let editedUser = store.get('users').find(u => u.get('_id') === id);
-        //editedUser = editedUser ? editedUser.toJS() : {};
+        const { params : {id}, editUser, store }  = this.props;
+        let editedUser = store.get('users').find(u => u.get('_id') === id);
+        editedUser = editedUser ? editedUser.toJS() : {};
 
         return (
             <UserForm title={this._createTitle(this.state.values.display_name)}
                       errors={{}}
-                      values={this.state.values}
+                      values={editedUser}
                       autoSlugfy={false}
                       passwordField={false}
                       onChange={({field, value}) => this.setState(state => {state.values[field] = value})}
-                      onSubmit={data => editUser({id, data})}
+                      onSubmit={() => editUser({id, data: this.state.values})}
                       submitButtonLabel="Update"
                       locationForBackButton="/admin/users"
             />
