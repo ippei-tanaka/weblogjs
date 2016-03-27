@@ -6,21 +6,22 @@ import userReducer from '../reducers/user-reducer';
 import authReducer from '../reducers/auth-reducer';
 
 
+const PRODUCTION_MODE = process.env.NODE_ENV === 'production'; // Configured in package.json
+
 const reducer = combineReducers({
     user: userReducer,
     auth: authReducer
 });
 
-const enhancer = compose(
-    // Middleware you want to use in development:
-    applyMiddleware(functionMiddleWare, promiseMiddleWare),
+const enhancers = [applyMiddleware(functionMiddleWare, promiseMiddleWare)];
 
-    // Required! Enable Redux DevTools with the monitors you chose
-    DevTools.instrument()//,
+/*
+if (!PRODUCTION_MODE) {
+    enhancers.push(DevTools.instrument());
+}
+*/
 
-    // Optional. Lets you write ?debug_session=<key> in address bar to persist debug sessions
-    //persistState(getDebugSessionKey())
-);
+const enhancer = compose.apply(compose, enhancers);
 
 const finalCreateStore = enhancer(createStore);
 

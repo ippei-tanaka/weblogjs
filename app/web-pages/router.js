@@ -49,19 +49,19 @@ export default class WebpageRouter {
         routing({location, response});
     }
 
-    get basePath () {
+    get basePath() {
         return this._basePath;
     }
 
-    get router () {
+    get router() {
         return this._router;
     }
 
-    get faviconDir () {
+    get faviconDir() {
         return FAVICON_DIR;
     }
 
-    get staticDir () {
+    get staticDir() {
         return STATIC_DIR;
     }
 }
