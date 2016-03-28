@@ -7,7 +7,7 @@ import {
     LOGIN_RESULT_RECEIVED,
     LOGOUT_REQUEST,
     LOGOUT_RESULT_RECEIVED
-} from '../constants/auth-action-types';
+} from '../constants/action-types';
 
 import {
     WAITING_FOR_STATUS_CHECK,

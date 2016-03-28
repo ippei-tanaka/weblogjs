@@ -2,10 +2,11 @@ import { loadUsersFromServer, editUserOnServer } from '../utilities/web-api-util
 
 import {
     USERS_LOAD_REQUEST,
-    USERS_LOAD_RESULT_RECEIVED,
+    LOADED_USER_RECEIVED,
     USERS_EDIT_REQUEST,
-    USERS_EDIT_RESULT_RECEIVED
-} from '../constants/user-action-types';
+    EDITED_USER_RECEIVED,
+    USER_EDIT_ERROR_RECEIVED
+} from '../constants/action-types';
 
 import {
     UNINITIALIZED,
@@ -24,6 +25,7 @@ const isProcessing = status =>
 export const loadUsers = () => (dispatch, getState) => {
 
     const { user } = getState();
+
     const users = user.get('users');
     const status = user.get('status');
 
@@ -42,12 +44,12 @@ export const loadUsers = () => (dispatch, getState) => {
 
         if (users) {
             dispatch({
-                type: USERS_LOAD_RESULT_RECEIVED,
+                type: LOADED_USER_RECEIVED,
                 users: users
             })
         } else {
             dispatch({
-                type: USERS_LOAD_RESULT_RECEIVED,
+                type: LOADED_USER_RECEIVED,
                 users: null
             })
         }
@@ -73,83 +75,17 @@ export const editUser = ({id, data}) => (dispatch, getState) => {
 
     co(function* () {
         const { user, errors } = yield editUserOnServer({id, data});
-        dispatch({
-            type: USERS_EDIT_RESULT_RECEIVED,
-            user,
-            errors
-        })
+
+        if (!errors) {
+            dispatch({
+                type: EDITED_USER_RECEIVED,
+                user
+            })
+        } else {
+            dispatch({
+                type: USER_EDIT_ERROR_RECEIVED,
+                errors
+            })
+        }
     });
 };
-
-
-/*
- export const requestLogin = ({email, password}) => (dispatch, getState) => {
-
- const { auth } = getState();
- const status = auth.get('status');
-
- if (status === WAITING_FOR_STATUS_CHECK
- || status === WAITING_FOR_LOGIN
- || status === WAITING_FOR_LOGOUT) {
- return;
- }
-
- dispatch({
- type: LOGIN_REQUEST
- });
-
- co(function* () {
- let user = yield getLoginUser();
-
- if (user) {
- dispatch({
- type: LOGIN_RESULT_RECEIVED,
- user: user
- });
- return;
- }
-
- user = yield loginToAdmin({email, password});
-
- dispatch({
- type: LOGIN_RESULT_RECEIVED,
- user: user || null
- });
- });
- };
-
-
- export const requestLogout = () => (dispatch, getState) => {
-
- const { auth } = getState();
- const status = auth.get('status');
-
- if (status === WAITING_FOR_STATUS_CHECK
- || status === WAITING_FOR_LOGIN
- || status === WAITING_FOR_LOGOUT) {
- return;
- }
-
- dispatch({
- type: LOGOUT_REQUEST
- });
-
- co(function* () {
- let user = yield getLoginUser();
-
- if (!user) {
- dispatch({
- type: LOGOUT_RESULT_RECEIVED,
- result: true
- });
- return;
- }
-
- dispatch({
- type: LOGOUT_RESULT_RECEIVED,
- result: yield logoutFromAdmin()
- })
- });
-
- };
- */

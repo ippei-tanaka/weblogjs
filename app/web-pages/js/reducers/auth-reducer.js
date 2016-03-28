@@ -6,7 +6,7 @@ import {
     LOGIN_REQUEST,
     LOGIN_RESULT_RECEIVED,
     LOGOUT_RESULT_RECEIVED
-} from '../constants/auth-action-types';
+} from '../constants/action-types';
 
 import {
     UNINITIALIZED,

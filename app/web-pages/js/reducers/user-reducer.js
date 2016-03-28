@@ -2,10 +2,10 @@ import Immutable from 'immutable';
 
 import {
     USERS_LOAD_REQUEST,
-    USERS_LOAD_RESULT_RECEIVED,
+    LOADED_USER_RECEIVED,
     USERS_EDIT_REQUEST,
-    USERS_EDIT_RESULT_RECEIVED
-} from '../constants/user-action-types';
+    EDITED_USER_RECEIVED
+} from '../constants/action-types';
 
 import {
     UNINITIALIZED,
@@ -20,7 +20,7 @@ import {
 
 const initialState = Immutable.fromJS({
     status: UNINITIALIZED,
-    users: []
+    users: {}
 });
 
 
@@ -31,10 +31,19 @@ export default (state = initialState, action) => {
         case USERS_LOAD_REQUEST:
             return state.set('status', LOADING_USERS);
 
-        case USERS_LOAD_RESULT_RECEIVED:
+        case LOADED_USER_RECEIVED:
             if (action.users) {
-                let users = state.get('users');
-                users = users.merge(action.users);
+
+                let users = {};
+
+                action.users.forEach((user) => {
+                    users[user._id] = user;
+                });
+
+                users = new Immutable.Map(users);
+
+                users = state.get('users').merge(users);
+
                 return state
                     .set('users', users)
                     .set('status', USERS_LOAD_SUCCEEDED);
@@ -45,14 +54,14 @@ export default (state = initialState, action) => {
         case USERS_EDIT_REQUEST:
             return state.set('status', PROCESSING_USER_EDIT);
 
-        case USERS_EDIT_RESULT_RECEIVED:
-            if (!action.errors && action.user) {
-                return state
-                    .updateIn(['users', action.user._id], val => action.user)
-                    .set('status', USER_EDIT_SUCCEEDED);
-            } else {
-                return state.set('status', USER_EDIT_FAILED);
-            }
+        case EDITED_USER_RECEIVED:
+            const users = state
+                .get('users')
+                .set(action.user._id, action.user);
+
+            return state
+                .set('users', users)
+                .set('status', USER_EDIT_SUCCEEDED);
 
         default:
             return state;

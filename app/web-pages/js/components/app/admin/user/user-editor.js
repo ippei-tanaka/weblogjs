@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import UserForm from './partials/user-form';
 import * as userActions from '../../../../action-creators/user';
+import * as errorActions from '../../../../action-creators/error';
 import { connect } from 'react-redux';
 import {
     UNINITIALIZED,
@@ -16,53 +17,49 @@ class UserEditor extends Component {
         super(props);
 
         this.state = {
+            errors: {},
             values: {}
         }
     }
 
-
-    componentDidMount() {
-        this._updateStoreValues();
-        this._updateStateValues();
-    }
-
-    componentWillReceiveProps () {
-        this._updateStateValues();
+    componentDidMount () {
+        const { clearErrors } = this.props;
+        clearErrors();
     }
 
     render() {
-        const { params : {id}, editUser, store }  = this.props;
-        let editedUser = store.get('users').find(u => u.get('_id') === id);
-        editedUser = editedUser ? editedUser.toJS() : {};
+        const {
+            params : {id},
+            editUser,
+            userStore,
+            errorStore,
+            loadUsers
+            } = this.props;
+
+        const status = userStore.get('status');
+
+        if (status === UNINITIALIZED) {
+            loadUsers();
+        }
+
+        let editedUser = userStore.get('users').get(id) || {};
+
+        let errors = errorStore.get('user');
+
+        const values = Object.assign({}, editedUser, this.state.values);
 
         return (
-            <UserForm title={this._createTitle(this.state.values.display_name)}
-                      errors={{}}
-                      values={editedUser}
+            <UserForm title={this._createTitle(editedUser.display_name)}
+                      errors={errors}
+                      values={values}
                       autoSlugfy={false}
                       passwordField={false}
-                      onChange={({field, value}) => this.setState(state => {state.values[field] = value})}
+                      onChange={(field, value) => this.setState(state => {state.values[field] = value})}
                       onSubmit={() => editUser({id, data: this.state.values})}
                       submitButtonLabel="Update"
                       locationForBackButton="/admin/users"
             />
         );
-    }
-
-    _updateStoreValues () {
-        const { store, loadUsers }  = this.props;
-        const status = store.get('status');
-
-        if (status === UNINITIALIZED) {
-            loadUsers();
-        }
-    }
-
-    _updateStateValues () {
-        const { store, params : {id} }  = this.props;
-        let editedUser = store.get('users').find(u => u.get('_id') === id);
-        editedUser = editedUser ? editedUser.toJS() : {};
-        this.setState(state => { state.values = editedUser });
     }
 
     _createTitle(username) {
@@ -78,6 +75,9 @@ class UserEditor extends Component {
 }
 
 export default connect(
-    state => ({store: state.user}),
-    userActions
+    state => ({
+        userStore: state.user,
+        errorStore: state.error
+    }),
+    Object.assign({}, errorActions, userActions)
 )(UserEditor);
