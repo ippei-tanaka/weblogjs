@@ -1,3 +1,76 @@
+import React, { Component } from 'react';
+import { Link } from 'react-router';
+import UserForm from './partials/user-form';
+import actions from '../../../../actions';
+import { connect } from 'react-redux';
+import {
+    UNINITIALIZED,
+    LOADING_USERS,
+    USERS_LOAD_SUCCEEDED,
+    USERS_LOAD_FAILED
+} from '../../../../constants/user-status';
+
+
+class UserAdder extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            errors: {},
+            values: {}
+        }
+    }
+
+    componentDidMount () {
+        const { clearErrors } = this.props;
+        clearErrors();
+    }
+
+    render() {
+        const {
+            params : {id},
+            userStore,
+            errorStore,
+            createUser,
+            loadUsers
+            } = this.props;
+
+        const status = userStore.get('status');
+
+        if (status === UNINITIALIZED) {
+            loadUsers();
+        }
+
+        let user = userStore.get('users').get(id) || {};
+
+        let errors = errorStore.get('user');
+
+        const values = Object.assign({}, user, this.state.values);
+
+        return (
+            <UserForm title="Create a new user"
+                      errors={errors}
+                      values={values}
+                      autoSlugfy={false}
+                      passwordField={true}
+                      onChange={(field, value) => this.setState(state => {state.values[field] = value})}
+                      onSubmit={() => createUser(this.state.values)}
+                      submitButtonLabel="Update"
+                      locationForBackButton="/admin/users"
+            />
+        );
+    }
+
+}
+
+export default connect(
+    state => ({
+        userStore: state.user,
+        errorStore: state.error
+    }),
+    actions
+)(UserAdder);
+/*
 import React from 'react';
 import { Link } from 'react-router';
 import Page from '../../../abstructs/page';
@@ -78,3 +151,4 @@ class UserAdder extends Page {
 
 
 export default UserAdder;
+*/

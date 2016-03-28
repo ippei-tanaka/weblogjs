@@ -4,6 +4,7 @@ import {
     USERS_LOAD_REQUEST,
     LOADED_USER_RECEIVED,
     USERS_EDIT_REQUEST,
+    CREATED_USER_RECEIVED,
     EDITED_USER_RECEIVED
 } from '../constants/action-types';
 
@@ -26,41 +27,40 @@ const initialState = Immutable.fromJS({
 
 export default (state = initialState, action) => {
 
+    const users = state.get('users');
+
     switch (action.type) {
 
-        case USERS_LOAD_REQUEST:
-            return state.set('status', LOADING_USERS);
+        //case USERS_LOAD_REQUEST:
+        //    return state.set('status', LOADING_USERS);
 
         case LOADED_USER_RECEIVED:
             if (action.users) {
 
-                let users = {};
+                let newUsers = {};
 
                 action.users.forEach((user) => {
-                    users[user._id] = user;
+                    newUsers[user._id] = user;
                 });
 
-                users = new Immutable.Map(users);
-
-                users = state.get('users').merge(users);
+                newUsers = new Immutable.Map(newUsers);
 
                 return state
-                    .set('users', users)
+                    .set('users', users.merge(newUsers))
                     .set('status', USERS_LOAD_SUCCEEDED);
             } else {
                 return state.set('status', USERS_LOAD_FAILED);
             }
+            break;
 
-        case USERS_EDIT_REQUEST:
-            return state.set('status', PROCESSING_USER_EDIT);
+        case CREATED_USER_RECEIVED:
+            return state
+                .set('users', users.set(action.user._id, action.user))
+                .set('status', USER_EDIT_SUCCEEDED);
 
         case EDITED_USER_RECEIVED:
-            const users = state
-                .get('users')
-                .set(action.user._id, action.user);
-
             return state
-                .set('users', users)
+                .set('users', users.set(action.user._id, action.user))
                 .set('status', USER_EDIT_SUCCEEDED);
 
         default:
