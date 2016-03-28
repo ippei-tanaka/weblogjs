@@ -4,7 +4,7 @@ import AdminMenu from './partials/admin-menu';
 import Loader from '../../partials/loader';
 import { Link, IndexLink } from 'react-router';
 import { connect } from 'react-redux';
-import * as authActions from '../../../action-creators/auth';
+import actions from '../../../actions';
 import {
     UNINITIALIZED,
     WAITING_FOR_STATUS_CHECK,
@@ -99,5 +99,5 @@ class Admin extends Component {
 
 export default connect(
     state => ({auth: state.auth}),
-    authActions
+    actions
 )(Admin);
