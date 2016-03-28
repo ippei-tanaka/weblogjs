@@ -4,9 +4,9 @@ import { Route, IndexRoute } from 'react-router';
 import App from "../containers/app";
 import Admin from "../containers/app/admin";
 import DashBoard from "../containers/app/admin/dashboard";
-import UserList from "../components/app/admin/user/user-list";
-import UserAdder from "../components/app/admin/user/user-adder";
-import UserEditor from "../components/app/admin/user/user-editor";
+import UserList from "../containers/app/admin/user/user-list";
+import UserAdder from "../containers/app/admin/user/user-adder";
+import UserEditor from "../containers/app/admin/user/user-editor";
 /*
 import UserDeleter from "../components/app/admin/user/user-deleter";
 import CategoryList from "../components/app/admin/category/category-list";

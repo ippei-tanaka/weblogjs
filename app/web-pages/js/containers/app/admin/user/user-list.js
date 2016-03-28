@@ -1,26 +1,19 @@
 import React, { Component } from 'react';
 import Moment from 'moment';
-import List from '../../../partials/list';
+import List from '../../../../components/partials/list';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
-import {
-    UNINITIALIZED,
-    LOADING_USERS,
-    USERS_LOAD_SUCCEEDED,
-    USERS_LOAD_FAILED
-} from '../../../../constants/user-status';
-
 
 class UserList extends Component {
 
-    render() {
-        const { store, loadUsers } = this.props;
-        const status = store.get('status');
-        const users = store.get('users').toArray();
+    componentDidMount () {
+        const { loadUsers } = this.props;
+        loadUsers();
+    }
 
-        if (status === UNINITIALIZED) {
-            loadUsers();
-        }
+    render() {
+        const { store } = this.props;
+        const users = store.get('users').toArray();
 
         return <List title={this._title}
                      adderLocation="/admin/users/adder"
