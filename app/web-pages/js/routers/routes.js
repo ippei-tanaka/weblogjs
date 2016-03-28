@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Route, IndexRoute } from 'react-router';
-import App from "../components/app";
-import Admin from "../components/app/admin";
-import DashBoard from "../components/app/admin/dashboard";
+import App from "../containers/app";
+import Admin from "../containers/app/admin";
+import DashBoard from "../containers/app/admin/dashboard";
 import UserList from "../components/app/admin/user/user-list";
 //import UserAdder from "../components/app/admin/user/user-adder";
 import UserEditor from "../components/app/admin/user/user-editor";
