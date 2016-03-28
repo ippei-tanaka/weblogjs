@@ -4,13 +4,15 @@ import functionMiddleWare from '../middlewares/function-middleware';
 import DevTools from '../containers/dev-tools';
 import userReducer from '../reducers/user-reducer';
 import authReducer from '../reducers/auth-reducer';
+import errorReducer from '../reducers/error-reducer';
 
 
 const PRODUCTION_MODE = process.env.NODE_ENV === 'production'; // Configured in package.json
 
 const reducer = combineReducers({
     user: userReducer,
-    auth: authReducer
+    auth: authReducer,
+    error: errorReducer
 });
 
 const enhancers = [applyMiddleware(functionMiddleWare, promiseMiddleWare)];

@@ -13,19 +13,14 @@ import {
 
 class UserList extends Component {
 
-    componentDidMount() {
-        const { store, loadUsers }  = this.props;
+    render() {
+        const { store, loadUsers } = this.props;
         const status = store.get('status');
+        const users = store.get('users').toArray();
 
         if (status === UNINITIALIZED) {
             loadUsers();
         }
-    }
-
-    render() {
-        const { store } = this.props;
-        const status = store.get('status');
-        const users = store.get('users').toJS();
 
         return <List title={this._title}
                      adderLocation="/admin/users/adder"
