@@ -5,8 +5,9 @@ import App from "../components/app";
 import Admin from "../components/app/admin";
 import DashBoard from "../components/app/admin/dashboard";
 import UserList from "../components/app/admin/user/user-list";
-import UserAdder from "../components/app/admin/user/user-adder";
+//import UserAdder from "../components/app/admin/user/user-adder";
 import UserEditor from "../components/app/admin/user/user-editor";
+/*
 import UserDeleter from "../components/app/admin/user/user-deleter";
 import CategoryList from "../components/app/admin/category/category-list";
 import CategoryAdder from "../components/app/admin/category/category-adder";
@@ -21,8 +22,24 @@ import PostAdder from "../components/app/admin/post/post-adder";
 import PostEditor from "../components/app/admin/post/post-editor";
 import PostDeleter from "../components/app/admin/post/post-deleter";
 import SettingEditor from "../components/app/admin/setting/setting-editor";
+*/
 import Public from "../components/app/public";
 
+
+const appRoutes = (
+    <Route path="/" component={App}>
+        <IndexRoute component={Public} />
+        <Route path="admin" component={Admin}>
+            <IndexRoute component={DashBoard} />
+            <Route path="users">
+                <IndexRoute component={UserList} />
+                <Route path=":id/editor" component={UserEditor}/>
+            </Route>
+        </Route>
+    </Route>
+);
+
+/*
 
 const appRoutes = (
     <Route path="/" component={App}>
@@ -60,5 +77,6 @@ const appRoutes = (
     </Route>
 );
 
+ */
 
 export { appRoutes };
