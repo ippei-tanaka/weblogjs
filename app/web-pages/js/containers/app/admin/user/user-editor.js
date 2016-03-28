@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import UserForm from './partials/user-form';
+import UserForm from '../../../../components/user-form';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
-import {
-    UNINITIALIZED,
-    LOADING_USERS,
-    USERS_LOAD_SUCCEEDED,
-    USERS_LOAD_FAILED
-} from '../../../../constants/user-status';
 
 
 class UserEditor extends Component {
@@ -22,8 +16,9 @@ class UserEditor extends Component {
     }
 
     componentDidMount () {
-        const { clearErrors } = this.props;
+        const { clearErrors, loadUsers } = this.props;
         clearErrors();
+        loadUsers();
     }
 
     render() {
@@ -31,15 +26,8 @@ class UserEditor extends Component {
             params : {id},
             editUser,
             userStore,
-            errorStore,
-            loadUsers
+            errorStore
             } = this.props;
-
-        const status = userStore.get('status');
-
-        if (status === UNINITIALIZED) {
-            loadUsers();
-        }
 
         let editedUser = userStore.get('users').get(id) || {};
 
@@ -48,7 +36,7 @@ class UserEditor extends Component {
         const values = Object.assign({}, editedUser, this.state.values);
 
         return (
-            <UserForm title={this._createTitle(editedUser.display_name)}
+            <UserForm title={`Edit the User "${editedUser.display_name}"`}
                       errors={errors}
                       values={values}
                       autoSlugfy={false}
@@ -59,10 +47,6 @@ class UserEditor extends Component {
                       locationForBackButton="/admin/users"
             />
         );
-    }
-
-    _createTitle(username) {
-        return `Edit the User "${username}"`;
     }
 
     static get propTypes() {
