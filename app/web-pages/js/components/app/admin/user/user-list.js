@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Moment from 'moment';
 import List from '../../../partials/list';
-import * as userActions from '../../../../action-creators/user';
+import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import {
     UNINITIALIZED,
@@ -73,5 +73,5 @@ class UserList extends Component {
 
 export default connect(
     state => ({store: state.user}),
-    userActions
+    actions
 )(UserList);

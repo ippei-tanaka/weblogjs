@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import UserForm from './partials/user-form';
-import * as userActions from '../../../../action-creators/user';
-import * as errorActions from '../../../../action-creators/error';
+import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import {
     UNINITIALIZED,
@@ -79,5 +78,5 @@ export default connect(
         userStore: state.user,
         errorStore: state.error
     }),
-    Object.assign({}, errorActions, userActions)
+    actions
 )(UserEditor);
