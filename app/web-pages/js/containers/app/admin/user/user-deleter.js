@@ -2,13 +2,20 @@ import React, { Component } from 'react';
 import Confirmation from '../../../../components/confirmation';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
-
+import { RESOLVED } from '../../../../constants/transaction-status';
 
 class UserDeleter extends Component {
 
-    componentDidMount () {
-        const { loadUsers } = this.props;
+    componentWillMount () {
+        const { initializeTransaction, loadUsers } = this.props;
+        initializeTransaction();
         loadUsers();
+    }
+
+    componentWillReceiveProps (props) {
+        if (props.transactionStore.get('status') === RESOLVED) {
+            this._goToListPage();
+        }
     }
 
     render() {
@@ -58,7 +65,7 @@ class UserDeleter extends Component {
 export default connect(
     state => ({
         userStore: state.user,
-        errorStore: state.error
+        transactionStore: state.transaction
     }),
     actions
 )(UserDeleter);

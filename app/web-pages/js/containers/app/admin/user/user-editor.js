@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import UserForm from '../../../../components/user-form';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
-
+import { RESOLVED } from '../../../../constants/transaction-status';
 
 class UserEditor extends Component {
     constructor(props) {
@@ -15,26 +15,30 @@ class UserEditor extends Component {
         }
     }
 
-    componentDidMount () {
-        const { clearErrors, loadUsers } = this.props;
-        clearErrors();
+    componentWillMount () {
+        const { initializeTransaction, loadUsers } = this.props;
+        initializeTransaction();
         loadUsers();
+    }
+
+    componentWillReceiveProps (props) {
+        if (props.transactionStore.get('status') === RESOLVED) {
+            this._goToListPage();
+        }
     }
 
     render() {
         const {
             params : {id},
             userStore,
-            errorStore
+            transactionStore
             } = this.props;
 
-        let editedUser = userStore.get('users').get(id) || {};
-
-        let errors = errorStore.get('user');
-
+        let editedUser = userStore.get('users').get(id) || null;
+        let errors = transactionStore.get('errors');
         const values = Object.assign({}, editedUser, this.state.values);
 
-        return (
+        return editedUser ? (
             <UserForm title={`Edit the User "${editedUser.display_name}"`}
                       errors={errors}
                       values={values}
@@ -45,6 +49,10 @@ class UserEditor extends Component {
                       submitButtonLabel="Update"
                       locationForBackButton="/admin/users"
             />
+        ) : (
+            <div className="module-data-editor">
+                <h2 className="m-dte-title">The user doesn't exist.</h2>
+            </div>
         );
     }
 
@@ -80,7 +88,7 @@ class UserEditor extends Component {
 export default connect(
     state => ({
         userStore: state.user,
-        errorStore: state.error
+        transactionStore: state.transaction
     }),
     actions
 )(UserEditor);

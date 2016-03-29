@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import UserForm from '../../../../components/user-form';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
+import { RESOLVED } from '../../../../constants/transaction-status';
 
 class UserAdder extends Component {
     constructor(props) {
@@ -14,21 +15,27 @@ class UserAdder extends Component {
         }
     }
 
-    componentDidMount () {
-        const { clearErrors, loadUsers } = this.props;
-        clearErrors();
+    componentWillMount () {
+        const { initializeTransaction, loadUsers } = this.props;
+        initializeTransaction();
         loadUsers();
+    }
+
+    componentWillReceiveProps (props) {
+        if (props.transactionStore.get('status') === RESOLVED) {
+            this._goToListPage();
+        }
     }
 
     render() {
         const {
             params : {id},
             userStore,
-            errorStore
+            transactionStore
             } = this.props;
 
         let user = userStore.get('users').get(id) || {};
-        let errors = errorStore.get('user');
+        let errors = transactionStore.get('errors');
 
         const values = Object.assign({}, user, this.state.values);
 
@@ -72,7 +79,7 @@ class UserAdder extends Component {
 export default connect(
     state => ({
         userStore: state.user,
-        errorStore: state.error
+        transactionStore: state.transaction
     }),
     actions
 )(UserAdder);
