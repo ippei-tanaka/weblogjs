@@ -209,9 +209,9 @@ export const loadUsersFromServer = () => ajaxRestfulAPI("/users")
     .then(data => data.items)
     .catch(() => null);
 
-export const createUserOnServer = (user) =>
+export const createUserOnServer = ({data}) =>
     ajaxRestfulAPI("/users", {
-        data: user,
+        data,
         method: 'post'
     })
         .then(user => ({user}))
@@ -219,8 +219,15 @@ export const createUserOnServer = (user) =>
 
 export const editUserOnServer = ({id, data}) =>
     ajaxRestfulAPI("/users/" + id, {
-        data: data,
+        data,
         method: 'put'
+    })
+        .then(user => ({user}))
+        .catch(errors => ({errors}));
+
+export const deleteUserOnServer = ({id}) =>
+    ajaxRestfulAPI("/users/" + id, {
+        method: 'delete'
     })
         .then(user => ({user}))
         .catch(errors => ({errors}));
