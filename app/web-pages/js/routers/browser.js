@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { appRoutes } from './routes';
 import { Router } from 'react-router'
-import createBrowserHistory from 'history/lib/createBrowserHistory';
 import { Provider } from 'react-redux';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 import store from '../stores/app-store';
-import DevTools from '../containers/dev-tools';
+import { appRoutes } from './routes';
+//import DevTools from '../containers/dev-tools';
 
-const PRODUCTION_MODE = process.env.NODE_ENV === 'production'; // Configured in package.json
+//const DEVELOPMENT_MODE = process.env.WEBLOG_ENV === 'development';
 const history = createBrowserHistory();
 require('../../sass/admin/main.scss');
 
@@ -26,7 +26,7 @@ ReactDOM.render(
             <Router history={history}>
                 {appRoutes}
             </Router>
-            { PRODUCTION_MODE ? null : <DevTools /> }
+            { DEVELOPMENT_MODE ? <DevTools /> : null }
         </div>
     </Provider>,
     document.getElementById('App')

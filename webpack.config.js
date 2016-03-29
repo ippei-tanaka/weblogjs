@@ -2,11 +2,9 @@ var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-
-const PRODUCTION_MODE = process.env.NODE_ENV === 'production'; // Configured in package.json
+const DEVELOPMENT_MODE = process.env.WEBLOG_ENV === 'development';
 const STATIC_DIR = path.resolve(__dirname, "./app/web-pages/static");
 const ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/js/routers/browser.js");
-
 
 module.exports = {
 
@@ -20,7 +18,7 @@ module.exports = {
         filename: "index.js"
     },
 
-    devtool: PRODUCTION_MODE ? null : 'source-map',
+    devtool: DEVELOPMENT_MODE ? 'source-map' : null,
 
     module: {
         loaders: [
@@ -34,8 +32,8 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                loader: PRODUCTION_MODE ? ExtractTextPlugin.extract("style", "css!sass") : null,
-                loaders: PRODUCTION_MODE ? null : ["style", "css", "sass"]
+                loader: DEVELOPMENT_MODE ? null : ExtractTextPlugin.extract("style", "css!sass"),
+                loaders: DEVELOPMENT_MODE ? ["style", "css", "sass"] : null
             }
         ]
     },
@@ -44,7 +42,7 @@ module.exports = {
         extensions: ['', '.js', '.jsx']
     },
 
-    plugins: PRODUCTION_MODE ? [
+    plugins: DEVELOPMENT_MODE ? null : [
         new ExtractTextPlugin('style.css', {
             allChunks: true
         }),
@@ -54,5 +52,5 @@ module.exports = {
             }
         }),
         new webpack.optimize.UglifyJsPlugin({minimize: true})
-    ] : null
+    ]
 };

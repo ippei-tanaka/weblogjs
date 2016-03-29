@@ -4,11 +4,11 @@
   "description": "a library for weblogs",
   "main": "./app",
   "scripts": {
-    "run-dev": "node ./examples/app",
-    "run-prd": "NODE_ENV=production node ./examples/app",
-    "test": "./node_modules/.bin/mocha $(find test -name '*.test.js') --compilers js:babel-core/register",
-    "webpack": "NODE_ENV=production ./node_modules/.bin/webpack",
-    "webpack-server": "./node_modules/.bin/webpack-dev-server --inline --hot"
+    "develop": "WEBLOG_ENV=development WEBLOG_WEBPACK_DEV_SERVER_PORT=8001 WEBLOG_WEBPACK_DEV_SERVER_HOST=localhost node ./examples/app",
+    "production": "node ./examples/app",
+    "webpack": "./node_modules/.bin/webpack",
+    "webpack-dev-server": "WEBLOG_ENV=development ./node_modules/.bin/webpack-dev-server --inline --hot --port=8001 --host=localhost",
+    "test": "./node_modules/.bin/mocha $(find test -name '*.test.js') --compilers js:babel-core/register"
   },
   "author": {
     "name": "Ippei Tanaka",
