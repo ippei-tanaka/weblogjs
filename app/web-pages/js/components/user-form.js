@@ -13,8 +13,7 @@ export default function UserForm(props) {
         onSubmit,
         onClickBackButton,
         passwordField,
-        submitButtonLabel,
-        locationForBackButton
+        submitButtonLabel
         } = props;
 
     const _onChange = field => {

@@ -7,13 +7,13 @@ import {
 
 import {
     LOADED_USER_RECEIVED,
-    LOADING_USER_ERROR_RECEIVED,
     CREATED_USER_RECEIVED,
-    CREATING_USER_ERROR_RECEIVED,
     EDITED_USER_RECEIVED,
-    EDITING_USER_ERROR_RECEIVED,
     DELETED_USER_RECEIVED,
-    DELETING_USER_ERROR_RECEIVED
+    TRANSACTION_INITIALIZE,
+    TRANSACTION_REQUEST,
+    TRANSACTION_REJECTED,
+    TRANSACTION_RESOLVED
 } from '../constants/action-types';
 
 import co from 'co';
@@ -30,13 +30,14 @@ export const loadUsers = () => (dispatch, getState) => {
             dispatch({
                 type: LOADED_USER_RECEIVED,
                 users: users
-            })
-        } else {
+            });
+        } /* else {
             dispatch({
-                type: LOADING_USER_ERROR_RECEIVED,
+                type: TRANSACTION_REJECTED,
                 errors
-            })
-        }
+            });
+
+        } */
     });
 };
 
@@ -44,19 +45,26 @@ export const createUser = (newUser) => (dispatch, getState) => {
 
     const users = getState().user.get('users');
 
+    dispatch({
+        type: TRANSACTION_REQUEST
+    });
+
     co(function* () {
         const { user, errors } = yield createUserOnServer({data: newUser});
 
         if (!errors) {
             dispatch({
+                type: TRANSACTION_RESOLVED
+            });
+            dispatch({
                 type: CREATED_USER_RECEIVED,
                 user
-            })
+            });
         } else {
             dispatch({
-                type: CREATING_USER_ERROR_RECEIVED,
+                type: TRANSACTION_REJECTED,
                 errors
-            })
+            });
         }
     });
 };
@@ -65,19 +73,26 @@ export const editUser = ({id, data}) => (dispatch, getState) => {
 
     const users = getState().user.get('users');
 
+    dispatch({
+        type: TRANSACTION_REQUEST
+    });
+
     co(function* () {
         const { user, errors } = yield editUserOnServer({id, data});
 
         if (!errors) {
             dispatch({
+                type: TRANSACTION_RESOLVED
+            });
+            dispatch({
                 type: EDITED_USER_RECEIVED,
                 user
-            })
+            });
         } else {
             dispatch({
-                type: EDITING_USER_ERROR_RECEIVED,
+                type: TRANSACTION_REJECTED,
                 errors
-            })
+            });
         }
     });
 };
@@ -86,17 +101,24 @@ export const deleteUser = ({id}) => (dispatch, getState) => {
 
     const users = getState().user.get('users');
 
+    dispatch({
+        type: TRANSACTION_REQUEST
+    });
+
     co(function* () {
         const { errors } = yield deleteUserOnServer({id});
 
         if (!errors) {
+            dispatch({
+                type: TRANSACTION_RESOLVED
+            });
             dispatch({
                 type: DELETED_USER_RECEIVED,
                 id
             })
         } else {
             dispatch({
-                type: DELETING_USER_ERROR_RECEIVED,
+                type: TRANSACTION_REJECTED,
                 errors
             })
         }

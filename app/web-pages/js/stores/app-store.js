@@ -3,7 +3,7 @@ import promiseMiddleWare from '../middlewares/promise-middleware';
 import functionMiddleWare from '../middlewares/function-middleware';
 import userReducer from '../reducers/user-reducer';
 import authReducer from '../reducers/auth-reducer';
-import errorReducer from '../reducers/error-reducer';
+import transactionReducer from '../reducers/transaction-reducer';
 //import DevTools from '../containers/dev-tools';
 
 //const DEVELOPMENT_MODE = process.env.WEBLOG_ENV === 'development';
@@ -11,7 +11,7 @@ import errorReducer from '../reducers/error-reducer';
 const reducer = combineReducers({
     user: userReducer,
     auth: authReducer,
-    error: errorReducer
+    transaction: transactionReducer
 });
 
 const enhancers = [applyMiddleware(functionMiddleWare, promiseMiddleWare)];
