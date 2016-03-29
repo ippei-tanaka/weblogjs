@@ -1,7 +1,8 @@
 import {
     loadUsersFromServer,
     editUserOnServer,
-    createUserOnServer
+    createUserOnServer,
+    deleteUserOnServer
 } from '../utilities/web-api-utils';
 
 import {
@@ -80,7 +81,7 @@ export const createUser = (newUser) => (dispatch, getState) => {
     */
 
     co(function* () {
-        const { user, errors } = yield createUserOnServer(newUser);
+        const { user, errors } = yield createUserOnServer({data: newUser});
 
         if (!errors) {
             dispatch({
@@ -115,6 +116,40 @@ export const editUser = ({id, data}) => (dispatch, getState) => {
 
     co(function* () {
         const { user, errors } = yield editUserOnServer({id, data});
+
+        if (!errors) {
+            dispatch({
+                type: EDITED_USER_RECEIVED,
+                user
+            })
+        } else {
+            dispatch({
+                type: USER_EDIT_ERROR_RECEIVED,
+                errors
+            })
+        }
+    });
+};
+
+
+export const deleteUser = ({id}) => (dispatch, getState) => {
+
+    const { user } = getState();
+    const users = user.get('users');
+    const status = user.get('status');
+
+    if (isProcessing(status)) {
+        return;
+    }
+
+    /*
+    dispatch({
+        type: USERS_EDIT_REQUEST
+    });
+    */
+
+    co(function* () {
+        const { user, errors } = yield deleteUserOnServer({id});
 
         if (!errors) {
             dispatch({
