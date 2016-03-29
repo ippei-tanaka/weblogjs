@@ -3,7 +3,7 @@ import ReactDOMServer from 'react-dom/server'
 import { Provider } from 'react-redux'
 import { match, RoutingContext } from 'react-router'
 import { appRoutes as routes } from './js/routers/routes'
-import Layout from './js/components/layout/html'
+import HtmlLayout from './js/components/html-layout'
 import store from './js/stores/app-store'
 import express from "express"
 import co from 'co'
@@ -27,7 +27,7 @@ var routing = ({location, response}) =>
                     <RoutingContext {...renderProps} />
                 </Provider>
             );
-            let html = ReactDOMServer.renderToStaticMarkup(<Layout />);
+            let html = ReactDOMServer.renderToStaticMarkup(<HtmlLayout />);
             html = html.replace("[CONTENT_PLACE_HOLDER]", content);
             response.status(200).send("<!DOCTYPE html>" + html);
         } else {
