@@ -24,29 +24,48 @@ class UserAdder extends Component {
         const {
             params : {id},
             userStore,
-            errorStore,
-            createUser
+            errorStore
             } = this.props;
 
         let user = userStore.get('users').get(id) || {};
-
         let errors = errorStore.get('user');
 
         const values = Object.assign({}, user, this.state.values);
 
         return (
-            <UserForm title="Create a new user"
+            <UserForm title="Create a New User"
                       errors={errors}
                       values={values}
-                      autoSlugfy={false}
                       passwordField={true}
-                      onChange={(field, value) => this.setState(state => {state.values[field] = value})}
-                      onSubmit={() => createUser(this.state.values)}
-                      submitButtonLabel="Update"
+                      onChange={this._onChange.bind(this)}
+                      onSubmit={this._onSubmit.bind(this)}
+                      onClickBackButton={this._goToListPage.bind(this)}
+                      submitButtonLabel="Create"
                       locationForBackButton="/admin/users"
             />
         );
     }
+
+    _onChange (field, value) {
+        this.setState(state => {
+            state.values[field] = value;
+        });
+    }
+
+    _onSubmit () {
+        const { createUser } = this.props;
+        createUser(this.state.values);
+    }
+
+    _goToListPage () {
+        this.context.history.pushState(null, "/admin/users");
+    }
+
+    static get contextTypes () {
+        return {
+            history: React.PropTypes.object
+        };
+    };
 
 }
 

@@ -24,7 +24,6 @@ class UserEditor extends Component {
     render() {
         const {
             params : {id},
-            editUser,
             userStore,
             errorStore
             } = this.props;
@@ -39,15 +38,36 @@ class UserEditor extends Component {
             <UserForm title={`Edit the User "${editedUser.display_name}"`}
                       errors={errors}
                       values={values}
-                      autoSlugfy={false}
                       passwordField={false}
-                      onChange={(field, value) => this.setState(state => {state.values[field] = value})}
-                      onSubmit={() => editUser({id, data: this.state.values})}
+                      onChange={this._onChange.bind(this)}
+                      onSubmit={this._onSubmit.bind(this)}
+                      onClickBackButton={this._goToListPage.bind(this)}
                       submitButtonLabel="Update"
                       locationForBackButton="/admin/users"
             />
         );
     }
+
+    _onChange (field, value) {
+        this.setState(state => {
+            state.values[field] = value;
+        });
+    }
+
+    _onSubmit () {
+        const { params : {id}, editUser } = this.props;
+        editUser({id, data: this.state.values});
+    }
+
+    _goToListPage () {
+        this.context.history.pushState(null, "/admin/users");
+    }
+
+    static get contextTypes () {
+        return {
+            history: React.PropTypes.object
+        };
+    };
 
     static get propTypes() {
         return {

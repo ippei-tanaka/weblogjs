@@ -11,6 +11,7 @@ export default function UserForm(props) {
         errors,
         onChange,
         onSubmit,
+        onClickBackButton,
         passwordField,
         submitButtonLabel,
         locationForBackButton
@@ -60,10 +61,10 @@ export default function UserForm(props) {
 
             <ButtonList>
                 <SubmitButton>{submitButtonLabel}</SubmitButton>
-                <Link to={locationForBackButton}
+                <Button onClick={onClickBackButton}
                       className="module-button">
                     Back
-                </Link>
+                </Button>
             </ButtonList>
 
         </Form>
