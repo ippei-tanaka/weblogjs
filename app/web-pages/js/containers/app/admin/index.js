@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import LoginForm from '../../../components/login-form';
 import AdminMenu from '../../../components/admin-menu';
-import Loader from '../../../components/partials/loader';
+import Loader from '../../../components/loader';
 import { Link, IndexLink } from 'react-router';
 import { connect } from 'react-redux';
 import actions from '../../../actions';

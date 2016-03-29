@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Moment from 'moment';
-import List from '../../../../components/partials/list';
+import List from '../../../../components/list';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 

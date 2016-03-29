@@ -206,8 +206,8 @@ export const logoutFromAdmin = () => ajaxRestfulAPI("/logout")
 
 
 export const loadUsersFromServer = () => ajaxRestfulAPI("/users")
-    .then(data => data.items)
-    .catch(() => null);
+    .then(data => ({users: data.items}))
+    .catch(errors => ({errors}));
 
 export const createUserOnServer = ({data}) =>
     ajaxRestfulAPI("/users", {

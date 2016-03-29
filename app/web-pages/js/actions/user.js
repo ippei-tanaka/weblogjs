@@ -6,79 +6,43 @@ import {
 } from '../utilities/web-api-utils';
 
 import {
-    USERS_LOAD_REQUEST,
     LOADED_USER_RECEIVED,
-    USERS_CREATE_REQUEST,
+    LOADING_USER_ERROR_RECEIVED,
     CREATED_USER_RECEIVED,
-    USER_CREATE_ERROR_RECEIVED,
-    USERS_EDIT_REQUEST,
+    CREATING_USER_ERROR_RECEIVED,
     EDITED_USER_RECEIVED,
-    USER_EDIT_ERROR_RECEIVED
+    EDITING_USER_ERROR_RECEIVED,
+    DELETED_USER_RECEIVED,
+    DELETING_USER_ERROR_RECEIVED
 } from '../constants/action-types';
-
-import {
-    UNINITIALIZED,
-    LOADING_USERS,
-    PROCESSING_USER_EDIT
-} from '../constants/user-status';
 
 import co from 'co';
 
 
-const isProcessing = status =>
-    status === PROCESSING_USER_EDIT
-    || status === LOADING_USERS;
-
-
 export const loadUsers = () => (dispatch, getState) => {
 
-    const { user } = getState();
-
-    const users = user.get('users');
-    const status = user.get('status');
-
-    if (isProcessing(status)) {
-        return;
-    }
-
-    /*
-    dispatch({
-        type: USERS_LOAD_REQUEST
-    });
-    */
+    const users = getState().user.get('users');
 
     co(function* () {
-        var users = yield loadUsersFromServer();
+        const { users, errors } = yield loadUsersFromServer();
 
-        if (users) {
+        if (!errors) {
             dispatch({
                 type: LOADED_USER_RECEIVED,
                 users: users
             })
         } else {
             dispatch({
-                type: LOADED_USER_RECEIVED,
-                users: null
+                type: LOADING_USER_ERROR_RECEIVED,
+                errors
             })
         }
     });
 };
 
-
 export const createUser = (newUser) => (dispatch, getState) => {
 
-    const { user } = getState();
-    const status = user.get('status');
-
-    if (isProcessing(status)) {
-        return;
-    }
-
-    /*
-    dispatch({
-        type: USERS_EDIT_REQUEST
-    });
-    */
+    const users = getState().user.get('users');
 
     co(function* () {
         const { user, errors } = yield createUserOnServer({data: newUser});
@@ -90,29 +54,16 @@ export const createUser = (newUser) => (dispatch, getState) => {
             })
         } else {
             dispatch({
-                type: USER_CREATE_ERROR_RECEIVED,
+                type: CREATING_USER_ERROR_RECEIVED,
                 errors
             })
         }
     });
 };
 
-
 export const editUser = ({id, data}) => (dispatch, getState) => {
 
-    const { user } = getState();
-    const users = user.get('users');
-    const status = user.get('status');
-
-    if (isProcessing(status)) {
-        return;
-    }
-
-    /*
-    dispatch({
-        type: USERS_EDIT_REQUEST
-    });
-    */
+    const users = getState().user.get('users');
 
     co(function* () {
         const { user, errors } = yield editUserOnServer({id, data});
@@ -124,41 +75,28 @@ export const editUser = ({id, data}) => (dispatch, getState) => {
             })
         } else {
             dispatch({
-                type: USER_EDIT_ERROR_RECEIVED,
+                type: EDITING_USER_ERROR_RECEIVED,
                 errors
             })
         }
     });
 };
 
-
 export const deleteUser = ({id}) => (dispatch, getState) => {
 
-    const { user } = getState();
-    const users = user.get('users');
-    const status = user.get('status');
-
-    if (isProcessing(status)) {
-        return;
-    }
-
-    /*
-    dispatch({
-        type: USERS_EDIT_REQUEST
-    });
-    */
+    const users = getState().user.get('users');
 
     co(function* () {
-        const { user, errors } = yield deleteUserOnServer({id});
+        const { errors } = yield deleteUserOnServer({id});
 
         if (!errors) {
             dispatch({
-                type: EDITED_USER_RECEIVED,
-                user
+                type: DELETED_USER_RECEIVED,
+                id
             })
         } else {
             dispatch({
-                type: USER_EDIT_ERROR_RECEIVED,
+                type: DELETING_USER_ERROR_RECEIVED,
                 errors
             })
         }
