@@ -19,9 +19,6 @@ import {
 } from '../../../constants/auth-status';
 
 
-const PRODUCTION_MODE = process.env.NODE_ENV === 'production';
-
-
 class Admin extends Component {
 
     constructor(props) {
@@ -51,13 +48,8 @@ class Admin extends Component {
             })
         };
         const menuElement = <AdminMenu onLogoutClick={requestLogout}/>;
-        let content = null;
         let menu = null;
-        let jsFile = null;
-        let cssFiles = [
-            <link key="1" href="/admin/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>,
-            <link key="2" href="/admin/style.css" media="all" rel="stylesheet"/>
-        ];
+        let content = null;
 
         switch (status) {
             case UNINITIALIZED:
@@ -79,18 +71,10 @@ class Admin extends Component {
                 break;
         }
 
-        if (PRODUCTION_MODE) {
-            jsFile = <script src="/admin/index.js"></script>;
-        } else {
-            jsFile = <script src="//localhost:8080/index.js"></script>;
-        }
-
         return (
             <div className="module-admin">
                 {menu}
                 {content}
-                {cssFiles}
-                {jsFile}
             </div>
         );
     }
