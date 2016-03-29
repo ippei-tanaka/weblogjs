@@ -1,38 +1,21 @@
 import Immutable from 'immutable';
 
 import {
-    USERS_LOAD_REQUEST,
     LOADED_USER_RECEIVED,
-    USERS_EDIT_REQUEST,
     CREATED_USER_RECEIVED,
-    EDITED_USER_RECEIVED
+    EDITED_USER_RECEIVED,
+    DELETED_USER_RECEIVED
 } from '../constants/action-types';
 
-import {
-    UNINITIALIZED,
-    LOADING_USERS,
-    USERS_LOAD_SUCCEEDED,
-    USERS_LOAD_FAILED,
-    PROCESSING_USER_EDIT,
-    USER_EDIT_SUCCEEDED,
-    USER_EDIT_FAILED
-} from '../constants/user-status';
-
-
 const initialState = Immutable.fromJS({
-    status: UNINITIALIZED,
     users: {}
 });
-
 
 export default (state = initialState, action) => {
 
     const users = state.get('users');
 
     switch (action.type) {
-
-        //case USERS_LOAD_REQUEST:
-        //    return state.set('status', LOADING_USERS);
 
         case LOADED_USER_RECEIVED:
             if (action.users) {
@@ -46,22 +29,21 @@ export default (state = initialState, action) => {
                 newUsers = new Immutable.Map(newUsers);
 
                 return state
-                    .set('users', users.merge(newUsers))
-                    .set('status', USERS_LOAD_SUCCEEDED);
-            } else {
-                return state.set('status', USERS_LOAD_FAILED);
+                    .set('users', users.merge(newUsers));
             }
-            break;
+            return state;
 
         case CREATED_USER_RECEIVED:
             return state
-                .set('users', users.set(action.user._id, action.user))
-                .set('status', USER_EDIT_SUCCEEDED);
+                .set('users', users.set(action.user._id, action.user));
 
         case EDITED_USER_RECEIVED:
             return state
-                .set('users', users.set(action.user._id, action.user))
-                .set('status', USER_EDIT_SUCCEEDED);
+                .set('users', users.set(action.user._id, action.user));
+
+        case DELETED_USER_RECEIVED:
+            return state
+                .set('users', users.delete(action.id));
 
         default:
             return state;
