@@ -63,7 +63,7 @@ describe('Restful API Auth', () => {
 
         it('should let the user log in', (done) => {
             co(function* () {
-                yield httpRequest.post(`${BASE_URL}/login`, admin); // Login
+                yield httpRequest.post(`${BASE_URL}/login`, admin);
                 done();
             }).catch(err => {
                 console.error(err);
@@ -84,8 +84,59 @@ describe('Restful API Auth', () => {
 
         it('should not let the user log in if the credential is invalid', (done) => {
             co(function* () {
-                yield httpRequest.post(`${BASE_URL}/login`, { email: "wrong@address.com", password: "invalidpass" }); // Login
-                yield httpRequest.get(`${BASE_URL}/users`); // This request should be okay.
+                yield httpRequest.post(`${BASE_URL}/login`, { email: "wrong@address.com", password: "invalidpass" });
+                yield httpRequest.get(`${BASE_URL}/users`);
+                done(new Error());
+            }).catch(data => {
+                expect(data.response.statusCode).to.equal(401);
+                done();
+            });
+        });
+
+        it('should let the user change their password', (done) => {
+            const testUser = {
+                email: "rrr@rrr.rrr",
+                password: "rrrrrrrr1",
+                slug: "rrr",
+                display_name: "RRR"
+            };
+
+            const passwords = {
+                old_password: "rrrrrrrr1",
+                password: "rrrrrrrr2"
+            };
+
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/login`, admin);
+                const createdUser = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+                yield httpRequest.put(`${BASE_URL}/users/${createdUser._id}`, passwords);
+                yield httpRequest.get(`${BASE_URL}/logout`);
+                yield httpRequest.post(`${BASE_URL}/login`, { email: testUser.email, password: passwords.password });
+                //yield httpRequest.get(`${BASE_URL}/users`);
+                done();
+            }).catch(err => {
+                console.error(err);
+                done(new Error());
+            });
+        });
+
+        it('should not let the user change their password without sending the old password', (done) => {
+            const testUser = {
+                email: "rrr@rrr.rrr",
+                password: "rrrrrrrr1",
+                slug: "rrr",
+                display_name: "RRR"
+            };
+
+            const newPassword = "rrrrrrrr2";
+
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/login`, admin);
+                const createdUser = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+                yield httpRequest.put(`${BASE_URL}/users/${createdUser._id}`, { password: newPassword });
+                yield httpRequest.get(`${BASE_URL}/logout`);
+                yield httpRequest.post(`${BASE_URL}/login`, { email: testUser.email, password: newPassword });
+                yield httpRequest.get(`${BASE_URL}/users`);
                 done(new Error());
             }).catch(data => {
                 expect(data.response.statusCode).to.equal(401);

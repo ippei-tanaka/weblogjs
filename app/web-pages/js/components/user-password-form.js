@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form } from './form';
 import { trimObjValues, slugfy } from '../utilities';
 
@@ -9,7 +10,6 @@ export default function UserForm({
     onChange,
     onSubmit,
     onClickBackButton,
-    passwordField,
     submitButtonLabel
     }) {
 
@@ -22,37 +22,32 @@ export default function UserForm({
         onSubmit();
     };
 
+    console.log(errors);
+
     return (
         <Form onSubmit={_onSubmit}>
 
             <Title>{title}</Title>
 
-            <FieldSet label="Email"
-                      error={errors.email}>
-                <Input value={values.email}
-                       type="email"
-                       onChange={_onChange("email")}/>
+            <FieldSet label="Old Password"
+                      error={errors.old_password}>
+                <Input value={values.old_password}
+                       type="text"
+                       onChange={_onChange("old_password")}/>
             </FieldSet>
 
-            {passwordField ? (
-                <FieldSet label="Password"
-                          error={errors.password}>
-                    <Input value={values.password}
-                           type="text"
-                           onChange={_onChange("password")}/>
-                </FieldSet>
-            ) : null}
-
-            <FieldSet label="Display Name"
-                      error={errors.display_name}>
-                <Input value={values.display_name}
-                       onChange={_onChange("display_name")}/>
+            <FieldSet label="New Password"
+                      error={errors.new_password}>
+                <Input value={values.new_password}
+                       type="text"
+                       onChange={_onChange("new_password")}/>
             </FieldSet>
 
-            <FieldSet label="Slug"
-                      error={errors.slug}>
-                <Input value={values.slug}
-                       onChange={_onChange("slug")}/>
+            <FieldSet label="Confirm the New Password"
+                      error={errors.new_password_confirmed}>
+                <Input value={values.new_password_confirmed}
+                       type="text"
+                       onChange={_onChange("new_password_confirmed")}/>
             </FieldSet>
 
             <ButtonList>

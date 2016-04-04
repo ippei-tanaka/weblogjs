@@ -7,6 +7,7 @@ import DashBoard from "../containers/app/admin/dashboard";
 import UserList from "../containers/app/admin/user/user-list";
 import UserAdder from "../containers/app/admin/user/user-adder";
 import UserEditor from "../containers/app/admin/user/user-editor";
+import UserPasswordEditor from "../containers/app/admin/user/user-password-editor";
 import UserDeleter from "../containers/app/admin/user/user-deleter";
 /*
 import CategoryList from "../components/app/admin/category/category-list";
@@ -35,6 +36,7 @@ const appRoutes = (
                 <IndexRoute component={UserList} />
                 <Route path="adder" component={UserAdder} />
                 <Route path=":id/editor" component={UserEditor}/>
+                <Route path=":id/password-editor" component={UserPasswordEditor}/>
                 <Route path=":id/deleter" component={UserDeleter}/>
             </Route>
         </Route>

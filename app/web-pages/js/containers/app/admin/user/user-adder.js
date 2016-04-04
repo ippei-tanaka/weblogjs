@@ -10,7 +10,6 @@ class UserAdder extends Component {
         super(props);
 
         this.state = {
-            errors: {},
             values: {}
         }
     }
@@ -37,6 +36,8 @@ class UserAdder extends Component {
         let user = userStore.get('users').get(id) || {};
         let errors = transactionStore.get('errors');
 
+        console.log(errors);
+
         const values = Object.assign({}, user, this.state.values);
 
         return (
@@ -48,7 +49,6 @@ class UserAdder extends Component {
                       onSubmit={this._onSubmit.bind(this)}
                       onClickBackButton={this._goToListPage.bind(this)}
                       submitButtonLabel="Create"
-                      locationForBackButton="/admin/users"
             />
         );
     }

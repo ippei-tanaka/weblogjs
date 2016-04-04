@@ -23,6 +23,68 @@ class UserManager extends ModelManager {
         return this.findOne({slug: slug});
     }
 
+    /*
+
+    update(condition, newValues) {
+        return super.update(condition, newValues).catch(function (e) {
+            console.log(3333);
+            console.log(e);
+        });
+    }
+
+
+    update(condition, newValues) {
+        if (newValues.password) {
+            delete newValues.password;
+        }
+        return super.update(condition, newValues);
+    }
+
+    updatePassword(id, values) {
+        const {
+            new_password,
+            new_password_confirmed,
+            old_password
+            } = values;
+
+        return co(function* () {
+
+            console.log('qweqweqeqweqw');
+
+            if (!old_password
+                || !new_password
+                || !new_password_confirmed)
+            {
+                return yield Promise.reject({});
+            }
+
+            console.log('zEEEEghfhfghfgh');
+
+            if (new_password !== new_password_confirmed)
+            {
+                return yield Promise.reject({});
+            }
+
+            const options = {select: ["password"]};
+            const user = yield this.findById(id, options);
+
+            if (!user) {
+                return yield Promise.reject({});
+            }
+
+
+            if (!(yield user.verifyPassword(old_password))) {
+                return yield Promise.reject({});
+            }
+
+            user.password = new_password;
+
+            yield user.save();
+
+            return yield Promise.resolve({});
+        }.bind(this));
+    }
+    */
 
     /**
      * @param {object} credential - Credential of the user.
@@ -45,7 +107,6 @@ class UserManager extends ModelManager {
             return user.verifyPassword(credential.password);
         }.bind(this));
     }
-
 
     createAdminUser(userObject) {
         userObject = userObject || {
