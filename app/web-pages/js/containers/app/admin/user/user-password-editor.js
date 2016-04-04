@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import UserForm from '../../../../components/user-form';
+import UserPasswordForm from '../../../../components/user-password-form';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../../../constants/transaction-status';
 
-class UserEditor extends Component {
+class UserPasswordEditor extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            values: {}
+            errors: {
+                old_password: "",
+                new_password: "",
+                new_password_confirmed: ""
+            },
+            values: {
+                old_password: "",
+                new_password: "",
+                new_password_confirmed: ""
+            }
         }
     }
 
@@ -32,24 +41,19 @@ class UserEditor extends Component {
             userStore,
             transactionStore
             } = this.props;
-
-        let editedUser = userStore.get('users').get(id) || null;
-        let errors = transactionStore.get('errors');
-        const values = Object.assign({}, editedUser, this.state.values);
+        const editedUser = userStore.get('users').get(id) || null;
+        const errors = transactionStore.get('errors');
+        const values = this.state.values;
 
         return editedUser ? (
-            <div>
-                <UserForm title={`Edit the User "${editedUser.display_name}"`}
-                          errors={errors}
-                          values={values}
-                          passwordField={false}
-                          onChange={this._onChange.bind(this)}
-                          onSubmit={this._onSubmit.bind(this)}
-                          onClickBackButton={this._goToListPage.bind(this)}
-                          submitButtonLabel="Update"
-                />
-                <div><Link to={`/admin/users/${id}/password-editor`}>Change the password</Link></div>
-            </div>
+            <UserPasswordForm title={`Edit the Password for User "${editedUser.display_name}"`}
+                              errors={errors}
+                              values={values}
+                              onChange={this._onChange.bind(this)}
+                              onSubmit={this._onSubmit.bind(this)}
+                              onClickBackButton={this._goToListPage.bind(this)}
+                              submitButtonLabel="Update"
+            />
         ) : (
             <div className="module-data-editor">
                 <h2 className="m-dte-title">The user doesn't exist.</h2>
@@ -65,11 +69,12 @@ class UserEditor extends Component {
 
     _onSubmit () {
         const { params : {id}, editUser } = this.props;
-        editUser({id, data: this.state.values});
+        //editUser({id, data: this.state.values});
     }
 
     _goToListPage () {
-        this.context.history.pushState(null, "/admin/users");
+        const { params : {id} } = this.props;
+        this.context.history.pushState(null, `/admin/users/${id}/editor`);
     }
 
     static get contextTypes () {
@@ -92,4 +97,4 @@ export default connect(
         transactionStore: state.transaction
     }),
     actions
-)(UserEditor);
+)(UserPasswordEditor);

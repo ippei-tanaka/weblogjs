@@ -9,6 +9,7 @@ import {
     LOADED_USER_RECEIVED,
     CREATED_USER_RECEIVED,
     EDITED_USER_RECEIVED,
+    USER_PASSWORD_EDIT_COMPLETE,
     DELETED_USER_RECEIVED,
     TRANSACTION_INITIALIZE,
     TRANSACTION_REQUEST,
@@ -86,6 +87,35 @@ export const editUser = ({id, data}) => (dispatch, getState) => {
             });
             dispatch({
                 type: EDITED_USER_RECEIVED,
+                user
+            });
+        } else {
+            dispatch({
+                type: TRANSACTION_REJECTED,
+                errors
+            });
+        }
+    });
+};
+
+
+export const editUserPassword = ({id, data}) => (dispatch, getState) => {
+
+    const users = getState().user.get('users');
+
+    dispatch({
+        type: TRANSACTION_REQUEST
+    });
+
+    co(function* () {
+        const { user, errors } = yield editUserOnServer({id, data});
+
+        if (!errors) {
+            dispatch({
+                type: TRANSACTION_RESOLVED
+            });
+            dispatch({
+                type: USER_PASSWORD_EDIT_COMPLETE,
                 user
             });
         } else {

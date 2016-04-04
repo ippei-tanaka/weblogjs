@@ -102,10 +102,11 @@ export default class ModelManager {
     /**
      * @public
      * @param {string} id
+     * @param {QueryOptions} [queryOptions]
      * @returns {Promise}
      */
-    findById(id) {
-        return this.findOne({_id: id});
+    findById(id, queryOptions) {
+        return this.findOne({_id: id}, queryOptions);
     }
 
 
@@ -184,20 +185,3 @@ export default class ModelManager {
     }
 
 }
-
-
-
-/*
-module.exports = {
-    applyTo: function (Model) {
-        var obj = {};
-
-        for (let key of Object.keys(methods)) {
-            obj[key] = methods[key].bind(methods, Model);
-        }
-
-        return obj;
-    },
-    methods
-};
-    */

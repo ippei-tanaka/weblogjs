@@ -1,14 +1,13 @@
-"use strict";
+import co from 'co';
+import mongoose from 'mongoose';
+import validate from 'mongoose-validator';
+import uniqueValidatorPlugin from 'mongoose-unique-validator';
+import bcrypt from 'bcrypt';
+import privileges from './privileges';
 
-var mongoose = require('mongoose');
-var validate = require('mongoose-validator');
-var uniqueValidatorPlugin = require('mongoose-unique-validator');
-var privileges = require('./privileges');
-
-var bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
 
-var passwordValidator = [
+const passwordValidator = [
     validate({
         validator: 'matches',
         arguments: /^[a-zA-Z0-9#!@%&\*]*$/,
@@ -21,7 +20,7 @@ var passwordValidator = [
     })
 ];
 
-var displayNameValidator = [
+const displayNameValidator = [
     validate({
         validator: 'matches',
         arguments: /^[a-zA-Z0-9_\-#!@%&\* ]*$/,
@@ -34,14 +33,14 @@ var displayNameValidator = [
     })
 ];
 
-var emailValidator = [
+const emailValidator = [
     validate({
         validator: 'isEmail',
         message: 'It is not a valid email address.'
     })
 ];
 
-var slugValidator = [
+const slugValidator = [
     validate({
         validator: 'matches',
         arguments: /^[a-zA-Z0-9\-_]*$/,
@@ -54,15 +53,17 @@ var slugValidator = [
     })
 ];
 
-var allPrivileges = Object.keys(privileges).map((privilege) => privileges[privilege]);
+const allPrivileges = Object.keys(privileges).map((privilege) => privileges[privilege]);
 
-var allPrivilegeReversed = {};
+/*
+const allPrivilegeReversed = {};
 
 for (let key of Object.keys(privileges)) {
     allPrivilegeReversed[privileges[key]] = key;
 }
+*/
 
-var privilegeValidator = [
+const privilegeValidator = [
     validate({
         validator: 'matches',
         arguments: new RegExp(`^${allPrivileges.join("|")}$`),
@@ -70,12 +71,13 @@ var privilegeValidator = [
     })
 ];
 
-var UserSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
     {
         email: {
             type: String,
             validate: emailValidator,
             required: 'Email is required.',
+            lowercase: true,
             index: true,
             unique: true
         },
@@ -113,23 +115,15 @@ var UserSchema = new mongoose.Schema(
         updated: {
             type: Date
         }
-    },
-    {
-        toObject: {
-            virtuals: true
-        },
-        toJSON: {
-            virtuals: true
-        }
     });
 
-
+/*
 UserSchema
     .virtual('readable_privileges')
     .get(function () {
         return this.privileges.map((privilege) => allPrivilegeReversed[privilege]);
     });
-
+*/
 
 UserSchema.plugin(
     uniqueValidatorPlugin,
@@ -137,19 +131,20 @@ UserSchema.plugin(
         message: 'The {PATH}, "{VALUE}", has been registered.'
     });
 
-
 UserSchema.methods.verifyPassword = function (password) {
-    return new Promise(function (resolve, reject) {
-        bcrypt.compare(password, this.password, function (err, isMatch) {
-            if (err) return reject(err);
-            resolve(isMatch);
-        });
-    }.bind(this));
+    return compareHashedStrings(password, this.password);
 };
 
+const compareHashedStrings = (string1, string2) => new Promise((resolve, reject) => {
+    bcrypt.compare(string1, string2, (error, isMatch) => {
+        if (error) return reject(error);
+        resolve(isMatch);
+    });
+});
 
+// Updated Date and Created Date
 UserSchema.pre('save', function (next) {
-    var now = new Date();
+    const now = new Date();
 
     this.updated = now;
 
@@ -160,22 +155,63 @@ UserSchema.pre('save', function (next) {
     next();
 });
 
+// Password
+UserSchema.virtual('old_password').set(function (newValue) {
+    //console.log(12312312);
+    //console.log(this);
+    //this._old_password = this.password;
+    //console.log(this.password);
+    //console.log(newValue);
+    try {
+        console.log(111111);
+        console.log(passwordValidator[0]);
+        console.log(222222);
+    } catch (error) {
+        console.error(error);
+    }
+
+    return newValue;
+});
 
 UserSchema.pre('save', function (next) {
-    var user = this;
 
-    if (!user.isModified('password')) return next();
+    co(function* () {
 
-    bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
-        if (err) return next(err);
+        if (!this.isModified('password')) {
+            return;
+        }
 
-        bcrypt.hash(user.password, salt, (err, hash) => {
-            if (err) return next(err);
-            user.password = hash;
-            next();
+        if (!this.isNew) {
+
+            if (!this.old_password) return;
+
+            console.log(yield this.verifyPassword(this.old_password)); 
+
+            if (!(yield this.verifyPassword(this.old_password)))
+            {
+                throw new Error('The old password is not correct.');
+            }
+        }
+
+        this.password = yield generateHash(this.password);
+
+    }.bind(this))
+        .then(next)
+        .catch((error) => {
+            console.log(error);
+            next(error);
+        });
+});
+
+const generateHash = (str) => new Promise ((resolve, reject) => {
+    bcrypt.genSalt(SALT_WORK_FACTOR, (error, salt) => {
+        if (error) return reject(error);
+
+        bcrypt.hash(str, salt, (error, hash) => {
+            if (error) return reject(error);
+            resolve(hash);
         });
     });
 });
-
 
 module.exports = mongoose.model('User', UserSchema);
