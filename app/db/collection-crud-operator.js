@@ -13,10 +13,17 @@ export default class CollectionCrudOperator {
         this._dbClient = dbClient;
     }
 
-    find (query) {
+    findMany (query) {
         return co(function* () {
             const collection = yield this._getCollection();
             return yield collection.find(query).toArray();
+        }.bind(this)).catch(this._filterError.bind(this));
+    }
+
+    findOne (id) {
+        return co(function* () {
+            const collection = yield this._getCollection();
+            return yield collection.findOne({_id: new ObjectID(id)});
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
