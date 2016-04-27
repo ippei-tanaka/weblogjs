@@ -181,13 +181,12 @@ const buildRouter = (dbClient) => {
 
     router.get('/categories', isLoggedIn, (request, response) => co(function* () {
         const { query } = url.parse(request.url, true);
-        const items = yield categoryOperator.find(query);
+        const items = yield categoryOperator.findMany(query);
         successHandler(response, {items: items});
     }).catch(errorHandler(response)));
 
     router.get('/categories/:id', isLoggedIn, (request, response) => co(function* () {
-        const db = yield dbClient.connect();
-        const item = yield db.collection('categories').findOne({_id: new ObjectID(request.params.id)});
+        const item = yield categoryOperator.findOne(request.params.id);
         successHandler(response, item);
     }).catch(errorHandler(response)));
 
