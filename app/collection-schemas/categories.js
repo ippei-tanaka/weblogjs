@@ -1,5 +1,4 @@
 import validator from 'validator';
-//import { ValidationError as VE } from '../errors';
 
 export default {
 

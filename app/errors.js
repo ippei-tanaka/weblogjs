@@ -26,15 +26,8 @@ export let DbError = class WeblogJsDatabaseError extends WeblogJsError {
     }
 };
 
-export let ValidationError = class WeblogJsValidationError {
-    constructor(messages) {
-        this.messages = messages;
-    }
-
-    toJSON() {
-        return {
-            name: this.name,
-            messages: this.messages
-        };
+export let ValidationError = class WeblogJsValidationError extends WeblogJsError {
+    constructor(message) {
+        super(message);
     }
 };

@@ -263,7 +263,8 @@ describe('Restful API', function() {
                 const cat = { name: "Fo o", slug: "fo o" };
                 yield httpRequest.post(`${BASE_URL}/categories`, cat);
                 done(new Error());
-            }).catch(() => {
+            }).catch((err) => {
+                //console.log(err.body);
                 done();
             });
         });

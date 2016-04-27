@@ -17,41 +17,39 @@ export default class CollectionCrudOperator {
         return co(function* () {
             const collection = yield this._getCollection();
             const cleanDoc = this._sanitize(doc);
-            const errors = this._validate(cleanDoc);
-            if (errors) throw errors;
+            this._validate(cleanDoc);
             return yield collection.insertOne(cleanDoc);
-        }.bind(this)).catch(error => {
-            if (error instanceof MongoError && error.code === 11000) {
-                const schema = this._getSchema();
-                const match = error.message.match(/\s[\w.]+\$([\w]+)_\d+\s.+\{.+:\s"(.+)"\s\}/);
-                const pathName = match[1];
-                const value = match[2];
-                throw {[pathName]: new VE([schema[pathName].unique.errorMessage(value)])};
-            }
-            throw error;
-        });
+        }.bind(this)).catch(this._filterError.bind(this));
     }
 
     updateOne(id, doc) {
         return co(function* () {
             const collection = yield this._getCollection();
             const cleanDoc = this._sanitize(doc);
-            const errors = this._validate(cleanDoc);
-            if (errors) throw errors;
+            this._validate(cleanDoc);
             return yield collection.updateOne(
                 {_id: new ObjectID(id)},
                 {$set: cleanDoc}
             );
-        }.bind(this)).catch(error => {
-            if (error instanceof MongoError && error.code === 11000) {
-                const schema = this._getSchema();
-                const match = error.message.match(/\s[\w.]+\$([\w]+)_\d+\s.+\{.+:\s"(.+)"\s\}/);
-                const pathName = match[1];
-                const value = match[2];
-                throw {[pathName]: new VE([schema[pathName].unique.errorMessage(value)])};
-            }
+        }.bind(this)).catch(this._filterError.bind(this));
+    }
+
+    _filterError (error) {
+        if (error instanceof ValidationErrorMap) {
             throw error;
-        });
+        }
+
+        if (error instanceof MongoError && error.code === 11000) {
+            const schema = this._getSchema();
+            const match = error.message.match(/\s[\w.]+\$([\w]+)_\d+\s.+\{.+:\s"(.+)"\s\}/);
+            const pathName = match[1];
+            const value = match[2];
+            const errorMap = new ValidationErrorMap();
+            errorMap.addError(pathName, [schema[pathName].unique.errorMessage(value)]);
+            throw errorMap;
+        }
+
+        throw new Error();
     }
 
     _getCollection() {
@@ -81,7 +79,7 @@ export default class CollectionCrudOperator {
     }
 
     _validate(doc) {
-        const errors = {};
+        const errorMap = new ValidationErrorMap();
         const schema = this._getSchema();
 
         for (let pathName of Object.keys(schema)) {
@@ -93,15 +91,13 @@ export default class CollectionCrudOperator {
             }
 
             if (errorMessages.length > 0) {
-                errors[pathName] = new VE(errorMessages);
+                errorMap.addError(pathName, errorMessages);
             }
         }
 
-        if (Object.keys(errors).length > 0) {
-            return errors;
+        if (!errorMap.isEmpty()) {
+            throw errorMap;
         }
-
-        return null;
     }
 
     _getSchema() {
@@ -109,5 +105,28 @@ export default class CollectionCrudOperator {
             throw new DbError(`collection "${this._collectionName}" doesn't exist in schema.`);
         }
         return schemas[this._collectionName];
+    }
+}
+
+class ValidationErrorMap {
+
+    constructor () {
+        this._errorMap = {};
+    }
+
+    /**
+     * @param pathName {string}
+     * @param errorMessages {string[]}
+     */
+    addError (pathName, errorMessages) {
+        this._errorMap[pathName] = errorMessages.map(msg => new VE(msg));
+    }
+
+    isEmpty () {
+        return Object.keys(this._errorMap).length === 0
+    }
+
+    toJSON() {
+        return this._errorMap;
     }
 }
