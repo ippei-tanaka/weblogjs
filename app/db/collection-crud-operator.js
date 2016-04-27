@@ -1,7 +1,7 @@
 import co from 'co';
 import schemas from '../collection-schemas';
 import { ValidationError as VE, DbError } from '../errors';
-import { MongoError } from 'mongodb';
+import { MongoError, ObjectID } from 'mongodb';
 
 export default class CollectionCrudOperator {
 
@@ -20,6 +20,28 @@ export default class CollectionCrudOperator {
             const errors = this._validate(cleanDoc);
             if (errors) throw errors;
             return yield collection.insertOne(cleanDoc);
+        }.bind(this)).catch(error => {
+            if (error instanceof MongoError && error.code === 11000) {
+                const schema = this._getSchema();
+                const match = error.message.match(/\s[\w.]+\$([\w]+)_\d+\s.+\{.+:\s"(.+)"\s\}/);
+                const pathName = match[1];
+                const value = match[2];
+                throw {[pathName]: new VE([schema[pathName].unique.errorMessage(value)])};
+            }
+            throw error;
+        });
+    }
+
+    updateOne(id, doc) {
+        return co(function* () {
+            const collection = yield this._getCollection();
+            const cleanDoc = this._sanitize(doc);
+            const errors = this._validate(cleanDoc);
+            if (errors) throw errors;
+            return yield collection.updateOne(
+                {_id: new ObjectID(id)},
+                {$set: cleanDoc}
+            );
         }.bind(this)).catch(error => {
             if (error instanceof MongoError && error.code === 11000) {
                 const schema = this._getSchema();

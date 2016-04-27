@@ -35,7 +35,9 @@ const weblogJs = new WeblogJS({
     apiRoot: configFile.restful_api_root
 });
 
-describe('Restful API', () => {
+describe('Restful API', function() {
+
+    this.timeout(5000);
 
     before('web server starting', () => weblogJs.webServer.start());
     before('dropping darabase', () => weblogJs.dbSettingOperator.dropDatabase());
@@ -222,6 +224,78 @@ describe('Restful API', () => {
             });
         });
 
+        it('should update a category', (done) => {
+            co(function* () {
+                const { _id } = yield httpRequest.post(`${BASE_URL}/categories`, testCategory);
+                const data1 = yield httpRequest.get(`${BASE_URL}/categories/${_id}`);
+                yield httpRequest.put(`${BASE_URL}/categories/${_id}`, {
+                    name: "Hello World",
+                    slug: "hello-world"
+                });
+                const data2 = yield httpRequest.get(`${BASE_URL}/categories/${_id}`);
+
+                expect(data1.name).to.equal(testCategory.name);
+                expect(data1.slug).to.equal(testCategory.slug);
+                expect(data2.name).to.equal("Hello World");
+                expect(data2.slug).to.equal("hello-world");
+                done();
+            }).catch((err) => {
+                //console.error(err);
+                done(new Error());
+            });
+        });
+
+        it('should not update a category when the slug is duplicated.', (done) => {
+            co(function* () {
+                const cat1 = { name: "Foo", slug: "foo" };
+                const cat2 = { name: "Bar", slug: "bar" };
+                yield httpRequest.post(`${BASE_URL}/categories`, cat1);
+                const id2 = (yield httpRequest.post(`${BASE_URL}/categories`, cat2))._id;
+                yield httpRequest.put(`${BASE_URL}/categories/${id2}`, {slug: "foo"});
+                done(new Error());
+            }).catch(() => {
+                done();
+            });
+        });
+
+        it('should not update a category if the posted object is not valid.', (done) => {
+            co(function* () {
+                const cat = { name: "Fo o", slug: "fo o" };
+                yield httpRequest.post(`${BASE_URL}/categories`, cat);
+                done(new Error());
+            }).catch(() => {
+                done();
+            });
+        });
+
+        it('should delete a category', (done) => {
+
+            var cat1 = {
+                name: 'Category Name',
+                slug: 'my0slug1'
+            };
+
+            var cat2 = {
+                name: 'Rondom Name',
+                slug: 'dsf324'
+            };
+
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/categories`, cat1);
+                yield httpRequest.post(`${BASE_URL}/categories`, cat2);
+                var data1 = yield httpRequest.get(`${BASE_URL}/categories`);
+                yield httpRequest.del(`${BASE_URL}/categories/${data1.items[0]._id}`);
+                var data2 = yield httpRequest.get(`${BASE_URL}/categories`);
+
+                expect(data1.items).to.have.length(2);
+                expect(data2.items).to.have.length(1);
+                done();
+            }).catch((err) => {
+                //console.error(err);
+                done(new Error());
+            });
+        });
+
         it('should return a list of categories', (done) => {
 
             var cat1 = {
@@ -266,54 +340,6 @@ describe('Restful API', () => {
             });
         });
 
-        it('should update a category', (done) => {
-            co(function* () {
-                const { _id } = yield httpRequest.post(`${BASE_URL}/categories`, testCategory);
-                const data1 = yield httpRequest.get(`${BASE_URL}/categories/${_id}`);
-                yield httpRequest.put(`${BASE_URL}/categories/${_id}`, {
-                    name: "Hello World",
-                    slug: "hello-world"
-                });
-                const data2 = yield httpRequest.get(`${BASE_URL}/categories/${_id}`);
-
-                expect(data1.name).to.equal(testCategory.name);
-                expect(data1.slug).to.equal(testCategory.slug);
-                expect(data2.name).to.equal("Hello World");
-                expect(data2.slug).to.equal("hello-world");
-                done();
-            }).catch((err) => {
-                //console.error(err);
-                done(new Error());
-            });
-        });
-
-        it('should delete a category', (done) => {
-
-            var cat1 = {
-                name: 'Category Name',
-                slug: 'my0slug1'
-            };
-
-            var cat2 = {
-                name: 'Rondom Name',
-                slug: 'dsf324'
-            };
-
-            co(function* () {
-                yield httpRequest.post(`${BASE_URL}/categories`, cat1);
-                yield httpRequest.post(`${BASE_URL}/categories`, cat2);
-                var data1 = yield httpRequest.get(`${BASE_URL}/categories`);
-                yield httpRequest.del(`${BASE_URL}/categories/${data1.items[0]._id}`);
-                var data2 = yield httpRequest.get(`${BASE_URL}/categories`);
-
-                expect(data1.items).to.have.length(2);
-                expect(data2.items).to.have.length(1);
-                done();
-            }).catch((err) => {
-                //console.error(err);
-                done(new Error());
-            });
-        });
     });
 
     /*

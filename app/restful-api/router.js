@@ -157,6 +157,11 @@ router.get('/privileges', isLoggedIn, response((ok) => {
 //-------------------------------------------------------
 // Category
 
+
+const successHandler = (response, obj, code = 200) => {
+    response.type('json').status(code).json(obj);
+};
+
 const errorHandler = (response, code = 400) => {
     return error => {
         console.error(error);
@@ -177,47 +182,29 @@ const buildRouter = (dbClient) => {
         // const { query } = url.parse(request.url, true);
         const db = yield dbClient.connect();
         const items = yield db.collection('categories').find({}).toArray();
-        response.type('json').status(200).json({items: items});
+        successHandler(response, {items: items});
     }).catch(errorHandler(response)));
 
     router.get('/categories/:id', isLoggedIn, (request, response) => co(function* () {
         const db = yield dbClient.connect();
         const item = yield db.collection('categories').findOne({_id: new ObjectID(request.params.id)});
-        response.type('json').status(200).json(item);
+        successHandler(response, item);
     }).catch(errorHandler(response)));
 
     router.post('/categories', isLoggedIn, (request, response) => co(function* () {
         const item = yield categoryOperator.insertOne(request.body);
-        response.type('json').status(200).json({_id: item.insertedId});
+        successHandler(response, {_id: item.insertedId});
     }).catch(errorHandler(response)));
 
     router.put('/categories/:id', isLoggedIn, (request, response) => co(function* () {
-        const { name, slug } = request.body;
-        let errors = [];
-
-        if (!name) {
-            errors.push(new ValidationError("Name is required."));
-        }
-
-        if (!slug) {
-            errors.push(new ValidationError("Slug is required."));
-        }
-
-        if (errors.length === 0) {
-            const db = yield dbClient.connect();
-            yield db.collection('categories')
-                .updateOne({_id: new ObjectID(request.params.id)}, {$set: {name, slug}});
-            response.type('json').status(200).json({});
-            return;
-        }
-
-        throw errors;
+        yield categoryOperator.updateOne(request.params.id, request.body);
+        successHandler(response, {});
     }).catch(errorHandler(response)));
 
     router.delete('/categories/:id', isLoggedIn, (request, response) => co(function* () {
         const db = yield dbClient.connect();
         yield db.collection('categories').deleteOne({_id: new ObjectID(request.params.id)});
-        response.type('json').status(200).json({});
+        successHandler(response, {});
     }).catch(errorHandler(response)));
 
     return router;
