@@ -1,6 +1,7 @@
 import { ObjectID } from 'mongodb';
 import validator from 'validator';
 import co from 'co';
+import url from 'url';
 import { Router } from 'express';
 import CollectionCrudOperator from '../db/collection-crud-operator';
 
@@ -179,9 +180,8 @@ const buildRouter = (dbClient) => {
     });
 
     router.get('/categories', isLoggedIn, (request, response) => co(function* () {
-        // const { query } = url.parse(request.url, true);
-        const db = yield dbClient.connect();
-        const items = yield db.collection('categories').find({}).toArray();
+        const { query } = url.parse(request.url, true);
+        const items = yield categoryOperator.find(query);
         successHandler(response, {items: items});
     }).catch(errorHandler(response)));
 
@@ -202,8 +202,7 @@ const buildRouter = (dbClient) => {
     }).catch(errorHandler(response)));
 
     router.delete('/categories/:id', isLoggedIn, (request, response) => co(function* () {
-        const db = yield dbClient.connect();
-        yield db.collection('categories').deleteOne({_id: new ObjectID(request.params.id)});
+        yield categoryOperator.deleteOne(request.params.id);
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
