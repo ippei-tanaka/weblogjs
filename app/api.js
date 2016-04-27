@@ -1,3 +1,4 @@
+/*
 import db  from './db';
 import userManager  from './model-managers/user-manager';
 import categoryManager  from './model-managers/category-manager';
@@ -16,3 +17,4 @@ module.exports = {
     settingManager,
     privileges
 };
+*/

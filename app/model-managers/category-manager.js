@@ -1,3 +1,4 @@
+/*
 import ModelManager from "./model-manager";
 import Category from "./models/category";
 
@@ -13,5 +14,5 @@ class CategoryManager extends ModelManager {
     }
 }
 
-
-export default new CategoryManager();
+*/
+export default {};

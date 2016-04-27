@@ -4,79 +4,76 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
-import WebpageRouter from '../web-pages/router';
-import RestfulApiRouter from '../restful-api/router';
-import ConfigManager from '../config-manager';
 import PassportManager from './passport-manager';
-import API from '../api';
 
+export default class WebServer {
 
+    constructor({
+        host, port, sessionSecret,
+        webpageRouter, apiRouter}) {
+        this._host = host;
+        this._port = port;
+        this._instance = null;
+        this._sessionSecret = sessionSecret;
+        this._webpageRouter = webpageRouter;
+        this._apiRouter = apiRouter;
+        this._expressApp = this._buildExpressApp();
+    }
 
-var passport = PassportManager.passport;
-var expressApp = express();
-var webServer;
-var config = ConfigManager.load();
-var webpageRouter = new WebpageRouter(config.web_page_root);
-var restfulApiRouter = new RestfulApiRouter(config.restful_api_root);
-var session = expressSession({
-    secret: config.session_secret,
-    resave: false,
-    saveUninitialized: false
-});
-
-
-
-expressApp.use(favicon(webpageRouter.faviconDir));
-//expressApp.use(logger('dev'));
-expressApp.use(bodyParser.json());
-expressApp.use(bodyParser.urlencoded({extended: false}));
-expressApp.use(cookieParser());
-
-expressApp.use(session);
-
-expressApp.use(passport.initialize());
-expressApp.use(passport.session());
-
-// Restful API
-expressApp.use(config.restful_api_root, restfulApiRouter.router);
-
-// Static Files in pages dir
-expressApp.use(express.static(webpageRouter.staticDir));
-
-// Web Pages
-expressApp.use(config.web_page_root, webpageRouter.router);
-
-
-/**
- * @returns {Promise}
- */
-var startServer = () => new Promise((resolve, reject) => {
-    API.db.connect()
-        .then(() => {
-            webServer = expressApp.listen(config.web_server_port, config.web_server_host,
-                (err) => {
-                    !err ? resolve() : reject(err);
-                });
-        });
-});
-
-/**
- * @returns {Promise}
- */
-var stopServer = () => new Promise((resolve, reject) => {
-    if (webServer) {
-        webServer.close((err) => {
-            if (!err) {
-                API.db.disconnect()
-                    .then(resolve)
-                    .catch(reject);
-            }
+    start() {
+        return new Promise((resolve, reject) => {
+            this._instance = this._expressApp.listen(
+                this._port,
+                this._host,
+                error => !error ? resolve() : reject(error)
+            );
         });
     }
-});
 
+    /*
+    stop() {
+        return new Promise((resolve, reject) => {
+            if (!this._instance) {
+                resolve();
+                return;
+            }
 
-module.exports = {
-    startServer,
-    stopServer
-};
+            this._instance.close(error =>
+                !error ? resolve() : reject(error));
+        });
+    }
+    */
+
+    _buildExpressApp() {
+        const passport = PassportManager.passport;
+        const expressApp = express();
+        const session = expressSession({
+            secret: this._sessionSecret,
+            resave: false,
+            saveUninitialized: false
+        });
+
+        expressApp.use(favicon(this._webpageRouter.faviconDir));
+
+        //expressApp.use(logger('dev'));
+        expressApp.use(bodyParser.json());
+        expressApp.use(bodyParser.urlencoded({extended: false}));
+        expressApp.use(cookieParser());
+
+        expressApp.use(session);
+
+        expressApp.use(passport.initialize());
+        expressApp.use(passport.session());
+
+        // Restful API
+        expressApp.use(this._apiRouter.basePath, this._apiRouter.router);
+
+        // Static Files in pages dir
+        expressApp.use(express.static(this._webpageRouter.staticDir));
+
+        // Web Pages
+        expressApp.use(this._webpageRouter.basePath, this._webpageRouter.router);
+
+        return expressApp;
+    }
+}
