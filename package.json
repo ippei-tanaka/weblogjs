@@ -21,6 +21,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "axios": "^0.9.1",
     "babel-loader": "^6.2.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-runtime": "^6.3.13",
@@ -42,6 +43,7 @@
     "webpack-sources": "^0.1.0"
   },
   "dependencies": {
+    "babel-plugin-transform-builtin-extend": "^1.1.0",
     "babel-polyfill": "^6.3.14",
     "babel-register": "^6.3.13",
     "bcrypt": "^0.8.5",
@@ -58,6 +60,7 @@
     "jquery": "^2.1.4",
     "keymirror": "^0.1.1",
     "moment": "^2.10.6",
+    "mongodb": "^2.1.14",
     "mongoose": "^4.3.6",
     "mongoose-unique-validator": "^0.6.2",
     "mongoose-validator": "^1.2.4",
@@ -72,6 +75,7 @@
     "react-router-redux": "^2.1.0",
     "request": "^2.67.0",
     "serve-favicon": "^2.3.0",
-    "superagent": "^1.6.1"
+    "superagent": "^1.6.1",
+    "validator": "^5.2.0"
   }
 }

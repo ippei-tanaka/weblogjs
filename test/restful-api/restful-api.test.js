@@ -1,42 +1,53 @@
+require('../../app/babel-request');
+
 import configFile from '../config.json';
-import WeblogJS from '../..';
 import co from 'co';
 import { expect } from 'chai';
-import testData from './test-data.json';
 import httpRequest from '../../utils/http-request';
+import WeblogJS from '../../app';
 
-
-var weblogjs = WeblogJS(configFile);
-var config = weblogjs.config;
+/*
 var admin = Object.freeze(Object.assign({
     email: config.admin_email,
     password: config.admin_password
 }));
-var testUser = Object.freeze(Object.assign(testData["valid-users"][0]));
-var testCategory = Object.freeze(Object.assign(testData["valid-categories"][0]));
-const BASE_URL = `http://${config.web_server_host}:${config.web_server_port}${config.restful_api_root}`;
+*/
+const testUser = Object.freeze({
+    "email": "email1@example.com",
+    "password": "test1234",
+    "slug": "slug-test1234",
+    "display_name": "Test User 1"
+});
 
+const testCategory = Object.freeze({
+    "name": "Oh My Category",
+    "slug": "oh-my-category"
+});
 
-var clearDb = () => {
-    return weblogjs.api.db.dropCollections()
-        .catch(() => {
-            //console.error(err);
-        });
-};
+const BASE_URL = `http://${configFile.web_server_host}:${configFile.web_server_port}${configFile.restful_api_root}`;
 
+const weblogJs = new WeblogJS({
+    dbHost: configFile.database_host,
+    dbPort: configFile.database_port,
+    dbName: configFile.database_name,
+    webHost: configFile.web_server_host,
+    webPort: configFile.web_server_port,
+    apiRoot: configFile.restful_api_root
+});
 
 describe('Restful API', () => {
 
+    before('web server starting', () => weblogJs.webServer.start());
+    before('dropping darabase', () => weblogJs.dbSettingOperator.dropDatabase());
+    before('creating indexes', () => weblogJs.dbSettingOperator.createIndexes());
+    beforeEach('emptying collections', () => weblogJs.dbSettingOperator.removeAllDocuments());
+    //beforeEach(() => weblogjs.api.userManager.createAdminUser());
+    //beforeEach(() => httpRequest.post(`${BASE_URL}/login`, admin));
+    //afterEach(() => httpRequest.get(`${BASE_URL}/logout`));
+    //after(() => dbClient.dropDb());
+    //after(() => weblogJs.webServerStop());
 
-    before(clearDb);
-    before(() => weblogjs.web.startServer());
-    beforeEach(clearDb);
-    beforeEach(() => weblogjs.api.userManager.createAdminUser());
-    beforeEach(() => httpRequest.post(`${BASE_URL}/login`, admin));
-    afterEach(() => httpRequest.get(`${BASE_URL}/logout`));
-    after(clearDb);
-    after(() => weblogjs.web.stopServer());
-
+    /*
     describe('/users', () => {
 
         it('should create a new user', (done) => {
@@ -160,58 +171,32 @@ describe('Restful API', () => {
             });
         });
     });
+    */
 
     describe('/categories', () => {
 
         it('should create a new category', (done) => {
             co(function* () {
-                var category = yield httpRequest.post(`${BASE_URL}/categories`, testCategory);
+                const { _id } = yield httpRequest.post(`${BASE_URL}/categories`, testCategory);
+                const category = yield httpRequest.get(`${BASE_URL}/categories/${_id}`);
                 expect(category._id).to.be.string;
                 expect(category.name).to.equal(testCategory.name);
                 expect(category.slug).to.equal(testCategory.slug);
                 done();
             }).catch((err) => {
-                console.error(err);
-                done(new Error());
-            });
-        });
-
-        it('should create a new category even when the name is duplicated', (done) => {
-
-            var cat1 = {
-                name: 'Category Name',
-                slug: 'cat-name-_'
-            };
-
-            var cat2 = {
-                name: 'Category Name',
-                slug: 'name-_'
-            };
-
-            co(function* () {
-                var retrievedCat1 = yield httpRequest.post(`${BASE_URL}/categories`, cat1);
-                var retrievedCat2 = yield httpRequest.post(`${BASE_URL}/categories`, cat2);
-
-                expect(retrievedCat1._id).to.be.string;
-                expect(retrievedCat1.name).to.equal(cat1.name);
-                expect(retrievedCat1.slug).to.equal(cat1.slug);
-                expect(retrievedCat2.name).to.equal(cat2.name);
-                expect(retrievedCat2.slug).to.equal(cat2.slug);
-                done();
-            }).catch((err) => {
-                console.error(err);
+                //console.error(err);
                 done(new Error());
             });
         });
 
         it('should not create a new category when the slug is duplicated', (done) => {
 
-            var cat1 = {
+            const cat1 = {
                 name: 'Category Name',
                 slug: 'my0slug1'
             };
 
-            var cat2 = {
+            const cat2 = {
                 name: 'Rondom Name',
                 slug: 'my0slug1'
             };
@@ -219,6 +204,18 @@ describe('Restful API', () => {
             co(function* () {
                 yield httpRequest.post(`${BASE_URL}/categories`, cat1);
                 yield httpRequest.post(`${BASE_URL}/categories`, cat2);
+                done(new Error());
+            }).catch(() => {
+                done();
+            });
+        });
+
+        it('should not create a new category if the posted object is not valid.', (done) => {
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/categories`, {
+                    name : '123456789',
+                    slug: 'd d'
+                });
                 done(new Error());
             }).catch(() => {
                 done();
@@ -250,7 +247,7 @@ describe('Restful API', () => {
                 expect(data.items).to.have.length(3);
                 done();
             }).catch((err) => {
-                console.error(err);
+                //console.error(err);
                 done(new Error());
             });
         });
@@ -264,30 +261,28 @@ describe('Restful API', () => {
                 expect(retreivedCategory.slug).to.equal(testCategory.slug);
                 done();
             }).catch((err) => {
-                console.error(err);
+                //console.error(err);
                 done(new Error());
             });
         });
 
         it('should update a category', (done) => {
             co(function* () {
-                yield httpRequest.post(`${BASE_URL}/categories`, testCategory);
-                var data1 = yield httpRequest.get(`${BASE_URL}/categories`, null);
-                yield httpRequest.put(`${BASE_URL}/categories/${data1.items[0]._id}`, {
+                const { _id } = yield httpRequest.post(`${BASE_URL}/categories`, testCategory);
+                const data1 = yield httpRequest.get(`${BASE_URL}/categories/${_id}`);
+                yield httpRequest.put(`${BASE_URL}/categories/${_id}`, {
                     name: "Hello World",
                     slug: "hello-world"
                 });
-                var data2 = yield httpRequest.get(`${BASE_URL}/categories`, null);
+                const data2 = yield httpRequest.get(`${BASE_URL}/categories/${_id}`);
 
-                expect(data1.items).to.have.length(1);
-                expect(data1.items[0].name).to.equal(testCategory.name);
-                expect(data1.items[0].slug).to.equal(testCategory.slug);
-                expect(data2.items).to.have.length(1);
-                expect(data2.items[0].name).to.equal("Hello World");
-                expect(data2.items[0].slug).to.equal("hello-world");
+                expect(data1.name).to.equal(testCategory.name);
+                expect(data1.slug).to.equal(testCategory.slug);
+                expect(data2.name).to.equal("Hello World");
+                expect(data2.slug).to.equal("hello-world");
                 done();
             }).catch((err) => {
-                console.error(err);
+                //console.error(err);
                 done(new Error());
             });
         });
@@ -315,12 +310,13 @@ describe('Restful API', () => {
                 expect(data2.items).to.have.length(1);
                 done();
             }).catch((err) => {
-                console.error(err);
+                //console.error(err);
                 done(new Error());
             });
         });
     });
 
+    /*
     describe('/posts', () => {
 
         it('should create a new post', (done) => {
@@ -364,7 +360,6 @@ describe('Restful API', () => {
             });
         });
 
-        /*
         it('should create a new post', (done) => {
 
             var testBlog = {
@@ -458,8 +453,9 @@ describe('Restful API', () => {
                 done(new Error());
             });
         });
-         */
 
     });
+             */
+
 
 });
