@@ -1,5 +1,5 @@
 import co from 'co';
-import schemas from '../collection-schemas';
+import schemas from '../schemas';
 import { DbError } from '../errors';
 
 export default class DbSettingOperator {
@@ -16,18 +16,13 @@ export default class DbSettingOperator {
 
             const db = yield this._dbClient.connect();
 
-            for (let collectionName of Object.keys(schemas)) {
-                const schema = schemas[collectionName];
-
-                for (let pathName of Object.keys(schema)) {
-                    const path = schema[pathName];
-
-                    if (path.unique) {
-                        yield db.collection(collectionName).createIndex({[pathName]: 1}, {unique: true});
+            for (let schema of schemas) {
+                for (let path of schema) {
+                    if (path.isUnique) {
+                        yield db.collection(schema.name).createIndex({[path.name]: 1}, {unique: true});
                     }
                 }
             }
-
         }.bind(this)).catch(() => {
             throw new DbError("An error occurred during createIndexes.");
         });

@@ -1,5 +1,3 @@
-import { ObjectID } from 'mongodb';
-import validator from 'validator';
 import co from 'co';
 import url from 'url';
 import { Router } from 'express';
@@ -165,7 +163,8 @@ const successHandler = (response, obj, code = 200) => {
 
 const errorHandler = (response, code = 400) => {
     return error => {
-        console.error(error);
+        console.log(error);
+        if (error) console.error(error.stack);
         response.type('json').status(code).json(error);
     }
 };

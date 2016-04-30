@@ -1,6 +1,8 @@
 import validator from 'validator';
+import Schema from './schema';
 
-export default {
+
+const categorySchema = new Schema('categories', {
 
     name: {
         sanitize: (value) => {
@@ -43,4 +45,7 @@ export default {
             return messages;
         }
     }
-}
+
+});
+
+export default categorySchema;

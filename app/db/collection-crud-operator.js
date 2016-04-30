@@ -1,6 +1,7 @@
 import co from 'co';
-import schemas from '../collection-schemas';
-import { ValidationError as VE, DbError } from '../errors';
+import schemas from '../schemas';
+import ValidationErrorMap from '../schemas/validation-error-map';
+import { DbError } from '../errors';
 import { MongoError, ObjectID } from 'mongodb';
 
 export default class CollectionCrudOperator {
@@ -11,16 +12,17 @@ export default class CollectionCrudOperator {
     constructor({collectionName, dbClient}) {
         this._collectionName = collectionName;
         this._dbClient = dbClient;
+        this._schema = schemas.getSchema(collectionName);
     }
 
-    findMany (query) {
+    findMany(query) {
         return co(function* () {
             const collection = yield this._getCollection();
             return yield collection.find(query).toArray();
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    findOne (id) {
+    findOne(id) {
         return co(function* () {
             const collection = yield this._getCollection();
             return yield collection.findOne({_id: new ObjectID(id)});
@@ -30,8 +32,9 @@ export default class CollectionCrudOperator {
     insertOne(doc) {
         return co(function* () {
             const collection = yield this._getCollection();
-            const cleanDoc = this._sanitize(doc);
-            this._validate(cleanDoc);
+            const cleanDoc = this._schema.sanitize(doc);
+            const errorMap = this._schema.validate(cleanDoc);
+            if (errorMap) throw errorMap;
             return yield collection.insertOne(cleanDoc);
         }.bind(this)).catch(this._filterError.bind(this));
     }
@@ -39,8 +42,9 @@ export default class CollectionCrudOperator {
     updateOne(id, doc) {
         return co(function* () {
             const collection = yield this._getCollection();
-            const cleanDoc = this._sanitize(doc);
-            this._validate(cleanDoc);
+            const cleanDoc = this._schema.sanitize(doc);
+            const errorMap = this._schema.validate(cleanDoc);
+            if (errorMap) throw errorMap;
             return yield collection.updateOne(
                 {_id: new ObjectID(id)},
                 {$set: cleanDoc}
@@ -55,18 +59,17 @@ export default class CollectionCrudOperator {
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    _filterError (error) {
+    _filterError(error) {
         if (error instanceof ValidationErrorMap) {
             throw error;
         }
 
         if (error instanceof MongoError && error.code === 11000) {
-            const schema = this._getSchema();
             const match = error.message.match(/\s[\w.]+\$([\w]+)_\d+\s.+\{.+:\s"(.+)"\s\}/);
             const pathName = match[1];
             const value = match[2];
             const errorMap = new ValidationErrorMap();
-            errorMap.addError(pathName, [schema[pathName].unique.errorMessage(value)]);
+            errorMap.addError(pathName, [this._schema.getPath(pathName).getUniqueErrorMessage(value)]);
             throw errorMap;
         }
 
@@ -81,74 +84,4 @@ export default class CollectionCrudOperator {
         }.bind(this));
     }
 
-    _sanitize(doc) {
-        const cleanDoc = {};
-        const schema = this._getSchema();
-
-        for (let pathName of Object.keys(schema)) {
-            let path = schema[pathName];
-
-            if (path.sanitize) {
-                cleanDoc[pathName] = path.sanitize(doc[pathName]);
-            }
-        }
-
-        if (doc._id) {
-            cleanDoc._id = doc._id;
-        }
-
-        return cleanDoc;
-    }
-
-    _validate(doc) {
-        const errorMap = new ValidationErrorMap();
-        const schema = this._getSchema();
-
-        for (let pathName of Object.keys(schema)) {
-            let path = schema[pathName];
-            let errorMessages = [];
-
-            if (path.validate) {
-                errorMessages = path.validate(doc[pathName]);
-            }
-
-            if (errorMessages.length > 0) {
-                errorMap.addError(pathName, errorMessages);
-            }
-        }
-
-        if (!errorMap.isEmpty()) {
-            throw errorMap;
-        }
-    }
-
-    _getSchema() {
-        if (!schemas[this._collectionName]) {
-            throw new DbError(`collection "${this._collectionName}" doesn't exist in schema.`);
-        }
-        return schemas[this._collectionName];
-    }
-}
-
-class ValidationErrorMap {
-
-    constructor () {
-        this._errorMap = {};
-    }
-
-    /**
-     * @param pathName {string}
-     * @param errorMessages {string[]}
-     */
-    addError (pathName, errorMessages) {
-        this._errorMap[pathName] = errorMessages.map(msg => new VE(msg));
-    }
-
-    isEmpty () {
-        return Object.keys(this._errorMap).length === 0
-    }
-
-    toJSON() {
-        return this._errorMap;
-    }
 }
