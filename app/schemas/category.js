@@ -5,17 +5,16 @@ import Schema from './schema';
 const schema = new Schema('category', {
 
     name: {
-        sanitize: (value) => {
-            return String(value);
+        required: {
+            errorMessage : function () {
+                return `A ${this.name} is required.`;
+            }
         },
+
+        sanitize: (value) => String(value),
 
         validate: function (value) {
             const messages = [];
-
-            if (!value) {
-                messages.push(`A ${this.name} is required.`);
-                return messages;
-            }
 
             if (!validator.isLength(value, {min:1, max: 200})) {
                 messages.push(`A ${this.name} should be between 1 and 200 characters.`);
@@ -32,17 +31,16 @@ const schema = new Schema('category', {
             }
         },
 
-        sanitize: (value) => {
-            return String(value);
+        required: {
+            errorMessage : function () {
+                return `A ${this.name} is required.`;
+            }
         },
+
+        sanitize: (value) => String(value),
 
         validate: function (value) {
             const messages = [];
-
-            if (!value) {
-                messages.push(`A ${this.name} is required.`);
-                return messages;
-            }
 
             if (!validator.isLength(value, {min:1, max: 200})) {
                 messages.push(`A ${this.name} should be between 1 and 200 characters.`);

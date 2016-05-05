@@ -22,45 +22,44 @@ export default class Schema {
         }
     }
 
+    /**
+     * @returns {string}
+     */
     get name () {
         return this._name;
     }
 
+    /**
+     * @param pathName {string}
+     * @returns {Path}
+     */
     getPath (pathName) {
         return this._paths[pathName];
     }
 
-    sanitize(doc) {
+    /**
+     * @param doc
+     * @returns {{cleanDoc: {}, errorMap: ValidationErrorMap}}
+     */
+    examine (doc) {
         const cleanDoc = {};
+        let errorMap = new ValidationErrorMap();
 
         for (let path of this) {
-            cleanDoc[path.name] = path.sanitize(doc[path.name]);
+            const value = doc[path.name];
+            const { cleanValue, errors } = path.examine(value);
+
+            if (errors.length > 0) {
+                errorMap.addError(path.name, errors);
+            } else {
+                cleanDoc[path.name] = cleanValue;
+            }
         }
 
         if (doc._id) {
             cleanDoc._id = doc._id;
         }
 
-        return cleanDoc;
-    }
-
-    validate(doc) {
-        const errorMap = new ValidationErrorMap();
-
-        for (let path of this) {
-            let errorMessages = [];
-
-            errorMessages = path.validate(doc[path.name]);
-
-            if (errorMessages.length > 0) {
-                errorMap.addError(path.name, errorMessages);
-            }
-        }
-
-        if (!errorMap.isEmpty()) {
-            return errorMap;
-        }
-
-        return null;
+        return { cleanDoc, errorMap };
     }
 }
