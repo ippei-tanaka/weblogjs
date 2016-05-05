@@ -2,7 +2,7 @@ import validator from 'validator';
 import Schema from './schema';
 
 
-const categorySchema = new Schema('categories', {
+const categorySchema = new Schema('category', {
 
     name: {
         sanitize: (value) => {

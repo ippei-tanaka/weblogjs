@@ -3,16 +3,17 @@ import schemas from '../schemas';
 import ValidationErrorMap from '../schemas/validation-error-map';
 import { DbError } from '../errors';
 import { MongoError, ObjectID } from 'mongodb';
+import pluralize from 'pluralize';
 
 export default class CollectionCrudOperator {
 
     /**
      * @param dbClient {DbClient}
      */
-    constructor({collectionName, dbClient}) {
-        this._collectionName = collectionName;
+    constructor({schemaName, dbClient}) {
         this._dbClient = dbClient;
-        this._schema = schemas.getSchema(collectionName);
+        this._schema = schemas.getSchema(schemaName);
+        this._collectionName = pluralize(schemaName);
     }
 
     findMany(query) {

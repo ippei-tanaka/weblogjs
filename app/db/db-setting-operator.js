@@ -1,6 +1,7 @@
 import co from 'co';
 import schemas from '../schemas';
 import { DbError } from '../errors';
+import pluralize from 'pluralize';
 
 export default class DbSettingOperator {
 
@@ -19,7 +20,7 @@ export default class DbSettingOperator {
             for (let schema of schemas) {
                 for (let path of schema) {
                     if (path.isUnique) {
-                        yield db.collection(schema.name).createIndex({[path.name]: 1}, {unique: true});
+                        yield db.collection(pluralize(schema.name)).createIndex({[path.name]: 1}, {unique: true});
                     }
                 }
             }
