@@ -164,8 +164,8 @@ const successHandler = (response, obj, code = 200) => {
 
 const errorHandler = (response, code = 400) => {
     return error => {
-        console.log(error);
-        if (error) console.error(error.stack);
+        //console.log(error);
+        if (error && error.stack) console.error(error.stack);
         response.type('json').status(code).json(error);
     }
 };
