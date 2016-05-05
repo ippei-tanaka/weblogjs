@@ -2,6 +2,7 @@ import co from 'co';
 import url from 'url';
 import { Router } from 'express';
 import CollectionCrudOperator from '../db/collection-crud-operator';
+import pluralize from 'pluralize';
 
 //var router = require('express').Router();
 //var url = require('url');
@@ -169,38 +170,38 @@ const errorHandler = (response, code = 400) => {
     }
 };
 
-const buildRouter = (dbClient) => {
+const addRoutesForCrudOperations = (schemaName, router, dbClient) => {
 
-    const router = new Router();
-
-    const categoryOperator = new CollectionCrudOperator({
+    const operator = new CollectionCrudOperator({
         dbClient,
-        collectionName: "categories"
+        schemaName: schemaName
     });
 
-    router.get('/categories', isLoggedIn, (request, response) => co(function* () {
+    const pathName = pluralize(schemaName);
+
+    router.get(`/${pathName}`, isLoggedIn, (request, response) => co(function* () {
         const { query } = url.parse(request.url, true);
-        const items = yield categoryOperator.findMany(query);
+        const items = yield operator.findMany(query);
         successHandler(response, {items: items});
     }).catch(errorHandler(response)));
 
-    router.get('/categories/:id', isLoggedIn, (request, response) => co(function* () {
-        const item = yield categoryOperator.findOne(request.params.id);
+    router.get(`/${pathName}/:id`, isLoggedIn, (request, response) => co(function* () {
+        const item = yield operator.findOne(request.params.id);
         successHandler(response, item);
     }).catch(errorHandler(response)));
 
-    router.post('/categories', isLoggedIn, (request, response) => co(function* () {
-        const item = yield categoryOperator.insertOne(request.body);
+    router.post(`/${pathName}`, isLoggedIn, (request, response) => co(function* () {
+        const item = yield operator.insertOne(request.body);
         successHandler(response, {_id: item.insertedId});
     }).catch(errorHandler(response)));
 
-    router.put('/categories/:id', isLoggedIn, (request, response) => co(function* () {
-        yield categoryOperator.updateOne(request.params.id, request.body);
+    router.put(`/${pathName}/:id`, isLoggedIn, (request, response) => co(function* () {
+        yield operator.updateOne(request.params.id, request.body);
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
-    router.delete('/categories/:id', isLoggedIn, (request, response) => co(function* () {
-        yield categoryOperator.deleteOne(request.params.id);
+    router.delete(`/${pathName}/:id`, isLoggedIn, (request, response) => co(function* () {
+        yield operator.deleteOne(request.params.id);
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
@@ -311,7 +312,9 @@ export default class RestfulApiRouter {
 
     constructor({basePath, dbClient}) {
         this._basePath = basePath;
-        this._router = buildRouter(dbClient);
+
+        const router = new Router();
+        this._router = addRoutesForCrudOperations("category", router, dbClient);
     }
 
     get basePath() {
