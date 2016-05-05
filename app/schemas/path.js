@@ -109,9 +109,16 @@ export default class Path {
      * @private
      */
     _validate(value) {
+        const messages = [];
+
         if (typeof this._path.validate === 'function') {
-            return this._path.validate.call(this, value);
+            const iterator = this._path.validate.call(this, value);
+
+            for (let message of iterator) {
+                messages.push(message);
+            }
         }
-        return [];
+
+        return messages;
     }
 }
