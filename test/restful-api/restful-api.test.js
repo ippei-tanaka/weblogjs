@@ -198,16 +198,8 @@ describe('Restful API', function() {
         });
 
         it('should not create a new category when the slug is duplicated', (done) => {
-
-            const cat1 = {
-                name: 'Category Name',
-                slug: 'my0slug1'
-            };
-
-            const cat2 = {
-                name: 'Rondom Name',
-                slug: 'my0slug1'
-            };
+            const cat1 = { name: 'Category Name',  slug: 'my0slug1' };
+            const cat2 = { name: 'Rondom Name',  slug: 'my0slug1' };
 
             co(function* () {
                 yield httpRequest.post(`${BASE_URL}/categories`, cat1);
@@ -291,16 +283,8 @@ describe('Restful API', function() {
         });
 
         it('should delete a category', (done) => {
-
-            var cat1 = {
-                name: 'Category Name',
-                slug: 'my0slug1'
-            };
-
-            var cat2 = {
-                name: 'Rondom Name',
-                slug: 'dsf324'
-            };
+            const cat1 = { name: "Foo", slug: "foo" };
+            const cat2 = { name: "Bar", slug: "bar" };
 
             co(function* () {
                 yield httpRequest.post(`${BASE_URL}/categories`, cat1);
@@ -319,21 +303,9 @@ describe('Restful API', function() {
         });
 
         it('should return a list of categories', (done) => {
-
-            var cat1 = {
-                name: 'Category Name',
-                slug: 'my0slug1'
-            };
-
-            var cat2 = {
-                name: 'Rondom Name',
-                slug: 'dsf324'
-            };
-
-            var cat3 = {
-                name: 'AS Name',
-                slug: 'gdfsg'
-            };
+            const cat1 = { name: "Foo", slug: "foo" };
+            const cat2 = { name: "Bar", slug: "bar" };
+            const cat3 = { name: "Foo Bar", slug: "foobar" };
 
             co(function* () {
                 yield httpRequest.post(`${BASE_URL}/categories`, cat1);
@@ -350,8 +322,8 @@ describe('Restful API', function() {
 
         it('should return a category', (done) => {
             co(function* () {
-                var createdCategory = yield httpRequest.post(`${BASE_URL}/categories`, testCategory);
-                var retreivedCategory = yield  httpRequest.get(`${BASE_URL}/categories/${createdCategory._id}`);
+                const createdCategory = yield httpRequest.post(`${BASE_URL}/categories`, testCategory);
+                const retreivedCategory = yield  httpRequest.get(`${BASE_URL}/categories/${createdCategory._id}`);
                 expect(retreivedCategory._id).to.equal(createdCategory._id);
                 expect(retreivedCategory.name).to.equal(testCategory.name);
                 expect(retreivedCategory.slug).to.equal(testCategory.slug);
