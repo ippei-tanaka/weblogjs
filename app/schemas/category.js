@@ -9,16 +9,16 @@ const schema = new Schema('category', {
             return String(value);
         },
 
-        validate: (value) => {
+        validate: function (value) {
             const messages = [];
 
             if (!value) {
-                messages.push('A name is required.');
+                messages.push(`A ${this.name} is required.`);
                 return messages;
             }
 
             if (!validator.isLength(value, {min:1, max: 200})) {
-                messages.push('A name should be between 1 and 200 characters.');
+                messages.push(`A ${this.name} should be between 1 and 200 characters.`);
             }
 
             return messages;
@@ -27,8 +27,8 @@ const schema = new Schema('category', {
 
     slug: {
         unique: {
-            errorMessage : (value) => {
-                return `The slug, "${value}", has already been taken.`;
+            errorMessage : function (value) {
+                return `The ${this.name}, "${value}", has already been taken.`;
             }
         },
 
@@ -36,20 +36,20 @@ const schema = new Schema('category', {
             return String(value);
         },
 
-        validate: (value) => {
+        validate: function (value) {
             const messages = [];
 
             if (!value) {
-                messages.push('A slug is required.');
+                messages.push(`A ${this.name} is required.`);
                 return messages;
             }
 
             if (!validator.isLength(value, {min:1, max: 200})) {
-                messages.push('A slug should be between 1 and 200 characters.');
+                messages.push(`A ${this.name} should be between 1 and 200 characters.`);
             }
 
             if (!validator.matches(value, /^[a-zA-Z0-9\-_]*$/)) {
-                messages.push('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+                messages.push(`Only alphabets, numbers and some symbols (-, _) are allowed for a ${this.name}.`);
             }
 
             return messages;

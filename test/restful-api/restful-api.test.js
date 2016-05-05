@@ -231,7 +231,8 @@ describe('Restful API', function() {
                     slug: 'd d'
                 });
                 done(new Error());
-            }).catch(() => {
+            }).catch((e) => {
+                console.log(e.body);
                 done();
             });
         });
@@ -265,7 +266,8 @@ describe('Restful API', function() {
                 const id2 = (yield httpRequest.post(`${BASE_URL}/categories`, cat2))._id;
                 yield httpRequest.put(`${BASE_URL}/categories/${id2}`, {slug: "foo"});
                 done(new Error());
-            }).catch(() => {
+            }).catch((e) => {
+                console.log(e.body);
                 done();
             });
         });

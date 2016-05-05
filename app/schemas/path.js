@@ -26,13 +26,13 @@ export default class Path {
      */
     validate(value) {
         if (this._path.validate) {
-            return this._path.validate(value);
+            return this._path.validate.call(this, value);
         }
         return [];
     }
 
     getUniqueErrorMessage (value) {
         if (!this.isUnique) return "";
-        return this._path.unique.errorMessage(value);
+        return this._path.unique.errorMessage.call(this, value);
     }
 }
