@@ -212,7 +212,19 @@ describe('Restful API', function() {
             });
         });
 
-        it('should not create a new category if the posted object is not valid.', (done) => {
+        it('should not create a new category if the posted object has an empty value for a required field.', (done) => {
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/categories`, {
+                    name : '123456789',
+                    slug: ''
+                });
+                done(new Error());
+            }).catch(() => {
+                done();
+            });
+        });
+
+        it('should not create a new category if the posted object has an invalid value.', (done) => {
             co(function* () {
                 yield httpRequest.post(`${BASE_URL}/categories`, {
                     name : '123456789',
