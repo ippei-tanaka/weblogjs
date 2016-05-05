@@ -30,6 +30,21 @@ export default class Schema {
     }
 
     /**
+     * @returns {{}}
+     */
+    get projection () {
+        const obj = {};
+
+        for (let path of this) {
+            if (!path.isExcluded) {
+                obj[path.name] = true;
+            }
+        }
+
+        return obj;
+    }
+
+    /**
      * @param pathName {string}
      * @returns {Path}
      */

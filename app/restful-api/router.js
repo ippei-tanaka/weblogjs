@@ -314,8 +314,9 @@ export default class RestfulApiRouter {
         this._basePath = basePath;
 
         let router = new Router();
-        router = addRoutesForCrudOperations("blog", router, dbClient);
+        router = addRoutesForCrudOperations("user", router, dbClient);
         router = addRoutesForCrudOperations("category", router, dbClient);
+        router = addRoutesForCrudOperations("blog", router, dbClient);
         this._router = router
     }
 

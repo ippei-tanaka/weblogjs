@@ -1,4 +1,5 @@
 import co from 'co';
+import user from './user';
 import category from './category';
 import blog from './blog';
 
@@ -6,6 +7,7 @@ import blog from './blog';
  * @type {Object.<string, WeblogJs_Schema>}
  */
 const schemas = {
+    [user.name]: user,
     [category.name]: category,
     [blog.name]: blog
 };

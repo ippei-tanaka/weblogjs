@@ -181,6 +181,34 @@ describe('Restful API', function() {
     });
     */
 
+    describe('/users', () => {
+
+        it('should create a new user', (done) => {
+            co(function* () {
+                const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+                const user = yield httpRequest.get(`${BASE_URL}/users/${_id}`);
+                expect(user["_id"]).to.equal(_id);
+                done();
+            }).catch((e) => {
+                console.error(e);
+                done(new Error());
+            });
+        });
+
+        it('should not include a password in the retrieved user data', (done) => {
+            co(function* () {
+                const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+                const user = yield httpRequest.get(`${BASE_URL}/users/${_id}`);
+                expect(user).to.not.have.property('password');
+                done();
+            }).catch((e) => {
+                console.error(e);
+                done(new Error());
+            });
+        });
+
+    });
+
     describe('/categories', () => {
 
         it('should create a new category', (done) => {
