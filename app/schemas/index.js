@@ -1,11 +1,13 @@
-import category from './category';
 import co from 'co';
+import category from './category';
+import blog from './blog';
 
 /**
  * @type {Object.<string, WeblogJs_Schema>}
  */
 const schemas = {
-    [category.name]: category
+    [category.name]: category,
+    [blog.name]: blog
 };
 
 class Schemas {
