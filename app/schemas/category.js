@@ -5,11 +5,7 @@ import Schema from './schema';
 const schema = new Schema('category', {
 
     name: {
-        required: {
-            errorMessage : function () {
-                return `A ${this.name} is required.`;
-            }
-        },
+        required: true,
 
         sanitize: (value) => String(value),
 
@@ -25,17 +21,9 @@ const schema = new Schema('category', {
     },
 
     slug: {
-        unique: {
-            errorMessage : function (value) {
-                return `The ${this.name}, "${value}", has already been taken.`;
-            }
-        },
+        unique: true,
 
-        required: {
-            errorMessage : function () {
-                return `A ${this.name} is required.`;
-            }
-        },
+        required: true,
 
         sanitize: (value) => String(value),
 

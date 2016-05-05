@@ -7,6 +7,23 @@ export default class Path {
 
     /**
      * @returns {string}
+     * @private
+     */
+    static _defaultRequiredErrorMessage () {
+        return `A ${this.name} is required.`;
+    }
+
+    /**
+     * @param value
+     * @returns {string}
+     * @private
+     */
+    static _defaultUniqueErrorMessage (value) {
+        return `The ${this.name}, "${value}", has already been taken.`;
+    }
+
+    /**
+     * @returns {string}
      */
     get name () {
         return this._name;
@@ -35,7 +52,7 @@ export default class Path {
         let errors = [];
 
         if (this.isRequired && this._checkIfEmpty(value)) {
-            errors.push(this._path.required.errorMessage.call(this, value));
+            errors.push(this.getRequiredErrorMessage());
             return { cleanValue, errors };
         }
 
@@ -46,12 +63,28 @@ export default class Path {
     }
 
     /**
+     * @returns {string}
+     */
+    getRequiredErrorMessage () {
+        if (!this.isRequired) return "";
+        if (typeof this._path.required === 'function') {
+            return this._path.required.call(this);
+        } else {
+            return Path._defaultRequiredErrorMessage.call(this);
+        }
+    }
+
+    /**
      * @param value
      * @returns {string}
      */
     getUniqueErrorMessage (value) {
         if (!this.isUnique) return "";
-        return this._path.unique.errorMessage.call(this, value);
+        if (typeof this._path.unique === 'function') {
+            return this._path.unique.call(this, value);
+        } else {
+            return Path._defaultUniqueErrorMessage.call(this, value);
+        }
     }
 
     /**
