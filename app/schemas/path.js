@@ -66,7 +66,6 @@ export default class Path {
      * @returns {string}
      */
     getRequiredErrorMessage () {
-        if (!this.isRequired) return "";
         if (typeof this._path.required === 'function') {
             return this._path.required.call(this);
         } else {
@@ -79,7 +78,6 @@ export default class Path {
      * @returns {string}
      */
     getUniqueErrorMessage (value) {
-        if (!this.isUnique) return "";
         if (typeof this._path.unique === 'function') {
             return this._path.unique.call(this, value);
         } else {
@@ -100,7 +98,7 @@ export default class Path {
      * @private
      */
     _sanitize(value) {
-        return this._path.sanitize
+        return typeof this._path.sanitize === 'function'
             ? this._path.sanitize.call(this, value)
             : value;
     }
@@ -111,7 +109,7 @@ export default class Path {
      * @private
      */
     _validate(value) {
-        if (this._path.validate) {
+        if (typeof this._path.validate === 'function') {
             return this._path.validate.call(this, value);
         }
         return [];
