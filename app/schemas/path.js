@@ -91,7 +91,7 @@ export default class Path {
      * @private
      */
     _checkIfEmpty(value) {
-        return value === "" || value === null;
+        return value === "" || value === undefined;
     }
 
     /**
