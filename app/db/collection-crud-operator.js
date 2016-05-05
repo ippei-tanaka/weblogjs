@@ -33,9 +33,8 @@ export default class CollectionCrudOperator {
     insertOne(doc) {
         return co(function* () {
             const collection = yield this._getCollection();
-            const cleanDoc = this._schema.sanitize(doc);
-            const errorMap = this._schema.validate(cleanDoc);
-            if (errorMap) throw errorMap;
+            const { cleanDoc, errorMap } = this._schema.examine(doc);
+            if (!errorMap.isEmpty()) throw errorMap;
             return yield collection.insertOne(cleanDoc);
         }.bind(this)).catch(this._filterError.bind(this));
     }
@@ -43,9 +42,8 @@ export default class CollectionCrudOperator {
     updateOne(id, doc) {
         return co(function* () {
             const collection = yield this._getCollection();
-            const cleanDoc = this._schema.sanitize(doc);
-            const errorMap = this._schema.validate(cleanDoc);
-            if (errorMap) throw errorMap;
+            const { cleanDoc, errorMap } = this._schema.examine(doc);
+            if (!errorMap.isEmpty()) throw errorMap;
             return yield collection.updateOne(
                 {_id: new ObjectID(id)},
                 {$set: cleanDoc}

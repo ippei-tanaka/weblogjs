@@ -215,11 +215,12 @@ describe('Restful API', function() {
         it('should not create a new category if the posted object has an empty value for a required field.', (done) => {
             co(function* () {
                 yield httpRequest.post(`${BASE_URL}/categories`, {
-                    name : '123456789',
+                    name : '',
                     slug: ''
                 });
                 done(new Error());
-            }).catch(() => {
+            }).catch((e) => {
+                console.log(e.body);
                 done();
             });
         });
@@ -252,8 +253,8 @@ describe('Restful API', function() {
                 expect(data2.name).to.equal("Hello World");
                 expect(data2.slug).to.equal("hello-world");
                 done();
-            }).catch((err) => {
-                //console.error(err);
+            }).catch((e) => {
+                //console.log(e.body);
                 done(new Error());
             });
         });

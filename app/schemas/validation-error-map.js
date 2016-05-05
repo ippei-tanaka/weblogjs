@@ -8,12 +8,15 @@ export default class ValidationErrorMap {
 
     /**
      * @param pathName {string}
-     * @param errorMessages {string[]}
+     * @param errorMessages {Array.<string>}
      */
     addError(pathName, errorMessages) {
         this._errorMap[pathName] = errorMessages.map(msg => new ValidationError(msg));
     }
 
+    /**
+     * @returns {boolean}
+     */
     isEmpty() {
         return Object.keys(this._errorMap).length === 0
     }
