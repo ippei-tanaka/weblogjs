@@ -2,7 +2,7 @@ import validator from 'validator';
 import Schema from './schema';
 
 
-const categorySchema = new Schema('category', {
+const schema = new Schema('category', {
 
     name: {
         sanitize: (value) => {
@@ -11,6 +11,11 @@ const categorySchema = new Schema('category', {
 
         validate: (value) => {
             const messages = [];
+
+            if (!value) {
+                messages.push('A name is required.');
+                return messages;
+            }
 
             if (!validator.isLength(value, {min:1, max: 200})) {
                 messages.push('A name should be between 1 and 200 characters.');
@@ -34,6 +39,11 @@ const categorySchema = new Schema('category', {
         validate: (value) => {
             const messages = [];
 
+            if (!value) {
+                messages.push('A slug is required.');
+                return messages;
+            }
+
             if (!validator.isLength(value, {min:1, max: 200})) {
                 messages.push('A slug should be between 1 and 200 characters.');
             }
@@ -48,4 +58,4 @@ const categorySchema = new Schema('category', {
 
 });
 
-export default categorySchema;
+export default schema;
