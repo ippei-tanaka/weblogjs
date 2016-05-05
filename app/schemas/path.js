@@ -44,6 +44,13 @@ export default class Path {
     }
 
     /**
+     * @returns {boolean}
+     */
+    get isExcluded () {
+        return !!this._path.excluded;
+    }
+
+    /**
      * @param value
      * @returns {{cleanValue: *, errors: Array.<string>}}
      */
