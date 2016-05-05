@@ -313,8 +313,10 @@ export default class RestfulApiRouter {
     constructor({basePath, dbClient}) {
         this._basePath = basePath;
 
-        const router = new Router();
-        this._router = addRoutesForCrudOperations("category", router, dbClient);
+        let router = new Router();
+        router = addRoutesForCrudOperations("blog", router, dbClient);
+        router = addRoutesForCrudOperations("category", router, dbClient);
+        this._router = router
     }
 
     get basePath() {

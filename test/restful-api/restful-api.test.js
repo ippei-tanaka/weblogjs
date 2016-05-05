@@ -24,6 +24,12 @@ const testCategory = Object.freeze({
     "slug": "oh-my-category"
 });
 
+const testBlog = Object.freeze({
+    "name": "My Blog",
+    "slug": "my-blog",
+    "posts_per_page": 5
+});
+
 const BASE_URL = `http://${configFile.web_server_host}:${configFile.web_server_port}${configFile.restful_api_root}`;
 
 const weblogJs = new WeblogJS({
@@ -185,8 +191,8 @@ describe('Restful API', function() {
                 expect(category.name).to.equal(testCategory.name);
                 expect(category.slug).to.equal(testCategory.slug);
                 done();
-            }).catch((err) => {
-                //console.error(err);
+            }).catch((e) => {
+                //console.error(e);
                 done(new Error());
             });
         });
@@ -220,7 +226,7 @@ describe('Restful API', function() {
                 });
                 done(new Error());
             }).catch((e) => {
-                console.log(e.body);
+                //console.log(e.body);
                 done();
             });
         });
@@ -233,7 +239,7 @@ describe('Restful API', function() {
                 });
                 done(new Error());
             }).catch((e) => {
-                console.log(e.body);
+                //console.log(e.body);
                 done();
             });
         });
@@ -268,7 +274,7 @@ describe('Restful API', function() {
                 yield httpRequest.put(`${BASE_URL}/categories/${id2}`, {slug: "foo"});
                 done(new Error());
             }).catch((e) => {
-                console.log(e.body);
+                //console.log(e.body);
                 done();
             });
         });
@@ -278,8 +284,8 @@ describe('Restful API', function() {
                 const cat = { name: "Fo o", slug: "fo o" };
                 yield httpRequest.post(`${BASE_URL}/categories`, cat);
                 done(new Error());
-            }).catch((err) => {
-                //console.log(err.body);
+            }).catch((e) => {
+                //console.log(e.body);
                 done();
             });
         });
@@ -306,8 +312,8 @@ describe('Restful API', function() {
                 expect(data1.items).to.have.length(2);
                 expect(data2.items).to.have.length(1);
                 done();
-            }).catch((err) => {
-                //console.error(err);
+            }).catch((e) => {
+                //console.error(e);
                 done(new Error());
             });
         });
@@ -336,8 +342,8 @@ describe('Restful API', function() {
                 var data = yield httpRequest.get(`${BASE_URL}/categories`);
                 expect(data.items).to.have.length(3);
                 done();
-            }).catch((err) => {
-                //console.error(err);
+            }).catch((e) => {
+                //console.error(e);
                 done(new Error());
             });
         });
@@ -350,8 +356,178 @@ describe('Restful API', function() {
                 expect(retreivedCategory.name).to.equal(testCategory.name);
                 expect(retreivedCategory.slug).to.equal(testCategory.slug);
                 done();
-            }).catch((err) => {
-                //console.error(err);
+            }).catch((e) => {
+                //console.error(e);
+                done(new Error());
+            });
+        });
+
+    });
+
+    describe('/blogs', () => {
+
+        it('should create a new blog', (done) => {
+            co(function* () {
+                const { _id } = yield httpRequest.post(`${BASE_URL}/blogs`, testBlog);
+                const blog = yield httpRequest.get(`${BASE_URL}/blogs/${_id}`);
+                expect(blog._id).to.be.string;
+                expect(blog.name).to.equal(testBlog.name);
+                expect(blog.slug).to.equal(testBlog.slug);
+                expect(blog.posts_per_page).to.equal(testBlog.posts_per_page);
+                done();
+            }).catch((e) => {
+                //console.error(e);
+                done(new Error());
+            });
+        });
+
+        it('should not create a new blog when the slug is duplicated', (done) => {
+
+            const blog1 = {
+                name: 'Here My Blog 1',
+                slug: 'heremyblog',
+                posts_per_page: 10
+            };
+
+            const blog2 = {
+                name: 'Here My Blog 2',
+                slug: 'heremyblog',
+                posts_per_page: 3
+            };
+
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/blogs`, blog1);
+                yield httpRequest.post(`${BASE_URL}/blogs`, blog2);
+                done(new Error());
+            }).catch((e) => {
+                //console.log(e.body);
+                done();
+            });
+        });
+
+        it('should not create a new blog if the posted object has an empty value for a required field.', (done) => {
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/blogs`, {
+                    name : 'Happy Blog',
+                    slug: 'happy-blog'
+                });
+                done(new Error());
+            }).catch((e) => {
+                //console.log(e.body);
+                done();
+            });
+        });
+
+        it('should not create a new blog if the posted object has an invalid value.', (done) => {
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/blogs`, {
+                    name : '123456789',
+                    slug: 'd d',
+                    posts_per_page: 12
+                });
+                done(new Error());
+            }).catch((e) => {
+                //console.log(e.body);
+                done();
+            });
+        });
+
+        it('should update a blog', (done) => {
+            co(function* () {
+                const { _id } = yield httpRequest.post(`${BASE_URL}/blogs`, testBlog);
+                const data1 = yield httpRequest.get(`${BASE_URL}/blogs/${_id}`);
+                yield httpRequest.put(`${BASE_URL}/blogs/${_id}`, {
+                    name: "Hello World",
+                    slug: "hello-world",
+                    posts_per_page: 5
+                });
+                const data2 = yield httpRequest.get(`${BASE_URL}/blogs/${_id}`);
+
+                expect(data1.name).to.equal(testBlog.name);
+                expect(data1.slug).to.equal(testBlog.slug);
+                expect(data2.name).to.equal("Hello World");
+                expect(data2.slug).to.equal("hello-world");
+                done();
+            }).catch((e) => {
+                //console.log(e.body);
+                done(new Error());
+            });
+        });
+
+        it('should not update a blog when the slug is duplicated.', (done) => {
+            co(function* () {
+                const blog1 = { name: "Foo", slug: "foo", posts_per_page: 1 };
+                const blog2 = { name: "Bar", slug: "bar", posts_per_page: 1 };
+                yield httpRequest.post(`${BASE_URL}/blogs`, blog1);
+                const id2 = (yield httpRequest.post(`${BASE_URL}/blogs`, blog2))._id;
+                yield httpRequest.put(`${BASE_URL}/blogs/${id2}`, {slug: "foo"});
+                done(new Error());
+            }).catch((e) => {
+                //console.log(e.body);
+                done();
+            });
+        });
+
+        it('should not update a blog if the posts_per_page is a negative number.', (done) => {
+            co(function* () {
+                const cat = { name: "Foo", slug: "foo", posts_per_page: -1 };
+                yield httpRequest.post(`${BASE_URL}/blogs`, cat);
+                done(new Error());
+            }).catch((e) => {
+                //console.log(e.body);
+                done();
+            });
+        });
+
+        it('should delete a blog', (done) => {
+            const blog1 = { name: "Foo", slug: "foo", posts_per_page: 1 };
+            const blog2 = { name: "Bar", slug: "bar", posts_per_page: 1 };
+
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/blogs`, blog1);
+                yield httpRequest.post(`${BASE_URL}/blogs`, blog2);
+                var data1 = yield httpRequest.get(`${BASE_URL}/blogs`);
+                yield httpRequest.del(`${BASE_URL}/blogs/${data1.items[0]._id}`);
+                var data2 = yield httpRequest.get(`${BASE_URL}/blogs`);
+
+                expect(data1.items).to.have.length(2);
+                expect(data2.items).to.have.length(1);
+                done();
+            }).catch((e) => {
+                //console.error(e);
+                done(new Error());
+            });
+        });
+
+        it('should return a list of blogs', (done) => {
+
+            const blog1 = { name: "Foo", slug: "foo", posts_per_page: 1 };
+            const blog2 = { name: "Bar", slug: "bar", posts_per_page: 1 };
+            const blog3 = { name: "Foo Bar", slug: "foobar", posts_per_page: 1 };
+
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/blogs`, blog1);
+                yield httpRequest.post(`${BASE_URL}/blogs`, blog2);
+                yield httpRequest.post(`${BASE_URL}/blogs`, blog3);
+                var data = yield httpRequest.get(`${BASE_URL}/blogs`);
+                expect(data.items).to.have.length(3);
+                done();
+            }).catch((e) => {
+                //console.error(e);
+                done(new Error());
+            });
+        });
+
+        it('should return a blog', (done) => {
+            co(function* () {
+                var createdBlog = yield httpRequest.post(`${BASE_URL}/blogs`, testBlog);
+                var retreivedBlog = yield  httpRequest.get(`${BASE_URL}/blogs/${createdBlog._id}`);
+                expect(retreivedBlog._id).to.equal(createdBlog._id);
+                expect(retreivedBlog.name).to.equal(testBlog.name);
+                expect(retreivedBlog.slug).to.equal(testBlog.slug);
+                done();
+            }).catch((e) => {
+                //console.error(e);
                 done(new Error());
             });
         });
