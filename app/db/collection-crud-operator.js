@@ -19,14 +19,14 @@ export default class CollectionCrudOperator {
     findMany(query) {
         return co(function* () {
             const collection = yield this._getCollection();
-            return yield collection.find(query, this._schema.projection).toArray();
+            return yield collection.find(query, this._schema.includedPaths).toArray();
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
     findOne(id) {
         return co(function* () {
             const collection = yield this._getCollection();
-            return yield collection.findOne({_id: new ObjectID(id)}, this._schema.projection);
+            return yield collection.findOne({_id: new ObjectID(id)}, this._schema.includedPaths);
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
