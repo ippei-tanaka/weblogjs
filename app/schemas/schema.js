@@ -32,7 +32,7 @@ export default class Schema {
     /**
      * @returns {{}}
      */
-    get projection () {
+    get includedPaths () {
         const obj = {};
 
         for (let path of this) {
