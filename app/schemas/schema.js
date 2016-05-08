@@ -32,16 +32,8 @@ export default class Schema {
     /**
      * @returns {{}}
      */
-    get includedPaths () {
-        const obj = {};
-
-        for (let path of this) {
-            if (!path.isExcluded) {
-                obj[path.name] = true;
-            }
-        }
-
-        return obj;
+    get projection () {
+        return {};
     }
 
     /**
@@ -62,10 +54,10 @@ export default class Schema {
 
         for (let path of this) {
             const value = doc[path.name];
-            const { cleanValue, errors } = path.examine(value);
+            const { cleanValue, errorMessages } = path.examine(value);
 
-            if (errors.length > 0) {
-                errorMap.addError(path.name, errors);
+            if (errorMessages.length > 0) {
+                errorMap.setError(path.name, errorMessages);
             } else {
                 cleanDoc[path.name] = cleanValue;
             }
@@ -76,5 +68,25 @@ export default class Schema {
         }
 
         return { cleanDoc, errorMap };
+    }
+
+    /**
+     * @param cleanDoc
+     * @param errorMap
+     * @returns {Promise.<{cleanDoc: *, errorMap: *}>}
+     */
+    preInsert({ cleanDoc, errorMap }) {
+        return Promise.resolve({ cleanDoc, errorMap });
+    }
+
+    /**
+     * @param oldDoc
+     * @param newValues
+     * @param cleanDoc
+     * @param errorMap
+     * @returns {Promise.<{cleanDoc: *, errorMap: *}>}
+     */
+    preUpdate ({ oldDoc, newValues, cleanDoc, errorMap }) {
+        return Promise.resolve({ cleanDoc, errorMap });
     }
 }
