@@ -1,5 +1,5 @@
 import validator from 'validator';
-import Schema from './schema';
+import Schema from './lib/schema';
 import co from 'co';
 import deepcopy from 'deepcopy';
 import bcrypt from 'bcrypt';
