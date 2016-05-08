@@ -2,6 +2,7 @@ import validator from 'validator';
 import Schema from './schema';
 import co from 'co';
 import deepcopy from 'deepcopy';
+import bcrypt from 'bcrypt';
 
 const paths = {
 
@@ -63,6 +64,30 @@ const paths = {
     }
 };
 
+const SALT_WORK_FACTOR = 10;
+
+const generateHash = (str) => new Promise ((resolve, reject) => {
+    bcrypt.genSalt(SALT_WORK_FACTOR, (error, salt) => {
+        if (error) return reject(error);
+
+        bcrypt.hash(str, salt, (error, hash) => {
+            if (error) return reject(error);
+            resolve(hash);
+        });
+    });
+});
+
+const compareHashedStrings = (string1, string2) => new Promise((resolve, reject) => {
+    bcrypt.compare(string1, string2, (error, isMatch) => {
+        if (error) return reject(error);
+        resolve(isMatch);
+    });
+});
+
+const HASHED_PASSWORD = "hashed_password";
+const OLD_PASSWORD = "old_password";
+const PASSWORD = "password";
+
 class UserSchema extends Schema {
 
     /**
@@ -92,8 +117,8 @@ class UserSchema extends Schema {
             const spr = yield superPreInsert({ cleanDoc, errorMap });
             const _cleanDoc = deepcopy(spr.cleanDoc);
 
-            _cleanDoc.hashed_password = "$$$$????";
-            delete _cleanDoc.password;
+            _cleanDoc[HASHED_PASSWORD] = yield generateHash(_cleanDoc[PASSWORD]);
+            delete _cleanDoc[PASSWORD];
 
             return {
                 cleanDoc: _cleanDoc,
@@ -112,10 +137,17 @@ class UserSchema extends Schema {
             const _cleanDoc = spr.cleanDoc;
             const _errorMap = spr.errorMap.clone();
 
-            if (!newValues.hasOwnProperty("password")) {
-                _errorMap.removeError("password");
-            } else if (!newValues.hasOwnProperty("old_password")) {
-                _errorMap.setError("password", ["Fddd!!!!"]);
+            if (!newValues.hasOwnProperty(PASSWORD)) {
+                _errorMap.removeError(PASSWORD);
+            } else if (!newValues.hasOwnProperty(OLD_PASSWORD)) {
+                _errorMap.setError(OLD_PASSWORD, ["To change the password, the current password has to be sent."]);
+            } else {
+                const result = yield compareHashedStrings(newValues[OLD_PASSWORD], oldDoc[HASHED_PASSWORD]);
+                if (result) {
+                    _cleanDoc[HASHED_PASSWORD] = yield generateHash(newValues[PASSWORD]);
+                } else {
+                    _errorMap.setError(OLD_PASSWORD, ["The current password sent is not correct."]);
+                }
             }
 
             return {

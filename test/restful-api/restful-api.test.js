@@ -242,6 +242,22 @@ describe('Restful API', function() {
                 done();
             });
         });
+
+        it("should update a user's password if their old password is sent", (done) => {
+            co(function* () {
+                const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+
+                yield httpRequest.put(`${BASE_URL}/users/${_id}`, {
+                    password: "NewPassword@@@",
+                    old_password: testUser.password
+                });
+
+                done();
+            }).catch((e) => {
+                console.error(e.body);
+                done(new Error());
+            });
+        });
     });
 
     describe('/categories', () => {
