@@ -1,4 +1,4 @@
-import { ValidationError } from '../errors';
+import { ValidationError } from '../../errors';
 import deepcopy from 'deepcopy';
 
 export default class ValidationErrorMap {

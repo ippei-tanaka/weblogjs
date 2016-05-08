@@ -1,6 +1,6 @@
 import co from 'co';
 import schemas from '../schemas';
-import ValidationErrorMap from '../schemas/validation-error-map';
+import ValidationErrorMap from '../schemas/lib/validation-error-map';
 import { DbError } from '../errors';
 import { MongoError, ObjectID } from 'mongodb';
 import pluralize from 'pluralize';
