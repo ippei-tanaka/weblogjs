@@ -1,5 +1,6 @@
 import ValidationErrorMap from './validation-error-map';
 import Path from './path';
+import deepcopy from 'deepcopy';
 
 /**
  * @class
@@ -71,22 +72,39 @@ export default class Schema {
     }
 
     /**
-     * @param cleanDoc
-     * @param errorMap
+     * @param {Object} [obj]
+     * @param {Object} obj.cleanDoc
+     * @param {ValidationErrorMap} obj.errorMap
      * @returns {Promise.<{cleanDoc: *, errorMap: *}>}
      */
     preInsert({ cleanDoc, errorMap }) {
-        return Promise.resolve({ cleanDoc, errorMap });
+        const _cleanDoc = deepcopy(cleanDoc);
+
+        _cleanDoc.created_date = new Date();
+        _cleanDoc.updated_date = null;
+
+        return Promise.resolve({
+            cleanDoc: _cleanDoc,
+            errorMap
+        });
     }
 
     /**
-     * @param oldDoc
-     * @param newValues
-     * @param cleanDoc
-     * @param errorMap
+     * @param {Object} [obj]
+     * @param {Object} obj.oldDoc
+     * @param {Object} obj.newValues
+     * @param {Object} obj.cleanDoc
+     * @param {ValidationErrorMap} obj.errorMap
      * @returns {Promise.<{cleanDoc: *, errorMap: *}>}
      */
     preUpdate ({ oldDoc, newValues, cleanDoc, errorMap }) {
-        return Promise.resolve({ cleanDoc, errorMap });
+        const _cleanDoc = deepcopy(cleanDoc);
+
+        _cleanDoc.updated_date = new Date();
+
+        return Promise.resolve({
+            cleanDoc: _cleanDoc,
+            errorMap
+        });
     }
 }

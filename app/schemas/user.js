@@ -1,6 +1,7 @@
 import validator from 'validator';
 import Schema from './schema';
 import co from 'co';
+import deepcopy from 'deepcopy';
 
 const paths = {
 
@@ -86,24 +87,42 @@ class UserSchema extends Schema {
      * @override
      */
     preInsert ({ cleanDoc, errorMap }) {
-        const _cleanDoc = Object.assign({}, cleanDoc);
+        const superPreInsert = super.preInsert;
+        return co(function* () {
+            const spr = yield superPreInsert({ cleanDoc, errorMap });
+            const _cleanDoc = deepcopy(spr.cleanDoc);
 
-        _cleanDoc.hashed_password = "$$$$????";
-        delete _cleanDoc.password;
+            _cleanDoc.hashed_password = "$$$$????";
+            delete _cleanDoc.password;
 
-        return Promise.resolve({ cleanDoc: _cleanDoc, errorMap });
+            return {
+                cleanDoc: _cleanDoc,
+                errorMap: spr.errorMap
+            };
+        });
     }
 
     /**
      * @override
      */
     preUpdate ({ oldDoc, newValues, cleanDoc, errorMap }) {
-        if (!newValues.hasOwnProperty("password")) {
-            errorMap.removeError("password");
-        } else if (!newValues.hasOwnProperty("old_password")) {
-            errorMap.setError("password", ["Fddd!!!!"]);
-        }
-        return Promise.resolve({ cleanDoc, errorMap });
+        const superPreUpdate = super.preUpdate;
+        return co(function* () {
+            const spr = yield superPreUpdate({ oldDoc, newValues, cleanDoc, errorMap });
+            const _cleanDoc = spr.cleanDoc;
+            const _errorMap = spr.errorMap.clone();
+
+            if (!newValues.hasOwnProperty("password")) {
+                _errorMap.removeError("password");
+            } else if (!newValues.hasOwnProperty("old_password")) {
+                _errorMap.setError("password", ["Fddd!!!!"]);
+            }
+
+            return {
+                cleanDoc: _cleanDoc,
+                errorMap: _errorMap
+            };
+        });
     }
 
 }

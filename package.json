@@ -51,6 +51,7 @@
     "classnames": "^2.2.1",
     "co": "^4.6.0",
     "cookie-parser": "^1.4.1",
+    "deepcopy": "^0.6.1",
     "express": "^4.13.3",
     "express-session": "^1.13.0",
     "flux": "^2.1.1",
