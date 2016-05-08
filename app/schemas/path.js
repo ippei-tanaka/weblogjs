@@ -44,29 +44,22 @@ export default class Path {
     }
 
     /**
-     * @returns {boolean}
-     */
-    get isExcluded () {
-        return !!this._path.excluded;
-    }
-
-    /**
      * @param value
-     * @returns {{cleanValue: *, errors: Array.<string>}}
+     * @returns {{cleanValue: *, errorMessages: Array.<string>}}
      */
     examine (value) {
         let cleanValue = null;
-        let errors = [];
+        let errorMessages = [];
 
         if (this.isRequired && this._checkIfEmpty(value)) {
-            errors.push(this.getRequiredErrorMessage());
-            return { cleanValue, errors };
+            errorMessages.push(this.getRequiredErrorMessage());
+            return { cleanValue, errorMessages };
         }
 
         cleanValue = this._sanitize(value);
-        errors = this._validate(cleanValue);
+        errorMessages = this._validate(cleanValue);
 
-        return { cleanValue, errors };
+        return { cleanValue, errorMessages };
     }
 
     /**

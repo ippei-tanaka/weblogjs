@@ -207,6 +207,41 @@ describe('Restful API', function() {
             });
         });
 
+        it("should update a user's display name", (done) => {
+            co(function* () {
+                const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+
+                let user = yield httpRequest.get(`${BASE_URL}/users/${_id}`);
+                expect(user["display_name"]).to.equal(testUser.display_name);
+
+                yield httpRequest.put(`${BASE_URL}/users/${_id}`, {
+                    display_name: "My new name"
+                });
+
+                user = yield httpRequest.get(`${BASE_URL}/users/${_id}`);
+                expect(user["display_name"]).to.equal("My new name");
+
+                done();
+            }).catch((e) => {
+                console.error(e.body);
+                done(new Error());
+            });
+        });
+
+        it("should not update a user's password unless their old password is sent", (done) => {
+            co(function* () {
+                const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+
+                yield httpRequest.put(`${BASE_URL}/users/${_id}`, {
+                    password: "NewPassword@@@"
+                });
+
+                done(new Error());
+            }).catch((e) => {
+                console.error(e.body);
+                done();
+            });
+        });
     });
 
     describe('/categories', () => {
@@ -264,20 +299,19 @@ describe('Restful API', function() {
             });
         });
 
-        it('should update a category', (done) => {
+        it('should partially update a category', (done) => {
             co(function* () {
                 const { _id } = yield httpRequest.post(`${BASE_URL}/categories`, testCategory);
                 const data1 = yield httpRequest.get(`${BASE_URL}/categories/${_id}`);
                 yield httpRequest.put(`${BASE_URL}/categories/${_id}`, {
-                    name: "Hello World",
-                    slug: "hello-world"
+                    name: "Hello World"
                 });
                 const data2 = yield httpRequest.get(`${BASE_URL}/categories/${_id}`);
 
                 expect(data1.name).to.equal(testCategory.name);
                 expect(data1.slug).to.equal(testCategory.slug);
                 expect(data2.name).to.equal("Hello World");
-                expect(data2.slug).to.equal("hello-world");
+                expect(data2.slug).to.equal(testCategory.slug);
                 done();
             }).catch((e) => {
                 //console.log(e.body);

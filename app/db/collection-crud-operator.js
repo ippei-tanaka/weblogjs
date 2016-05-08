@@ -19,30 +19,40 @@ export default class CollectionCrudOperator {
     findMany(query) {
         return co(function* () {
             const collection = yield this._getCollection();
-            return yield collection.find(query, this._schema.includedPaths).toArray();
+            return yield collection.find(query, this._schema.projection).toArray();
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
     findOne(id) {
         return co(function* () {
             const collection = yield this._getCollection();
-            return yield collection.findOne({_id: new ObjectID(id)}, this._schema.includedPaths);
+            return yield collection.findOne({_id: new ObjectID(id)}, this._schema.projection);
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
     insertOne(doc) {
         return co(function* () {
             const collection = yield this._getCollection();
-            const { cleanDoc, errorMap } = this._schema.examine(doc);
+            const result = this._schema.examine(doc);
+            const { cleanDoc, errorMap } = yield this._schema.preInsert(result);
             if (!errorMap.isEmpty()) throw errorMap;
             return yield collection.insertOne(cleanDoc);
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    updateOne(id, doc) {
+    updateOne(id, values) {
         return co(function* () {
             const collection = yield this._getCollection();
-            const { cleanDoc, errorMap } = this._schema.examine(doc);
+            const oldDoc = yield collection.findOne({_id: new ObjectID(id)});
+            const oldDocForMerge = yield collection.findOne({_id: new ObjectID(id)}, this._schema.projection);
+            const mergedDoc = Object.assign({}, oldDocForMerge, values);
+            const result = this._schema.examine(mergedDoc);
+            const { cleanDoc, errorMap } = yield this._schema.preUpdate({
+                oldDoc,
+                newValues: values,
+                cleanDoc: result.cleanDoc,
+                errorMap: result.errorMap
+            });
             if (!errorMap.isEmpty()) throw errorMap;
             return yield collection.updateOne(
                 {_id: new ObjectID(id)},
@@ -68,7 +78,7 @@ export default class CollectionCrudOperator {
             const pathName = match[1];
             const value = match[2];
             const errorMap = new ValidationErrorMap();
-            errorMap.addError(pathName, [this._schema.getPath(pathName).getUniqueErrorMessage(value)]);
+            errorMap.setError(pathName, [this._schema.getPath(pathName).getUniqueErrorMessage(value)]);
             throw errorMap;
         }
 

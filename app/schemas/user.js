@@ -1,8 +1,8 @@
 import validator from 'validator';
 import Schema from './schema';
+import co from 'co';
 
-
-const schema = new Schema('user', {
+const paths = {
 
     email: {
         unique: true,
@@ -17,7 +17,6 @@ const schema = new Schema('user', {
 
     password: {
         required: true,
-        excluded: true,
         sanitize: (value) => String(value).trim(),
         validate: function* (value) {
             const range = {min:8, max: 16};
@@ -61,6 +60,52 @@ const schema = new Schema('user', {
             }
         }
     }
-});
+};
 
-export default schema;
+class UserSchema extends Schema {
+
+    /**
+     * @override
+     */
+    constructor () {
+        super('user', paths);
+    }
+
+    /**
+     * @override
+     */
+    get projection () {
+        return {
+            email: true,
+            display_name: true,
+            slug: true
+        };
+    }
+
+    /**
+     * @override
+     */
+    preInsert ({ cleanDoc, errorMap }) {
+        const _cleanDoc = Object.assign({}, cleanDoc);
+
+        _cleanDoc.hashed_password = "$$$$????";
+        delete _cleanDoc.password;
+
+        return Promise.resolve({ cleanDoc: _cleanDoc, errorMap });
+    }
+
+    /**
+     * @override
+     */
+    preUpdate ({ oldDoc, newValues, cleanDoc, errorMap }) {
+        if (!newValues.hasOwnProperty("password")) {
+            errorMap.removeError("password");
+        } else if (!newValues.hasOwnProperty("old_password")) {
+            errorMap.setError("password", ["Fddd!!!!"]);
+        }
+        return Promise.resolve({ cleanDoc, errorMap });
+    }
+
+}
+
+export default new UserSchema();
