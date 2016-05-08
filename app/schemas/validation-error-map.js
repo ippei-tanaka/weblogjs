@@ -1,9 +1,10 @@
 import { ValidationError } from '../errors';
+import deepcopy from 'deepcopy';
 
 export default class ValidationErrorMap {
 
-    constructor() {
-        this._errorMap = {};
+    constructor(map = {}) {
+        this._errorMap = map;
     }
 
     /**
@@ -14,8 +15,18 @@ export default class ValidationErrorMap {
         this._errorMap[pathName] = errorMessages.map(msg => new ValidationError(msg));
     }
 
+    /**
+     * @param pathName
+     */
     removeError (pathName) {
         delete this._errorMap[pathName];
+    }
+
+    /**
+     * @returns {ValidationErrorMap}
+     */
+    clone () {
+        return new ValidationErrorMap(deepcopy(this._errorMap));
     }
 
     /**
