@@ -10,7 +10,7 @@ export default class Path {
      * @private
      */
     static _defaultRequiredErrorMessage () {
-        return `A ${this.name} is required.`;
+        return `A ${this.displayName} is required.`;
     }
 
     /**
@@ -19,7 +19,7 @@ export default class Path {
      * @private
      */
     static _defaultUniqueErrorMessage (value) {
-        return `The ${this.name}, "${value}", has already been taken.`;
+        return `The ${this.displayName}, "${value}", has already been taken.`;
     }
 
     /**
@@ -27,6 +27,13 @@ export default class Path {
      */
     get name () {
         return this._name;
+    }
+
+    /**
+     * @returns {string}
+     */
+    get displayName () {
+        return this._path.display_name || this.name;
     }
 
     /**

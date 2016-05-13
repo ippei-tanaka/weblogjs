@@ -42,15 +42,34 @@ const schema = new Schema('post', {
         }
     },
 
-    author: {
-        required: true,
+    author_id: {
+        display_name: "author ID",
         sanitize: objectIDfy,
         validate: function* (value) {
             if (!value) {
                 yield `"${value}" is an invalid ID.`
             }
-        },
-        reference: "user._id"
+        }
+    },
+
+    category_id: {
+        display_name: "category ID",
+        sanitize: objectIDfy,
+        validate: function* (value) {
+            if (!value) {
+                yield `"${value}" is an invalid ID.`
+            }
+        }
+    },
+
+    blog_id: {
+        display_name: "blog ID",
+        sanitize: objectIDfy,
+        validate: function* (value) {
+            if (!value) {
+                yield `"${value}" is an invalid ID.`
+            }
+        }
     }
 
 });

@@ -33,6 +33,7 @@ const paths = {
     },
 
     display_name: {
+        display_name: "display name",
         required: true,
         sanitize: (value) => String(value).trim(),
         validate: function* (value) {
