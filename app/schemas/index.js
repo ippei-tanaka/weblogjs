@@ -2,6 +2,7 @@ import co from 'co';
 import user from './user';
 import category from './category';
 import blog from './blog';
+import post from './post';
 
 /**
  * @type {Object.<string, WeblogJs_Schema>}
@@ -9,7 +10,8 @@ import blog from './blog';
 const schemas = {
     [user.name]: user,
     [category.name]: category,
-    [blog.name]: blog
+    [blog.name]: blog,
+    [post.name]: post
 };
 
 class Schemas {
