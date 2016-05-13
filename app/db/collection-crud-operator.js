@@ -19,31 +19,14 @@ export default class CollectionCrudOperator {
     findMany(query) {
         return co(function* () {
             const collection = yield this._getCollection();
-            const docs = yield collection.find(query, this._schema.projection).toArray();
-            return docs;
+            return yield collection.find(query, this._schema.projection).toArray();
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
     findOne(query) {
         return co(function* () {
             const collection = yield this._getCollection();
-            const doc = yield collection.findOne(query, this._schema.projection);
-
-            for (let path of this._schema.referringPaths) {
-                const ref = path.reference;
-                if (doc.hasOwnProperty(ref.pathName)) {
-                    const crudOperator = new CollectionCrudOperator({
-                        schemaName: ref.schemaName,
-                        dbClient: this._dbClient
-                    });
-                    const referredItem = yield crudOperator.findOne({
-                        [ref.pathName]: doc[path.name]
-                    });
-                    doc[path.name] = referredItem;
-                }
-            }
-
-            return doc;
+            return yield collection.findOne(query, this._schema.projection);
         }.bind(this)).catch(this._filterError.bind(this));
     }
 

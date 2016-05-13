@@ -37,16 +37,6 @@ export default class Schema {
         return {};
     }
 
-    get referringPaths () {
-        return (function* () {
-            for (let path of this) {
-                if (path.isReference) {
-                    yield path;
-                }
-            }
-        }.bind(this))();
-    }
-
     /**
      * @param pathName {string}
      * @returns {Path}
