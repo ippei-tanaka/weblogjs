@@ -165,7 +165,7 @@ const successHandler = (response, obj, code = 200) => {
 const errorHandler = (response, code = 400) => {
     return error => {
         //console.log(error);
-        if (error && error.stack) console.error(error.stack);
+        //if (error && error.stack) console.error(error.stack);
         response.type('json').status(code).json(error);
     }
 };
@@ -186,22 +186,22 @@ const addRoutesForCrudOperations = (schemaName, router, dbClient) => {
     }).catch(errorHandler(response)));
 
     router.get(`/${pathName}/:id`, isLoggedIn, (request, response) => co(function* () {
-        const item = yield operator.findOne(request.params.id);
+        const item = yield operator.findOneById(request.params.id);
         successHandler(response, item);
     }).catch(errorHandler(response)));
 
     router.post(`/${pathName}`, isLoggedIn, (request, response) => co(function* () {
-        const item = yield operator.insertOne(request.body);
+        const item = yield operator.insertOneById(request.body);
         successHandler(response, {_id: item.insertedId});
     }).catch(errorHandler(response)));
 
     router.put(`/${pathName}/:id`, isLoggedIn, (request, response) => co(function* () {
-        yield operator.updateOne(request.params.id, request.body);
+        yield operator.updateOneById(request.params.id, request.body);
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
     router.delete(`/${pathName}/:id`, isLoggedIn, (request, response) => co(function* () {
-        yield operator.deleteOne(request.params.id);
+        yield operator.deleteOneById(request.params.id);
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
@@ -317,6 +317,7 @@ export default class RestfulApiRouter {
         router = addRoutesForCrudOperations("user", router, dbClient);
         router = addRoutesForCrudOperations("category", router, dbClient);
         router = addRoutesForCrudOperations("blog", router, dbClient);
+        router = addRoutesForCrudOperations("post", router, dbClient);
         this._router = router
     }
 

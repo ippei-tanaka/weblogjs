@@ -19,18 +19,39 @@ export default class CollectionCrudOperator {
     findMany(query) {
         return co(function* () {
             const collection = yield this._getCollection();
-            return yield collection.find(query, this._schema.projection).toArray();
+            const docs = yield collection.find(query, this._schema.projection).toArray();
+            return docs;
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    findOne(id) {
+    findOne(query) {
         return co(function* () {
             const collection = yield this._getCollection();
-            return yield collection.findOne({_id: new ObjectID(id)}, this._schema.projection);
+            const doc = yield collection.findOne(query, this._schema.projection);
+
+            for (let path of this._schema.referringPaths) {
+                const ref = path.reference;
+                if (doc.hasOwnProperty(ref.pathName)) {
+                    const crudOperator = new CollectionCrudOperator({
+                        schemaName: ref.schemaName,
+                        dbClient: this._dbClient
+                    });
+                    const referredItem = yield crudOperator.findOne({
+                        [ref.pathName]: doc[path.name]
+                    });
+                    doc[path.name] = referredItem;
+                }
+            }
+
+            return doc;
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    insertOne(doc) {
+    findOneById(id) {
+        return this.findOne({_id: new ObjectID(id)});
+    }
+
+    insertOneById(doc) {
         return co(function* () {
             const collection = yield this._getCollection();
             const result = this._schema.examine(doc);
@@ -40,7 +61,7 @@ export default class CollectionCrudOperator {
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    updateOne(id, values) {
+    updateOneById(id, values) {
         return co(function* () {
             const collection = yield this._getCollection();
             const oldDoc = yield collection.findOne({_id: new ObjectID(id)});
@@ -61,7 +82,7 @@ export default class CollectionCrudOperator {
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    deleteOne(id) {
+    deleteOneById(id) {
         return co(function* () {
             const collection = yield this._getCollection();
             return yield collection.deleteOne({_id: new ObjectID(id)});
