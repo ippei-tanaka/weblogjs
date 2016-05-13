@@ -604,37 +604,55 @@ describe('Restful API', function() {
 
         it('should create a new post', (done) => {
             co(function* () {
-                const { user, blog, category } = yield createEssentialData();
-                const { _id } = yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({}, testPost, {
-                    author: user._id
-                }));
+                const { _id } = yield httpRequest.post(`${BASE_URL}/posts`, testPost);
                 yield httpRequest.get(`${BASE_URL}/posts/${_id}`);
-
                 done();
             }).catch((e) => {
-                console.error(e.body);
+                console.error(e.body || e);
                 done(new Error());
             });
         });
 
         it('should return a post', (done) => {
             co(function* () {
-                const { user, blog, category } = yield createEssentialData();
-                const { _id } = yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({}, testPost, {
-                    author: user._id
-                }));
+                const { _id } = yield httpRequest.post(`${BASE_URL}/posts`, testPost);
+                const post = yield httpRequest.get(`${BASE_URL}/posts/${_id}`);
+                expect(post._id).to.equal(_id);
+                expect(post.title).to.equal(testPost.title);
+                expect(post.slug).to.equal(testPost.slug);
+                done();
+            }).catch((e) => {
+                console.error(e.body || e);
+                done(new Error());
+            });
+        });
+
+        /*
+        it('should return a list of posts', (done) => {
+            co(function* () {
+                const data1 = yield createEssentialData();
+                const data2 = yield createEssentialData();
+                const re = {
+                    author_id: data1.user._id,
+                    blog_id: data1.blog._id,
+                    category_id: data1.category._id
+                };
+                const { _id } = yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({}, testPost, ));
                 const post = yield httpRequest.get(`${BASE_URL}/posts/${_id}`);
 
                 expect(post._id).to.equal(_id);
                 expect(post.title).to.equal(testPost.title);
                 expect(post.slug).to.equal(testPost.slug);
-                expect(post.author).to.equal(user._id);
+                expect(post.author_id).to.equal(user._id);
+                expect(post.blog_id).to.equal(blog._id);
+                expect(post.category_id).to.equal(category._id);
                 done();
             }).catch((e) => {
                 console.error(e);
                 done(new Error());
             });
         });
+        */
 
         /*
         it('should not create a new blog when the slug is duplicated', (done) => {
