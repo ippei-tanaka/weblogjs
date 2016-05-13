@@ -628,7 +628,7 @@ describe('Restful API', function() {
                 expect(post._id).to.equal(_id);
                 expect(post.title).to.equal(testPost.title);
                 expect(post.slug).to.equal(testPost.slug);
-                expect(JSON.stringify(post.author)).to.equal(JSON.stringify(user));
+                expect(post.author).to.equal(user._id);
                 done();
             }).catch((e) => {
                 console.error(e);

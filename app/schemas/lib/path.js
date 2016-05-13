@@ -44,25 +44,6 @@ export default class Path {
     }
 
     /**
-     * @returns {boolean}
-     */
-    get isReference () {
-        return !!this._path.reference;
-    }
-
-    get reference () {
-        const reference = this._path.reference;
-
-        if (!reference) {
-            return null;
-        }
-
-        const [schemaName, pathName] = reference.split(".");
-
-        return {schemaName, pathName};
-    }
-
-    /**
      * @param value
      * @returns {{cleanValue: *, errorMessages: Array.<string>}}
      */
