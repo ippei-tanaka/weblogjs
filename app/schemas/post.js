@@ -1,6 +1,6 @@
 import validator from 'validator';
 import Schema from './lib/schema';
-import { ObjectID } from 'mongodb';
+import { objectIDfy } from './lib/sanitizers';
 
 const schema = new Schema('post', {
 
@@ -44,15 +44,7 @@ const schema = new Schema('post', {
 
     author: {
         required: true,
-        sanitize: (value) => {
-            let ID;
-            try {
-                ID = ObjectID(value)
-            } catch (e) {
-                return null;
-            }
-            return ID;
-        },
+        sanitize: objectIDfy,
         validate: function* (value) {
             if (!value) {
                 yield `"${value}" is an invalid ID.`
