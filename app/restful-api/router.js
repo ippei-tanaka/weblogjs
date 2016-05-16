@@ -170,6 +170,24 @@ const errorHandler = (response, code = 400) => {
     }
 };
 
+const parseParameters = (_url) => {
+    const obj = url.parse(_url, true);
+    const params = obj.query || {};
+
+    let query = {};
+    let sort = {};
+    let limit = 0;
+
+    try {
+        query = JSON.parse(params.query);
+        sort = JSON.parse(params.sort);
+        limit = Number.parseInt(params.limit);
+    } catch (error) {
+    }
+
+    return {query, sort, limit};
+};
+
 const addRoutesForCrudOperations = (schemaName, router, dbClient) => {
 
     const operator = new CollectionCrudOperator({
@@ -180,8 +198,8 @@ const addRoutesForCrudOperations = (schemaName, router, dbClient) => {
     const pathName = pluralize(schemaName);
 
     router.get(`/${pathName}`, isLoggedIn, (request, response) => co(function* () {
-        const { query } = url.parse(request.url, true);
-        const items = yield operator.findMany(query);
+        const { query, sort, limit } = parseParameters(request.url);
+        const items = yield operator.findMany(query, sort, limit);
         successHandler(response, {items: items});
     }).catch(errorHandler(response)));
 

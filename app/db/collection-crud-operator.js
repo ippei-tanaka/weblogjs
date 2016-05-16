@@ -16,10 +16,12 @@ export default class CollectionCrudOperator {
         this._collectionName = pluralize(schemaName);
     }
 
-    findMany(query) {
+    findMany(query = {}, sort = {}, limit = 0) {
         return co(function* () {
             const collection = yield this._getCollection();
-            return yield collection.find(query, this._schema.projection).toArray();
+            return yield collection
+                .find(query, this._schema.projection)
+                .sort(sort).limit(limit).toArray();
         }.bind(this)).catch(this._filterError.bind(this));
     }
 

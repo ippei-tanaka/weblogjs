@@ -592,14 +592,37 @@ describe('Restful API', function() {
 
     describe('/posts', () => {
 
-        const createEssentialData = () => co(function* () {
-            let result = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+        const createOptionalData = (prefix = "") => co(function* () {
+
+            let result = yield httpRequest.post(`${BASE_URL}/users`, {
+                email: `${prefix}test@test.com`,
+                password: "testtest",
+                slug: `${prefix}test-test`,
+                display_name: `${prefix}Test User`
+            });
+
             const user = yield httpRequest.get(`${BASE_URL}/users/${result._id}`);
-            result = yield httpRequest.post(`${BASE_URL}/blogs`, testBlog);
+
+            result = yield httpRequest.post(`${BASE_URL}/blogs`, {
+                name: `${prefix}Test Blog`,
+                slug: `${prefix}test-blog`,
+                posts_per_page: "5"
+            });
+
             const blog = yield httpRequest.get(`${BASE_URL}/blogs/${result._id}`);
-            result = yield httpRequest.post(`${BASE_URL}/categories`, testCategory);
+
+            result = yield httpRequest.post(`${BASE_URL}/categories`, {
+                name: `${prefix}Test Category`,
+                slug: `${prefix}test-category`
+            });
+
             const category = yield httpRequest.get(`${BASE_URL}/categories/${result._id}`);
-            return { user, blog, category };
+
+            return {
+                author_id: user._id,
+                blog_id: blog._id,
+                category_id: category._id
+            };
         });
 
         it('should create a new post', (done) => {
@@ -627,32 +650,88 @@ describe('Restful API', function() {
             });
         });
 
-        /*
         it('should return a list of posts', (done) => {
             co(function* () {
-                const data1 = yield createEssentialData();
-                const data2 = yield createEssentialData();
-                const re = {
-                    author_id: data1.user._id,
-                    blog_id: data1.blog._id,
-                    category_id: data1.category._id
-                };
-                const { _id } = yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({}, testPost, ));
-                const post = yield httpRequest.get(`${BASE_URL}/posts/${_id}`);
+                const options = yield createOptionalData();
+                yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({}, testPost, options, { slug: '1' }));
+                yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({}, testPost, options, { slug: '2' }));
+                yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({}, testPost, options, { slug: '3' }));
+                yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({}, testPost, options, { slug: '4' }));
+                yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({}, testPost, options, { slug: '5' }));
+                const json = yield httpRequest.get(`${BASE_URL}/posts/`);
+                const posts = json.items;
 
-                expect(post._id).to.equal(_id);
-                expect(post.title).to.equal(testPost.title);
-                expect(post.slug).to.equal(testPost.slug);
-                expect(post.author_id).to.equal(user._id);
-                expect(post.blog_id).to.equal(blog._id);
-                expect(post.category_id).to.equal(category._id);
+                expect(posts.length).to.equal(5);
+                let count = 1;
+
+                for (let post of posts) {
+                    expect(post._id).to.be.string;
+                    expect(post.title).to.equal(testPost.title);
+                    expect(post.slug).to.equal(String(count));
+                    expect(post.author_id).to.equal(options.author_id);
+                    expect(post.blog_id).to.equal(options.blog_id);
+                    expect(post.category_id).to.equal(options.category_id);
+                    count++;
+                }
+
                 done();
             }).catch((e) => {
-                console.error(e);
+                console.error(e.body || e);
                 done(new Error());
             });
         });
-        */
+
+        it('should return a filtered and sorted list of posts', (done) => {
+            co(function* () {
+                const options1 = yield createOptionalData(1);
+                const options2 = yield createOptionalData(2);
+
+                yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({
+                    title: "Intro to Javascript",
+                    slug: "intro-to-js",
+                    content: "Not Yet"
+                }, options1));
+
+                yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({
+                    title: "Questions about Life",
+                    slug: "questions",
+                    content: "I don't know!"
+                }, options2));
+
+                yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({
+                    title: "Favourite Food",
+                    slug: "favourite-food",
+                    content: "I like miso soup and beef stew."
+                }, options2));
+
+                let json = yield httpRequest.get(`${BASE_URL}/posts/?query={"slug":"questions"}`);
+                let posts = json.items;
+
+                expect(posts.length).to.equal(1);
+                expect(posts[0].title).to.equal("Questions about Life");
+
+                json = yield httpRequest.get(`${BASE_URL}/posts/?query={"slug":{"$in":["questions","intro-to-js"]}}&sort={"slug":-1}`);
+                posts = json.items;
+
+                expect(posts.length).to.equal(2);
+                expect(posts[0].title).to.equal("Questions about Life");
+                expect(posts[1].title).to.equal("Intro to Javascript");
+
+                /*
+                json = yield httpRequest.get(`${BASE_URL}/posts/?query={"author_id":"${options2.author_id}"}&sort={"slug":1}`);
+                posts = json.items;
+
+                expect(posts.length).to.equal(2);
+                expect(posts[0].title).to.equal("Favourite Food");
+                expect(posts[1].title).to.equal("Questions about Life");
+                */
+
+                done();
+            }).catch((e) => {
+                console.error(e.body || e);
+                done(new Error());
+            });
+        });
 
         /*
         it('should not create a new blog when the slug is duplicated', (done) => {
