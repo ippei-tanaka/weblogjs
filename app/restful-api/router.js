@@ -3,6 +3,7 @@ import url from 'url';
 import { Router } from 'express';
 import CollectionCrudOperator from '../db/collection-crud-operator';
 import pluralize from 'pluralize';
+import { SyntaxError } from '../errors';
 
 //var router = require('express').Router();
 //var url = require('url');
@@ -172,20 +173,64 @@ const errorHandler = (response, code = 400) => {
 
 const parseParameters = (_url) => {
     const obj = url.parse(_url, true);
-    const params = obj.query || {};
 
-    let query = {};
-    let sort = {};
-    let limit = 0;
+    const params = Object.assign({
+        query: "{}",
+        sort: "{}",
+        limit: "0",
+        skip: "0"
+    }, obj.query);
+
+    let query, sort, limit, skip;
 
     try {
         query = JSON.parse(params.query);
-        sort = JSON.parse(params.sort);
-        limit = Number.parseInt(params.limit);
+
+        if (typeof query !== "object")
+            throw null;
+
+        for (let key of Object.keys(query)) {
+            const val = query[key];
+            if (typeof val !== "string"
+                && typeof val !== "number") {
+                throw null;
+            }
+        }
     } catch (error) {
+        throw new SyntaxError("The query parameter is invalid.");
     }
 
-    return {query, sort, limit};
+    try {
+        sort = JSON.parse(params.sort);
+
+        if (typeof sort !== "object")
+            throw null;
+
+        for (let key of Object.keys(sort)) {
+            const val = sort[key];
+            if (val !== 1 && val !== -1) {
+                throw null;
+            }
+        }
+    } catch (error) {
+        throw new SyntaxError("THe sort parameter is invalid.");
+    }
+
+    try {
+        limit = Number.parseInt(params.limit);
+        if (Number.isNaN(limit)) throw null;
+    } catch (error) {
+        throw new SyntaxError("The limit parameter is invalid.");
+    }
+
+    try {
+        skip = Number.parseInt(params.skip);
+        if (Number.isNaN(skip)) throw null;
+    } catch (error) {
+        throw new SyntaxError("The offset parameter is invalid.");
+    }
+
+    return {query, sort, limit, skip};
 };
 
 const addRoutesForCrudOperations = (schemaName, router, dbClient) => {
@@ -198,28 +243,28 @@ const addRoutesForCrudOperations = (schemaName, router, dbClient) => {
     const pathName = pluralize(schemaName);
 
     router.get(`/${pathName}`, isLoggedIn, (request, response) => co(function* () {
-        const { query, sort, limit } = parseParameters(request.url);
-        const items = yield operator.findMany(query, sort, limit);
+        const { query, sort, limit, skip } = parseParameters(request.url);
+        const items = yield operator.findMany(query, sort, limit, skip);
         successHandler(response, {items: items});
     }).catch(errorHandler(response)));
 
     router.get(`/${pathName}/:id`, isLoggedIn, (request, response) => co(function* () {
-        const item = yield operator.findOneById(request.params.id);
+        const item = yield operator.findOne({_id: request.params.id});
         successHandler(response, item);
     }).catch(errorHandler(response)));
 
     router.post(`/${pathName}`, isLoggedIn, (request, response) => co(function* () {
-        const item = yield operator.insertOneById(request.body);
+        const item = yield operator.insertOne(request.body);
         successHandler(response, {_id: item.insertedId});
     }).catch(errorHandler(response)));
 
     router.put(`/${pathName}/:id`, isLoggedIn, (request, response) => co(function* () {
-        yield operator.updateOneById(request.params.id, request.body);
+        yield operator.updateOne({_id: request.params.id}, request.body);
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
     router.delete(`/${pathName}/:id`, isLoggedIn, (request, response) => co(function* () {
-        yield operator.deleteOneById(request.params.id);
+        yield operator.deleteOne({_id: request.params.id});
         successHandler(response, {});
     }).catch(errorHandler(response)));
 

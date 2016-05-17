@@ -1,3 +1,34 @@
+import { ObjectID } from 'mongodb';
+
+const TYPES = {
+    String: "string",
+    Integer: "Integer",
+    ObjectID: "ObjectID"
+};
+
+/**
+ * @returns {string}
+ */
+const requiredErrorDefaultMessage = function () {
+    return `A ${this.displayName} is required.`;
+};
+
+/**
+ * @param value
+ * @returns {string}
+ */
+const uniqueErrorDefaultMessage = function (value) {
+    return `The ${this.displayName}, "${value}", has already been taken.`;
+};
+
+/**
+ * @param value
+ * @returns {string}
+ */
+const typeErrorDefaultMessage = function (value) {
+    return `The ${this.displayName}, "${value}", is invalid.`;
+};
+
 export default class Path {
 
     constructor (name, path) {
@@ -5,21 +36,8 @@ export default class Path {
         this._path = path;
     }
 
-    /**
-     * @returns {string}
-     * @private
-     */
-    static _defaultRequiredErrorMessage () {
-        return `A ${this.displayName} is required.`;
-    }
-
-    /**
-     * @param value
-     * @returns {string}
-     * @private
-     */
-    static _defaultUniqueErrorMessage (value) {
-        return `The ${this.displayName}, "${value}", has already been taken.`;
+    static get Types () {
+        return TYPES;
     }
 
     /**
@@ -34,6 +52,13 @@ export default class Path {
      */
     get displayName () {
         return this._path.display_name || this.name;
+    }
+
+    /**
+     * @returns {string}
+     */
+    get type () {
+        return this._path.type;
     }
 
     /**
@@ -52,21 +77,34 @@ export default class Path {
 
     /**
      * @param value
-     * @returns {{cleanValue: *, errorMessages: Array.<string>}}
+     * @returns {*}
      */
     examine (value) {
-        let cleanValue = null;
-        let errorMessages = [];
-
         if (this.isRequired && this._checkIfEmpty(value)) {
-            errorMessages.push(this.getRequiredErrorMessage());
-            return { cleanValue, errorMessages };
+            throw [this.getRequiredErrorMessage()];
         }
 
-        cleanValue = this._sanitize(value);
-        errorMessages = this._validate(cleanValue);
+        return this._validate(this._sanitize(value));
+    }
 
-        return { cleanValue, errorMessages };
+    /**
+     * @param value
+     * @returns {*}
+     */
+    convertToType(value) {
+        try {
+            if (this.type === TYPES.Integer) {
+                const num = Number.parseInt(value);
+                if (Number.isNaN(num)) throw null;
+                return num;
+            } else if (this.type === TYPES.ObjectID) {
+                return ObjectID(value);
+            } else {
+                return String(value);
+            }
+        } catch (error) {
+            throw [typeErrorDefaultMessage.call(this, value)];
+        }
     }
 
     /**
@@ -76,7 +114,7 @@ export default class Path {
         if (typeof this._path.required === 'function') {
             return this._path.required.call(this);
         } else {
-            return Path._defaultRequiredErrorMessage.call(this);
+            return requiredErrorDefaultMessage.call(this);
         }
     }
 
@@ -88,7 +126,7 @@ export default class Path {
         if (typeof this._path.unique === 'function') {
             return this._path.unique.call(this, value);
         } else {
-            return Path._defaultUniqueErrorMessage.call(this, value);
+            return uniqueErrorDefaultMessage.call(this, value);
         }
     }
 
@@ -112,7 +150,7 @@ export default class Path {
 
     /**
      * @param value
-     * @returns {Array.<string>}
+     * @returns {*}
      * @private
      */
     _validate(value) {
@@ -126,6 +164,10 @@ export default class Path {
             }
         }
 
-        return messages;
+        if (messages.length > 0) {
+            throw messages;
+        }
+
+        return value;
     }
 }

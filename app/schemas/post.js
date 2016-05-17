@@ -1,12 +1,13 @@
 import validator from 'validator';
 import Schema from './lib/schema';
-import { objectIDfy } from './lib/sanitizers';
+import Path from './lib/path';
 
 const schema = new Schema('post', {
 
     title: {
         required: true,
-        sanitize: (value) => String(value).trim(),
+        type: Path.Types.String,
+        sanitize: (value) => value.trim(),
         validate: function* (value) {
             const range = {min:1, max: 200};
             if (!validator.isLength(value, range)) {
@@ -18,7 +19,8 @@ const schema = new Schema('post', {
     slug: {
         unique: true,
         required: true,
-        sanitize: (value) => String(value).trim(),
+        type: Path.Types.String,
+        sanitize: (value) => value.trim(),
         validate: function* (value) {
             const range = {min:1, max: 200};
             if (!validator.isLength(value, range)) {
@@ -33,7 +35,7 @@ const schema = new Schema('post', {
 
     content: {
         required: true,
-        sanitize: (value) => String(value).trim(),
+        type: Path.Types.String,
         validate: function* (value) {
             const range = {min:1, max: 30000};
             if (!validator.isLength(value, range)) {
@@ -44,7 +46,7 @@ const schema = new Schema('post', {
 
     author_id: {
         display_name: "author ID",
-        sanitize: objectIDfy,
+        type: Path.Types.ObjectID,
         validate: function* (value) {
             if (!value) {
                 yield `"${value}" is an invalid ID.`
@@ -54,7 +56,7 @@ const schema = new Schema('post', {
 
     category_id: {
         display_name: "category ID",
-        sanitize: objectIDfy,
+        type: Path.Types.ObjectID,
         validate: function* (value) {
             if (!value) {
                 yield `"${value}" is an invalid ID.`
@@ -64,7 +66,7 @@ const schema = new Schema('post', {
 
     blog_id: {
         display_name: "blog ID",
-        sanitize: objectIDfy,
+        type: Path.Types.ObjectID,
         validate: function* (value) {
             if (!value) {
                 yield `"${value}" is an invalid ID.`

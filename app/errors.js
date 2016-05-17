@@ -31,3 +31,9 @@ export let ValidationError = class WeblogJsValidationError extends WeblogJsError
         super(message);
     }
 };
+
+export let SyntaxError = class WeblogJsSyntaxError extends WeblogJsError {
+    constructor(message) {
+        super(message);
+    }
+};
