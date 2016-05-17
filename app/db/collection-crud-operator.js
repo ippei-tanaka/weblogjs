@@ -2,7 +2,7 @@ import co from 'co';
 import schemas from '../schemas';
 import ValidationErrorMap from '../schemas/lib/validation-error-map';
 import { DbError } from '../errors';
-import { MongoError, ObjectID } from 'mongodb';
+import { MongoError } from 'mongodb';
 import pluralize from 'pluralize';
 
 export default class CollectionCrudOperator {
@@ -16,61 +16,52 @@ export default class CollectionCrudOperator {
         this._collectionName = pluralize(schemaName);
     }
 
-    findMany(query = {}, sort = {}, limit = 0) {
+    findMany(query = {}, sort = {}, limit = 0, skip = 0) {
         return co(function* () {
             const collection = yield this._getCollection();
+            const _query = this._schema.convertToType(query);
             return yield collection
-                .find(query, this._schema.projection)
-                .sort(sort).limit(limit).toArray();
+                .find(_query, this._schema.projection)
+                .sort(sort)
+                .skip(skip)
+                .limit(limit).toArray();
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
     findOne(query) {
         return co(function* () {
             const collection = yield this._getCollection();
-            return yield collection.findOne(query, this._schema.projection);
+            const _query = this._schema.convertToType(query);
+            return yield collection.findOne(_query, this._schema.projection);
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    findOneById(id) {
-        return this.findOne({_id: new ObjectID(id)});
-    }
-
-    insertOneById(doc) {
+    insertOne(values) {
         return co(function* () {
             const collection = yield this._getCollection();
-            const result = this._schema.examine(doc);
-            const { cleanDoc, errorMap } = yield this._schema.preInsert(result);
-            if (!errorMap.isEmpty()) throw errorMap;
-            return yield collection.insertOne(cleanDoc);
+            const doc = yield this._schema.createDoc(values);
+            return yield collection.insertOne(doc);
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    updateOneById(id, values) {
+    updateOne(query, values) {
         return co(function* () {
             const collection = yield this._getCollection();
-            const oldDoc = yield collection.findOne({_id: new ObjectID(id)});
-            const oldDocForMerge = yield collection.findOne({_id: new ObjectID(id)}, this._schema.projection);
-            const mergedDoc = Object.assign({}, oldDocForMerge, values);
-            const result = this._schema.examine(mergedDoc);
-            const { cleanDoc, errorMap } = yield this._schema.preUpdate({
-                oldDoc,
-                newValues: values,
-                cleanDoc: result.cleanDoc,
-                errorMap: result.errorMap
-            });
-            if (!errorMap.isEmpty()) throw errorMap;
+            const _query = this._schema.convertToType(query);
+            const oldDoc = yield collection.findOne(_query);
+            const doc = yield this._schema.updateDoc(oldDoc, values);
             return yield collection.updateOne(
-                {_id: new ObjectID(id)},
-                {$set: cleanDoc}
+                _query,
+                {$set: doc}
             );
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    deleteOneById(id) {
+    deleteOne(query) {
         return co(function* () {
             const collection = yield this._getCollection();
-            return yield collection.deleteOne({_id: new ObjectID(id)});
+            const _query = this._schema.convertToType(query);
+            return yield collection.deleteOne(_query);
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
@@ -88,6 +79,7 @@ export default class CollectionCrudOperator {
             throw errorMap;
         }
 
+        console.log("_filterError:");
         console.error(error);
         throw new Error();
     }

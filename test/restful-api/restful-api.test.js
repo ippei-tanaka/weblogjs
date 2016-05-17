@@ -196,7 +196,7 @@ describe('Restful API', function() {
                 expect(user["_id"]).to.equal(_id);
                 done();
             }).catch((e) => {
-                console.error(e);
+                console.error(e.body || e);
                 done(new Error());
             });
         });
@@ -208,7 +208,7 @@ describe('Restful API', function() {
                 expect(user).to.not.have.property('password');
                 done();
             }).catch((e) => {
-                console.error(e);
+                console.error(e.body || e);
                 done(new Error());
             });
         });
@@ -229,7 +229,7 @@ describe('Restful API', function() {
 
                 done();
             }).catch((e) => {
-                console.error(e.body);
+                //console.error(e.body || e);
                 done(new Error());
             });
         });
@@ -244,7 +244,7 @@ describe('Restful API', function() {
 
                 done(new Error());
             }).catch((e) => {
-                //console.error(e.body);
+                //console.error(e.body || e);
                 done();
             });
         });
@@ -260,8 +260,24 @@ describe('Restful API', function() {
 
                 done();
             }).catch((e) => {
-                console.error(e.body);
+                //console.error(e.body || e);
                 done(new Error());
+            });
+        });
+
+        it("should not update a user's password if their old password is wrong", (done) => {
+            co(function* () {
+                const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+
+                yield httpRequest.put(`${BASE_URL}/users/${_id}`, {
+                    password: "NewPassword@@@",
+                    old_password: "WrongPassword"
+                });
+
+                done(new Error());
+            }).catch((e) => {
+                //console.error(e.body || e);
+                done();
             });
         });
     });
@@ -336,7 +352,7 @@ describe('Restful API', function() {
                 expect(data2.slug).to.equal(testCategory.slug);
                 done();
             }).catch((e) => {
-                //console.log(e.body);
+                console.log(e.body || e);
                 done(new Error());
             });
         });
@@ -704,12 +720,25 @@ describe('Restful API', function() {
                     content: "I like miso soup and beef stew."
                 }, options2));
 
+                yield httpRequest.post(`${BASE_URL}/posts`, Object.assign({
+                    title: "Abstract Food",
+                    slug: "abstract-food",
+                    content: "Diet Food"
+                }, options2));
+
                 let json = yield httpRequest.get(`${BASE_URL}/posts/?query={"slug":"questions"}`);
                 let posts = json.items;
 
                 expect(posts.length).to.equal(1);
                 expect(posts[0].title).to.equal("Questions about Life");
 
+                json = yield httpRequest.get(`${BASE_URL}/posts/?skip=1&limit=2&sort={"slug":1}`);
+                posts = json.items;
+
+                expect(posts.length).to.equal(2);
+                expect(posts[0].title).to.equal("Favourite Food");
+                expect(posts[1].title).to.equal("Intro to Javascript");
+                /*
                 json = yield httpRequest.get(`${BASE_URL}/posts/?query={"slug":{"$in":["questions","intro-to-js"]}}&sort={"slug":-1}`);
                 posts = json.items;
 
@@ -717,7 +746,6 @@ describe('Restful API', function() {
                 expect(posts[0].title).to.equal("Questions about Life");
                 expect(posts[1].title).to.equal("Intro to Javascript");
 
-                /*
                 json = yield httpRequest.get(`${BASE_URL}/posts/?query={"author_id":"${options2.author_id}"}&sort={"slug":1}`);
                 posts = json.items;
 

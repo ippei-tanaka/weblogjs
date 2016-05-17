@@ -1,6 +1,8 @@
 import ValidationErrorMap from './validation-error-map';
 import Path from './path';
 import deepcopy from 'deepcopy';
+import { ObjectID } from 'mongodb';
+import co from 'co';
 
 /**
  * @class
@@ -8,7 +10,7 @@ import deepcopy from 'deepcopy';
  */
 export default class Schema {
 
-    constructor (name, paths) {
+    constructor(name, paths) {
         this._name = name;
         this._paths = {};
 
@@ -26,14 +28,14 @@ export default class Schema {
     /**
      * @returns {string}
      */
-    get name () {
+    get name() {
         return this._name;
     }
 
     /**
      * @returns {{}}
      */
-    get projection () {
+    get projection() {
         return {};
     }
 
@@ -41,70 +43,128 @@ export default class Schema {
      * @param pathName {string}
      * @returns {Path}
      */
-    getPath (pathName) {
+    getPath(pathName) {
         return this._paths[pathName];
     }
 
-    /**
-     * @param doc
-     * @returns {{cleanDoc: {}, errorMap: ValidationErrorMap}}
-     */
-    examine (doc) {
-        const cleanDoc = {};
-        let errorMap = new ValidationErrorMap();
+    createDoc(values) {
+        return co(function* () {
+            let _values = {};
 
-        for (let path of this) {
-            const value = doc[path.name];
-            const { cleanValue, errorMessages } = path.examine(value);
+            for (let path of this) {
+                _values[path.name] = values[path.name];
+            }
 
-            if (errorMessages.length > 0) {
-                errorMap.setError(path.name, errorMessages);
-            } else {
-                cleanDoc[path.name] = cleanValue;
+            return yield this._preInsert(this._examine(_values));
+
+        }.bind(this)).catch(errorMap => {
+            throw new ValidationErrorMap(errorMap);
+        });
+    }
+
+    updateDoc(oldDoc, newValues) {
+        return co(function* () {
+            let _values = {};
+
+            for (let pathName of Object.keys(newValues)) {
+                let path = this.getPath(pathName);
+
+                if (!path) continue;
+
+                _values[path.name] = newValues[path.name];
+            }
+
+            return yield this._preUpdate(oldDoc, newValues, this._examine(_values));
+
+        }.bind(this)).catch(errorMap => {
+            throw new ValidationErrorMap(errorMap);
+        });
+    }
+
+    convertToType(obj) {
+        try {
+            return this._convertToType(obj);
+        } catch (errorMap) {
+            throw new ValidationErrorMap(errorMap);
+        }
+    }
+
+    _examine(values) {
+        const doc = {};
+        let convertedValues;
+        let errors = {};
+
+        try {
+            convertedValues = this._convertToType(values);
+        } catch (_errors) {
+            errors = Object.assign({}, errors, _errors);
+        }
+
+        for (let pathName of Object.keys(convertedValues)) {
+            let path = this.getPath(pathName);
+
+            if (!path) continue;
+
+            try {
+                doc[path.name] = path.examine(convertedValues[path.name]);
+            } catch (errorMessages) {
+                errors[path.name] = errorMessages;
             }
         }
 
-        if (doc._id) {
-            cleanDoc._id = doc._id;
+        if (values._id) {
+            doc._id = values._id;
         }
 
-        return { cleanDoc, errorMap };
+        if (Object.keys(errors).length > 0) {
+            throw errors;
+        }
+
+        return doc;
     }
 
-    /**
-     * @param {Object} [obj]
-     * @param {Object} obj.cleanDoc
-     * @param {ValidationErrorMap} obj.errorMap
-     * @returns {Promise.<{cleanDoc: *, errorMap: *}>}
-     */
-    preInsert({ cleanDoc, errorMap }) {
-        const _cleanDoc = deepcopy(cleanDoc);
+    _convertToType(values) {
+        const convertedValues = {};
+        let errors = {};
 
-        _cleanDoc.created_date = new Date();
-        _cleanDoc.updated_date = null;
+        for (let pathName of Object.keys(values)) {
+            let path = this.getPath(pathName);
 
-        return Promise.resolve({
-            cleanDoc: _cleanDoc,
-            errorMap
-        });
+            if (!path) continue;
+
+            try {
+                convertedValues[path.name] = path.convertToType(values[path.name]);
+            } catch (errorMessages) {
+                errors[path.name] = errorMessages;
+            }
+        }
+
+        // TODO check if doc._id is valid
+        if (values._id) {
+            convertedValues._id = new ObjectID(values._id);
+        }
+
+        if (Object.keys(errors).length > 0) {
+            throw errors;
+        }
+
+        return convertedValues;
     }
 
-    /**
-     * @param {Object} [obj]
-     * @param {Object} obj.oldDoc
-     * @param {Object} obj.newValues
-     * @param {Object} obj.cleanDoc
-     * @param {ValidationErrorMap} obj.errorMap
-     * @returns {Promise.<{cleanDoc: *, errorMap: *}>}
-     */
-    preUpdate ({ oldDoc, newValues, cleanDoc, errorMap }) {
-        const _cleanDoc = deepcopy(cleanDoc);
+    _preInsert(doc) {
+        const _doc = deepcopy(doc);
 
-        _cleanDoc.updated_date = new Date();
+        _doc.created_date = new Date();
+        _doc.updated_date = null;
 
-        return Promise.resolve({
-            cleanDoc: _cleanDoc,
-            errorMap
-        });
+        return Promise.resolve(_doc);
+    }
+
+    _preUpdate(oldDoc, newValues, doc) {
+        const _doc = deepcopy(doc);
+
+        _doc.updated_date = new Date();
+
+        return Promise.resolve(_doc);
     }
 }

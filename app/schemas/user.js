@@ -3,12 +3,14 @@ import Schema from './lib/schema';
 import co from 'co';
 import deepcopy from 'deepcopy';
 import bcrypt from 'bcrypt';
+import Path from './lib/path';
 
 const paths = {
 
     email: {
         unique: true,
         required: true,
+        type: Path.Types.String,
         sanitize: (value) => validator.normalizeEmail(value),
         validate: function* (value) {
             if (!validator.isEmail(value)) {
@@ -19,7 +21,8 @@ const paths = {
 
     password: {
         required: true,
-        sanitize: (value) => String(value).trim(),
+        type: Path.Types.String,
+        sanitize: (value) => value.trim(),
         validate: function* (value) {
             const range = {min:8, max: 16};
             if (!validator.isLength(value, range)) {
@@ -35,7 +38,8 @@ const paths = {
     display_name: {
         display_name: "display name",
         required: true,
-        sanitize: (value) => String(value).trim(),
+        type: Path.Types.String,
+        sanitize: (value) => value.trim(),
         validate: function* (value) {
             const range = {min:1, max: 20};
             if (!validator.isLength(value, range)) {
@@ -51,7 +55,8 @@ const paths = {
     slug: {
         unique: true,
         required: true,
-        sanitize: (value) => String(value).trim(),
+        type: Path.Types.String,
+        sanitize: (value) => value.trim(),
         validate: function* (value) {
             const range = {min:1, max: 200};
             if (!validator.isLength(value, range)) {
@@ -112,49 +117,47 @@ class UserSchema extends Schema {
     /**
      * @override
      */
-    preInsert ({ cleanDoc, errorMap }) {
-        const superPreInsert = super.preInsert;
+    _preInsert (doc) {
+        const superPreInsert = super._preInsert.bind(this);
+
         return co(function* () {
-            const spr = yield superPreInsert({ cleanDoc, errorMap });
-            const _cleanDoc = deepcopy(spr.cleanDoc);
+            const _doc = deepcopy(yield superPreInsert(doc));
 
-            _cleanDoc[HASHED_PASSWORD] = yield generateHash(_cleanDoc[PASSWORD]);
-            delete _cleanDoc[PASSWORD];
+            _doc[HASHED_PASSWORD] = yield generateHash(_doc[PASSWORD]);
+            delete _doc[PASSWORD];
 
-            return {
-                cleanDoc: _cleanDoc,
-                errorMap: spr.errorMap
-            };
+            return _doc;
         });
     }
 
     /**
      * @override
      */
-    preUpdate ({ oldDoc, newValues, cleanDoc, errorMap }) {
-        const superPreUpdate = super.preUpdate;
-        return co(function* () {
-            const spr = yield superPreUpdate({ oldDoc, newValues, cleanDoc, errorMap });
-            const _cleanDoc = spr.cleanDoc;
-            const _errorMap = spr.errorMap.clone();
+    _preUpdate (oldDoc, newValues, doc) {
+        const superPreUpdate = super._preUpdate.bind(this);
 
-            if (!newValues.hasOwnProperty(PASSWORD)) {
-                _errorMap.removeError(PASSWORD);
-            } else if (!newValues.hasOwnProperty(OLD_PASSWORD)) {
-                _errorMap.setError(OLD_PASSWORD, ["To change the password, the current password has to be sent."]);
-            } else {
-                const result = yield compareHashedStrings(newValues[OLD_PASSWORD], oldDoc[HASHED_PASSWORD]);
-                if (result) {
-                    _cleanDoc[HASHED_PASSWORD] = yield generateHash(newValues[PASSWORD]);
+        return co(function* () {
+            const _doc = deepcopy(yield superPreUpdate(oldDoc, newValues, doc));
+            const errors = {};
+
+            if (newValues.hasOwnProperty(PASSWORD)) {
+                if (!newValues.hasOwnProperty(OLD_PASSWORD)) {
+                    errors[OLD_PASSWORD] = ["To change the password, the current password has to be sent."];
                 } else {
-                    _errorMap.setError(OLD_PASSWORD, ["The current password sent is not correct."]);
+                    const result = yield compareHashedStrings(newValues[OLD_PASSWORD], oldDoc[HASHED_PASSWORD]);
+                    if (result) {
+                        _doc[HASHED_PASSWORD] = yield generateHash(newValues[PASSWORD]);
+                    } else {
+                        errors[OLD_PASSWORD] = ["The current password sent is not correct."];
+                    }
                 }
             }
 
-            return {
-                cleanDoc: _cleanDoc,
-                errorMap: _errorMap
-            };
+            if (Object.keys(errors).length > 0) {
+                throw errors;
+            }
+
+            return _doc;
         });
     }
 
