@@ -9,6 +9,7 @@ import DbClient from './db/db-client';
 import DbSettingOperator from './db/db-setting-operator';
 import CollectionCrudOperator from './db/collection-crud-operator';
 import PassportManager from './passport-manager';
+import Schema from './schemas';
 
 class WeblogJS {
 
@@ -69,7 +70,10 @@ class WeblogJS {
     }
 
     createUser (user) {
-        return this._userOperator.insertOne(user);
+        return co(function* () {
+            const doc = yield Schema.getSchema('user').createDoc(user);
+            return yield this._userOperator.insertOne(doc);
+        }.bind(this));
     }
 }
 

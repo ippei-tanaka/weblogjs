@@ -1,9 +1,6 @@
 import co from 'co';
-//import schemas from '../schemas';
-//import ValidationErrorMap from '../schemas/lib/validation-error-map';
 import { UniqueIndexDbError } from '../errors';
 import { MongoError } from 'mongodb';
-//import pluralize from 'pluralize';
 import DbClient from './db-client';
 
 export default class CollectionCrudOperator {
@@ -12,14 +9,12 @@ export default class CollectionCrudOperator {
      * @param dbClient {DbClient}
      */
     constructor({collectionName}) {
-        //this._schema = schemas.getSchema(schemaName);
-        this._collectionName = collectionName;//pluralize(schemaName);
+        this._collectionName = collectionName;
     }
 
     findMany(query = {}, sort = {}, limit = 0, skip = 0, projection = {}) {
         return co(function* () {
             const collection = yield this._getCollection();
-            //const _query = this._schema.convertToType(query);
             return yield collection
                 .find(query, projection)
                 .sort(sort)
@@ -31,7 +26,6 @@ export default class CollectionCrudOperator {
     findOne(query = {}, projection = {}) {
         return co(function* () {
             const collection = yield this._getCollection();
-            //const _query = this._schema.convertToType(query);
             return yield collection.findOne(query, projection);
         }.bind(this)).catch(this._filterError.bind(this));
     }
@@ -39,7 +33,6 @@ export default class CollectionCrudOperator {
     insertOne(values) {
         return co(function* () {
             const collection = yield this._getCollection();
-            //const doc = yield this._schema.createDoc(values);
             return yield collection.insertOne(values);
         }.bind(this)).catch(this._filterError.bind(this));
     }
@@ -47,9 +40,6 @@ export default class CollectionCrudOperator {
     updateOne(query, values) {
         return co(function* () {
             const collection = yield this._getCollection();
-            //const _query = this._schema.convertToType(query);
-            const oldDoc = yield collection.findOne(query);
-            //const doc = yield this._schema.updateDoc(oldDoc, values);
             return yield collection.updateOne(
                 query,
                 {$set: values}
@@ -60,7 +50,6 @@ export default class CollectionCrudOperator {
     deleteOne(query) {
         return co(function* () {
             const collection = yield this._getCollection();
-            //const _query = this._schema.convertToType(query);
             return yield collection.deleteOne(query);
         }.bind(this)).catch(this._filterError.bind(this));
     }
