@@ -1,6 +1,4 @@
 import co from 'co';
-import { UniqueIndexDbError } from '../errors';
-import { MongoError } from 'mongodb';
 import DbClient from './db-client';
 
 export default class CollectionCrudOperator {
@@ -17,21 +15,21 @@ export default class CollectionCrudOperator {
                 .sort(sort)
                 .skip(skip)
                 .limit(limit).toArray();
-        }.bind(this)).catch(this._filterError.bind(this));
+        }.bind(this));
     }
 
     findOne(query = {}, projection = {}) {
         return co(function* () {
             const collection = yield this._getCollection();
             return yield collection.findOne(query, projection);
-        }.bind(this)).catch(this._filterError.bind(this));
+        }.bind(this));
     }
 
     insertOne(values) {
         return co(function* () {
             const collection = yield this._getCollection();
             return yield collection.insertOne(values);
-        }.bind(this)).catch(this._filterError.bind(this));
+        }.bind(this));
     }
 
     updateOne(query, values) {
@@ -41,35 +39,14 @@ export default class CollectionCrudOperator {
                 query,
                 {$set: values}
             );
-        }.bind(this)).catch(this._filterError.bind(this));
+        }.bind(this));
     }
 
     deleteOne(query) {
         return co(function* () {
             const collection = yield this._getCollection();
             return yield collection.deleteOne(query);
-        }.bind(this)).catch(this._filterError.bind(this));
-    }
-
-    _filterError(error) {
-        /*
-        if (error instanceof ValidationErrorMap) {
-            throw error;
-        }
-        */
-
-        if (error instanceof MongoError && error.code === 11000) {
-            const match = error.message.match(/\s[\w.]+\$([\w]+)_\d+\s.+\{.+:\s"(.+)"\s\}/);
-            const pathName = match[1];
-            const value = match[2];
-            //const errorMap = new ValidationErrorMap();
-            //errorMap.setError(pathName, [this._schema.getPath(pathName).getUniqueErrorMessage(value)]);
-            throw new UniqueIndexDbError({pathName, value});
-        }
-
-        //console.log("_filterError:");
-        //console.error(error);
-        //throw new Error();
+        }.bind(this));
     }
 
     _getCollection() {
