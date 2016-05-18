@@ -1,11 +1,12 @@
 import co from 'co';
 import url from 'url';
 import { Router } from 'express';
-import CollectionCrudOperator from '../db/collection-crud-operator';
+//import CollectionCrudOperator from '../db/collection-crud-operator';
 import pluralize from 'pluralize';
 import { SyntaxError } from '../errors';
 import PassportManager from '../passport-manager';
-import Schemas from '../schemas';
+//import Schemas from '../schemas';
+import ModelOperator from '../model/model-operator';
 
 /*
 //-------------------------------------------------------
@@ -153,38 +154,32 @@ const parseParameters = (_url) => {
 
 const addRoutesForCrudOperations = (schemaName, router) => {
 
-    const collectionName = pluralize(schemaName);
+    const operator = new ModelOperator({schemaName});
+    const path = pluralize(schemaName);
 
-    const operator = new CollectionCrudOperator({collectionName});
-
-    const schema = Schemas.getSchema(schemaName);
-
-    router.get(`/${collectionName}`, isLoggedIn, (request, response) => co(function* () {
+    router.get(`/${path}`, isLoggedIn, (request, response) => co(function* () {
         const { query, sort, limit, skip } = parseParameters(request.url);
-        const docs = yield operator.findMany(schema.convertToType(query), sort, limit, skip, schema.projection);
-        successHandler(response, {items: docs});
+        const models = yield operator.findMany({query, sort, limit, skip});
+        successHandler(response, {items: models});
     }).catch(errorHandler(response)));
 
-    router.get(`/${collectionName}/:id`, isLoggedIn, (request, response) => co(function* () {
-        const doc = yield operator.findOne(schema.convertToType({_id: request.params.id}), schema.projection);
-        successHandler(response, doc);
+    router.get(`/${path}/:id`, isLoggedIn, (request, response) => co(function* () {
+        const model = yield operator.findOne({_id: request.params.id});
+        successHandler(response, model);
     }).catch(errorHandler(response)));
 
-    router.post(`/${collectionName}`, isLoggedIn, (request, response) => co(function* () {
-        const doc = yield operator.insertOne(yield schema.createDoc(request.body));
-        successHandler(response, {_id: doc.insertedId});
+    router.post(`/${path}`, isLoggedIn, (request, response) => co(function* () {
+        const model = yield operator.insertOne(request.body);
+        successHandler(response, {_id: model.insertedId});
     }).catch(errorHandler(response)));
 
-    router.put(`/${collectionName}/:id`, isLoggedIn, (request, response) => co(function* () {
-        const query = schema.convertToType({_id: request.params.id});
-        const oldDoc = yield operator.findOne(query);
-        const doc = yield schema.updateDoc(oldDoc, request.body);
-        yield operator.updateOne(query, doc);
+    router.put(`/${path}/:id`, isLoggedIn, (request, response) => co(function* () {
+        yield operator.updateOne({_id: request.params.id}, request.body);
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
-    router.delete(`/${collectionName}/:id`, isLoggedIn, (request, response) => co(function* () {
-        yield operator.deleteOne(schema.convertToType({_id: request.params.id}));
+    router.delete(`/${path}/:id`, isLoggedIn, (request, response) => co(function* () {
+        yield operator.deleteOne({_id: request.params.id});
         successHandler(response, {});
     }).catch(errorHandler(response)));
 

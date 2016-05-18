@@ -7,9 +7,8 @@ import WebpageRouter from './web-pages/router';
 import RestfulApiRouter from './restful-api/router';
 import DbClient from './db/db-client';
 import DbSettingOperator from './db/db-setting-operator';
-import CollectionCrudOperator from './db/collection-crud-operator';
 import PassportManager from './passport-manager';
-import Schema from './schemas';
+import ModelOperator from './model/model-operator';
 
 class WeblogJS {
 
@@ -48,9 +47,7 @@ class WeblogJS {
         });
 
         this._webServer = webServer;
-        this._userOperator = new CollectionCrudOperator({
-            collectionName: "users"
-        });
+        this._userOperator = new ModelOperator({schemaName: "user"});
 
         return this;
     }
@@ -70,10 +67,7 @@ class WeblogJS {
     }
 
     createUser (user) {
-        return co(function* () {
-            const doc = yield Schema.getSchema('user').createDoc(user);
-            return yield this._userOperator.insertOne(doc);
-        }.bind(this));
+        return this._userOperator.insertOne(user);
     }
 }
 
