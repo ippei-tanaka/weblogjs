@@ -5,7 +5,6 @@ var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var LocalStrategy = require('passport-local').Strategy;
 var co = require('co');
-var api = require('../../app/api');
 var authHandler;
 var basicAuth;
 var localAuth;
@@ -32,9 +31,7 @@ passport.use(new BasicStrategy(authHandler));
 basicAuth = passport.authenticate('basic', {session: false});
 
 
-passport.use(new LocalStrategy({
-    usernameField: 'email'
-}, authHandler));
+passport.use(new LocalStrategy({usernameField: 'email'}, authHandler));
 
 
 passport.serializeUser((user, done) => {

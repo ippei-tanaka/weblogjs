@@ -1,9 +1,16 @@
 import { MongoClient } from 'mongodb';
 import co from 'co';
 
-export default class DbClient {
+let initialized = false;
 
-    constructor({host,port,database}) {
+class DbClient {
+
+    constructor() {}
+
+    init({host,port,database}) {
+        if (initialized) throw new Error("DbClient has been initialized.");
+
+        initialized = true;
         this._host = host;
         this._port = port;
         this._database = database;
@@ -11,6 +18,8 @@ export default class DbClient {
     }
 
     connect() {
+        if (!initialized) throw new Error("DbClient has not been initialized.");
+
         return co(function*() {
             if (!this._instance) {
                 this._instance = yield MongoClient.connect(this._buildUrl());
@@ -32,4 +41,7 @@ export default class DbClient {
         console.log("Connection to the database was closed!");
         this._instance = null;
     }
+
 }
+
+export default new DbClient();

@@ -2,20 +2,14 @@ import co from 'co';
 import schemas from '../schemas';
 import { DbError } from '../errors';
 import pluralize from 'pluralize';
+import DbClient from './db-client';
 
-export default class DbSettingOperator {
-
-    /**
-     * @param dbClient {DbClient}
-     */
-    constructor ({dbClient}) {
-        this._dbClient = dbClient;
-    }
+class DbSettingOperator {
 
     createIndexes () {
         return co(function* () {
 
-            const db = yield this._dbClient.connect();
+            const db = yield DbClient.connect();
 
             for (let schema of schemas) {
                 for (let path of schema) {
@@ -31,7 +25,7 @@ export default class DbSettingOperator {
 
     removeAllDocuments () {
         return co(function* () {
-            const db = yield this._dbClient.connect();
+            const db = yield DbClient.connect();
             const collections = yield db.listCollections().toArray();
 
             for (let c of collections) {
@@ -48,7 +42,7 @@ export default class DbSettingOperator {
 
     dropDatabase () {
         return co(function* () {
-            const db = yield this._dbClient.connect();
+            const db = yield DbClient.connect();
             yield db.dropDatabase();
         }.bind(this)).catch(() => {
             throw new DbError("An error occurred during dropDatabase.");
@@ -56,3 +50,5 @@ export default class DbSettingOperator {
     }
 
 }
+
+export default new DbSettingOperator();
