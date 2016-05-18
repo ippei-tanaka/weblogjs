@@ -5,9 +5,6 @@ import DbClient from './db-client';
 
 export default class CollectionCrudOperator {
 
-    /**
-     * @param dbClient {DbClient}
-     */
     constructor({collectionName}) {
         this._collectionName = collectionName;
     }
