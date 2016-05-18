@@ -4,7 +4,7 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
-import PassportManager from './passport-manager';
+import PassportManager from '../passport-manager';
 
 export default class WebServer {
 
@@ -45,7 +45,6 @@ export default class WebServer {
     */
 
     _buildExpressApp() {
-        const passport = PassportManager.passport;
         const expressApp = express();
         const session = expressSession({
             secret: this._sessionSecret,
@@ -62,8 +61,8 @@ export default class WebServer {
 
         expressApp.use(session);
 
-        expressApp.use(passport.initialize());
-        expressApp.use(passport.session());
+        expressApp.use(PassportManager.passport.initialize());
+        expressApp.use(PassportManager.passport.session());
 
         // Restful API
         expressApp.use(this._apiRouter.basePath, this._apiRouter.router);

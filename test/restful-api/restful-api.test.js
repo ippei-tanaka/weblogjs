@@ -6,12 +6,13 @@ import { expect } from 'chai';
 import httpRequest from '../../utils/http-request';
 import WeblogJS from '../../app';
 
-/*
-var admin = Object.freeze(Object.assign({
-    email: config.admin_email,
-    password: config.admin_password
+const admin = Object.freeze(Object.assign({
+    email: "ttt@ttt.com",
+    password: "tttttttt",
+    display_name: "Admin",
+    slug: 'admin'
 }));
-*/
+
 const testUser = Object.freeze({
     "email": "email1@example.com",
     "password": "test1234",
@@ -38,7 +39,7 @@ const testPost = Object.freeze({
 
 const BASE_URL = `http://${configFile.web_server_host}:${configFile.web_server_port}${configFile.restful_api_root}`;
 
-const weblogJs = new WeblogJS({
+WeblogJS.init({
     dbHost: configFile.database_host,
     dbPort: configFile.database_port,
     dbName: configFile.database_name,
@@ -51,10 +52,11 @@ describe('Restful API', function() {
 
     this.timeout(5000);
 
-    before('web server starting', () => weblogJs.webServer.start());
-    before('dropping darabase', () => weblogJs.dbSettingOperator.dropDatabase());
-    before('creating indexes', () => weblogJs.dbSettingOperator.createIndexes());
-    beforeEach('emptying collections', () => weblogJs.dbSettingOperator.removeAllDocuments());
+    before('web server starting', () => WeblogJS.webServer.start());
+    before('dropping darabase', () => WeblogJS.dbSettingOperator.dropDatabase());
+    before('creating indexes', () => WeblogJS.dbSettingOperator.createIndexes());
+    beforeEach('emptying collections', () => WeblogJS.dbSettingOperator.removeAllDocuments());
+    beforeEach('creating admin', () => WeblogJS.createUser(admin));
     //beforeEach(() => weblogjs.api.userManager.createAdminUser());
     //beforeEach(() => httpRequest.post(`${BASE_URL}/login`, admin));
     //afterEach(() => httpRequest.get(`${BASE_URL}/logout`));
@@ -186,6 +188,28 @@ describe('Restful API', function() {
         });
     });
     */
+
+    describe('/login', () => {
+        it('should give a 401 error if the user try to retrieve restricted data when they haven\'t logged in', (done) => {
+            co(function* () {
+                yield httpRequest.get(`${BASE_URL}/users`);
+                done(new Error());
+            }).catch(e => {
+                expect(e.response.statusCode).to.equal(401);
+                done();
+            });
+        });
+
+        it('should let the user log in', (done) => {
+            co(function* () {
+                yield httpRequest.post(`${BASE_URL}/login`, admin);
+                done();
+            }).catch(e => {
+                console.error(e.body || e);
+                done(new Error());
+            });
+        });
+    });
 
     describe('/users', () => {
 

@@ -7,10 +7,14 @@ import WebpageRouter from './web-pages/router';
 import RestfulApiRouter from './restful-api/router';
 import DbClient from './db/db-client';
 import DbSettingOperator from './db/db-setting-operator';
+import CollectionCrudOperator from './db/collection-crud-operator';
+import PassportManager from './passport-manager';
 
-export default class WeblogJS {
+class WeblogJS {
 
-    constructor({
+    constructor() {}
+
+    init({
         dbHost = "localhost",
         dbPort = 27017,
         dbName = "weblogjs",
@@ -22,7 +26,7 @@ export default class WeblogJS {
         } = {}
     ) {
 
-        const dbClient = new DbClient({
+        DbClient.init({
             host: dbHost,
             port: dbPort,
             database: dbName
@@ -30,7 +34,9 @@ export default class WeblogJS {
 
         const webpageRouter = new WebpageRouter(webPageRoot);
 
-        const restfulApiRouter = new RestfulApiRouter({basePath: apiRoot, dbClient});
+        const restfulApiRouter = new RestfulApiRouter({
+            basePath: apiRoot
+        });
 
         const webServer = new WebServer({
             host: webHost,
@@ -40,8 +46,12 @@ export default class WeblogJS {
             apiRouter: restfulApiRouter
         });
 
-        this._dbSettingOperator = new DbSettingOperator({dbClient});
         this._webServer = webServer;
+        this._userOperator = new CollectionCrudOperator({
+            collectionName: "users"
+        });
+
+        return this;
     }
 
     /**
@@ -55,6 +65,12 @@ export default class WeblogJS {
      * @returns {DbSettingOperator}
      */
     get dbSettingOperator() {
-        return this._dbSettingOperator;
+        return DbSettingOperator;
+    }
+
+    createUser (user) {
+        return this._userOperator.insertOne(user);
     }
 }
+
+export default new WeblogJS();
