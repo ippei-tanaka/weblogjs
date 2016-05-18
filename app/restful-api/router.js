@@ -52,7 +52,7 @@ router.get('/privileges', isLoggedIn, response((ok) => {
 */
 
 const isLoggedIn = (request, response, next) => {
-    return next();
+    //return next();
     if (request.isAuthenticated())
         return next();
 
@@ -166,7 +166,7 @@ const addRoutesForCrudOperations = (schemaName, router) => {
     }).catch(errorHandler(response)));
 
     router.get(`/${collectionName}/:id`, isLoggedIn, (request, response) => co(function* () {
-        const doc = yield operator.findOne(schema.convertToType({_id: request.params.id}));
+        const doc = yield operator.findOne(schema.convertToType({_id: request.params.id}), schema.projection);
         successHandler(response, doc);
     }).catch(errorHandler(response)));
 

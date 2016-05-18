@@ -117,11 +117,11 @@ class UserSchema extends Schema {
     /**
      * @override
      */
-    _preInsert (doc) {
-        const superPreInsert = super._preInsert.bind(this);
+    _preCreate (doc) {
+        const superPreCreate = super._preCreate.bind(this);
 
         return co(function* () {
-            const _doc = deepcopy(yield superPreInsert(doc));
+            const _doc = deepcopy(yield superPreCreate(doc));
 
             _doc[HASHED_PASSWORD] = yield generateHash(_doc[PASSWORD]);
             delete _doc[PASSWORD];

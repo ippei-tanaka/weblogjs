@@ -55,7 +55,7 @@ export default class Schema {
                 _values[path.name] = values[path.name];
             }
 
-            return yield this._preInsert(this._examine(_values));
+            return yield this._preCreate(this._examine(_values));
 
         }.bind(this)).catch(errorMap => {
             throw new ValidationErrorMap(errorMap);
@@ -151,7 +151,7 @@ export default class Schema {
         return convertedValues;
     }
 
-    _preInsert(doc) {
+    _preCreate(doc) {
         const _doc = deepcopy(doc);
 
         _doc.created_date = new Date();
