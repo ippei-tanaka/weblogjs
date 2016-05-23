@@ -4,13 +4,14 @@ import co from 'co';
 import deepcopy from 'deepcopy';
 import bcrypt from 'bcrypt';
 import Path from './lib/path';
+import Types from './lib/types';
 
 const paths = {
 
     email: {
         unique: true,
         required: true,
-        type: Path.Types.String,
+        type: Types.String,
         sanitize: (value) => validator.normalizeEmail(value),
         validate: function* (value) {
             if (!validator.isEmail(value)) {
@@ -20,11 +21,10 @@ const paths = {
     },
 
     password: {
-        required: true,
-        type: Path.Types.String,
+        type: Types.String,
         sanitize: (value) => value.trim(),
         validate: function* (value) {
-            const range = {min:8, max: 16};
+            const range = {min: 8, max: 16};
             if (!validator.isLength(value, range)) {
                 yield `A ${this.name} should be between ${range.min} and ${range.max} characters.`;
             }
@@ -38,10 +38,10 @@ const paths = {
     display_name: {
         display_name: "display name",
         required: true,
-        type: Path.Types.String,
+        type: Types.String,
         sanitize: (value) => value.trim(),
         validate: function* (value) {
-            const range = {min:1, max: 20};
+            const range = {min: 1, max: 20};
             if (!validator.isLength(value, range)) {
                 yield `A ${this.name} should be between ${range.min} and ${range.max} characters.`;
             }
@@ -55,10 +55,10 @@ const paths = {
     slug: {
         unique: true,
         required: true,
-        type: Path.Types.String,
+        type: Types.String,
         sanitize: (value) => value.trim(),
         validate: function* (value) {
-            const range = {min:1, max: 200};
+            const range = {min: 1, max: 200};
             if (!validator.isLength(value, range)) {
                 yield `A ${this.name} should be between ${range.min} and ${range.max} characters.`;
             }
@@ -72,7 +72,7 @@ const paths = {
 
 const SALT_WORK_FACTOR = 10;
 
-const generateHash = (str) => new Promise ((resolve, reject) => {
+const generateHash = (str) => new Promise((resolve, reject) => {
     bcrypt.genSalt(SALT_WORK_FACTOR, (error, salt) => {
         if (error) return reject(error);
 
@@ -83,8 +83,8 @@ const generateHash = (str) => new Promise ((resolve, reject) => {
     });
 });
 
-const compareHashedStrings = (string1, string2) => new Promise((resolve, reject) => {
-    bcrypt.compare(string1, string2, (error, isMatch) => {
+const compareHashedStrings = (plainString, hashedString) => new Promise((resolve, reject) => {
+    bcrypt.compare(plainString, hashedString, (error, isMatch) => {
         if (error) return reject(error);
         resolve(isMatch);
     });
@@ -99,29 +99,35 @@ class UserSchema extends Schema {
     /**
      * @override
      */
-    constructor () {
+    constructor() {
         super('user', paths);
     }
 
     /**
      * @override
      */
-    get projection () {
-        return {
-            email: true,
-            display_name: true,
-            slug: true
-        };
+    get projection() {
+        return Object.assign(
+            {},
+            super.projection,
+            {
+                password: false
+            });
     }
 
-    /**
-     * @override
-     */
-    _preCreate (doc) {
-        const superPreCreate = super._preCreate.bind(this);
+    compareHashedStrings (plainString, hashedString) {
+        return compareHashedStrings(plainString, hashedString);
+    }
+
+    _preCreate(doc) {
+        const superFunc = super._preCreate.bind(this);
 
         return co(function* () {
-            const _doc = deepcopy(yield superPreCreate(doc));
+            const _doc = deepcopy(yield superFunc(doc));
+
+            if (!_doc[PASSWORD]) {
+                throw ["A user password is required."];
+            }
 
             _doc[HASHED_PASSWORD] = yield generateHash(_doc[PASSWORD]);
             delete _doc[PASSWORD];
@@ -130,21 +136,21 @@ class UserSchema extends Schema {
         });
     }
 
-    /**
-     * @override
-     */
-    _preUpdate (oldDoc, newValues, doc) {
-        const superPreUpdate = super._preUpdate.bind(this);
+    _preUpdate(oldDoc, newValues, doc) {
+        const superFunc = super._preUpdate.bind(this);
 
         return co(function* () {
-            const _doc = deepcopy(yield superPreUpdate(oldDoc, newValues, doc));
+            const _doc = deepcopy(yield superFunc(oldDoc, newValues, doc));
             const errors = {};
 
-            if (newValues.hasOwnProperty(PASSWORD)) {
-                if (!newValues.hasOwnProperty(OLD_PASSWORD)) {
+            if (newValues.hasOwnProperty(PASSWORD))
+            {
+                if (!newValues.hasOwnProperty(OLD_PASSWORD))
+                {
                     errors[OLD_PASSWORD] = ["To change the password, the current password has to be sent."];
                 } else {
-                    const result = yield compareHashedStrings(newValues[OLD_PASSWORD], oldDoc[HASHED_PASSWORD]);
+                    const result = yield this.compareHashedStrings(newValues[OLD_PASSWORD], oldDoc[HASHED_PASSWORD]);
+
                     if (result) {
                         _doc[HASHED_PASSWORD] = yield generateHash(newValues[PASSWORD]);
                     } else {
@@ -153,12 +159,13 @@ class UserSchema extends Schema {
                 }
             }
 
+
             if (Object.keys(errors).length > 0) {
                 throw errors;
             }
 
             return _doc;
-        });
+        }.bind(this));
     }
 
 }

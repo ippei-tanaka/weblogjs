@@ -1,12 +1,13 @@
 import validator from 'validator';
 import Schema from './lib/schema';
 import Path from './lib/path';
+import Types from './lib/types';
 
 const schema = new Schema('post', {
 
     title: {
         required: true,
-        type: Path.Types.String,
+        type: Types.String,
         sanitize: (value) => value.trim(),
         validate: function* (value) {
             const range = {min:1, max: 200};
@@ -19,7 +20,7 @@ const schema = new Schema('post', {
     slug: {
         unique: true,
         required: true,
-        type: Path.Types.String,
+        type: Types.String,
         sanitize: (value) => value.trim(),
         validate: function* (value) {
             const range = {min:1, max: 200};
@@ -35,7 +36,7 @@ const schema = new Schema('post', {
 
     content: {
         required: true,
-        type: Path.Types.String,
+        type: Types.String,
         validate: function* (value) {
             const range = {min:1, max: 30000};
             if (!validator.isLength(value, range)) {
@@ -46,7 +47,7 @@ const schema = new Schema('post', {
 
     author_id: {
         display_name: "author ID",
-        type: Path.Types.ObjectID,
+        type: Types.ObjectID,
         validate: function* (value) {
             if (!value) {
                 yield `"${value}" is an invalid ID.`
@@ -56,7 +57,7 @@ const schema = new Schema('post', {
 
     category_id: {
         display_name: "category ID",
-        type: Path.Types.ObjectID,
+        type: Types.ObjectID,
         validate: function* (value) {
             if (!value) {
                 yield `"${value}" is an invalid ID.`
@@ -66,7 +67,7 @@ const schema = new Schema('post', {
 
     blog_id: {
         display_name: "blog ID",
-        type: Path.Types.ObjectID,
+        type: Types.ObjectID,
         validate: function* (value) {
             if (!value) {
                 yield `"${value}" is an invalid ID.`

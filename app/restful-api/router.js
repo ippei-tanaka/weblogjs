@@ -6,7 +6,7 @@ import pluralize from 'pluralize';
 import { SyntaxError } from '../errors';
 import PassportManager from '../passport-manager';
 //import Schemas from '../schemas';
-import ModelOperator from '../model/model-operator';
+import Models from '../models';
 
 /*
 //-------------------------------------------------------
@@ -53,7 +53,6 @@ router.get('/privileges', isLoggedIn, response((ok) => {
 */
 
 const isLoggedIn = (request, response, next) => {
-    //return next();
     if (request.isAuthenticated())
         return next();
 
@@ -61,8 +60,6 @@ const isLoggedIn = (request, response, next) => {
 };
 
 const isLoggedOut = (request, response, next) => {
-    return next();
-
     if (!request.isAuthenticated())
         return next();
 
@@ -76,7 +73,7 @@ const successHandler = (response, obj, code = 200) => {
 const errorHandler = (response, code = 400) => {
     return error => {
         //console.log(error);
-        //if (error && error.stack) console.error(error.stack);
+        if (error && error.stack) console.error(error.stack);
         response.type('json').status(code).json(error);
     }
 };
@@ -84,6 +81,11 @@ const errorHandler = (response, code = 400) => {
 const addRoutesForAuth = (router) => {
 
     router.post('/login', isLoggedOut, PassportManager.localAuth, (request, response) => {
+        successHandler(response, {});
+    });
+
+    router.get('/logout', isLoggedIn, (request, response) => {
+        request.logout();
         successHandler(response, {});
     });
 
@@ -154,32 +156,32 @@ const parseParameters = (_url) => {
 
 const addRoutesForCrudOperations = (schemaName, router) => {
 
-    const operator = new ModelOperator({schemaName});
+    const Model = Models.getModel(schemaName);
     const path = pluralize(schemaName);
 
     router.get(`/${path}`, isLoggedIn, (request, response) => co(function* () {
         const { query, sort, limit, skip } = parseParameters(request.url);
-        const models = yield operator.findMany({query, sort, limit, skip});
+        const models = yield Model.findMany({query, sort, limit, skip});
         successHandler(response, {items: models});
     }).catch(errorHandler(response)));
 
     router.get(`/${path}/:id`, isLoggedIn, (request, response) => co(function* () {
-        const model = yield operator.findOne({_id: request.params.id});
+        const model = yield Model.findOne({_id: request.params.id});
         successHandler(response, model);
     }).catch(errorHandler(response)));
 
     router.post(`/${path}`, isLoggedIn, (request, response) => co(function* () {
-        const model = yield operator.insertOne(request.body);
+        const model = yield Model.insertOne(request.body);
         successHandler(response, {_id: model.insertedId});
     }).catch(errorHandler(response)));
 
     router.put(`/${path}/:id`, isLoggedIn, (request, response) => co(function* () {
-        yield operator.updateOne({_id: request.params.id}, request.body);
+        yield Model.updateOne({_id: request.params.id}, request.body);
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
     router.delete(`/${path}/:id`, isLoggedIn, (request, response) => co(function* () {
-        yield operator.deleteOne({_id: request.params.id});
+        yield Model.deleteOne({_id: request.params.id});
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
