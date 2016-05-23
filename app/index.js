@@ -8,7 +8,7 @@ import RestfulApiRouter from './restful-api/router';
 import DbClient from './db/db-client';
 import DbSettingOperator from './db/db-setting-operator';
 import PassportManager from './passport-manager';
-import ModelOperator from './model/model-operator';
+import UserModel from './models/user-model';
 
 class WeblogJS {
 
@@ -47,7 +47,6 @@ class WeblogJS {
         });
 
         this._webServer = webServer;
-        this._userOperator = new ModelOperator({schemaName: "user"});
 
         return this;
     }
@@ -67,7 +66,7 @@ class WeblogJS {
     }
 
     createUser (user) {
-        return this._userOperator.insertOne(user);
+        return UserModel.insertOne(user);
     }
 }
 

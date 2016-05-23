@@ -1,12 +1,13 @@
 import validator from 'validator';
 import Schema from './lib/schema';
 import Path from './lib/path';
+import Types from './lib/types';
 
 const schema = new Schema('category', {
 
     name: {
         required: true,
-        type: Path.Types.String,
+        type: Types.String,
         sanitize: (value) => value.trim(),
         validate: function* (value) {
             const range = {min:1, max: 200};
@@ -19,7 +20,7 @@ const schema = new Schema('category', {
     slug: {
         unique: true,
         required: true,
-        type: Path.Types.String,
+        type: Types.String,
         sanitize: (value) => value.trim(),
         validate: function* (value) {
             const range = {min:1, max: 200};

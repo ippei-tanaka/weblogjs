@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import co from 'co';
-import ModelOperator from './model/model-operator';
+import UserModel from './models/user-model';
 
 let localAuth = passport.authenticate('local');
 
@@ -14,8 +14,6 @@ class PassportManager {
             return;
         }
         instance = this;
-
-        this._userOperator = new ModelOperator({schemaName: 'user'});
 
         passport.use(new LocalStrategy({usernameField: 'email'}, this._authHandler.bind(this)));
 
@@ -36,31 +34,30 @@ class PassportManager {
 
     _authHandler (email, password, done) {
         return co(function* () {
-            const model = yield this._userOperator.findOne({email});
+            const model = yield UserModel.findOne({email});
 
-            console.log("_authHandler");
-            console.log(model);
-
-            //var isValid = yield api.userManager.isValid({email: email, password: password});
-
-            /*
-            if (isValid) {
-                let user = yield api.userManager.findByEmail(email);
-                return done(null, user);
-            } else {
+            if (!model) {
                 return done();
             }
-            */
 
-            done();
+            if (!(yield model.checkPassword(password))) {
+                return done();
+            }
+
+            return done(null, model.values);
+
         }.bind(this)).catch(e => console.log);
     }
 
     _deserializeUser (_id, done) {
         return co(function* () {
-            const model = yield this._userOperator.findOne({_id});
-            done(null, model);
-            done();
+            const model = yield UserModel.findOne({_id});
+
+            if (!model) {
+                return done();
+            }
+
+            return done(null, model.values);
         }.bind(this)).catch((error) => {
             done(error);
         });
