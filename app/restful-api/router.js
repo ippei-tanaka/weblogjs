@@ -1,56 +1,10 @@
 import co from 'co';
 import url from 'url';
 import { Router } from 'express';
-//import CollectionCrudOperator from '../db/collection-crud-operator';
 import pluralize from 'pluralize';
 import { SyntaxError } from '../errors';
 import PassportManager from '../passport-manager';
-//import Schemas from '../schemas';
 import Models from '../models';
-
-/*
-//-------------------------------------------------------
-// Home
-
-router.get('/', response((ok) => {
-    ok({});
-}));
-
-
-//-------------------------------------------------------
-// Login
-
-router.post('/login', isLoggedOut, localAuth, response((ok) => {
-    ok({});
-}));
-
-
-//-------------------------------------------------------
-// Logout
-
-router.get('/logout', isLoggedIn, response((ok, error, request) => {
-    request.logout();
-    ok({});
-}));
-
-
-//-------------------------------------------------------
-// User
-
-router.get('/users/me', isLoggedIn, response((ok, error, request) => {
-    userManager.findById(request.user._id)
-        .then(ok)
-        .catch(error);
-}));
-
-//-------------------------------------------------------
-// Privileges
-
-router.get('/privileges', isLoggedIn, response((ok) => {
-    ok(privileges);
-}));
-
-*/
 
 const isLoggedIn = (request, response, next) => {
     if (request.isAuthenticated())
@@ -72,24 +26,9 @@ const successHandler = (response, obj, code = 200) => {
 
 const errorHandler = (response, code = 400) => {
     return error => {
-        //console.log(error);
         if (error && error.stack) console.error(error.stack);
         response.type('json').status(code).json(error);
     }
-};
-
-const addRoutesForAuth = (router) => {
-
-    router.post('/login', isLoggedOut, PassportManager.localAuth, (request, response) => {
-        successHandler(response, {});
-    });
-
-    router.get('/logout', isLoggedIn, (request, response) => {
-        request.logout();
-        successHandler(response, {});
-    });
-
-    return router;
 };
 
 const parseParameters = (_url) => {
@@ -188,6 +127,55 @@ const addRoutesForCrudOperations = (schemaName, router) => {
     return router;
 };
 
+const addRoutesForAuth = (router) => {
+
+    router.post('/login', isLoggedOut, PassportManager.localAuth, (request, response) => {
+        successHandler(response, {});
+    });
+
+    router.get('/logout', isLoggedIn, (request, response) => {
+        request.logout();
+        successHandler(response, {});
+    });
+
+    return router;
+};
+
+
+const addRoutesForHome = (router) => {
+
+    router.get(`/`, (request, response) => co(function* () {
+        successHandler(response, {});
+    }).catch(errorHandler(response)));
+
+    return router;
+};
+
+
+const addRoutesForUser = (router) => {
+
+    const UserModel = Models.getModel('user');
+
+    router.get(`/users/me`, isLoggedIn, (request, response) => co(function* () {
+        const model = yield UserModel.findOne({_id: request.user._id});
+        successHandler(response, model);
+    }).catch(errorHandler(response)));
+
+    return router;
+};
+
+/*
+
+//-------------------------------------------------------
+// Privileges
+
+router.get('/privileges', isLoggedIn, response((ok) => {
+    ok(privileges);
+}));
+
+*/
+
+
 /*
 //-------------------------------------------------------
 // Setting
@@ -216,11 +204,13 @@ export default class RestfulApiRouter {
 
         let router = new Router();
 
+        router = addRoutesForAuth(router);
+        router = addRoutesForHome(router);
+        router = addRoutesForUser(router);
         router = addRoutesForCrudOperations("user", router);
         router = addRoutesForCrudOperations("category", router);
         router = addRoutesForCrudOperations("blog", router);
         router = addRoutesForCrudOperations("post", router);
-        router = addRoutesForAuth(router);
 
         this._router = router
     }
