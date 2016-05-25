@@ -110,12 +110,19 @@ const addRoutesForCrudOperations = (schemaName, router) => {
     }).catch(errorHandler(response)));
 
     router.post(`/${path}`, isLoggedIn, (request, response) => co(function* () {
-        const model = yield Model.insertOne(request.body);
-        successHandler(response, {_id: model.insertedId});
+        const model = new Model(request.body);
+        const result = yield model.save();
+        successHandler(response, {_id: result.insertedId});
     }).catch(errorHandler(response)));
 
     router.put(`/${path}/:id`, isLoggedIn, (request, response) => co(function* () {
-        yield Model.updateOne({_id: request.params.id}, request.body);
+        const model = yield Model.findOne({_id: request.params.id});
+
+        if (model) {
+            model.setValues(request.body);
+            yield model.save();
+        }
+
         successHandler(response, {});
     }).catch(errorHandler(response)));
 

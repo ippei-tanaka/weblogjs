@@ -41,7 +41,7 @@ export default class SchemaModel {
             const _query = (new this(query)).values;
             const docs = yield this._operator.findMany(_query, sort, limit, skip);
             return docs.map(doc => new this(doc));
-        }.bind(this)).catch(this._filterError.bind(this));
+        }.bind(this));
     }
 
     static findOne(query) {
@@ -49,53 +49,15 @@ export default class SchemaModel {
             const _query = (new this(query)).values;
             const doc = yield this._operator.findOne(_query);
             return doc ? new this(doc) : null;
-        }.bind(this)).catch(this._filterError.bind(this));
+        }.bind(this));
     }
 
-    static insertOne(values) {
-        return co(function* () {
-            const model = new this(values);
-            const doc = yield model.save();
-            return doc;
-        }.bind(this)).catch(this._filterError.bind(this));
-    }
-
-    static updateOne(query, values) {
-        return co(function* () {
-            const doc = yield this.findOne(query);
-            if (doc) {
-                doc.setValues(values);
-                return yield doc.save();
-            } else {
-                return null;
-            }
-        }.bind(this)).catch(this._filterError.bind(this));
-    }
-
+    // TODO catch errors for this._operator.deleteOne
     static deleteOne(query) {
         return co(function* () {
             const _query = (new this(query)).values;
             const result = yield this._operator.deleteOne(_query);
-        }.bind(this)).catch(this._filterError.bind(this));
-    }
-
-    static _filterError(error) {
-        if (error instanceof ValidationErrorMap) {
-            throw error;
-        }
-
-        if (error instanceof MongoError && error.code === 11000) {
-            const match = error.message.match(/\s[\w.]+\$([\w]+)_\d+\s.+\{.+:\s"(.+)"\s\}/);
-            const pathName = match[1];
-            const value = match[2];
-            const errorMap = new ValidationErrorMap();
-            errorMap.setError(pathName, [this._schema.getPath(pathName).uniqueErrorMessageBuilder(value)]);
-            throw errorMap;
-        }
-
-        console.log("_filterError:");
-        console.error(error.stack || error);
-        throw new Error();
+        }.bind(this));
     }
 
     constructor(values) {
@@ -140,12 +102,7 @@ export default class SchemaModel {
         return co(function* () {
             this._examine();
             let values = yield this._executeHooks();
-
-            if (!this._updated) {
-                return yield this.constructor._operator.insertOne(values);
-            } else {
-                return yield this.constructor._operator.updateOne({_id: values._id}, values);
-            }
+            return yield this._executeDbOperation(values);
         }.bind(this));
     }
 
@@ -180,6 +137,25 @@ export default class SchemaModel {
         }.bind(this)).catch((error) => {
             throw new ValidationErrorMap(error);
         });
+    }
+
+    _executeDbOperation (values) {
+        return co(function* () {
+            if (!this._updated) {
+                return yield this.constructor._operator.insertOne(values);
+            } else {
+                return yield this.constructor._operator.updateOne({_id: values._id}, values);
+            }
+        }.bind(this)).catch(function(error) {
+            if (error instanceof MongoError && error.code === 11000) {
+                const match = error.message.match(/\s[\w.]+\$([\w]+)_\d+\s.+\{.+:\s"(.+)"\s\}/);
+                const pathName = match[1];
+                const value = match[2];
+                const errorMap = new ValidationErrorMap();
+                errorMap.setError(pathName, [this.constructor._schema.getPath(pathName).uniqueErrorMessageBuilder(value)]);
+                throw errorMap;
+            }
+        }.bind(this));
     }
 
     _instantiatePathModelsWithValues(values) {

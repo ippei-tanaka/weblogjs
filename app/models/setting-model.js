@@ -30,11 +30,14 @@ export default class SettingModel extends SchemaModel {
 
     static setSetting (values) {
         return co(function* () {
-            const model = yield this.findOne({});
+            let model = yield this.findOne({});
+
             if (model) {
-                yield this.updateOne({_id: model.values._id}, values);
+                model.setValues(values);
+                yield model.save();
             } else {
-                yield this.insertOne(values);
+                model = new this(values);
+                yield model.save();
             }
         }.bind(this));
     }
