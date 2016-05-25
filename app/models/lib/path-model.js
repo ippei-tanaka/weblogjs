@@ -76,7 +76,7 @@ class PathModel {
 
             return String(value);
         } catch (error) {
-            throw [this.constructor._path.typeErrorMessageBuilder(value)];
+            throw this.constructor._path.typeErrorMessageBuilder(value);
         }
     }
 }
