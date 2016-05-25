@@ -76,11 +76,13 @@ describe('Restful API', function () {
     describe('/login', () => {
         it('should give a 401 error if the user try to retrieve restricted data when they haven\'t logged in', (done) => {
             co(function* () {
+                let error;
                 try {
                     yield httpRequest.get(`${BASE_URL}/users`);
-                } catch (error) {
-                    expect(error.response.statusCode).to.equal(401);
+                } catch (e) {
+                    error = e;
                 }
+                expect(error.response.statusCode).to.equal(401);
                 done();
             }).catch(e => {
                 done(e);
@@ -254,14 +256,19 @@ describe('Restful API', function () {
 
         it('should not create a new category if the posted object has an empty value for a required field.', (done) => {
             co(function* () {
+                let error;
+
                 try {
                     yield httpRequest.post(`${BASE_URL}/categories`, {
                         name: '',
                         slug: ''
                     });
-                } catch (error) {
-                    expect(error.body.name[0].message).to.equal('A name is required.');
+                } catch (e) {
+                    error = e;
                 }
+
+                expect(error.body.name[0].message).to.equal('A name is required.');
+
                 done();
             }).catch((e) => {
                 done(e);
@@ -270,14 +277,17 @@ describe('Restful API', function () {
 
         it('should not create a new category if the posted object has an invalid value.', (done) => {
             co(function* () {
+                let error;
+
                 try {
                     yield httpRequest.post(`${BASE_URL}/categories`, {
                         name: '123456789',
                         slug: 'd d'
                     });
-                } catch (error) {
-                    expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+                } catch (e) {
+                    error = e;
                 }
+                expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
                 done();
             }).catch((e) => {
                 done(e);
@@ -305,15 +315,19 @@ describe('Restful API', function () {
 
         it('should not update a category when the slug is duplicated.', (done) => {
             co(function* () {
+                let error;
+
                 try {
                     const cat1 = {name: "Foo", slug: "foo"};
                     const cat2 = {name: "Bar", slug: "bar"};
                     yield httpRequest.post(`${BASE_URL}/categories`, cat1);
                     const id2 = (yield httpRequest.post(`${BASE_URL}/categories`, cat2))._id;
                     yield httpRequest.put(`${BASE_URL}/categories/${id2}`, {slug: "foo"});
-                } catch (error) {
-                    expect(error.body.slug[0].message).to.equal('The slug, "foo", has already been taken.');
+                } catch (e) {
+                    error = e;
                 }
+                expect(error.body.slug[0].message).to.equal('The slug, "foo", has already been taken.');
+
                 done();
             }).catch((e) => {
                 done(e);
@@ -322,17 +336,22 @@ describe('Restful API', function () {
 
         it('should not update a category if the posted object is not valid.', (done) => {
             co(function* () {
+                let error;
                 let name = "";
 
-                while (name.length < 250) { name += "a" }
+                while (name.length < 250) {
+                    name += "a"
+                }
 
                 try {
                     const cat = {name: name, slug: "fo o"};
                     yield httpRequest.post(`${BASE_URL}/categories`, cat);
-                } catch (error) {
-                    expect(error.body.name[0].message).to.equal('A name should be between 1 and 200 characters.');
-                    expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+                } catch (e) {
+                    error = e;
                 }
+
+                expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+
                 done();
             }).catch((e) => {
                 done(e);
@@ -424,12 +443,14 @@ describe('Restful API', function () {
             };
 
             co(function* () {
+                let error;
                 try {
                     yield httpRequest.post(`${BASE_URL}/blogs`, blog1);
                     yield httpRequest.post(`${BASE_URL}/blogs`, blog2);
-                } catch (error) {
-                    expect(error.body.slug[0].message).to.equal('The slug, "heremyblog", has already been taken.');
+                } catch (e) {
+                    error = e;
                 }
+                expect(error.body.slug[0].message).to.equal('The slug, "heremyblog", has already been taken.');
                 done();
             }).catch((e) => {
                 done(e);
@@ -438,14 +459,16 @@ describe('Restful API', function () {
 
         it('should not create a new blog if the posted object has an empty value for a required field.', (done) => {
             co(function* () {
+                let error;
                 try {
                     yield httpRequest.post(`${BASE_URL}/blogs`, {
                         name: 'Happy Blog',
                         slug: 'happy-blog'
                     });
-                } catch (error) {
-                    expect(error.body.posts_per_page[0].message).to.equal('A posts_per_page is required.');
+                } catch (e) {
+                    error = e;
                 }
+                expect(error.body.posts_per_page[0].message).to.equal('A posts_per_page is required.');
                 done();
             }).catch((e) => {
                 done(e);
@@ -454,15 +477,36 @@ describe('Restful API', function () {
 
         it('should not create a new blog if the posted object has an invalid value.', (done) => {
             co(function* () {
+                let error;
                 try {
                     yield httpRequest.post(`${BASE_URL}/blogs`, {
                         name: '123456789',
                         slug: 'd d',
                         posts_per_page: 12
                     });
-                } catch (error) {
-                    expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+                } catch (e) {
+                    error = e;
                 }
+                expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+                done();
+            }).catch((e) => {
+                done(e);
+            });
+        });
+
+        it('should return type error messages', (done) => {
+            co(function* () {
+                let error;
+                try {
+                    yield httpRequest.post(`${BASE_URL}/blogs`, {
+                        name: "Hello World",
+                        slug: "hello-world",
+                        posts_per_page: "test"
+                    });
+                } catch (e) {
+                    error = e;
+                }
+                expect(error.body.posts_per_page[0].message).to.equal('The posts_per_page, "test", is invalid.');
                 done();
             }).catch((e) => {
                 done(e);
@@ -492,15 +536,17 @@ describe('Restful API', function () {
 
         it('should not update a blog when the slug is duplicated.', (done) => {
             co(function* () {
-               try {
-                   const blog1 = {name: "Foo", slug: "foo", posts_per_page: 1};
-                   const blog2 = {name: "Bar", slug: "bar", posts_per_page: 1};
-                   yield httpRequest.post(`${BASE_URL}/blogs`, blog1);
-                   const id2 = (yield httpRequest.post(`${BASE_URL}/blogs`, blog2))._id;
-                   yield httpRequest.put(`${BASE_URL}/blogs/${id2}`, {slug: "foo"});
-               } catch (error) {
-                   expect(error.body.slug[0].message).to.equal('The slug, "foo", has already been taken.');
+                let error;
+                try {
+                    const blog1 = {name: "Foo", slug: "foo", posts_per_page: 1};
+                    const blog2 = {name: "Bar", slug: "bar", posts_per_page: 1};
+                    yield httpRequest.post(`${BASE_URL}/blogs`, blog1);
+                    const id2 = (yield httpRequest.post(`${BASE_URL}/blogs`, blog2))._id;
+                    yield httpRequest.put(`${BASE_URL}/blogs/${id2}`, {slug: "foo"});
+                } catch (e) {
+                    error = e;
                 }
+                expect(error.body.slug[0].message).to.equal('The slug, "foo", has already been taken.');
                 done();
             }).catch((e) => {
                 done(e);
@@ -509,12 +555,14 @@ describe('Restful API', function () {
 
         it('should not update a blog if the posts_per_page is a negative number.', (done) => {
             co(function* () {
-               try {
-                   const cat = {name: "Foo", slug: "foo", posts_per_page: -1};
-                   yield httpRequest.post(`${BASE_URL}/blogs`, cat);
-               } catch (error) {
-                    expect(error.body.posts_per_page[0].message).to.equal('A posts_per_page should be greater than 0.');
+                let error;
+                try {
+                    const cat = {name: "Foo", slug: "foo", posts_per_page: -1};
+                    yield httpRequest.post(`${BASE_URL}/blogs`, cat);
+                } catch (e) {
+                    error = e;
                 }
+                expect(error.body.posts_per_page[0].message).to.equal('A posts_per_page should be greater than 0.');
                 done();
             }).catch((e) => {
                 done(e);
@@ -634,6 +682,27 @@ describe('Restful API', function () {
             });
         });
 
+        it('should return type error messages', (done) => {
+            co(function* () {
+                let error;
+                try {
+                    yield httpRequest.post(`${BASE_URL}/posts`, {
+                        title: "Hello World",
+                        slug: "hello-world",
+                        content: "test",
+                        author_id: "ddddd"
+                    });
+                } catch (e) {
+                    error = e;
+                }
+                expect(error.body.author_id[0].message).to.equal('The author ID, "ddddd", is invalid.');
+                done();
+            }).catch((e) => {
+                done(e);
+            });
+        });
+
+
         it('should return a list of posts', (done) => {
             co(function* () {
                 const options = yield createOptionalData();
@@ -732,7 +801,7 @@ describe('Restful API', function () {
         it('should set a blog to the setting', (done) => {
             co(function* () {
                 const { _id } = yield httpRequest.post(`${BASE_URL}/blogs`, testBlog);
-                yield httpRequest.post(`${BASE_URL}/setting`, { front: _id });
+                yield httpRequest.post(`${BASE_URL}/setting`, {front: _id});
                 const setting = yield httpRequest.get(`${BASE_URL}/setting`);
                 expect(setting.front).to.equal(_id);
                 done();

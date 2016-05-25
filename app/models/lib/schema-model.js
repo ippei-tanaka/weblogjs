@@ -184,13 +184,21 @@ export default class SchemaModel {
 
     _instantiatePathModelsWithValues(values) {
         const pathModels = {};
+        const error = {};
 
         for (let path of this.constructor._schema) {
             const value = values[path.name];
             const PathModel = this.constructor._PathModels[path.name];
 
-            pathModels[path.name] = new PathModel(value);
+            try {
+                pathModels[path.name] = new PathModel(value);
+            } catch (e) {
+                error[path.name] = [e];
+            }
         }
+
+        if (Object.keys(error).length > 0)
+            throw new ValidationErrorMap(error);
 
         return pathModels;
     }
