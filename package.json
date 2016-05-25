@@ -4,8 +4,8 @@
   "description": "a library for weblogs",
   "main": "./app",
   "scripts": {
-    "develop": "WEBLOG_ENV=development WEBLOG_WEBPACK_DEV_SERVER_PORT=8001 WEBLOG_WEBPACK_DEV_SERVER_HOST=localhost node ./examples/app",
-    "production": "node ./examples/app",
+    "develop": "WEBLOG_ENV=development WEBLOG_WEBPACK_DEV_SERVER_PORT=8001 WEBLOG_WEBPACK_DEV_SERVER_HOST=localhost node ./runner/index",
+    "production": "node ./runner/index",
     "webpack": "./node_modules/.bin/webpack",
     "webpack-dev-server": "WEBLOG_ENV=development ./node_modules/.bin/webpack-dev-server --inline --hot --port=8001 --host=localhost",
     "test": "./node_modules/.bin/mocha $(find test -name '*.test.js') --compilers js:babel-core/register"
