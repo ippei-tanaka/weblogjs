@@ -1,6 +1,5 @@
 import validator from 'validator';
 import Schema from './lib/schema';
-import Path from './lib/path';
 import Types from './lib/types';
 
 const schema = new Schema('category', {

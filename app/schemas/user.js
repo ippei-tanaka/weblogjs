@@ -3,7 +3,6 @@ import Schema from './lib/schema';
 import co from 'co';
 import deepcopy from 'deepcopy';
 import bcrypt from 'bcrypt';
-import Path from './lib/path';
 import Types from './lib/types';
 
 const paths = {
@@ -119,28 +118,27 @@ class UserSchema extends Schema {
         return compareHashedStrings(plainString, hashedString);
     }
 
-    _preCreate(doc) {
+    _preCreate(doc, rowDoc) {
         const superFunc = super._preCreate.bind(this);
 
         return co(function* () {
-            const _doc = deepcopy(yield superFunc(doc));
+            const _doc = deepcopy(yield superFunc(doc, rowDoc));
 
-            if (!_doc[PASSWORD]) {
+            if (!rowDoc[PASSWORD]) {
                 throw {[PASSWORD]: ["A user password is required."]};
             }
 
-            _doc[HASHED_PASSWORD] = yield generateHash(_doc[PASSWORD]);
-            delete _doc[PASSWORD];
+            _doc[HASHED_PASSWORD] = yield generateHash(rowDoc[PASSWORD]);
 
             return _doc;
         });
     }
 
-    _preUpdate(oldDoc, newValues, doc) {
+    _preUpdate(doc, rowDoc, oldDoc, newValues) {
         const superFunc = super._preUpdate.bind(this);
 
         return co(function* () {
-            const _doc = deepcopy(yield superFunc(oldDoc, newValues, doc));
+            const _doc = deepcopy(yield superFunc(doc, rowDoc, oldDoc, newValues));
             const errors = {};
 
             if (newValues.hasOwnProperty(PASSWORD))

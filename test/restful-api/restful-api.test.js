@@ -479,11 +479,11 @@ describe('Restful API', function () {
                     posts_per_page: 5
                 });
                 const data2 = yield httpRequest.get(`${BASE_URL}/blogs/${_id}`);
-
                 expect(data1.name).to.equal(testBlog.name);
                 expect(data1.slug).to.equal(testBlog.slug);
                 expect(data2.name).to.equal("Hello World");
                 expect(data2.slug).to.equal("hello-world");
+                expect(data2.posts_per_page).to.equal(5);
                 done();
             }).catch((e) => {
                 done(e);
@@ -706,6 +706,35 @@ describe('Restful API', function () {
                 expect(posts[0].title).to.equal("Favourite Food");
                 expect(posts[1].title).to.equal("Intro to Javascript");
 
+                done();
+            }).catch((e) => {
+                done(e);
+            });
+        });
+
+    });
+
+    describe('/setting', () => {
+
+        beforeEach('login', () => login());
+        afterEach('logout', () => logout());
+
+        it('should return the empty setting if nothing is set', (done) => {
+            co(function* () {
+                const setting = yield httpRequest.get(`${BASE_URL}/setting`);
+                expect(Object.keys(setting).length).to.equal(0);
+                done();
+            }).catch((e) => {
+                done(e);
+            });
+        });
+
+        it('should set a blog to the setting', (done) => {
+            co(function* () {
+                const { _id } = yield httpRequest.post(`${BASE_URL}/blogs`, testBlog);
+                yield httpRequest.post(`${BASE_URL}/setting`, { front: _id });
+                const setting = yield httpRequest.get(`${BASE_URL}/setting`);
+                expect(setting.front).to.equal(_id);
                 done();
             }).catch((e) => {
                 done(e);

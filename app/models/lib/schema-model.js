@@ -173,9 +173,9 @@ export default class SchemaModel {
     _executeHooks() {
         return co(function* () {
             if (!this._updated) {
-                return yield this.constructor._schema._preCreate(this._rawValues);
+                return yield this.constructor._schema._preCreate(this.values, this._rawValues);
             } else {
-                return yield this.constructor._schema._preUpdate(this._initialRawValues, this._additionalRawValues, this._rawValues);
+                return yield this.constructor._schema._preUpdate(this.values, this._rawValues, this._initialRawValues, this._additionalRawValues);
             }
         }.bind(this)).catch((error) => {
             throw new ValidationErrorMap(error);

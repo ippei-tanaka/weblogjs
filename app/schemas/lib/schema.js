@@ -67,7 +67,7 @@ export default class Schema {
         return this._paths[pathName];
     }
 
-    _preCreate(doc) {
+    _preCreate(doc, rowDoc) {
         const _doc = deepcopy(doc);
 
         _doc.created_date = new Date();
@@ -76,7 +76,7 @@ export default class Schema {
         return Promise.resolve(_doc);
     }
 
-    _preUpdate(oldDoc, newValues, doc) {
+    _preUpdate(doc, rowDoc, oldDoc, newValues) {
         const _doc = deepcopy(doc);
 
         _doc.updated_date = new Date();
