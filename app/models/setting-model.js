@@ -21,16 +21,28 @@ export default class SettingModel extends SchemaModel {
         return operator;
     }
 
+    static findMany () {
+        return undefined;
+    }
+
+    static findOne () {
+        return undefined;
+    }
+
     static getSetting () {
+        const findOne = super.findOne.bind(this);
+
         return co(function* () {
-            const model = yield this.findOne({});
+            const model = yield findOne({});
             return model ? model : {};
         }.bind(this));
     }
 
     static setSetting (values) {
+        const findOne = super.findOne.bind(this);
+
         return co(function* () {
-            let model = yield this.findOne({});
+            let model = yield findOne({});
 
             if (model) {
                 model.setValues(values);
