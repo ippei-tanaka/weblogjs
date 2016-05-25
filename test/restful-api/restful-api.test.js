@@ -61,14 +61,29 @@ describe('Restful API', function () {
     beforeEach('emptying collections', () => WeblogJS.dbSettingOperator.removeAllDocuments());
     beforeEach('creating admin', () => WeblogJS.createUser(admin));
 
+    describe('/home', () => {
+        it('should return an empty object', (done) => {
+            co(function* () {
+                const obj = yield httpRequest.get(`${BASE_URL}/`);
+                expect(Object.keys(obj).length).to.equal(0);
+                done();
+            }).catch((e) => {
+                done(e);
+            });
+        });
+    });
+
     describe('/login', () => {
         it('should give a 401 error if the user try to retrieve restricted data when they haven\'t logged in', (done) => {
             co(function* () {
-                yield httpRequest.get(`${BASE_URL}/users`);
-                done(new Error());
-            }).catch(e => {
-                expect(e.response.statusCode).to.equal(401);
+                try {
+                    yield httpRequest.get(`${BASE_URL}/users`);
+                } catch (error) {
+                    expect(error.response.statusCode).to.equal(401);
+                }
                 done();
+            }).catch(e => {
+                done(e);
             });
         });
 
@@ -78,9 +93,8 @@ describe('Restful API', function () {
                 const users = yield httpRequest.get(`${BASE_URL}/users`);
                 yield httpRequest.get(`${BASE_URL}/logout`);
                 done();
-            }).catch(e => {
-                console.error(e.body || e);
-                done(new Error());
+            }).catch((e) => {
+                done(e);
             });
         });
     });
@@ -90,6 +104,19 @@ describe('Restful API', function () {
         beforeEach('login', () => login());
         afterEach('logout', () => logout());
 
+        it('should return the login user data', (done) => {
+            co(function* () {
+                const user = yield httpRequest.get(`${BASE_URL}/users/me`);
+                expect(user.email).to.equal(admin.email);
+                expect(user.slug).to.equal(admin.slug);
+                expect(user.display_name).to.equal(admin.display_name);
+                expect(user).to.not.have.property('password');
+                done();
+            }).catch((e) => {
+                done(e);
+            });
+        });
+
         it('should create a new user', (done) => {
             co(function* () {
                 const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
@@ -97,8 +124,7 @@ describe('Restful API', function () {
                 expect(user._id).to.equal(_id);
                 done();
             }).catch((e) => {
-                console.error(e.body || e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -109,8 +135,7 @@ describe('Restful API', function () {
                 expect(user).to.not.have.property('password');
                 done();
             }).catch((e) => {
-                console.error(e.body || e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -130,23 +155,29 @@ describe('Restful API', function () {
 
                 done();
             }).catch((e) => {
-                console.error(e.body || e);
-                done(new Error());
+                done(e);
             });
         });
 
         it("should not update a user's password unless their old password is sent", (done) => {
             co(function* () {
-                const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+                let error;
 
-                yield httpRequest.put(`${BASE_URL}/users/${_id}`, {
-                    password: "NewPassword@@@"
-                });
+                try {
+                    const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+                    yield httpRequest.put(`${BASE_URL}/users/${_id}`, {
+                        password: "NewPassword@@@"
+                    });
+                } catch (e) {
+                    error = e;
+                }
 
-                done(new Error());
-            }).catch((e) => {
-                //console.error(e.body || e);
+                expect(error.body.old_password[0].message).to.equal('To change the password, the current password has to be sent.');
+
                 done();
+
+            }).catch((e) => {
+                done(e);
             });
         });
 
@@ -161,24 +192,31 @@ describe('Restful API', function () {
 
                 done();
             }).catch((e) => {
-                console.error(e.body || e);
-                done(new Error());
+                done(e);
             });
         });
 
         it("should not update a user's password if their old password is wrong", (done) => {
             co(function* () {
-                const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
 
-                yield httpRequest.put(`${BASE_URL}/users/${_id}`, {
-                    password: "NewPassword@@@",
-                    old_password: "WrongPassword"
-                });
+                let error;
 
-                done(new Error());
-            }).catch((e) => {
-                //console.error(e.body || e);
+                try {
+                    const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+
+                    yield httpRequest.put(`${BASE_URL}/users/${_id}`, {
+                        password: "NewPassword@@@",
+                        old_password: "WrongPassword"
+                    });
+                } catch (e) {
+                    error = e;
+                }
+
+                expect(error.body.old_password[0].message).to.equal('The current password sent is not correct.');
+
                 done();
+            }).catch((e) => {
+                done(e);
             });
         });
     });
@@ -197,8 +235,7 @@ describe('Restful API', function () {
                 expect(category.slug).to.equal(testCategory.slug);
                 done();
             }).catch((e) => {
-                //console.error(e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -217,27 +254,33 @@ describe('Restful API', function () {
 
         it('should not create a new category if the posted object has an empty value for a required field.', (done) => {
             co(function* () {
-                yield httpRequest.post(`${BASE_URL}/categories`, {
-                    name: '',
-                    slug: ''
-                });
-                done(new Error());
-            }).catch((e) => {
-                //console.log(e.body);
+                try {
+                    yield httpRequest.post(`${BASE_URL}/categories`, {
+                        name: '',
+                        slug: ''
+                    });
+                } catch (error) {
+                    expect(error.body.name[0].message).to.equal('A name is required.');
+                }
                 done();
+            }).catch((e) => {
+                done(e);
             });
         });
 
         it('should not create a new category if the posted object has an invalid value.', (done) => {
             co(function* () {
-                yield httpRequest.post(`${BASE_URL}/categories`, {
-                    name: '123456789',
-                    slug: 'd d'
-                });
-                done(new Error());
-            }).catch((e) => {
-                //console.log(e.body);
+                try {
+                    yield httpRequest.post(`${BASE_URL}/categories`, {
+                        name: '123456789',
+                        slug: 'd d'
+                    });
+                } catch (error) {
+                    expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+                }
                 done();
+            }).catch((e) => {
+                done(e);
             });
         });
 
@@ -256,33 +299,43 @@ describe('Restful API', function () {
                 expect(data2.slug).to.equal(testCategory.slug);
                 done();
             }).catch((e) => {
-                console.log(e.body || e);
-                done(new Error());
+                done(e);
             });
         });
 
         it('should not update a category when the slug is duplicated.', (done) => {
             co(function* () {
-                const cat1 = {name: "Foo", slug: "foo"};
-                const cat2 = {name: "Bar", slug: "bar"};
-                yield httpRequest.post(`${BASE_URL}/categories`, cat1);
-                const id2 = (yield httpRequest.post(`${BASE_URL}/categories`, cat2))._id;
-                yield httpRequest.put(`${BASE_URL}/categories/${id2}`, {slug: "foo"});
-                done(new Error());
-            }).catch((e) => {
-                //console.log(e.body);
+                try {
+                    const cat1 = {name: "Foo", slug: "foo"};
+                    const cat2 = {name: "Bar", slug: "bar"};
+                    yield httpRequest.post(`${BASE_URL}/categories`, cat1);
+                    const id2 = (yield httpRequest.post(`${BASE_URL}/categories`, cat2))._id;
+                    yield httpRequest.put(`${BASE_URL}/categories/${id2}`, {slug: "foo"});
+                } catch (error) {
+                    expect(error.body.slug[0].message).to.equal('The slug, "foo", has already been taken.');
+                }
                 done();
+            }).catch((e) => {
+                done(e);
             });
         });
 
         it('should not update a category if the posted object is not valid.', (done) => {
             co(function* () {
-                const cat = {name: "Fo o", slug: "fo o"};
-                yield httpRequest.post(`${BASE_URL}/categories`, cat);
-                done(new Error());
-            }).catch((e) => {
-                //console.log(e.body);
+                let name = "";
+
+                while (name.length < 250) { name += "a" }
+
+                try {
+                    const cat = {name: name, slug: "fo o"};
+                    yield httpRequest.post(`${BASE_URL}/categories`, cat);
+                } catch (error) {
+                    expect(error.body.name[0].message).to.equal('A name should be between 1 and 200 characters.');
+                    expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+                }
                 done();
+            }).catch((e) => {
+                done(e);
             });
         });
 
@@ -301,8 +354,7 @@ describe('Restful API', function () {
                 expect(data2.items).to.have.length(1);
                 done();
             }).catch((e) => {
-                //console.error(e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -319,8 +371,7 @@ describe('Restful API', function () {
                 expect(data.items).to.have.length(3);
                 done();
             }).catch((e) => {
-                //console.error(e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -333,8 +384,7 @@ describe('Restful API', function () {
                 expect(retreivedCategory.slug).to.equal(testCategory.slug);
                 done();
             }).catch((e) => {
-                //console.error(e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -355,8 +405,7 @@ describe('Restful API', function () {
                 expect(blog.posts_per_page).to.equal(testBlog.posts_per_page);
                 done();
             }).catch((e) => {
-                //console.error(e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -375,39 +424,48 @@ describe('Restful API', function () {
             };
 
             co(function* () {
-                yield httpRequest.post(`${BASE_URL}/blogs`, blog1);
-                yield httpRequest.post(`${BASE_URL}/blogs`, blog2);
-                done(new Error());
-            }).catch((e) => {
-                //console.log(e.body);
+                try {
+                    yield httpRequest.post(`${BASE_URL}/blogs`, blog1);
+                    yield httpRequest.post(`${BASE_URL}/blogs`, blog2);
+                } catch (error) {
+                    expect(error.body.slug[0].message).to.equal('The slug, "heremyblog", has already been taken.');
+                }
                 done();
+            }).catch((e) => {
+                done(e);
             });
         });
 
         it('should not create a new blog if the posted object has an empty value for a required field.', (done) => {
             co(function* () {
-                yield httpRequest.post(`${BASE_URL}/blogs`, {
-                    name: 'Happy Blog',
-                    slug: 'happy-blog'
-                });
-                done(new Error());
-            }).catch((e) => {
-                //console.log(e.body);
+                try {
+                    yield httpRequest.post(`${BASE_URL}/blogs`, {
+                        name: 'Happy Blog',
+                        slug: 'happy-blog'
+                    });
+                } catch (error) {
+                    expect(error.body.posts_per_page[0].message).to.equal('A posts_per_page is required.');
+                }
                 done();
+            }).catch((e) => {
+                done(e);
             });
         });
 
         it('should not create a new blog if the posted object has an invalid value.', (done) => {
             co(function* () {
-                yield httpRequest.post(`${BASE_URL}/blogs`, {
-                    name: '123456789',
-                    slug: 'd d',
-                    posts_per_page: 12
-                });
-                done(new Error());
-            }).catch((e) => {
-                //console.log(e.body);
+                try {
+                    yield httpRequest.post(`${BASE_URL}/blogs`, {
+                        name: '123456789',
+                        slug: 'd d',
+                        posts_per_page: 12
+                    });
+                } catch (error) {
+                    expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+                }
                 done();
+            }).catch((e) => {
+                done(e);
             });
         });
 
@@ -428,33 +486,38 @@ describe('Restful API', function () {
                 expect(data2.slug).to.equal("hello-world");
                 done();
             }).catch((e) => {
-                //console.log(e.body);
-                done(new Error());
+                done(e);
             });
         });
 
         it('should not update a blog when the slug is duplicated.', (done) => {
             co(function* () {
-                const blog1 = {name: "Foo", slug: "foo", posts_per_page: 1};
-                const blog2 = {name: "Bar", slug: "bar", posts_per_page: 1};
-                yield httpRequest.post(`${BASE_URL}/blogs`, blog1);
-                const id2 = (yield httpRequest.post(`${BASE_URL}/blogs`, blog2))._id;
-                yield httpRequest.put(`${BASE_URL}/blogs/${id2}`, {slug: "foo"});
-                done(new Error());
-            }).catch((e) => {
-                //console.log(e.body);
+               try {
+                   const blog1 = {name: "Foo", slug: "foo", posts_per_page: 1};
+                   const blog2 = {name: "Bar", slug: "bar", posts_per_page: 1};
+                   yield httpRequest.post(`${BASE_URL}/blogs`, blog1);
+                   const id2 = (yield httpRequest.post(`${BASE_URL}/blogs`, blog2))._id;
+                   yield httpRequest.put(`${BASE_URL}/blogs/${id2}`, {slug: "foo"});
+               } catch (error) {
+                   expect(error.body.slug[0].message).to.equal('The slug, "foo", has already been taken.');
+                }
                 done();
+            }).catch((e) => {
+                done(e);
             });
         });
 
         it('should not update a blog if the posts_per_page is a negative number.', (done) => {
             co(function* () {
-                const cat = {name: "Foo", slug: "foo", posts_per_page: -1};
-                yield httpRequest.post(`${BASE_URL}/blogs`, cat);
-                done(new Error());
-            }).catch((e) => {
-                //console.log(e.body);
+               try {
+                   const cat = {name: "Foo", slug: "foo", posts_per_page: -1};
+                   yield httpRequest.post(`${BASE_URL}/blogs`, cat);
+               } catch (error) {
+                    expect(error.body.posts_per_page[0].message).to.equal('A posts_per_page should be greater than 0.');
+                }
                 done();
+            }).catch((e) => {
+                done(e);
             });
         });
 
@@ -473,8 +536,7 @@ describe('Restful API', function () {
                 expect(data2.items).to.have.length(1);
                 done();
             }).catch((e) => {
-                //console.error(e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -492,8 +554,7 @@ describe('Restful API', function () {
                 expect(data.items).to.have.length(3);
                 done();
             }).catch((e) => {
-                //console.error(e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -506,8 +567,7 @@ describe('Restful API', function () {
                 expect(retreivedBlog.slug).to.equal(testBlog.slug);
                 done();
             }).catch((e) => {
-                //console.error(e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -557,8 +617,7 @@ describe('Restful API', function () {
                 yield httpRequest.get(`${BASE_URL}/posts/${_id}`);
                 done();
             }).catch((e) => {
-                console.error(e.body || e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -571,8 +630,7 @@ describe('Restful API', function () {
                 expect(post.slug).to.equal(testPost.slug);
                 done();
             }).catch((e) => {
-                console.error(e.body || e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -602,8 +660,7 @@ describe('Restful API', function () {
 
                 done();
             }).catch((e) => {
-                console.error(e.body || e);
-                done(new Error());
+                done(e);
             });
         });
 
@@ -651,8 +708,7 @@ describe('Restful API', function () {
 
                 done();
             }).catch((e) => {
-                console.error(e.body || e);
-                done(new Error());
+                done(e);
             });
         });
 

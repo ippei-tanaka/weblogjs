@@ -126,7 +126,7 @@ class UserSchema extends Schema {
             const _doc = deepcopy(yield superFunc(doc));
 
             if (!_doc[PASSWORD]) {
-                throw ["A user password is required."];
+                throw {[PASSWORD]: ["A user password is required."]};
             }
 
             _doc[HASHED_PASSWORD] = yield generateHash(_doc[PASSWORD]);

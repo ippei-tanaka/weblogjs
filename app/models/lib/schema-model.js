@@ -8,23 +8,21 @@ const ___PathModels = {};
 
 export default class SchemaModel {
 
-    static get name () {
+    static get name() {
         return null;
     }
 
-    static get _schema () {
+    static get _schema() {
         return null;
     }
 
-    static get _PathModels ()
-    {
-        if (!___PathModels[this.name])
-        {
+    static get _PathModels() {
+        if (!___PathModels[this.name]) {
             ___PathModels[this.name] = {};
 
             for (let path of this._schema) {
                 ___PathModels[this.name][path.name] = class extends PathModel {
-                    static get _path () {
+                    static get _path() {
                         return path;
                     }
                 };
@@ -34,11 +32,11 @@ export default class SchemaModel {
         return ___PathModels[this.name];
     }
 
-    static get _operator () {
+    static get _operator() {
         return null;
     }
 
-    static findMany ({query, sort, limit, skip}) {
+    static findMany({query, sort, limit, skip}) {
         return co(function* () {
             const _query = (new this(query)).values;
             const docs = yield this._operator.findMany(_query, sort, limit, skip);
@@ -46,7 +44,7 @@ export default class SchemaModel {
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    static findOne (query) {
+    static findOne(query) {
         return co(function* () {
             const _query = (new this(query)).values;
             const doc = yield this._operator.findOne(_query);
@@ -54,7 +52,7 @@ export default class SchemaModel {
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    static insertOne (values) {
+    static insertOne(values) {
         return co(function* () {
             const model = new this(values);
             const doc = yield model.save();
@@ -62,7 +60,7 @@ export default class SchemaModel {
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    static updateOne (query, values) {
+    static updateOne(query, values) {
         return co(function* () {
             const doc = yield this.findOne(query);
             if (doc) {
@@ -74,7 +72,7 @@ export default class SchemaModel {
         }.bind(this)).catch(this._filterError.bind(this));
     }
 
-    static deleteOne (query) {
+    static deleteOne(query) {
         return co(function* () {
             const _query = (new this(query)).values;
             const result = yield this._operator.deleteOne(_query);
@@ -91,7 +89,7 @@ export default class SchemaModel {
             const pathName = match[1];
             const value = match[2];
             const errorMap = new ValidationErrorMap();
-            errorMap.setError(pathName, [this._schema.getPath(pathName).getUniqueErrorMessage(value)]);
+            errorMap.setError(pathName, [this._schema.getPath(pathName).uniqueErrorMessageBuilder(value)]);
             throw errorMap;
         }
 
@@ -100,7 +98,7 @@ export default class SchemaModel {
         throw new Error();
     }
 
-    constructor (values) {
+    constructor(values) {
         this._pathModels = this._instantiatePathModelsWithValues(values);
         this._initialRawValues = values;
         this._additionalRawValues = {};
@@ -108,7 +106,7 @@ export default class SchemaModel {
         this._updated = false;
     }
 
-    get values () {
+    get values() {
         const _values = {};
         const projection = this.constructor._schema.projection;
 
@@ -127,52 +125,67 @@ export default class SchemaModel {
         return _values;
     }
 
-    get rawValues () {
+    get rawValues() {
         return this._rawValues;
     }
 
-    setValues (values) {
+    setValues(values) {
         this._rawValues = Object.assign({}, this._rawValues, values);
         this._additionalRawValues = Object.assign({}, this._additionalRawValues, values);
         this._pathModels = this._instantiatePathModelsWithValues(this._rawValues);
         this._updated = true;
     }
 
-    save ()
-    {
-        return co(function* ()
-        {
-            for (let pathName of Object.keys(this._pathModels))
-            {
-                const pathModel = this._pathModels[pathName];
-                pathModel.examine();
-            }
-
-            let values;
+    save() {
+        return co(function* () {
+            this._examine();
+            let values = yield this._executeHooks();
 
             if (!this._updated) {
-                values = yield this.constructor._schema._preCreate(this._rawValues);
                 return yield this.constructor._operator.insertOne(values);
             } else {
-                values = yield this.constructor._schema._preUpdate(this._initialRawValues, this._additionalRawValues, this._rawValues);
                 return yield this.constructor._operator.updateOne({_id: values._id}, values);
             }
-
-        }.bind(this)).catch(errorMap => {
-            throw new ValidationErrorMap(errorMap);
-        });
+        }.bind(this));
     }
 
-    toJSON () {
+    toJSON() {
         return this.values;
     }
 
-    _instantiatePathModelsWithValues (values)
-    {
+    _examine() {
+        const error = {};
+
+        for (let pathName of Object.keys(this._pathModels)) {
+            const pathModel = this._pathModels[pathName];
+
+            try {
+                pathModel.examine();
+            } catch (e) {
+                error[pathName] = e;
+            }
+        }
+
+        if (Object.keys(error).length > 0)
+            throw new ValidationErrorMap(error);
+    }
+
+    _executeHooks() {
+        return co(function* () {
+            if (!this._updated) {
+                return yield this.constructor._schema._preCreate(this._rawValues);
+            } else {
+                return yield this.constructor._schema._preUpdate(this._initialRawValues, this._additionalRawValues, this._rawValues);
+            }
+        }.bind(this)).catch((error) => {
+            throw new ValidationErrorMap(error);
+        });
+    }
+
+    _instantiatePathModelsWithValues(values) {
         const pathModels = {};
 
-        for (let path of this.constructor._schema)
-        {
+        for (let path of this.constructor._schema) {
             const value = values[path.name];
             const PathModel = this.constructor._PathModels[path.name];
 

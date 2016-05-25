@@ -4,7 +4,14 @@ import deepcopy from 'deepcopy';
 export default class ValidationErrorMap {
 
     constructor(map = {}) {
-        this._errorMap = map;
+        if (map instanceof ValidationErrorMap) {
+            this._errorMap = map;
+        } else {
+            this._errorMap = {};
+            for (let pathName of Object.keys(map)) {
+                this.setError(pathName, map[pathName]);
+            }
+        }
     }
 
     /**
