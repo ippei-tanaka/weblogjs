@@ -3,12 +3,14 @@ import user from './user-model';
 import category from './category-model';
 import blog from './blog-model';
 import post from './post-model';
+import setting from './setting-model';
 
 const models = {
     [user.name]: user,
     [category.name]: category,
     [blog.name]: blog,
-    [post.name]: post
+    [post.name]: post,
+    [setting.name]: setting
 };
 
 class Models {

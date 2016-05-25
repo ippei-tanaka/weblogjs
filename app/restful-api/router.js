@@ -141,7 +141,6 @@ const addRoutesForAuth = (router) => {
     return router;
 };
 
-
 const addRoutesForHome = (router) => {
 
     router.get(`/`, (request, response) => co(function* () {
@@ -151,7 +150,6 @@ const addRoutesForHome = (router) => {
     return router;
 };
 
-
 const addRoutesForUser = (router) => {
 
     const UserModel = Models.getModel('user');
@@ -159,6 +157,23 @@ const addRoutesForUser = (router) => {
     router.get(`/users/me`, isLoggedIn, (request, response) => co(function* () {
         const model = yield UserModel.findOne({_id: request.user._id});
         successHandler(response, model);
+    }).catch(errorHandler(response)));
+
+    return router;
+};
+
+const addRoutesForSetting = (router) => {
+
+    const SettingModel = Models.getModel('setting');
+
+    router.get(`/setting`, (request, response) => co(function* () {
+        const model = yield SettingModel.getSetting();
+        successHandler(response, model);
+    }).catch(errorHandler(response)));
+
+    router.post(`/setting`, (request, response) => co(function* () {
+        yield SettingModel.setSetting(request.body);
+        successHandler(response, {});
     }).catch(errorHandler(response)));
 
     return router;
@@ -175,28 +190,6 @@ router.get('/privileges', isLoggedIn, response((ok) => {
 
 */
 
-
-/*
-//-------------------------------------------------------
-// Setting
-
-
-router.get('/setting', isLoggedIn, response((ok, error) => {
-    settingManager.getSetting()
-        .then(ok)
-        .catch(error);
-}));
-
-router.put('/setting', isLoggedIn, response((ok, error, request) => {
-    settingManager.setFront(request.body ? request.body.front : null)
-        .then(ok)
-        .catch((eee) => {
-            console.error(eee);
-            error(eee);
-        });
-}));
-*/
-
 export default class RestfulApiRouter {
 
     constructor({basePath}) {
@@ -204,13 +197,15 @@ export default class RestfulApiRouter {
 
         let router = new Router();
 
-        router = addRoutesForAuth(router);
+        // The order of those functions matters.
         router = addRoutesForHome(router);
+        router = addRoutesForAuth(router);
         router = addRoutesForUser(router);
         router = addRoutesForCrudOperations("user", router);
         router = addRoutesForCrudOperations("category", router);
         router = addRoutesForCrudOperations("blog", router);
         router = addRoutesForCrudOperations("post", router);
+        router = addRoutesForSetting(router);
 
         this._router = router
     }
