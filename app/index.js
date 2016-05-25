@@ -66,7 +66,7 @@ class WeblogJS {
     }
 
     createUser (user) {
-        return UserModel.insertOne(user);
+        return new UserModel(user).save();
     }
 }
 
