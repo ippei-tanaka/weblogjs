@@ -10,29 +10,32 @@ class UserPasswordEditor extends Component {
         super(props);
 
         this.state = {
-            values: {}
+            values: {},
+            actionId: null
         }
     }
 
-    componentWillMount () {
-        const { initializeTransaction } = this.props;
-        initializeTransaction();
+    componentWillMount() {
+        this.setState({actionId: Symbol()});
     }
 
-    componentWillReceiveProps (props) {
-        if (props.transactionStore.get('status') === RESOLVED) {
+    componentWillUnmount() {
+        this.props.finishTransaction(this.state.actionId);
+    }
+
+    componentWillReceiveProps(props) {
+        const transaction = props.transactionStore.get(this.state.actionId);
+
+        if (transaction && transaction.get('status') === RESOLVED) {
             this._goToListPage();
         }
     }
 
     render() {
-        const {
-            params : {id},
-            userStore,
-            transactionStore
-            } = this.props;
+        const {params: {id}, userStore, transactionStore} = this.props;
         const editedUser = userStore.get('users').get(id) || null;
-        const errors = transactionStore.get('errors');
+        const transaction = transactionStore.get(this.state.actionId);
+        const errors = transaction ? transaction.get('errors') : {};
         const values = this.state.values;
 
         return editedUser ? (
@@ -51,23 +54,23 @@ class UserPasswordEditor extends Component {
         );
     }
 
-    _onChange (field, value) {
+    _onChange(field, value) {
         this.setState(state => {
             state.values[field] = value;
         });
     }
 
-    _onSubmit () {
+    _onSubmit() {
         const { params : {id}, editUserPassword } = this.props;
-        editUserPassword({id, data: this.state.values});
+        editUserPassword(this.state.actionId, {id, data: this.state.values});
     }
 
-    _goToListPage () {
+    _goToListPage() {
         const { params : {id} } = this.props;
         this.context.history.pushState(null, `/admin/users/${id}/editor`);
     }
 
-    static get contextTypes () {
+    static get contextTypes() {
         return {
             history: React.PropTypes.object
         };

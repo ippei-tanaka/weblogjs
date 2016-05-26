@@ -10,30 +10,32 @@ class UserEditor extends Component {
         super(props);
 
         this.state = {
-            values: {}
+            values: {},
+            actionId: null
         }
     }
 
-    componentWillMount () {
-        const { initializeTransaction } = this.props;
-        initializeTransaction();
+    componentWillMount() {
+        this.setState({actionId: Symbol()});
     }
 
-    componentWillReceiveProps (props) {
-        if (props.transactionStore.get('status') === RESOLVED) {
+    componentWillUnmount() {
+        this.props.finishTransaction(this.state.actionId);
+    }
+
+    componentWillReceiveProps(props) {
+        const transaction = props.transactionStore.get(this.state.actionId);
+
+        if (transaction && transaction.get('status') === RESOLVED) {
             this._goToListPage();
         }
     }
 
     render() {
-        const {
-            params : {id},
-            userStore,
-            transactionStore
-            } = this.props;
-
-        let editedUser = userStore.get('users').get(id) || null;
-        let errors = transactionStore.get('errors');
+        const {params: {id}, userStore, transactionStore} = this.props;
+        const editedUser = userStore.get('users').get(id) || null;
+        const transaction = transactionStore.get(this.state.actionId);
+        const errors = transaction ? transaction.get('errors') : {};
         const values = Object.assign({}, editedUser, this.state.values);
 
         return editedUser ? (
@@ -64,7 +66,7 @@ class UserEditor extends Component {
 
     _onSubmit () {
         const { params : {id}, editUser } = this.props;
-        editUser({id, data: this.state.values});
+        editUser(this.state.actionId, {id, data: this.state.values});
     }
 
     _goToListPage () {
