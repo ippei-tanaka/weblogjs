@@ -205,29 +205,21 @@ export const logoutFromAdmin = () => ajaxRestfulAPI("/logout")
     .catch(() => false);
 
 
-export const loadUsersFromServer = () => ajaxRestfulAPI("/users")
-    .then(data => ({users: data.items}))
-    .catch(errors => ({errors}));
+export const getFromServer = ({path}) => ajaxRestfulAPI(path);
 
-export const createUserOnServer = ({data}) =>
-    ajaxRestfulAPI("/users", {
+export const postOnServer = ({path, data}) =>
+    ajaxRestfulAPI(path, {
         data,
         method: 'post'
-    })
-        .then(user => ({user}))
-        .catch(errors => ({errors}));
+    });
 
-export const editUserOnServer = ({id, data}) =>
-    ajaxRestfulAPI("/users/" + id, {
+export const putOneOnServer = ({path, data}) =>
+    ajaxRestfulAPI(path, {
         data,
         method: 'put'
-    })
-        .then(user => ({user}))
-        .catch(errors => ({errors}));
+    });
 
-export const deleteUserOnServer = ({id}) =>
-    ajaxRestfulAPI("/users/" + id, {
+export const deleteOnServer = ({path, id}) =>
+    ajaxRestfulAPI(path, {
         method: 'delete'
-    })
-        .then(user => ({user}))
-        .catch(errors => ({errors}));
+    });

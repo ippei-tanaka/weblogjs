@@ -41,19 +41,13 @@ class UserList extends Component {
                 label: "Email"
             },
 
-            readable_privileges: {
-                label: "Privileges",
-                stringify: value =>
-                    value.map(p => p.toLowerCase()).join(', ')
-            },
-
-            created: {
+            created_date: {
                 label: "Created",
                 stringify: value =>
                     Moment(value).format("YYYY-MM-DD HH:mm Z")
             },
 
-            updated: {
+            updated_date: {
                 label: "Updated",
                 stringify: value =>
                     Moment(value).format("YYYY-MM-DD HH:mm Z")

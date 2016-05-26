@@ -44,7 +44,7 @@ export default (state = initialState, action) => {
             }
             return state
                 .set('status', REJECTED)
-                .set('errors', action.errors.errors);
+                .set('errors', action.errors);
 
         default:
             return state;

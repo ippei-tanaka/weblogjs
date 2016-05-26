@@ -1,5 +1,5 @@
 import * as authActions from './auth';
 import * as transactionActions from './transaction';
-import * as userActions from './user';
+import * as resourcesActions from './resorces';
 
-export default Object.assign({}, authActions, transactionActions, userActions);
+export default Object.assign({}, authActions, transactionActions, resourcesActions);
