@@ -8,9 +8,7 @@ import {
     DELETED_USER_RECEIVED
 } from '../constants/action-types';
 
-const initialState = Immutable.fromJS({
-    users: {}
-});
+const initialState = Immutable.Map({});
 
 export default (state = initialState, action) => {
 
@@ -20,34 +18,24 @@ export default (state = initialState, action) => {
 
         case LOADED_USER_RECEIVED:
             if (action.data) {
-
-                let newUsers = {};
-
-                action.data.forEach((user) => {
-                    newUsers[user._id] = user;
+                action.data.forEach((data) => {
+                    state = state.set(data._id, data);
                 });
-
-                newUsers = new Immutable.Map(newUsers);
-
-                return state
-                    .set('users', users.merge(newUsers));
+                return state;
             }
             return state;
 
         case CREATED_USER_RECEIVED:
-            return state
-                .set('users', users.set(action.data._id, action.data));
+            return state.set(action.data._id, action.data);
 
         case EDITED_USER_RECEIVED:
-            return state
-                .set('users', users.set(action.data._id, action.data));
+            return state.set(action.data._id, action.data);
 
         case USER_PASSWORD_EDIT_COMPLETE:
             return state;
 
         case DELETED_USER_RECEIVED:
-            return state
-                .set('users', users.delete(action.id));
+            return state.delete(action.id);
 
         default:
             return state;

@@ -8,7 +8,7 @@ class UserList extends Component {
 
     render() {
         const { userStore } = this.props;
-        const users = userStore.get('users').toArray();
+        const users = userStore.toArray();
 
         return <List title="User List"
                      adderLocation="/admin/users/adder"
