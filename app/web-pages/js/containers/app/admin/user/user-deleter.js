@@ -7,9 +7,8 @@ import { RESOLVED } from '../../../../constants/transaction-status';
 class UserDeleter extends Component {
 
     componentWillMount () {
-        const { initializeTransaction, loadUsers } = this.props;
+        const { initializeTransaction } = this.props;
         initializeTransaction();
-        loadUsers();
     }
 
     componentWillReceiveProps (props) {

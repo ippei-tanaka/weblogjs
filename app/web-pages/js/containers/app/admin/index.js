@@ -35,8 +35,8 @@ class Admin extends Component {
     }
 
     render() {
-        const { requestLogin, requestLogout, auth, children } = this.props;
-        const status = auth.get('status');
+        const { requestLogin, authStore, children } = this.props;
+        const authStatus = authStore.get('status');
         const loginFormProps = {
             error: false,
             email: this.state.email,
@@ -47,12 +47,9 @@ class Admin extends Component {
                 password: this.state.password
             })
         };
-        const menuElement = <AdminMenu onLogoutClick={requestLogout}/>;
-        let menu = null;
         let content = null;
 
-        switch (status) {
-            case UNINITIALIZED:
+        switch (authStatus) {
             case LOGOUT_CONFIRMED:
             case LOGOUT_SUCCEEDED:
                 content = <LoginForm {...loginFormProps} />;
@@ -61,11 +58,14 @@ class Admin extends Component {
                 loginFormProps.error = true;
                 content = <LoginForm {...loginFormProps} />;
                 break;
+            case LOGOUT_FAILED:
             case LOGIN_CONFIRMED:
             case LOGIN_SUCCEEDED:
-                menu = menuElement;
                 content = children;
                 break;
+            case UNINITIALIZED:
+            case WAITING_FOR_LOGIN:
+            case WAITING_FOR_STATUS_CHECK:
             default:
                 content = <Loader />;
                 break;
@@ -73,7 +73,6 @@ class Admin extends Component {
 
         return (
             <div className="module-admin">
-                {menu}
                 {content}
             </div>
         );
@@ -82,6 +81,6 @@ class Admin extends Component {
 
 
 export default connect(
-    state => ({auth: state.auth}),
+    state => ({authStore: state.auth}),
     actions
 )(Admin);

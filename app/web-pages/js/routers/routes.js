@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Route, IndexRoute } from 'react-router';
 import App from "../containers/app";
 import Admin from "../containers/app/admin";
+import AdminWrapper from "../containers/app/admin/wrapper";
 import DashBoard from "../containers/app/admin/dashboard";
 import UserList from "../containers/app/admin/user/user-list";
 import UserAdder from "../containers/app/admin/user/user-adder";
@@ -29,15 +30,17 @@ import Public from "../components/app/public";
 
 const appRoutes = (
     <Route path="/" component={App}>
-        <IndexRoute component={Public} />
+        <IndexRoute component={Public}/>
         <Route path="admin" component={Admin}>
-            <IndexRoute component={DashBoard} />
-            <Route path="users">
-                <IndexRoute component={UserList} />
-                <Route path="adder" component={UserAdder} />
-                <Route path=":id/editor" component={UserEditor}/>
-                <Route path=":id/password-editor" component={UserPasswordEditor}/>
-                <Route path=":id/deleter" component={UserDeleter}/>
+            <Route component={AdminWrapper}>
+                <IndexRoute component={DashBoard}/>
+                <Route path="users">
+                    <IndexRoute component={UserList}/>
+                    <Route path="adder" component={UserAdder}/>
+                    <Route path=":id/editor" component={UserEditor}/>
+                    <Route path=":id/password-editor" component={UserPasswordEditor}/>
+                    <Route path=":id/deleter" component={UserDeleter}/>
+                </Route>
             </Route>
         </Route>
     </Route>

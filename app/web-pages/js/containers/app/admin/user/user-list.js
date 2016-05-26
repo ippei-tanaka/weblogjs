@@ -6,14 +6,9 @@ import { connect } from 'react-redux';
 
 class UserList extends Component {
 
-    componentDidMount () {
-        const { loadUsers } = this.props;
-        loadUsers();
-    }
-
     render() {
-        const { store } = this.props;
-        const users = store.get('users').toArray();
+        const { userStore } = this.props;
+        const users = userStore.get('users').toArray();
 
         return <List title={this._title}
                      adderLocation="/admin/users/adder"
@@ -59,6 +54,6 @@ class UserList extends Component {
 
 
 export default connect(
-    state => ({store: state.user}),
+    state => ({userStore: state.user}),
     actions
 )(UserList);

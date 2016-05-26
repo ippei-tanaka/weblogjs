@@ -26,8 +26,20 @@ const errorHandler = (dispatch) => (errors) => {
     });
 };
 
+const modify = (dispatch, main) => {
+    dispatch({
+        type: TRANSACTION_REQUEST
+    });
+    return co(function* () {
+        yield main();
+        dispatch({
+            type: TRANSACTION_RESOLVED
+        });
+    }).catch(errorHandler(dispatch));
+};
+
 const load = (path, doneType) => () => (dispatch, getState) => {
-    co(function* () {
+    return co(function* () {
         const response = yield getFromServer({path: `/${path}`});
         dispatch({
             type: doneType,
@@ -37,27 +49,18 @@ const load = (path, doneType) => () => (dispatch, getState) => {
 };
 
 const create = (path, doneType) => (newUser) => (dispatch, getState) => {
-    dispatch({
-        type: TRANSACTION_REQUEST
-    });
-    co(function* () {
+    return modify(dispatch, () => co(function* () {
         let response = yield postOnServer({data: newUser, path: `/${path}`});
         response = yield getFromServer({path: `/${path}/${response._id}`});
-        dispatch({
-            type: TRANSACTION_RESOLVED
-        });
         dispatch({
             type: doneType,
             data: response
         });
-    }).catch(errorHandler(dispatch));
+    }));
 };
 
 const edit = (path, doneType) => ({id, data}) => (dispatch, getState) => {
-    dispatch({
-        type: TRANSACTION_REQUEST
-    });
-    co(function* () {
+    return modify(dispatch, () => co(function* () {
         yield putOneOnServer({data, path: `/${path}/${id}`});
         const response = yield getFromServer({path: `/${path}/${id}`});
         dispatch({
@@ -67,14 +70,11 @@ const edit = (path, doneType) => ({id, data}) => (dispatch, getState) => {
             type: doneType,
             data: response
         });
-    }).catch(errorHandler(dispatch));
+    }));
 };
 
 const del = (path, doneType) => ({id}) => (dispatch, getState) => {
-    dispatch({
-        type: TRANSACTION_REQUEST
-    });
-    co(function* () {
+    return modify(dispatch, () => co(function* () {
         yield deleteOnServer({path: `/${path}/${id}`});
         dispatch({
             type: TRANSACTION_RESOLVED
@@ -83,7 +83,7 @@ const del = (path, doneType) => ({id}) => (dispatch, getState) => {
             type: doneType,
             id
         });
-    }).catch(errorHandler(dispatch));
+    }));
 };
 
 export const loadUsers = load('users', LOADED_USER_RECEIVED);
@@ -93,10 +93,7 @@ export const createUser = create('users', CREATED_USER_RECEIVED);
 export const editUser = edit('users', EDITED_USER_RECEIVED);
 
 export const editUserPassword = ({id, data}) => (dispatch, getState) => {
-    dispatch({
-        type: TRANSACTION_REQUEST
-    });
-    co(function* () {
+    return modify(dispatch, () => co(function* () {
         yield putOneOnServer({data, path: `/users/${id}/password`});
         dispatch({
             type: TRANSACTION_RESOLVED
@@ -104,7 +101,7 @@ export const editUserPassword = ({id, data}) => (dispatch, getState) => {
         dispatch({
             type: USER_PASSWORD_EDIT_COMPLETE
         });
-    }).catch(errorHandler(dispatch));
+    }));
 };
 
 export const deleteUser = del('users', DELETED_USER_RECEIVED);
