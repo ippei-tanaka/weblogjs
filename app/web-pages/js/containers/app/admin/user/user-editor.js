@@ -15,9 +15,8 @@ class UserEditor extends Component {
     }
 
     componentWillMount () {
-        const { initializeTransaction, loadUsers } = this.props;
+        const { initializeTransaction } = this.props;
         initializeTransaction();
-        loadUsers();
     }
 
     componentWillReceiveProps (props) {

@@ -49,7 +49,7 @@ export default (state = initialState, action) => {
         case LOGIN_RESULT_RECEIVED:
             return state
                 .set('status', action.user ? LOGIN_SUCCEEDED : LOGIN_FAILED)
-                .set('user', action.user);
+                .set('user', action.user || null);
 
         case LOGOUT_RESULT_RECEIVED:
             return state
