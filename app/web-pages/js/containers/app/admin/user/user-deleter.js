@@ -34,7 +34,7 @@ class UserDeleter extends Component {
     render() {
         const { params : {id}, userStore } = this.props;
 
-        const deletedUser = userStore.get('users').get(id) || null;
+        const deletedUser = userStore.get(id) || null;
 
         return deletedUser ? (
             <div className="module-data-editor">

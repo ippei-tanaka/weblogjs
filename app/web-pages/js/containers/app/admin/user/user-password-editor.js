@@ -33,7 +33,7 @@ class UserPasswordEditor extends Component {
 
     render() {
         const {params: {id}, userStore, transactionStore} = this.props;
-        const editedUser = userStore.get('users').get(id) || null;
+        const editedUser = userStore.get(id) || null;
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
         const values = this.state.values;

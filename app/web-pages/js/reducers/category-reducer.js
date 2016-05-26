@@ -26,12 +26,10 @@ export default (state = initialState, action) => {
             return state.set(action.data._id, action.data);
 
         case EDITED_CATEGORY_RECEIVED:
-            return state
-                .set(action.data._id, action.data);
+            return state.set(action.data._id, action.data);
 
         case DELETED_CATEGORY_RECEIVED:
-            return state
-                .delete(action.id);
+            return state.delete(action.id);
 
         default:
             return state;
