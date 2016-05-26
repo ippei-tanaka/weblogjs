@@ -22,8 +22,6 @@ export default function UserForm({
         onSubmit();
     };
 
-    console.log(errors);
-
     return (
         <Form onSubmit={_onSubmit}>
 
@@ -37,17 +35,17 @@ export default function UserForm({
             </FieldSet>
 
             <FieldSet label="New Password"
-                      error={errors.new_password}>
-                <Input value={values.new_password}
+                      error={errors.password}>
+                <Input value={values.password}
                        type="text"
-                       onChange={_onChange("new_password")}/>
+                       onChange={_onChange("password")}/>
             </FieldSet>
 
             <FieldSet label="Confirm the New Password"
-                      error={errors.new_password_confirmed}>
-                <Input value={values.new_password_confirmed}
+                      error={errors.password_confirmed}>
+                <Input value={values.password_confirmed}
                        type="text"
-                       onChange={_onChange("new_password_confirmed")}/>
+                       onChange={_onChange("password_confirmed")}/>
             </FieldSet>
 
             <ButtonList>
