@@ -10,6 +10,10 @@ import UserAdder from "../containers/app/admin/user/user-adder";
 import UserEditor from "../containers/app/admin/user/user-editor";
 import UserPasswordEditor from "../containers/app/admin/user/user-password-editor";
 import UserDeleter from "../containers/app/admin/user/user-deleter";
+import CategoryList from "../containers/app/admin/category/category-list";
+import CategoryAdder from "../containers/app/admin/category/category-adder";
+//import CategoryEditor from "../containers/app/admin/category/category-editor";
+//import CategoryDeleter from "../containers/app/admin/category/category-deleter";
 /*
 import CategoryList from "../components/app/admin/category/category-list";
 import CategoryAdder from "../components/app/admin/category/category-adder";
@@ -40,6 +44,10 @@ const appRoutes = (
                     <Route path=":id/editor" component={UserEditor}/>
                     <Route path=":id/password-editor" component={UserPasswordEditor}/>
                     <Route path=":id/deleter" component={UserDeleter}/>
+                </Route>
+                <Route path="categories">
+                    <IndexRoute component={CategoryList}/>
+                    <Route path="adder" component={CategoryAdder}/>
                 </Route>
             </Route>
         </Route>

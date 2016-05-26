@@ -14,20 +14,26 @@ class AdminWrapper extends Component {
         super(props);
 
         this.state = {
-            actionId: null
+            actionIdForUsers: null,
+            actionIdForCategories: null
         }
     }
 
     componentWillMount() {
-        this.setState({actionId: Symbol()});
+        this.setState({
+            actionIdForUsers: Symbol(),
+            actionIdForCategories: Symbol()
+        });
     }
 
     componentDidMount() {
-        this.props.loadUsers(this.state.actionId);
+        this.props.loadUsers(this.state.actionIdForUsers);
+        this.props.loadCategories(this.state.actionIdForCategories);
     }
 
     componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+        this.props.finishTransaction(this.state.actionIdForUsers);
+        this.props.finishTransaction(this.state.actionIdForCategories);
     }
 
     render() {
