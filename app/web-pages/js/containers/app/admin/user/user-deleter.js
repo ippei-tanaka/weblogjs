@@ -6,13 +6,27 @@ import { RESOLVED } from '../../../../constants/transaction-status';
 
 class UserDeleter extends Component {
 
-    componentWillMount () {
-        const { initializeTransaction } = this.props;
-        initializeTransaction();
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            values: {},
+            actionId: null
+        }
     }
 
-    componentWillReceiveProps (props) {
-        if (props.transactionStore.get('status') === RESOLVED) {
+    componentWillMount() {
+        this.setState({actionId: Symbol()});
+    }
+
+    componentWillUnmount() {
+        this.props.finishTransaction(this.state.actionId);
+    }
+
+    componentWillReceiveProps(props) {
+        const transaction = props.transactionStore.get(this.state.actionId);
+
+        if (transaction && transaction.get('status') === RESOLVED) {
             this._goToListPage();
         }
     }
@@ -40,7 +54,7 @@ class UserDeleter extends Component {
 
     _onApproved () {
         const { params : {id}, deleteUser } = this.props;
-        deleteUser({id});
+        deleteUser(this.state.actionId, {id});
     }
 
     _goToListPage () {

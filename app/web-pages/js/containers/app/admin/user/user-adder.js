@@ -10,32 +10,32 @@ class UserAdder extends Component {
         super(props);
 
         this.state = {
-            values: {}
+            values: {},
+            actionId: null
         }
     }
 
-    componentWillMount () {
-        const { initializeTransaction } = this.props;
-        initializeTransaction();
+    componentWillMount() {
+        this.setState({actionId: Symbol()});
     }
 
-    componentWillReceiveProps (props) {
-        if (props.transactionStore.get('status') === RESOLVED) {
+    componentWillUnmount() {
+        this.props.finishTransaction(this.state.actionId);
+    }
+
+    componentWillReceiveProps(props) {
+        const transaction = props.transactionStore.get(this.state.actionId);
+
+        if (transaction && transaction.get('status') === RESOLVED) {
             this._goToListPage();
         }
     }
 
     render() {
-        const {
-            params : {id},
-            userStore,
-            transactionStore
-            } = this.props;
-
-        let user = userStore.get('users').get(id) || {};
-        let errors = transactionStore.get('errors');
-
-        const values = Object.assign({}, user, this.state.values);
+        const {transactionStore} = this.props;
+        const {values, actionId} = this.state;
+        const transaction = transactionStore.get(actionId);
+        const errors = transaction ? transaction.get('errors') : {};
 
         return (
             <UserForm title="Create a New User"
@@ -50,22 +50,21 @@ class UserAdder extends Component {
         );
     }
 
-    _onChange (field, value) {
+    _onChange(field, value) {
         this.setState(state => {
             state.values[field] = value;
         });
     }
 
-    _onSubmit () {
-        const { createUser } = this.props;
-        createUser(this.state.values);
+    _onSubmit() {
+        this.props.createUser(this.state.actionId, this.state.values);
     }
 
-    _goToListPage () {
+    _goToListPage() {
         this.context.history.pushState(null, "/admin/users");
     }
 
-    static get contextTypes () {
+    static get contextTypes() {
         return {
             history: React.PropTypes.object
         };
@@ -75,7 +74,6 @@ class UserAdder extends Component {
 
 export default connect(
     state => ({
-        userStore: state.user,
         transactionStore: state.transaction
     }),
     actions

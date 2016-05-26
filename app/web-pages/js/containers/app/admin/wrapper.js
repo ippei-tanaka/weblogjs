@@ -10,8 +10,24 @@ import { LOGOUT_FAILED } from '../../../constants/auth-status';
 
 class AdminWrapper extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            actionId: null
+        }
+    }
+
+    componentWillMount() {
+        this.setState({actionId: Symbol()});
+    }
+
     componentDidMount() {
-        this.props.loadUsers();
+        this.props.loadUsers(this.state.actionId);
+    }
+
+    componentWillUnmount() {
+        this.props.finishTransaction(this.state.actionId);
     }
 
     render() {
