@@ -1,93 +1,84 @@
-import React from 'react';
-import CategoryStore from '../../../../stores/category-store';
-import ViewActionCreator from '../../../../action-creators/view-action-creator';
-import Page from '../../../abstructs/page';
-import Confirmation from '../../../partials/confirmation';
-import hat from 'hat';
+import React, { Component } from 'react';
+import Confirmation from '../../../../components/confirmation';
+import actions from '../../../../actions';
+import { connect } from 'react-redux';
+import { RESOLVED } from '../../../../constants/transaction-status';
 
-var rack = hat.rack();
-
-class CategoryDeleter extends Page {
+class CategoryDeleter extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            values: ""
-        };
-
-        this.token = rack();
-
-        this.callback = this.onStoreChanged.bind(this);
+            values: {},
+            actionId: null
+        }
     }
 
-    componentDidMount() {
-        this.updateValues();
-        CategoryStore.addChangeListener(this.callback);
+    componentWillMount() {
+        this.setState({actionId: Symbol()});
     }
 
     componentWillUnmount() {
-        CategoryStore.removeChangeListener(this.callback);
+        this.props.finishTransaction(this.state.actionId);
+    }
+
+    componentWillReceiveProps(props) {
+        const transaction = props.transactionStore.get(this.state.actionId);
+
+        if (transaction && transaction.get('status') === RESOLVED) {
+            this._goToListPage();
+        }
     }
 
     render() {
-        this.setPageTitle(this.title);
+        const { params : {id}, categoryStore } = this.props;
 
-        return (
+        const deletedCategory = categoryStore.get(id) || null;
+
+        return deletedCategory ? (
             <div className="module-data-editor">
-                <h2 className="m-dte-title">{this.title}</h2>
+                <h2 className="m-dte-title">{`Delete the Category "${deletedCategory.display_name}"`}</h2>
                 <Confirmation
                     mode="choose"
-                    onApproved={this.onApproved.bind(this)}
-                    onCanceled={this.onCanceled.bind(this)}
-                >{this.label}</Confirmation>
+                    onApproved={this._onApproved.bind(this)}
+                    onCanceled={this._goToListPage.bind(this)}
+                >{`Do you want to delete "${deletedCategory.display_name}"?`}</Confirmation>
+            </div>
+        ) : (
+            <div className="module-data-editor">
+                <h2 className="m-dte-title">The category doesn't exist.</h2>
             </div>
         );
     }
 
-    onApproved () {
-        ViewActionCreator.requestDeleteCategory({
-            token: this.token,
-            id: this.props.params.id
-        });
+    _onApproved () {
+        const { params : {id}, deleteCategory } = this.props;
+        deleteCategory(this.state.actionId, {id});
     }
 
-    onCanceled () {
-        this.goToListPage();
-    }
-
-    onStoreChanged() {
-        var action = CategoryStore.latestAction;
-
-        this.updateValues();
-
-        if (action && action.token === this.token) {
-            if (action.data && action.data.errors) {
-                this.setState(s => { s.errors = action.data.errors });
-            } else {
-                this.goToListPage();
-            }
-        }
-    }
-
-    goToListPage () {
+    _goToListPage () {
         this.context.history.pushState(null, "/admin/categories");
     }
 
-    updateValues () {
-        this.setState(s => {
-            s.values = CategoryStore.get(this.props.params.id) || {};
-        });
+    static get contextTypes () {
+        return {
+            history: React.PropTypes.object
+        };
+    };
+
+    static get propTypes() {
+        return {
+            params: React.PropTypes.object
+        };
     }
 
-    get title() {
-        return `Delete the Category "${this.state.values.name}"`;
-    }
-
-    get label() {
-        return `Do you want to delete "${this.state.values.name}"?`;
-    }
 }
 
-
-export default CategoryDeleter;
+export default connect(
+    state => ({
+        categoryStore: state.category,
+        transactionStore: state.transaction
+    }),
+    actions
+)(CategoryDeleter);
