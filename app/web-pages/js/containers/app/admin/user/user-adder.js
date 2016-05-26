@@ -36,8 +36,6 @@ class UserAdder extends Component {
         let user = userStore.get('users').get(id) || {};
         let errors = transactionStore.get('errors');
 
-        console.log(errors);
-
         const values = Object.assign({}, user, this.state.values);
 
         return (
