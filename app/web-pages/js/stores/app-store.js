@@ -2,6 +2,7 @@ import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import promiseMiddleWare from '../middlewares/promise-middleware';
 import functionMiddleWare from '../middlewares/function-middleware';
 import userReducer from '../reducers/user-reducer';
+import categoryReducer from '../reducers/category-reducer';
 import authReducer from '../reducers/auth-reducer';
 import transactionReducer from '../reducers/transaction-reducer';
 //import DevTools from '../containers/dev-tools';
@@ -10,6 +11,7 @@ import transactionReducer from '../reducers/transaction-reducer';
 
 const reducer = combineReducers({
     user: userReducer,
+    category: categoryReducer,
     auth: authReducer,
     transaction: transactionReducer
 });

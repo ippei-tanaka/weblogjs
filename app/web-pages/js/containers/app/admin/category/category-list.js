@@ -4,32 +4,28 @@ import List from '../../../../components/list';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 
-class UserList extends Component {
+class CategoryList extends Component {
 
     render() {
-        const { userStore } = this.props;
-        const users = userStore.get('users').toArray();
+        const { categoryStore } = this.props;
+        const categories = categoryStore.toArray();
 
-        return <List title="User List"
-                     adderLocation="/admin/users/adder"
+        return <List title="Category List"
+                     adderLocation="/admin/categories/adder"
                      fields={this._fields}
-                     models={users}
-                     editorLocationBuilder={id => `/admin/users/${id}/editor`}
-                     deleterLocationBuilder={id => `/admin/users/${id}/deleter`}/>;
+                     models={categories}
+                     editorLocationBuilder={id => `/admin/categories/${id}/editor`}
+                     deleterLocationBuilder={id => `/admin/categories/${id}/deleter`}/>;
     }
 
     get _fields() {
         return {
-            display_name: {
+            name: {
                 label: "Name"
             },
 
             slug: {
                 label: "Slug"
-            },
-
-            email: {
-                label: "Email"
             },
 
             created_date: {
@@ -50,6 +46,6 @@ class UserList extends Component {
 
 
 export default connect(
-    state => ({userStore: state.user}),
+    state => ({categoryStore: state.category}),
     actions
-)(UserList);
+)(CategoryList);

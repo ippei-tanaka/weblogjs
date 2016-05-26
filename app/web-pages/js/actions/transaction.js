@@ -11,6 +11,12 @@ import {
     EDITED_USER_RECEIVED,
     USER_PASSWORD_EDIT_COMPLETE,
     DELETED_USER_RECEIVED,
+
+    LOADED_CATEGORY_RECEIVED,
+    CREATED_CATEGORY_RECEIVED,
+    EDITED_CATEGORY_RECEIVED,
+    DELETED_CATEGORY_RECEIVED,
+
     TRANSACTION_REQUEST,
     TRANSACTION_REJECTED,
     TRANSACTION_RESOLVED,
@@ -102,6 +108,14 @@ export const editUserPassword = (actionId, {id, data}) => (dispatch, getState) =
 };
 
 export const deleteUser = del('users', DELETED_USER_RECEIVED);
+
+export const loadCategories = load('categories', LOADED_CATEGORY_RECEIVED);
+
+export const createCategory = create('categories', CREATED_CATEGORY_RECEIVED);
+
+export const editCategory = edit('categories', EDITED_CATEGORY_RECEIVED);
+
+export const deleteCategory = del('categories', DELETED_CATEGORY_RECEIVED);
 
 export const finishTransaction = (actionId) => (dispatch, getState) => {
     dispatch({
