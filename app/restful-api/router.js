@@ -166,6 +166,18 @@ const addRoutesForUser = (router) => {
         successHandler(response, model);
     }).catch(errorHandler(response)));
 
+    router.put(`/users/:id/password`, isLoggedIn, (request, response) => co(function* () {
+        const model = yield UserModel.findOne({_id: request.params.id});
+
+        if (model) {
+            model.setValues(request.body);
+            model.setValues({password_update: true});
+            yield model.save();
+        }
+
+        successHandler(response, {});
+    }).catch(errorHandler(response)));
+
     return router;
 };
 

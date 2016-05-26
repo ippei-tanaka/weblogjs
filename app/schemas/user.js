@@ -20,8 +20,8 @@ const paths = {
     },
 
     password: {
+        required: true,
         type: Types.String,
-        sanitize: (value) => value.trim(),
         validate: function* (value) {
             const range = {min: 8, max: 16};
             if (!validator.isLength(value, range)) {
@@ -91,7 +91,9 @@ const compareHashedStrings = (plainString, hashedString) => new Promise((resolve
 
 const HASHED_PASSWORD = "hashed_password";
 const OLD_PASSWORD = "old_password";
+const PASSWORD_UPDATE = "password_update";
 const PASSWORD = "password";
+const PASSWORD_CONFIRMED = "password_confirmed";
 
 class UserSchema extends Schema {
 
@@ -114,7 +116,7 @@ class UserSchema extends Schema {
             });
     }
 
-    compareHashedStrings (plainString, hashedString) {
+    compareHashedStrings(plainString, hashedString) {
         return compareHashedStrings(plainString, hashedString);
     }
 
@@ -123,13 +125,8 @@ class UserSchema extends Schema {
 
         return co(function* () {
             const _doc = deepcopy(yield superFunc(doc, rowDoc));
-
-            if (!rowDoc[PASSWORD]) {
-                throw {[PASSWORD]: ["A user password is required."]};
-            }
-
             _doc[HASHED_PASSWORD] = yield generateHash(rowDoc[PASSWORD]);
-
+            _doc[PASSWORD] = rowDoc[PASSWORD];
             return _doc;
         });
     }
@@ -141,22 +138,40 @@ class UserSchema extends Schema {
             const _doc = deepcopy(yield superFunc(doc, rowDoc, oldDoc, newValues));
             const errors = {};
 
-            if (newValues.hasOwnProperty(PASSWORD))
-            {
-                if (!newValues.hasOwnProperty(OLD_PASSWORD))
-                {
-                    errors[OLD_PASSWORD] = ["To change the password, the current password has to be sent."];
-                } else {
-                    const result = yield this.compareHashedStrings(newValues[OLD_PASSWORD], oldDoc[HASHED_PASSWORD]);
+            if (newValues[PASSWORD_UPDATE]) {
+                if (!newValues.hasOwnProperty(PASSWORD) || !newValues[PASSWORD]) {
+                    errors[PASSWORD] = ["A new password is required."];
+                }
 
-                    if (result) {
-                        _doc[HASHED_PASSWORD] = yield generateHash(newValues[PASSWORD]);
-                    } else {
+                if (!newValues.hasOwnProperty(OLD_PASSWORD) || !newValues[OLD_PASSWORD]) {
+                    errors[OLD_PASSWORD] = ["The current password is required."];
+                }
+
+                if (!newValues.hasOwnProperty(PASSWORD_CONFIRMED) || !newValues[PASSWORD_CONFIRMED]) {
+                    errors[PASSWORD_CONFIRMED] = ["The confirmed password is required."];
+                }
+
+                if (newValues.hasOwnProperty(PASSWORD_CONFIRMED)
+                    && newValues[PASSWORD_CONFIRMED] !== ""
+                    && newValues[PASSWORD] !== newValues[PASSWORD_CONFIRMED]) {
+                    errors[PASSWORD_CONFIRMED] = ['The confirmed password sent is not the same as the new password.'];
+                }
+
+                if (newValues.hasOwnProperty(OLD_PASSWORD) && newValues[OLD_PASSWORD] !== "") {
+                    const result = yield this.compareHashedStrings(newValues[OLD_PASSWORD], oldDoc[HASHED_PASSWORD]);
+                    if (!result) {
                         errors[OLD_PASSWORD] = ["The current password sent is not correct."];
                     }
                 }
-            }
 
+                if (Object.keys(errors).length === 0) {
+                    _doc[HASHED_PASSWORD] = yield generateHash(newValues[PASSWORD]);
+                }
+            } else {
+                if (newValues.hasOwnProperty(PASSWORD)) {
+                    errors[PASSWORD] = ["The password can't be updated."];
+                }
+            }
 
             if (Object.keys(errors).length > 0) {
                 throw errors;

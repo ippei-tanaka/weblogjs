@@ -116,6 +116,9 @@ export default class SchemaModel {
         for (let pathName of Object.keys(this._pathModels)) {
             const pathModel = this._pathModels[pathName];
 
+            if (this._updated && this._additionalRawValues[pathName] === undefined)
+                continue;
+
             try {
                 pathModel.examine();
             } catch (e) {

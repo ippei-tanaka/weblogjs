@@ -4,6 +4,7 @@ import {
     LOADED_USER_RECEIVED,
     CREATED_USER_RECEIVED,
     EDITED_USER_RECEIVED,
+    USER_PASSWORD_EDIT_COMPLETE,
     DELETED_USER_RECEIVED
 } from '../constants/action-types';
 
@@ -18,11 +19,11 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case LOADED_USER_RECEIVED:
-            if (action.users) {
+            if (action.data) {
 
                 let newUsers = {};
 
-                action.users.forEach((user) => {
+                action.data.forEach((user) => {
                     newUsers[user._id] = user;
                 });
 
@@ -35,11 +36,14 @@ export default (state = initialState, action) => {
 
         case CREATED_USER_RECEIVED:
             return state
-                .set('users', users.set(action.user._id, action.user));
+                .set('users', users.set(action.data._id, action.data));
 
         case EDITED_USER_RECEIVED:
             return state
-                .set('users', users.set(action.user._id, action.user));
+                .set('users', users.set(action.data._id, action.data));
+
+        case USER_PASSWORD_EDIT_COMPLETE:
+            return state;
 
         case DELETED_USER_RECEIVED:
             return state

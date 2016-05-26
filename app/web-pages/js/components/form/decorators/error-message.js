@@ -6,8 +6,8 @@ export default class ErrorMessage extends React.Component {
         return (
             this.props.error.length > 0 ? (
                 <ul>
-                    {this.props.error.map((error) =>
-                        <li className="module-field-error-message">
+                    {this.props.error.map((error, index) =>
+                        <li className="module-field-error-message" key={index}>
                             {error.message}
                         </li>
                     )}

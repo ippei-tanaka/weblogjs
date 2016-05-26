@@ -161,20 +161,22 @@ describe('Restful API', function () {
             });
         });
 
-        it("should not update a user's password unless their old password is sent", (done) => {
+        it("should not update a user's password on '/users/:id/' path", (done) => {
             co(function* () {
                 let error;
 
                 try {
                     const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
                     yield httpRequest.put(`${BASE_URL}/users/${_id}`, {
-                        password: "NewPassword@@@"
+                        password: "NewPassword@@@",
+                        password_confirmed: "NewPassword@@@",
+                        old_password: testUser.password
                     });
                 } catch (e) {
                     error = e;
                 }
 
-                expect(error.body.old_password[0].message).to.equal('To change the password, the current password has to be sent.');
+                expect(error.body.password[0].message).to.equal("The password can't be updated.");
 
                 done();
 
@@ -183,12 +185,36 @@ describe('Restful API', function () {
             });
         });
 
-        it("should update a user's password if their old password is sent", (done) => {
+        it("should not update a user's password unless the confirmed password and their old password is sent", (done) => {
+            co(function* () {
+                let error;
+
+                try {
+                    const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+                    yield httpRequest.put(`${BASE_URL}/users/${_id}/password`, {
+                        password: "NewPassword@@@"
+                    });
+                } catch (e) {
+                    error = e;
+                }
+
+                expect(error.body.old_password[0].message).to.equal('The current password is required.');
+                expect(error.body.password_confirmed[0].message).to.equal('The confirmed password is required.');
+
+                done();
+
+            }).catch((e) => {
+                done(e);
+            });
+        });
+
+        it("should update a user's password if the confirmed password and their old password is sent", (done) => {
             co(function* () {
                 const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
 
-                yield httpRequest.put(`${BASE_URL}/users/${_id}`, {
+                yield httpRequest.put(`${BASE_URL}/users/${_id}/password`, {
                     password: "NewPassword@@@",
+                    password_confirmed: "NewPassword@@@",
                     old_password: testUser.password
                 });
 
@@ -206,8 +232,9 @@ describe('Restful API', function () {
                 try {
                     const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
 
-                    yield httpRequest.put(`${BASE_URL}/users/${_id}`, {
+                    yield httpRequest.put(`${BASE_URL}/users/${_id}/password`, {
                         password: "NewPassword@@@",
+                        password_confirmed: "NewPassword@@@",
                         old_password: "WrongPassword"
                     });
                 } catch (e) {
@@ -215,6 +242,31 @@ describe('Restful API', function () {
                 }
 
                 expect(error.body.old_password[0].message).to.equal('The current password sent is not correct.');
+
+                done();
+            }).catch((e) => {
+                done(e);
+            });
+        });
+
+        it("should not update a user's password if the confirmed password is wrong", (done) => {
+            co(function* () {
+
+                let error;
+
+                try {
+                    const { _id } = yield httpRequest.post(`${BASE_URL}/users`, testUser);
+
+                    yield httpRequest.put(`${BASE_URL}/users/${_id}/password`, {
+                        password: "NewPassword@@@",
+                        password_confirmed: "qwerqwer",
+                        old_password: testUser.password
+                    });
+                } catch (e) {
+                    error = e;
+                }
+
+                expect(error.body.password_confirmed[0].message).to.equal('The confirmed password sent is not the same as the new password.');
 
                 done();
             }).catch((e) => {

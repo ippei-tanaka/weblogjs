@@ -10,16 +10,7 @@ class UserPasswordEditor extends Component {
         super(props);
 
         this.state = {
-            errors: {
-                old_password: "",
-                new_password: "",
-                new_password_confirmed: ""
-            },
-            values: {
-                old_password: "",
-                new_password: "",
-                new_password_confirmed: ""
-            }
+            values: {}
         }
     }
 
@@ -68,8 +59,8 @@ class UserPasswordEditor extends Component {
     }
 
     _onSubmit () {
-        const { params : {id}, editUser } = this.props;
-        //editUser({id, data: this.state.values});
+        const { params : {id}, editUserPassword } = this.props;
+        editUserPassword({id, data: this.state.values});
     }
 
     _goToListPage () {
