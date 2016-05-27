@@ -14,8 +14,8 @@ module.exports = {
     ],
 
     output: {
-        path: STATIC_DIR + "/admin/",
-        filename: "index.js"
+        path: STATIC_DIR,
+        filename: "admin.js"
     },
 
     devtool: DEVELOPMENT_MODE ? 'source-map' : null,
