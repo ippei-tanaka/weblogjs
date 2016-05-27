@@ -20,7 +20,7 @@ export default function HtmlLayout() {
             [CONTENT_PLACE_HOLDER]
         </div>
         { DEVELOPMENT_MODE ? (
-            <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/index.js`}></script>
+            <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/admin.js`}></script>
         ) : (
             <script src="/admin.js"></script>
         ) }
