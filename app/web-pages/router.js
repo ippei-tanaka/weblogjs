@@ -16,24 +16,31 @@ const STATIC_DIR = path.resolve(__dirname, './static');
 
 var routing = ({location, response}) =>
 
-    match({routes, location}, (error, redirectLocation, renderProps) => {
+    match({routes, location}, (error, redirectLocation, renderProps) => co(function* () {
         if (error) {
             response.status(500).send(error.message);
         } else if (redirectLocation) {
             response.redirect(302, redirectLocation.pathname);
         } else if (renderProps) {
-            let content = ReactDOMServer.renderToString(
+            //const component = renderProps.components[renderProps.components.length - 1].WrappedComponent;
+
+            //if (component.fetchData) yield component.fetchData({store});
+
+            const content = ReactDOMServer.renderToString(
                 <Provider store={store}>
                     <RoutingContext {...renderProps} />
                 </Provider>
             );
+
             let html = ReactDOMServer.renderToStaticMarkup(<HtmlLayout />);
+
             html = html.replace("[CONTENT_PLACE_HOLDER]", content);
+
             response.status(200).send("<!DOCTYPE html>" + html);
         } else {
             response.status(404).send("Not Found!");
         }
-    });
+    }));
 
 
 export default class WebpageRouter {

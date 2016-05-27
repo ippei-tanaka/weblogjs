@@ -45,7 +45,7 @@ const modify = (dispatch, actionId, main) => {
         id: actionId
     });
 
-    co(function* () {
+    return co(function* () {
         yield main();
 
         dispatch({
@@ -62,7 +62,7 @@ const modify = (dispatch, actionId, main) => {
 };
 
 const load = (path, doneType) => (actionId) => (dispatch, getState) => {
-    modify(dispatch, actionId, () => co(function* () {
+    return modify(dispatch, actionId, () => co(function* () {
         const response = yield getFromServer({path: `/${path}`});
         dispatch({
             type: doneType,
@@ -72,7 +72,7 @@ const load = (path, doneType) => (actionId) => (dispatch, getState) => {
 };
 
 const create = (path, doneType) => (actionId, newUser) => (dispatch, getState) => {
-    modify(dispatch, actionId, () => co(function* () {
+    return modify(dispatch, actionId, () => co(function* () {
         let response = yield postOnServer({data: newUser, path: `/${path}`});
         response = yield getFromServer({path: `/${path}/${response._id}`});
         dispatch({
@@ -83,7 +83,7 @@ const create = (path, doneType) => (actionId, newUser) => (dispatch, getState) =
 };
 
 const edit = (path, doneType) => (actionId, {id, data}) => (dispatch, getState) => {
-    modify(dispatch, actionId, () => co(function* () {
+    return modify(dispatch, actionId, () => co(function* () {
         yield putOneOnServer({data, path: `/${path}/${id}`});
         const response = yield getFromServer({path: `/${path}/${id}`});
         dispatch({
@@ -94,7 +94,7 @@ const edit = (path, doneType) => (actionId, {id, data}) => (dispatch, getState) 
 };
 
 const del = (path, doneType) => (actionId, {id}) => (dispatch, getState) => {
-    modify(dispatch, actionId, () => co(function* () {
+    return modify(dispatch, actionId, () => co(function* () {
         yield deleteOnServer({path: `/${path}/${id}`});
         dispatch({
             type: doneType,
@@ -122,7 +122,7 @@ export const editUser = edit('users', EDITED_USER_RECEIVED);
 export const deleteUser = del('users', DELETED_USER_RECEIVED);
 
 export const editUserPassword = (actionId, {id, data}) => (dispatch, getState) => {
-    modify(dispatch, actionId, () => co(function* () {
+    return modify(dispatch, actionId, () => co(function* () {
         yield putOneOnServer({data, path: `/users/${id}/password`});
         dispatch({
             type: USER_PASSWORD_EDIT_COMPLETE
@@ -158,7 +158,7 @@ export const editPost = edit('posts', EDITED_POST_RECEIVED);
 export const deletePost = del('posts', DELETED_POST_RECEIVED);
 
 export const loadSetting = (actionId) => (dispatch, getState) => {
-    modify(dispatch, actionId, () => co(function* () {
+    return modify(dispatch, actionId, () => co(function* () {
         const response = yield getFromServer({path: `/setting`});
         dispatch({
             type: LOADED_SETTING_RECEIVED,
@@ -168,7 +168,7 @@ export const loadSetting = (actionId) => (dispatch, getState) => {
 };
 
 export const editSetting  = (actionId, {data}) => (dispatch, getState) => {
-    modify(dispatch, actionId, () => co(function* () {
+    return modify(dispatch, actionId, () => co(function* () {
         yield putOneOnServer({data, path: `/setting`});
         const response = yield getFromServer({path: `/setting`});
         dispatch({
