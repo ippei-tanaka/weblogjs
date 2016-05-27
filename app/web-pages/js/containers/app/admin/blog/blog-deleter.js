@@ -10,7 +10,6 @@ class BlogDeleter extends Component {
         super(props);
 
         this.state = {
-            values: {},
             actionId: null
         }
     }
