@@ -17,6 +17,8 @@ const initialState = Immutable.Map({});
 
 export default (state = initialState, action) => {
 
+    console.log(state.toArray());
+
     switch (action.type) {
 
         case TRANSACTION_REQUEST:

@@ -72,6 +72,18 @@ const schema = new Schema('post', {
                 yield `"${value}" is an invalid ID.`
             }
         }
+    },
+
+    tags: {
+        type: [Types.String],
+        validate: function* (value) {
+            const range = {min:1, max: 100};
+            for (let item of value) {
+                if (!validator.isLength(item, range)) {
+                    yield `A tag should be between ${range.min} and ${range.max} characters.`;
+                }
+            }
+        }
     }
 
 });
