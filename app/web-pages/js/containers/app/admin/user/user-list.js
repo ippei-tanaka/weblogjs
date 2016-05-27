@@ -50,17 +50,21 @@ class UserList extends Component {
             },
 
             created_date: {
-                label: "Created",
+                label: "Created Date",
                 stringify: value =>
-                    Moment(value).format("YYYY-MM-DD HH:mm Z")
+                    value ? Moment(value).format("YYYY-MM-DD HH:mm Z") : this.noneElement
             },
 
             updated_date: {
-                label: "Updated",
+                label: "Updated Date",
                 stringify: value =>
-                    Moment(value).format("YYYY-MM-DD HH:mm Z")
+                    value ? Moment(value).format("YYYY-MM-DD HH:mm Z") : this.noneElement
             }
         }
+    }
+
+    get noneElement () {
+        return <span className="m-dtl-none">(None)</span>;
     }
 
 }
