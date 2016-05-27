@@ -190,7 +190,7 @@ const addRoutesForSetting = (router) => {
         successHandler(response, model);
     }).catch(errorHandler(response)));
 
-    router.post(`/setting`, (request, response) => co(function* () {
+    router.put(`/setting`, (request, response) => co(function* () {
         yield SettingModel.setSetting(request.body);
         successHandler(response, {});
     }).catch(errorHandler(response)));

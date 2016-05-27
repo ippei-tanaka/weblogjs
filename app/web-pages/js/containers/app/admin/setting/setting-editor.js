@@ -1,59 +1,56 @@
-import React from 'react';
-import { Link } from 'react-router';
-import { FieldSet, SubmitButton, ButtonList, Select, Option, Title, Form, FlushMessage } from '../../../partials/form';
-import Page from '../../../abstructs/page';
-import ViewActionCreator from '../../../../action-creators/view-action-creator';
-import SettingStore from '../../../../stores/setting-store';
-import BlogStore from '../../../../stores/blog-store';
-import hat from 'hat';
+import React, { Component } from 'react';
+import { FieldSet, SubmitButton, ButtonList, Select, Option, Title, Form, FlushMessage } from '../../../../components/form';
+import actions from '../../../../actions';
+import { connect } from 'react-redux';
+import { RESOLVED } from '../../../../constants/transaction-status';
 
-
-var rack = hat.rack();
-
-
-class SettingEditor extends Page {
-
+class SettingEditor extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            errors: {},
             values: {},
-            blogList: [],
-            updateSucceeded: false
-        };
-
-        this.token = rack();
-
-        this.settingStoreCallback = this.onSettingStoreChanged.bind(this);
-        this.blogStoreCallback = this.setLists.bind(this);
+            actionId: null,
+            blogLoadActionId: null,
+            settingLoadActionId: null
+        }
     }
 
-    componentDidMount() {
-        this.setLists();
-        this.setCurrentValues();
-        SettingStore.addChangeListener(this.settingStoreCallback);
-        BlogStore.addChangeListener(this.blogStoreCallback);
+    componentWillMount() {
+        this.setState({
+            actionId: Symbol(),
+            blogLoadActionId: Symbol(),
+            settingLoadActionId: Symbol()
+        });
+        this.props.loadBlogs(this.state.blogLoadActionId);
+        this.props.loadSetting(this.state.settingLoadActionId);
     }
 
     componentWillUnmount() {
-        SettingStore.removeChangeListener(this.settingStoreCallback);
-        BlogStore.removeChangeListener(this.blogStoreCallback);
+        this.props.finishTransaction(this.state.actionId);
+        this.props.finishTransaction(this.state.blogLoadActionId);
+        this.props.finishTransaction(this.state.settingLoadActionId);
     }
 
     render() {
-        this.setPageTitle(this.title);
+        const {settingStore, blogStore, transactionStore} = this.props;
+        const setting = settingStore;
+        const blogList = blogStore.toArray();
+        const transaction = transactionStore.get(this.state.actionId);
+        const errors = transaction ? transaction.get('errors') : {};
+        const values = Object.assign({}, setting, this.state.values);
+        const updateSucceeded = transaction && transaction.get('status') === RESOLVED;
 
         return (
-            <Form onSubmit={this.onSubmit.bind(this)}>
+            <Form onSubmit={this._onSubmit.bind(this)}>
 
-                <Title>{this.title}</Title>
+                <Title>Setting</Title>
 
                 <FieldSet label="Front Blog"
-                          error={this.state.errors.front}>
-                    <Select value={this.state.values.front}
-                            onChange={value => { this.updateValue('front', value || null)}}>
-                        {this.state.blogList.map(c => <Option key={c._id} value={c._id}>{c.title}</Option>)}
+                          error={errors.front}>
+                    <Select value={values.front}
+                            onChange={this._onChange.bind(this, 'front')}>
+                        {blogList.map(b => <Option key={b._id} value={b._id}>{b.name}</Option>)}
                     </Select>
                 </FieldSet>
 
@@ -61,7 +58,7 @@ class SettingEditor extends Page {
                     <SubmitButton>Update</SubmitButton>
                 </ButtonList>
 
-                {this.state.updateSucceeded ? (
+                {updateSucceeded ? (
                     <FlushMessage>Successfully Updated!</FlushMessage>
                 ) : null}
 
@@ -69,65 +66,29 @@ class SettingEditor extends Page {
         );
     }
 
-    onSubmit(event) {
-        event.preventDefault();
-
-        ViewActionCreator.requestUpdateSetting({
-            token: this.token,
-            data: this.state.values
+    _onChange(field, value) {
+        this.setState(state => {
+            state.values[field] = value;
         });
     }
 
-    onSettingStoreChanged() {
-        var action = SettingStore.latestAction;
-
-        this.setCurrentValues();
-
-        if (action && action.token === this.token) {
-            if (action.data && action.data.errors) {
-                this.setState(s => {
-                    s.errors = action.data.errors;
-                    s.updateSucceeded = false;
-                });
-            } else {
-                this.setState(s => {
-                    s.errors = {};
-                    s.updateSucceeded = true;
-                });
-            }
-        }
+    _onSubmit(e) {
+        e.preventDefault();
+        this.props.editSetting(this.state.actionId, {data: this.state.values});
     }
 
-    updateValue(fieldName, value) {
-        this.setState(s => {
-            s.values[fieldName] = value;
-            s.updateSucceeded = false;
-        });
-    }
-
-    setCurrentValues() {
-        this.setState(s => {
-            s.values = SettingStore.get();
-        });
-    }
-
-    setLists() {
-        this.setState(s => {
-            s.blogList = BlogStore.getAll();
-        });
-    }
-
-    get title() {
-        return "Edit the Setting";
-    }
-
-    static get propTypes() {
+    static get contextTypes() {
         return {
-            params: React.PropTypes.object
+            history: React.PropTypes.object
         };
-    }
-
+    };
 }
 
-
-export default SettingEditor;
+export default connect(
+    state => ({
+        settingStore: state.setting,
+        blogStore: state.blog,
+        transactionStore: state.transaction
+    }),
+    actions
+)(SettingEditor);
