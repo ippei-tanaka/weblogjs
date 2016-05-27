@@ -14,15 +14,11 @@ import CategoryList from "../containers/app/admin/category/category-list";
 import CategoryAdder from "../containers/app/admin/category/category-adder";
 import CategoryEditor from "../containers/app/admin/category/category-editor";
 import CategoryDeleter from "../containers/app/admin/category/category-deleter";
+import BlogList from "../containers/app/admin/blog/blog-list";
+import BlogAdder from "../containers/app/admin/blog/blog-adder";
+import BlogEditor from "../containers/app/admin/blog/blog-editor";
+import BlogDeleter from "../containers/app/admin/blog/blog-deleter";
 /*
-import CategoryList from "../components/app/admin/category/category-list";
-import CategoryAdder from "../components/app/admin/category/category-adder";
-import CategoryEditor from "../components/app/admin/category/category-editor";
-import CategoryDeleter from "../components/app/admin/category/category-deleter";
-import BlogList from "../components/app/admin/blog/blog-list";
-import BlogAdder from "../components/app/admin/blog/blog-adder";
-import BlogEditor from "../components/app/admin/blog/blog-editor";
-import BlogDeleter from "../components/app/admin/blog/blog-deleter";
 import PostList from "../components/app/admin/post/post-list";
 import PostAdder from "../components/app/admin/post/post-adder";
 import PostEditor from "../components/app/admin/post/post-editor";
@@ -50,6 +46,12 @@ const appRoutes = (
                     <Route path="adder" component={CategoryAdder}/>
                     <Route path=":id/editor" component={CategoryEditor}/>
                     <Route path=":id/deleter" component={CategoryDeleter}/>
+                </Route>
+                <Route path="blogs">
+                    <IndexRoute component={BlogList}/>
+                    <Route path="adder" component={BlogAdder}/>
+                    <Route path=":id/editor" component={BlogEditor}/>
+                    <Route path=":id/deleter" component={BlogDeleter}/>
                 </Route>
             </Route>
         </Route>

@@ -17,6 +17,19 @@ import {
     EDITED_CATEGORY_RECEIVED,
     DELETED_CATEGORY_RECEIVED,
 
+    LOADED_BLOG_RECEIVED,
+    CREATED_BLOG_RECEIVED,
+    EDITED_BLOG_RECEIVED,
+    DELETED_BLOG_RECEIVED,
+
+    LOADED_POST_RECEIVED,
+    CREATED_POST_RECEIVED,
+    EDITED_POST_RECEIVED,
+    DELETED_POST_RECEIVED,
+
+    LOADED_SETTING_RECEIVED,
+    EDITED_SETTING_RECEIVED,
+
     TRANSACTION_REQUEST,
     TRANSACTION_REJECTED,
     TRANSACTION_RESOLVED,
@@ -92,11 +105,21 @@ const del = (path, doneType) => (actionId, {id}) => (dispatch, getState) => {
 
 //------------
 
+export const finishTransaction = (actionId) => (dispatch, getState) => {
+    dispatch({
+        type: TRANSACTION_FINISHED,
+        id: actionId
+    });
+};
+
+
 export const loadUsers = load('users', LOADED_USER_RECEIVED);
 
 export const createUser = create('users', CREATED_USER_RECEIVED);
 
 export const editUser = edit('users', EDITED_USER_RECEIVED);
+
+export const deleteUser = del('users', DELETED_USER_RECEIVED);
 
 export const editUserPassword = (actionId, {id, data}) => (dispatch, getState) => {
     modify(dispatch, actionId, () => co(function* () {
@@ -107,7 +130,6 @@ export const editUserPassword = (actionId, {id, data}) => (dispatch, getState) =
     }));
 };
 
-export const deleteUser = del('users', DELETED_USER_RECEIVED);
 
 export const loadCategories = load('categories', LOADED_CATEGORY_RECEIVED);
 
@@ -117,9 +139,41 @@ export const editCategory = edit('categories', EDITED_CATEGORY_RECEIVED);
 
 export const deleteCategory = del('categories', DELETED_CATEGORY_RECEIVED);
 
-export const finishTransaction = (actionId) => (dispatch, getState) => {
-    dispatch({
-        type: TRANSACTION_FINISHED,
-        id: actionId
-    });
+
+export const loadBlogs = load('blogs', LOADED_BLOG_RECEIVED);
+
+export const createBlog = create('blogs', CREATED_BLOG_RECEIVED);
+
+export const editBlog = edit('blogs', EDITED_BLOG_RECEIVED);
+
+export const deleteBlog = del('blogs', DELETED_BLOG_RECEIVED);
+
+
+export const loadPosts = load('posts', LOADED_POST_RECEIVED);
+
+export const createPost = create('posts', CREATED_POST_RECEIVED);
+
+export const editPost = edit('posts', EDITED_POST_RECEIVED);
+
+export const deletePost = del('posts', DELETED_POST_RECEIVED);
+
+export const loadSetting = (actionId) => (dispatch, getState) => {
+    modify(dispatch, actionId, () => co(function* () {
+        const response = yield getFromServer({path: `/setting`});
+        dispatch({
+            type: LOADED_SETTING_RECEIVED,
+            data: response
+        });
+    }));
+};
+
+export const editSetting  = (actionId, {data}) => (dispatch, getState) => {
+    modify(dispatch, actionId, () => co(function* () {
+        yield putOneOnServer({data, path: `/setting`});
+        const response = yield getFromServer({path: `/setting`});
+        dispatch({
+            type: EDITED_SETTING_RECEIVED,
+            data: response
+        });
+    }));
 };
