@@ -1,6 +1,5 @@
 require('../../app/babel-request');
 
-import configFile from '../config.json';
 import co from 'co';
 import { expect } from 'chai';
 import httpRequest from '../../utils/http-request';
@@ -40,15 +39,17 @@ const testPost = Object.freeze({
     "is_draft": false
 });
 
-const BASE_URL = `http://${configFile.web_server_host}:${configFile.web_server_port}${configFile.restful_api_root}`;
+const WEBSERVER_HOST = "localhost";
+const WEBSERVER_PORT = 3001;
+const API_ROOT = '/api';
+const BASE_URL = `http://${WEBSERVER_HOST}:${WEBSERVER_PORT}${API_ROOT}`;
 
 WeblogJS.init({
-    dbHost: configFile.database_host,
-    dbPort: configFile.database_port,
-    dbName: configFile.database_name,
-    webHost: configFile.web_server_host,
-    webPort: configFile.web_server_port,
-    apiRoot: configFile.restful_api_root
+    dbName: "weblogjstest",
+    webHost: WEBSERVER_HOST,
+    webPort: WEBSERVER_PORT,
+    apiRoot: API_ROOT,
+    internalWebPort: 3002
 });
 
 const login = () => httpRequest.post(`${BASE_URL}/login`, admin);
