@@ -50,8 +50,10 @@ class PathModel {
         return true;
     }
 
-    _normalize (value) {
+    _normalize (value, type) {
         try {
+            type = type || this.constructor._path.type;
+
             if (value === undefined) {
                 return undefined;
             }
@@ -60,18 +62,23 @@ class PathModel {
                 return null;
             }
 
-            if (this.constructor._path.type === TYPES.Integer) {
+            if (type === TYPES.Integer) {
                 const num = Number.parseInt(value);
                 if (Number.isNaN(num)) throw null;
                 return num;
             }
 
-            if (this.constructor._path.type === TYPES.ObjectID) {
+            if (type === TYPES.ObjectID) {
                 return ObjectID(value);
             }
 
-            if (this.constructor._path.type === TYPES.Date) {
+            if (type === TYPES.Date) {
                 return new Date(value);
+            }
+
+            if (Array.isArray(type)) {
+                if (!Array.isArray(value)) throw null;
+                return value.map((item) => this._normalize(item, type[0]));
             }
 
             return String(value);

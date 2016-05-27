@@ -34,7 +34,8 @@ const testBlog = Object.freeze({
 const testPost = Object.freeze({
     "title": "My Post",
     "slug": "my-post",
-    "content": "Hello, world!"
+    "content": "Hello, world!",
+    "tags": ["tag1", "tag2", "tag3"]
 });
 
 const BASE_URL = `http://${configFile.web_server_host}:${configFile.web_server_port}${configFile.restful_api_root}`;
@@ -728,6 +729,9 @@ describe('Restful API', function () {
                 expect(post._id).to.equal(_id);
                 expect(post.title).to.equal(testPost.title);
                 expect(post.slug).to.equal(testPost.slug);
+                expect(post.tags).to.include(testPost.tags[0]);
+                expect(post.tags).to.include(testPost.tags[1]);
+                expect(post.tags).to.include(testPost.tags[2]);
                 done();
             }).catch((e) => {
                 done(e);

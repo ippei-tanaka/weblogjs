@@ -1,81 +1,103 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router';
-import Page from '../../../abstructs/page';
-import ViewActionCreator from '../../../../action-creators/view-action-creator';
-import PostStore from '../../../../stores/post-store';
-import PostForm from './partials/post-form';
-import hat from 'hat';
+import PostForm from '../../../../components/post-form';
+import actions from '../../../../actions';
+import { connect } from 'react-redux';
+import { RESOLVED } from '../../../../constants/transaction-status';
 
-
-var rack = hat.rack();
-
-
-class PostAdder extends Page {
+class PostAdder extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            errors: {},
-            values: {
-                publish_date: new Date()
-            }
-        };
-
-        this.token = rack();
-
-        this.callback = this.onStoreChanged.bind(this);
+            values: {},
+            actionId: null,
+            blogLoadActionId: null,
+            categoryLoadActionId: null,
+            userLoadActionId: null
+        }
     }
 
-    componentDidMount() {
-        PostStore.addChangeListener(this.callback);
+    componentWillMount() {
+        this.setState({
+            actionId: Symbol(),
+            blogLoadActionId: Symbol(),
+            categoryLoadActionId: Symbol(),
+            userLoadActionId: Symbol()
+        });
+        this.props.loadBlogs(this.state.blogLoadActionId);
+        this.props.loadCategories(this.state.categoryLoadActionId);
+        this.props.loadUsers(this.state.userLoadActionId);
     }
 
     componentWillUnmount() {
-        PostStore.removeChangeListener(this.callback);
+        this.props.finishTransaction(this.state.actionId);
+        this.props.finishTransaction(this.state.blogLoadActionId);
+        this.props.finishTransaction(this.state.categoryLoadActionId);
+        this.props.finishTransaction(this.state.userLoadActionId);
+    }
+
+    componentWillReceiveProps(props) {
+        const transaction = props.transactionStore.get(this.state.actionId);
+
+        if (transaction && transaction.get('status') === RESOLVED) {
+            this._goToListPage();
+        }
     }
 
     render() {
-        this.setPageTitle(this.title);
+        const {transactionStore, categoryStore, blogStore, userStore} = this.props;
+        const {values, actionId} = this.state;
+        const transaction = transactionStore.get(actionId);
+        const errors = transaction ? transaction.get('errors') : {};
+        const categoryList = categoryStore.toArray();
+        const blogList = blogStore.toArray();
+        const userList = userStore.toArray();
 
         return (
-            <PostForm title={this.title}
-                      errors={this.state.errors}
-                      values={this.state.values}
-                      autoSlugfy={true}
-                      onSubmit={this.onSubmit.bind(this)}
+            <PostForm title="Create a New Post"
+                      errors={errors}
+                      values={values}
+                      categoryList={categoryList}
+                      blogList={blogList}
+                      authorList={userList}
+                      onChange={this._onChange.bind(this)}
+                      onSubmit={this._onSubmit.bind(this)}
+                      onClickBackButton={this._goToListPage.bind(this)}
                       submitButtonLabel="Create"
-                      locationForBackButton="/admin/posts"
             />
         );
     }
 
-    onSubmit({full}) {
-        ViewActionCreator.requestCreatePost({
-            token: this.token,
-            data: full
+    _onChange(field, value) {
+        this.setState(state => {
+            state.values[field] = value;
         });
     }
 
-    onStoreChanged() {
-        var action = PostStore.latestAction;
-
-        if (action && action.token === this.token) {
-            if (action.data && action.data.errors) {
-                this.setState(s => {
-                    s.errors = action.data.errors
-                });
-            } else {
-                this.context.history.pushState(null, "/admin/posts");
-            }
-        }
+    _onSubmit() {
+        this.props.createPost(this.state.actionId, this.state.values);
     }
 
-    get title() {
-        return "Create a New Post";
+    _goToListPage() {
+        this.context.history.pushState(null, "/admin/posts");
     }
+
+    static get contextTypes() {
+        return {
+            history: React.PropTypes.object
+        };
+    };
 
 }
 
-
-export default PostAdder;
+export default connect(
+    state => ({
+        blogStore: state.blog,
+        userStore: state.user,
+        categoryStore: state.category,
+        transactionStore: state.transaction
+    }),
+    actions
+)(PostAdder);
