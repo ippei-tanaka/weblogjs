@@ -19,12 +19,12 @@ import BlogAdder from "../containers/app/admin/blog/blog-adder";
 import BlogEditor from "../containers/app/admin/blog/blog-editor";
 import BlogDeleter from "../containers/app/admin/blog/blog-deleter";
 /*
-import PostList from "../components/app/admin/post/post-list";
-import PostAdder from "../components/app/admin/post/post-adder";
-import PostEditor from "../components/app/admin/post/post-editor";
-import PostDeleter from "../components/app/admin/post/post-deleter";
-import SettingEditor from "../components/app/admin/setting/setting-editor";
+import PostList from "../containers/app/admin/post/post-list";
+import PostAdder from "../containers/app/admin/post/post-adder";
+import PostEditor from "../containers/app/admin/post/post-editor";
+import PostDeleter from "../containers/app/admin/post/post-deleter";
 */
+import SettingEditor from "../containers/app/admin/setting/setting-editor";
 import Public from "../components/app/public";
 
 
@@ -52,6 +52,9 @@ const appRoutes = (
                     <Route path="adder" component={BlogAdder}/>
                     <Route path=":id/editor" component={BlogEditor}/>
                     <Route path=":id/deleter" component={BlogDeleter}/>
+                </Route>
+                <Route path="setting">
+                    <IndexRoute component={SettingEditor}/>
                 </Route>
             </Route>
         </Route>

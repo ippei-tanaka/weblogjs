@@ -853,7 +853,7 @@ describe('Restful API', function () {
         it('should set a blog to the setting', (done) => {
             co(function* () {
                 const { _id } = yield httpRequest.post(`${BASE_URL}/blogs`, testBlog);
-                yield httpRequest.post(`${BASE_URL}/setting`, {front: _id});
+                yield httpRequest.put(`${BASE_URL}/setting`, {front: _id});
                 const setting = yield httpRequest.get(`${BASE_URL}/setting`);
                 expect(setting.front).to.equal(_id);
                 done();
