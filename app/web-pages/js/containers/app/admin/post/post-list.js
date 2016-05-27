@@ -123,16 +123,16 @@ class PostList extends Component {
 
             },
 
-            created: {
+            created_date: {
                 label: "Created Date",
                 stringify: value =>
-                    Moment(value).format("YYYY-MM-DD HH:mm Z")
+                    value ? Moment(value).format("YYYY-MM-DD HH:mm Z") : this.noneElement
             },
 
-            updated: {
+            updated_date: {
                 label: "Updated Date",
                 stringify: value =>
-                    Moment(value).format("YYYY-MM-DD HH:mm Z")
+                    value ? Moment(value).format("YYYY-MM-DD HH:mm Z") : this.noneElement
             }
         }
     }
