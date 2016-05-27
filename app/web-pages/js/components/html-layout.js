@@ -11,8 +11,8 @@ export default function HtmlLayout() {
             <meta charSet="utf-8"/>
             <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
-            <link href="/admin/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
-            <link href="/admin/style.css" media="all" rel="stylesheet"/>
+            <link href="/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
+            <link href="/style.css" media="all" rel="stylesheet"/>
             <title>Weblog JS</title>
         </head>
         <body>
@@ -22,7 +22,7 @@ export default function HtmlLayout() {
         { DEVELOPMENT_MODE ? (
             <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/index.js`}></script>
         ) : (
-            <script src="/admin/index.js"></script>
+            <script src="/admin.js"></script>
         ) }
         </body>
         </html>
