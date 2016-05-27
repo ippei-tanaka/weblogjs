@@ -4,6 +4,7 @@ import UserForm from '../../../../components/user-form';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../../constants/config'
 
 class UserAdder extends Component {
     constructor(props) {
@@ -61,7 +62,7 @@ class UserAdder extends Component {
     }
 
     _goToListPage() {
-        this.context.history.pushState(null, "/admin/users");
+        this.context.history.pushState(null, `${ADMIN_DIR}/users`);
     }
 
     static get contextTypes() {

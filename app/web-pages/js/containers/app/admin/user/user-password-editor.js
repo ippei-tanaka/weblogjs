@@ -4,6 +4,7 @@ import UserPasswordForm from '../../../../components/user-password-form';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../../constants/config'
 
 class UserPasswordEditor extends Component {
     constructor(props) {
@@ -67,7 +68,7 @@ class UserPasswordEditor extends Component {
 
     _goToListPage() {
         const { params : {id} } = this.props;
-        this.context.history.pushState(null, `/admin/users/${id}/editor`);
+        this.context.history.pushState(null, `${ADMIN_DIR}/users/${id}/editor`);
     }
 
     static get contextTypes() {

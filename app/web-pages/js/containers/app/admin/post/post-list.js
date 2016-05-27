@@ -3,6 +3,7 @@ import Moment from 'moment';
 import List from '../../../../components/list';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
+import { ADMIN_DIR } from '../../../../constants/config'
 
 class PostList extends Component {
 
@@ -45,11 +46,11 @@ class PostList extends Component {
         const authorList = userStore.toArray();
 
         return <List title="Post List"
-                     adderLocation="/admin/posts/adder"
+                     adderLocation={`${ADMIN_DIR}/posts/adder`}
                      fields={this._getFields({authorList, blogList, categoryList})}
                      models={posts}
-                     editorLocationBuilder={id => `/admin/posts/${id}/editor`}
-                     deleterLocationBuilder={id => `/admin/posts/${id}/deleter`}/>;
+                     editorLocationBuilder={id => `${ADMIN_DIR}/posts/${id}/editor`}
+                     deleterLocationBuilder={id => `${ADMIN_DIR}/posts/${id}/deleter`}/>;
     }
 
     _getFields({authorList, blogList, categoryList}) {

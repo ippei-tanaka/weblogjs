@@ -4,6 +4,7 @@ import BlogForm from '../../../../components/blog-form';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../../constants/config'
 
 class BlogEditor extends Component {
 
@@ -69,7 +70,7 @@ class BlogEditor extends Component {
     }
 
     _goToListPage () {
-        this.context.history.pushState(null, "/admin/blogs");
+        this.context.history.pushState(null, `${ADMIN_DIR}/blogs`);
     }
 
     static get contextTypes () {

@@ -3,6 +3,7 @@ import Moment from 'moment';
 import List from '../../../../components/list';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
+import { ADMIN_DIR } from '../../../../constants/config'
 
 class BlogList extends Component {
 
@@ -28,11 +29,11 @@ class BlogList extends Component {
         const blogs = blogStore.toArray();
 
         return <List title="Blog List"
-                     adderLocation="/admin/blogs/adder"
+                     adderLocation={`${ADMIN_DIR}/blogs/adder`}
                      fields={this._fields}
                      models={blogs}
-                     editorLocationBuilder={id => `/admin/blogs/${id}/editor`}
-                     deleterLocationBuilder={id => `/admin/blogs/${id}/deleter`}/>;
+                     editorLocationBuilder={id => `${ADMIN_DIR}/blogs/${id}/editor`}
+                     deleterLocationBuilder={id => `${ADMIN_DIR}/blogs/${id}/deleter`}/>;
     }
 
     get _fields() {

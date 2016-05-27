@@ -4,6 +4,7 @@ import CategoryForm from '../../../../components/category-form';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../../constants/config'
 
 class CategoryEditor extends Component {
     constructor(props) {
@@ -67,8 +68,8 @@ class CategoryEditor extends Component {
         editCategory(this.state.actionId, {id, data: this.state.values});
     }
 
-    _goToListPage () {
-        this.context.history.pushState(null, "/admin/categories");
+    _goToListPage() {
+        this.context.history.pushState(null, `${ADMIN_DIR}/categories`);
     }
 
     static get contextTypes () {

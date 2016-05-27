@@ -3,6 +3,7 @@ import Confirmation from '../../../../components/confirmation';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../../constants/config'
 
 class BlogDeleter extends Component {
 
@@ -57,7 +58,7 @@ class BlogDeleter extends Component {
     }
 
     _goToListPage () {
-        this.context.history.pushState(null, "/admin/blogs");
+        this.context.history.pushState(null, `${ADMIN_DIR}/blogs`);
     }
 
     static get contextTypes () {

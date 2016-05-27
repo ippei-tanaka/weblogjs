@@ -3,6 +3,7 @@ import Confirmation from '../../../../components/confirmation';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../../constants/config'
 
 class PostDeleter extends Component {
 
@@ -56,8 +57,8 @@ class PostDeleter extends Component {
         deletePost(this.state.actionId, {id});
     }
 
-    _goToListPage () {
-        this.context.history.pushState(null, "/admin/posts");
+    _goToListPage() {
+        this.context.history.pushState(null, `${ADMIN_DIR}/posts`);
     }
 
     static get contextTypes () {
