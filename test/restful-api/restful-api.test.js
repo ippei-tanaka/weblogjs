@@ -35,7 +35,9 @@ const testPost = Object.freeze({
     "title": "My Post",
     "slug": "my-post",
     "content": "Hello, world!",
-    "tags": ["tag1", "tag2", "tag3"]
+    "tags": ["tag1", "tag2", "tag3"],
+    "publish_date": new Date(),
+    "is_draft": false
 });
 
 const BASE_URL = `http://${configFile.web_server_host}:${configFile.web_server_port}${configFile.restful_api_root}`;

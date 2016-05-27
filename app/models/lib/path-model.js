@@ -76,6 +76,10 @@ class PathModel {
                 return new Date(value);
             }
 
+            if (type === TYPES.Boolean) {
+                return !!value;
+            }
+
             if (Array.isArray(type)) {
                 if (!Array.isArray(value)) throw null;
                 return value.map((item) => this._normalize(item, type[0]));
