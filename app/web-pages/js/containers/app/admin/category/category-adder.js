@@ -4,6 +4,7 @@ import CategoryForm from '../../../../components/category-form';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../../constants/config'
 
 class CategoryAdder extends Component {
     constructor(props) {
@@ -60,7 +61,7 @@ class CategoryAdder extends Component {
     }
 
     _goToListPage() {
-        this.context.history.pushState(null, "/admin/categories");
+        this.context.history.pushState(null, `${ADMIN_DIR}/categories`);
     }
 
     static get contextTypes() {

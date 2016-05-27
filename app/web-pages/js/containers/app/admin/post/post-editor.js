@@ -4,6 +4,7 @@ import PostForm from '../../../../components/post-form';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../../constants/config'
 
 class PostEditor extends Component {
 
@@ -88,8 +89,8 @@ class PostEditor extends Component {
         editPost(this.state.actionId, {id, data: this.state.values});
     }
 
-    _goToListPage () {
-        this.context.history.pushState(null, "/admin/posts");
+    _goToListPage() {
+        this.context.history.pushState(null, `${ADMIN_DIR}/posts`);
     }
 
     static get contextTypes () {

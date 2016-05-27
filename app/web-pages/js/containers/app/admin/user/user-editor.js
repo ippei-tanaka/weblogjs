@@ -4,6 +4,7 @@ import UserForm from '../../../../components/user-form';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../../constants/config'
 
 class UserEditor extends Component {
     constructor(props) {
@@ -49,7 +50,7 @@ class UserEditor extends Component {
                           onClickBackButton={this._goToListPage.bind(this)}
                           submitButtonLabel="Update"
                 />
-                <div><Link to={`/admin/users/${id}/password-editor`}>Change the password</Link></div>
+                <div><Link to={`${ADMIN_DIR}/users/${id}/password-editor`}>Change the password</Link></div>
             </div>
         ) : (
             <div className="module-data-editor">
@@ -69,8 +70,8 @@ class UserEditor extends Component {
         editUser(this.state.actionId, {id, data: this.state.values});
     }
 
-    _goToListPage () {
-        this.context.history.pushState(null, "/admin/users");
+    _goToListPage() {
+        this.context.history.pushState(null, `${ADMIN_DIR}/users`);
     }
 
     static get contextTypes () {
