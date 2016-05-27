@@ -10,7 +10,6 @@ class CategoryDeleter extends Component {
         super(props);
 
         this.state = {
-            values: {},
             actionId: null
         }
     }

@@ -10,7 +10,6 @@ class UserDeleter extends Component {
         super(props);
 
         this.state = {
-            values: {},
             actionId: null
         }
     }
