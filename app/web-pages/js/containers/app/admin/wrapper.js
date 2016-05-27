@@ -9,33 +9,6 @@ import { LOGOUT_FAILED } from '../../../constants/auth-status';
 
 
 class AdminWrapper extends Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            actionIdForUsers: null,
-            actionIdForCategories: null
-        }
-    }
-
-    componentWillMount() {
-        this.setState({
-            actionIdForUsers: Symbol(),
-            actionIdForCategories: Symbol()
-        });
-    }
-
-    componentDidMount() {
-        this.props.loadUsers(this.state.actionIdForUsers);
-        this.props.loadCategories(this.state.actionIdForCategories);
-    }
-
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionIdForUsers);
-        this.props.finishTransaction(this.state.actionIdForCategories);
-    }
-
     render() {
         const { requestLogout, authStore, children } = this.props;
         const authStatus = authStore.get('status');

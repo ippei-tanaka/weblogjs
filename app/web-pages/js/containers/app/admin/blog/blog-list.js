@@ -4,7 +4,7 @@ import List from '../../../../components/list';
 import actions from '../../../../actions';
 import { connect } from 'react-redux';
 
-class UserList extends Component {
+class BlogList extends Component {
 
     constructor(props) {
         super(props);
@@ -16,7 +16,7 @@ class UserList extends Component {
 
     componentWillMount() {
         this.setState({actionId: Symbol()});
-        this.props.loadUsers(this.state.actionId);
+        this.props.loadBlogs(this.state.actionId);
     }
 
     componentWillUnmount() {
@@ -24,20 +24,20 @@ class UserList extends Component {
     }
 
     render() {
-        const { userStore } = this.props;
-        const users = userStore.toArray();
+        const { blogStore } = this.props;
+        const blogs = blogStore.toArray();
 
-        return <List title="User List"
-                     adderLocation="/admin/users/adder"
+        return <List title="Blog List"
+                     adderLocation="/admin/blogs/adder"
                      fields={this._fields}
-                     models={users}
-                     editorLocationBuilder={id => `/admin/users/${id}/editor`}
-                     deleterLocationBuilder={id => `/admin/users/${id}/deleter`}/>;
+                     models={blogs}
+                     editorLocationBuilder={id => `/admin/blogs/${id}/editor`}
+                     deleterLocationBuilder={id => `/admin/blogs/${id}/deleter`}/>;
     }
 
     get _fields() {
         return {
-            display_name: {
+            name: {
                 label: "Name"
             },
 
@@ -45,8 +45,8 @@ class UserList extends Component {
                 label: "Slug"
             },
 
-            email: {
-                label: "Email"
+            posts_per_page: {
+                label: "Posts Per Page"
             },
 
             created_date: {
@@ -62,11 +62,10 @@ class UserList extends Component {
             }
         }
     }
-
 }
 
 
 export default connect(
-    state => ({userStore: state.user}),
+    state => ({blogStore: state.blog}),
     actions
-)(UserList);
+)(BlogList);

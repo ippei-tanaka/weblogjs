@@ -6,6 +6,23 @@ import { connect } from 'react-redux';
 
 class CategoryList extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            actionId: null
+        }
+    }
+
+    componentWillMount() {
+        this.setState({actionId: Symbol()});
+        this.props.loadCategories(this.state.actionId);
+    }
+
+    componentWillUnmount() {
+        this.props.finishTransaction(this.state.actionId);
+    }
+
     render() {
         const { categoryStore } = this.props;
         const categories = categoryStore.toArray();
