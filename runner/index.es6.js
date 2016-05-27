@@ -1,10 +1,13 @@
 import WeblogJS from '../app';
 import co from 'co';
 
+const WEBSERVER_PORT = process.env.WB_WSERVER_PORT;
+const INTERNAL_WEBSERVER_PORT = process.env.WB_INTN_WSERVER_PORT;
+
 WeblogJS.init({
-    webPort: 3001,
+    webPort: WEBSERVER_PORT,
     sessionSecret: "asdfasd9DSAISD",
-    internalWebPort: 3002
+    internalWebPort: INTERNAL_WEBSERVER_PORT
 });
 
 const admin = Object.freeze({

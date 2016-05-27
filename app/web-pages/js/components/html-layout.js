@@ -1,8 +1,9 @@
 import React from "react";
 
 const DEVELOPMENT_MODE = process.env.WEBLOG_ENV === 'development';
-const WP_DEV_SERVER_HOST = process.env.WEBLOG_WEBPACK_DEV_SERVER_HOST;
-const WP_DEV_SERVER_PORT = process.env.WEBLOG_WEBPACK_DEV_SERVER_PORT;
+const PRODUCTION_MODE = process.env.WEBLOG_ENV === 'production';
+const WP_DEV_SERVER_HOST = process.env.WB_WEBPACK_SERVER_HOST;
+const WP_DEV_SERVER_PORT = process.env.WB_WEBPACK_SERVER_PORT;
 
 export default function HtmlLayout() {
     return (
@@ -19,11 +20,8 @@ export default function HtmlLayout() {
         <div id="App" className="module-app">
             [CONTENT_PLACE_HOLDER]
         </div>
-        { DEVELOPMENT_MODE ? (
-            <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/admin.js`}></script>
-        ) : (
-            <script src="/admin.js"></script>
-        ) }
+        { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/admin.js`}></script> : null }
+        { PRODUCTION_MODE ? <script src="/admin.js"></script> : null }
         </body>
         </html>
     )
