@@ -6,6 +6,8 @@ import { SyntaxError } from '../errors';
 import PassportManager from '../passport-manager';
 import Models from '../models';
 
+const bypass = (request, response, next) => next();
+
 const isLoggedIn = (request, response, next) => {
     if (request.isAuthenticated())
         return next();
@@ -93,29 +95,29 @@ const parseParameters = (_url) => {
     return {query, sort, limit, skip};
 };
 
-const addRoutesForCrudOperations = (schemaName, router) => {
+const addRoutesForCrudOperations = (schemaName, router, filter) => {
 
     const Model = Models.getModel(schemaName);
     const path = pluralize(schemaName);
 
-    router.get(`/${path}`, isLoggedIn, (request, response) => co(function* () {
+    router.get(`/${path}`, filter, (request, response) => co(function* () {
         const { query, sort, limit, skip } = parseParameters(request.url);
         const models = yield Model.findMany({query, sort, limit, skip});
         successHandler(response, {items: models});
     }).catch(errorHandler(response)));
 
-    router.get(`/${path}/:id`, isLoggedIn, (request, response) => co(function* () {
+    router.get(`/${path}/:id`, filter, (request, response) => co(function* () {
         const model = yield Model.findOne({_id: request.params.id});
         successHandler(response, model);
     }).catch(errorHandler(response)));
 
-    router.post(`/${path}`, isLoggedIn, (request, response) => co(function* () {
+    router.post(`/${path}`, filter, (request, response) => co(function* () {
         const model = new Model(request.body);
         const result = yield model.save();
         successHandler(response, {_id: result.insertedId});
     }).catch(errorHandler(response)));
 
-    router.put(`/${path}/:id`, isLoggedIn, (request, response) => co(function* () {
+    router.put(`/${path}/:id`, filter, (request, response) => co(function* () {
         const model = yield Model.findOne({_id: request.params.id});
 
         if (model) {
@@ -126,7 +128,7 @@ const addRoutesForCrudOperations = (schemaName, router) => {
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
-    router.delete(`/${path}/:id`, isLoggedIn, (request, response) => co(function* () {
+    router.delete(`/${path}/:id`, filter, (request, response) => co(function* () {
         yield Model.deleteOne({_id: request.params.id});
         successHandler(response, {});
     }).catch(errorHandler(response)));
@@ -134,13 +136,13 @@ const addRoutesForCrudOperations = (schemaName, router) => {
     return router;
 };
 
-const addRoutesForAuth = (router) => {
+const addRoutesForAuth = (router, loginCheck, logoutCheck, authentication) => {
 
-    router.post('/login', isLoggedOut, PassportManager.localAuth, (request, response) => {
+    router.post('/login', logoutCheck, authentication, (request, response) => {
         successHandler(response, {});
     });
 
-    router.get('/logout', isLoggedIn, (request, response) => {
+    router.get('/logout', loginCheck, (request, response) => {
         request.logout();
         successHandler(response, {});
     });
@@ -157,16 +159,20 @@ const addRoutesForHome = (router) => {
     return router;
 };
 
-const addRoutesForUser = (router) => {
+const addRoutesForUser = (router, filter) => {
 
     const UserModel = Models.getModel('user');
 
-    router.get(`/users/me`, isLoggedIn, (request, response) => co(function* () {
-        const model = yield UserModel.findOne({_id: request.user._id});
-        successHandler(response, model);
+    router.get(`/users/me`, filter, (request, response) => co(function* () {
+        if (request.user) {
+            const model = yield UserModel.findOne({_id: request.user._id});
+            successHandler(response, model);
+        } else {
+            successHandler(response, null);
+        }
     }).catch(errorHandler(response)));
 
-    router.put(`/users/:id/password`, isLoggedIn, (request, response) => co(function* () {
+    router.put(`/users/:id/password`, filter, (request, response) => co(function* () {
         const model = yield UserModel.findOne({_id: request.params.id});
 
         if (model) {
@@ -181,16 +187,16 @@ const addRoutesForUser = (router) => {
     return router;
 };
 
-const addRoutesForSetting = (router) => {
+const addRoutesForSetting = (router, filter) => {
 
     const SettingModel = Models.getModel('setting');
 
-    router.get(`/setting`, (request, response) => co(function* () {
+    router.get(`/setting`, filter, (request, response) => co(function* () {
         const model = yield SettingModel.getSetting();
         successHandler(response, model);
     }).catch(errorHandler(response)));
 
-    router.put(`/setting`, (request, response) => co(function* () {
+    router.put(`/setting`, filter, (request, response) => co(function* () {
         yield SettingModel.setSetting(request.body);
         successHandler(response, {});
     }).catch(errorHandler(response)));
@@ -211,20 +217,24 @@ router.get('/privileges', isLoggedIn, response((ok) => {
 
 export default class RestfulApiRouter {
 
-    constructor({basePath}) {
+    constructor({basePath, authProtection}) {
         this._basePath = basePath;
 
         let router = new Router();
 
+        const loginCheck = authProtection ? isLoggedIn : bypass;
+        const logoutCheck = authProtection ? isLoggedOut : bypass;
+        const authentication = authProtection ? PassportManager.localAuth : bypass;
+
         // The order of those functions matters.
         router = addRoutesForHome(router);
-        router = addRoutesForAuth(router);
-        router = addRoutesForUser(router);
-        router = addRoutesForCrudOperations("user", router);
-        router = addRoutesForCrudOperations("category", router);
-        router = addRoutesForCrudOperations("blog", router);
-        router = addRoutesForCrudOperations("post", router);
-        router = addRoutesForSetting(router);
+        router = addRoutesForAuth(router, loginCheck, logoutCheck, authentication);
+        router = addRoutesForUser(router, loginCheck);
+        router = addRoutesForCrudOperations("user", router, loginCheck);
+        router = addRoutesForCrudOperations("category", router, loginCheck);
+        router = addRoutesForCrudOperations("blog", router, loginCheck);
+        router = addRoutesForCrudOperations("post", router, loginCheck);
+        router = addRoutesForSetting(router, loginCheck);
 
         this._router = router
     }
