@@ -4,19 +4,23 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
-import PassportManager from '../passport-manager';
 
 export default class WebServer {
 
     constructor({
         host, port, sessionSecret,
-        webpageRouter, apiRouter}) {
+        webpageRouter, apiRouter, PassportManager}) {
         this._host = host;
         this._port = port;
         this._instance = null;
-        this._sessionSecret = sessionSecret;
+        this._session = expressSession({
+            secret: sessionSecret,
+            resave: false,
+            saveUninitialized: false
+        });
         this._webpageRouter = webpageRouter;
         this._apiRouter = apiRouter;
+        this._PassportManager = PassportManager;
         this._expressApp = this._buildExpressApp();
     }
 
@@ -46,32 +50,27 @@ export default class WebServer {
 
     _buildExpressApp() {
         const expressApp = express();
-        const session = expressSession({
-            secret: this._sessionSecret,
-            resave: false,
-            saveUninitialized: false
-        });
-
-        expressApp.use(favicon(this._webpageRouter.faviconDir));
 
         //expressApp.use(logger('dev'));
         expressApp.use(bodyParser.json());
         expressApp.use(bodyParser.urlencoded({extended: false}));
         expressApp.use(cookieParser());
+        expressApp.use(this._session);
 
-        expressApp.use(session);
+        if (this._PassportManager) {
+            expressApp.use(this._PassportManager.passport.initialize());
+            expressApp.use(this._PassportManager.passport.session());
+        }
 
-        expressApp.use(PassportManager.passport.initialize());
-        expressApp.use(PassportManager.passport.session());
+        if (this._apiRouter) {
+            expressApp.use(this._apiRouter.basePath, this._apiRouter.router);
+        }
 
-        // Restful API
-        expressApp.use(this._apiRouter.basePath, this._apiRouter.router);
-
-        // Static Files in pages dir
-        expressApp.use(express.static(this._webpageRouter.staticDir));
-
-        // Web Pages
-        expressApp.use(this._webpageRouter.basePath, this._webpageRouter.router);
+        if (this._webpageRouter) {
+            expressApp.use(favicon(this._webpageRouter.faviconDir));
+            expressApp.use(express.static(this._webpageRouter.staticDir));
+            expressApp.use(this._webpageRouter.basePath, this._webpageRouter.router);
+        }
 
         return expressApp;
     }

@@ -22,6 +22,9 @@ class WeblogJS {
         webPort = 80,
         webPageRoot = "/",
         apiRoot = "/api",
+        internalWebHost = "localhost",
+        internalWebPort = 3002,
+        internalApiRoot = "/api",
         sessionSecret = "keyboard cat"
         } = {}
     ) {
@@ -35,18 +38,30 @@ class WeblogJS {
         const webpageRouter = new WebpageRouter(webPageRoot);
 
         const restfulApiRouter = new RestfulApiRouter({
-            basePath: apiRoot
+            basePath: apiRoot,
+            authProtection: true
         });
 
-        const webServer = new WebServer({
+        this._webServer = new WebServer({
             host: webHost,
             port: webPort,
             sessionSecret: sessionSecret,
             webpageRouter: webpageRouter,
-            apiRouter: restfulApiRouter
+            apiRouter: restfulApiRouter,
+            PassportManager: PassportManager
         });
 
-        this._webServer = webServer;
+        const internalRestfulApiRouter = new RestfulApiRouter({
+            basePath: internalApiRoot,
+            authProtection: false
+        });
+
+        this._internalWebServer =  new WebServer({
+            host: internalWebHost,
+            port: internalWebPort,
+            sessionSecret: sessionSecret,
+            apiRouter: internalRestfulApiRouter
+        });
 
         return this;
     }
@@ -56,6 +71,13 @@ class WeblogJS {
      */
     get webServer() {
         return this._webServer;
+    }
+
+    /**
+     * @returns {WebServer}
+     */
+    get internalWebServer() {
+        return this._internalWebServer;
     }
 
     /**

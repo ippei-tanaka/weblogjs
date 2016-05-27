@@ -9,7 +9,10 @@ WeblogJS.init({
     webHost: configFile.web_server_host,
     webPort: configFile.web_server_port,
     apiRoot: configFile.restful_api_root,
-    sessionSecret: configFile.session_secret
+    sessionSecret: configFile.session_secret,
+    internalWebHost: configFile.internal_web_server_host,
+    internalWebPort: configFile.internal_web_server_port,
+    internalApiRoot: configFile.internal_restful_api_root
 });
 
 const admin = Object.freeze({
@@ -21,6 +24,7 @@ const admin = Object.freeze({
 
 co(function* () {
     yield WeblogJS.webServer.start();
+    yield WeblogJS.internalWebServer.start();
     yield WeblogJS.dbSettingOperator.dropDatabase();
     yield WeblogJS.dbSettingOperator.createIndexes();
     yield WeblogJS.dbSettingOperator.removeAllDocuments();
