@@ -84,6 +84,14 @@ const schema = new Schema('post', {
                 }
             }
         }
+    },
+
+    publish_date: {
+        type: Types.Date
+    },
+
+    is_draft: {
+        type: Types.Boolean
     }
 
 });

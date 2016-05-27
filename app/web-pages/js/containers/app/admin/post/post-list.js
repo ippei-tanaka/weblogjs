@@ -105,7 +105,9 @@ class PostList extends Component {
             tags: {
                 label: "Tags",
                 stringify: value => {
-                    return value.length > 0 ? value.join(', ') : this.noneElement;
+                    return Array.isArray(value) && value.length > 0
+                        ? value.join(', ')
+                        : this.noneElement;
                 }
             },
 
