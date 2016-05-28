@@ -9,7 +9,7 @@
     "webpack-dev-server": "WEBLOG_ENV={^mode^:^webpack-dev-server^,^web_port^:3001} ./node_modules/.bin/webpack-dev-server --inline --hot --port=8001 --host=localhost",
     "production"        : "WEBLOG_ENV={^mode^:^production^,^web_port^:8001} node ./runner/index",
     "webpack"           : "WEBLOG_ENV={^mode^:^production^,^web_port^:8001} ./node_modules/.bin/webpack",
-    "test"              : "WEBLOG_ENV={^mode^:^test^,^web_port^:3001} ./node_modules/.bin/mocha $(find test -name '*.test.js') --compilers js:babel-core/register"
+    "test"              : "WEBLOG_ENV={^mode^:^test^,^web_port^:3002} ./node_modules/.bin/mocha $(find test -name '*.test.js') --compilers js:babel-core/register"
   },
   "author": {
     "name": "Ippei Tanaka",

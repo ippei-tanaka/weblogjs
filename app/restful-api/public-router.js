@@ -24,31 +24,6 @@ const addRoutesForCrudOperations = (schemaName, router) => {
     return router;
 };
 
-const addRoutesForHome = (router) => {
-
-    router.get(`/`, (request, response) => co(function* () {
-        successHandler(response, {});
-    }).catch(errorHandler(response)));
-
-    return router;
-};
-
-const addRoutesForUser = (router) => {
-
-    const UserModel = Models.getModel('user');
-
-    router.get(`/users/me`, (request, response) => co(function* () {
-        if (request.user) {
-            const model = yield UserModel.findOne({_id: request.user._id});
-            successHandler(response, model);
-        } else {
-            successHandler(response, null);
-        }
-    }).catch(errorHandler(response)));
-
-    return router;
-};
-
 const addRoutesForSetting = (router) => {
 
     const SettingModel = Models.getModel('setting');
@@ -68,8 +43,6 @@ export default class PublicRestfulApiRouter {
 
         let router = new Router();
 
-        router = addRoutesForHome(router);
-        router = addRoutesForUser(router);
         router = addRoutesForCrudOperations("user", router);
         router = addRoutesForCrudOperations("category", router);
         router = addRoutesForCrudOperations("blog", router);
