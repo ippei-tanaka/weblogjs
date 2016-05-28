@@ -50,12 +50,9 @@ const createHtml = (renderProps, htmlContainer) => co(function* () {
         }
     }
 
-    if (component.fetchData) {
-        yield component.fetchData({store, actions: _actions});
-    }
-
-    if (component.getTitle) {
-        title = yield component.getTitle({store, actions: _actions});
+    if (component.prepareForPreRendering) {
+        const data = yield component.prepareForPreRendering({store, actions: _actions});
+        title = data.title;
     }
 
     const content = ReactDOMServer.renderToString(
