@@ -1,7 +1,8 @@
-const WEBSERVER_PORT = process.env.WB_WSERVER_PORT;
-const INTERNAL_WEBSERVER_PORT = process.env.WB_INTN_WSERVER_PORT;
-const SERVER_MODE = process.env.WEBLOG_ENV === 'development' || process.env.WEBLOG_ENV === 'production';
-const PORT = SERVER_MODE ? INTERNAL_WEBSERVER_PORT : WEBSERVER_PORT;
+import WEBLOG_ENV from '../../../../env-variables';
+
+const SERVER_MODE =  WEBLOG_ENV.mode === 'development' || WEBLOG_ENV.mode === 'production';
+const WEB_PORT = WEBLOG_ENV.web_port;
 
 export const ADMIN_DIR = '/admin';
-export const URL_BASE = `http://localhost:${PORT}`;
+export const API_PATH = SERVER_MODE ? WEBLOG_ENV.public_api_root : WEBLOG_ENV.admin_api_root;
+export const URL_BASE = `http://localhost:${WEB_PORT}`;

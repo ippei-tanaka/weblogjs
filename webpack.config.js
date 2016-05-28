@@ -1,8 +1,11 @@
-var path = require('path');
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+require('./app/babel-request');
 
-const DEVELOPMENT_MODE = process.env.WEBLOG_ENV === 'webpack-dev-server';
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const WEBLOG_ENV = require('./env-variables');
+
+const DEVELOPMENT_MODE = WEBLOG_ENV === 'webpack-dev-server';
 const STATIC_DIR = path.resolve(__dirname, "./app/web-pages/static");
 const ADMIN_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/admin-browser.js");
 const PUBLIC_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/public-browser.js");
@@ -10,7 +13,7 @@ const PUBLIC_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/public-browse
 const regPlugins = [
     new webpack.DefinePlugin({
         "process.env": {
-            WB_WSERVER_PORT: process.env.WB_WSERVER_PORT
+            WEBLOG_ENV: WEBLOG_ENV
         }
     })
 ];

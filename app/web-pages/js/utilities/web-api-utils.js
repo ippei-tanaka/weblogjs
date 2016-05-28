@@ -1,10 +1,9 @@
 import ajax from "./ajax";
-
-const URL_BASE = "/api";
+import { API_PATH } from '../constants/config';
 
 var ajaxRestfulAPI = (uri, options) => {
     options = Object.assign({
-        url: URL_BASE + uri,
+        url: API_PATH + uri,
         method: "get"
     }, options);
     return ajax(options);

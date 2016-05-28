@@ -48,8 +48,7 @@ WeblogJS.init({
     dbName: "weblogjstest",
     webHost: WEBSERVER_HOST,
     webPort: WEBSERVER_PORT,
-    apiRoot: API_ROOT,
-    internalWebPort: 3002
+    apiRoot: API_ROOT
 });
 
 const login = () => httpRequest.post(`${BASE_URL}/login`, admin);
