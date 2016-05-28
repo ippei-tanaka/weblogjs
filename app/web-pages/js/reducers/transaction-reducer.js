@@ -19,6 +19,10 @@ export default (state = initialState, action) => {
 
     //console.log(state.toArray());
 
+    if (!action.id) {
+        return state;
+    }
+
     switch (action.type) {
 
         case TRANSACTION_REQUEST:

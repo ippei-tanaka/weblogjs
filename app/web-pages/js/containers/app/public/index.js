@@ -5,15 +5,16 @@ import co from 'co';
 
 class Public extends Component {
 
-    /*
-    static fetchData ({store}) {
+    static fetchData ({actions, store}) {
         return co(function* () {
-            console.log(12312);
-            yield actions.loadUsers("a")(store.dispatch, store.getState);
-            console.log(34534);
-        }.bind(this)).catch(e => console.log(e));
+            yield actions.loadUsers();
+        }.bind(this));
     }
-    */
+
+    static getTitle ({actions, store}) {
+        const name = store.getState().user.toArray()[0].display_name;
+        return `Hey, I am ${name}!`;
+    }
 
     constructor(props) {
         super(props);
