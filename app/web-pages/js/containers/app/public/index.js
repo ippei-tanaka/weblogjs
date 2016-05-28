@@ -5,14 +5,12 @@ import co from 'co';
 
 class Public extends Component {
 
-    static fetchData({actions, store}) {
+    static prepareForPreRendering({actions, store}) {
         return co(function* () {
             yield actions.loadPublicPosts();
-        }.bind(this));
-    }
-
-    static getTitle({actions, store}) {
-        return Promise.resolve(`Hey!`);
+            const posts = store.getState().post.toArray();
+            return { title: "\\(^v^)/ " + posts.length }
+        });
     }
 
     componentWillMount () {
