@@ -4,6 +4,7 @@ import co from 'co';
 import { expect } from 'chai';
 import httpRequest from '../../utils/http-request';
 import WeblogJS from '../../app';
+import WEBLOG_ENV from '../../env-variables';
 
 const admin = Object.freeze(Object.assign({
     email: "ttt@ttt.com",
@@ -39,16 +40,13 @@ const testPost = Object.freeze({
     "is_draft": false
 });
 
-const WEBSERVER_HOST = "localhost";
-const WEBSERVER_PORT = 3001;
-const API_ROOT = '/api';
+const WEBSERVER_HOST = WEBLOG_ENV.web_host;
+const WEBSERVER_PORT = WEBLOG_ENV.web_port;
+const API_ROOT = WEBLOG_ENV.admin_api_root;
 const BASE_URL = `http://${WEBSERVER_HOST}:${WEBSERVER_PORT}${API_ROOT}`;
 
 WeblogJS.init({
-    dbName: "weblogjstest",
-    webHost: WEBSERVER_HOST,
-    webPort: WEBSERVER_PORT,
-    apiRoot: API_ROOT
+    dbName: "weblogjstest"
 });
 
 const login = () => httpRequest.post(`${BASE_URL}/login`, admin);
