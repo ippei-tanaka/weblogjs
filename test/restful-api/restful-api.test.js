@@ -1,4 +1,4 @@
-require('../../app/babel-request');
+require('../../babel-request');
 
 import co from 'co';
 import { expect } from 'chai';

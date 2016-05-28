@@ -1,2 +1,2 @@
-require('../app/babel-request');
+require('../babel-request');
 require('./index.es6');
