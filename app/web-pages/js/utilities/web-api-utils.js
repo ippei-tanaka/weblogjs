@@ -1,47 +1,22 @@
 import ajax from "./ajax";
-import { API_PATH } from '../constants/config';
 
-var ajaxRestfulAPI = (uri, options) => {
-    options = Object.assign({
-        url: API_PATH + uri,
-        method: "get"
-    }, options);
-    return ajax(options);
-};
+export const getFromServer = ({path}) => ajax({
+    url: path,
+    method: 'get'
+});
 
-export const getLoginUser = () => ajaxRestfulAPI("/users/me")
-    .then(loginUser => loginUser)
-    .catch(() => null);
+export const postOnServer = ({path, data}) => ajax({
+    url: path,
+    method: 'post',
+    data
+});
 
+export const putOneOnServer = ({path, data}) => ajax({
+    url: path,
+    method: 'put'
+});
 
-export const loginToAdmin = ({email, password}) => ajaxRestfulAPI("/login", {
-    data: {email, password},
-    method: 'post'
-})
-    .then(loginUser => loginUser)
-    .catch(() => null);
-
-
-export const logoutFromAdmin = () => ajaxRestfulAPI("/logout")
-    .then(() => true)
-    .catch(() => false);
-
-
-export const getFromServer = ({path}) => ajaxRestfulAPI(path);
-
-export const postOnServer = ({path, data}) =>
-    ajaxRestfulAPI(path, {
-        data,
-        method: 'post'
-    });
-
-export const putOneOnServer = ({path, data}) =>
-    ajaxRestfulAPI(path, {
-        data,
-        method: 'put'
-    });
-
-export const deleteOnServer = ({path, id}) =>
-    ajaxRestfulAPI(path, {
-        method: 'delete'
-    });
+export const deleteOnServer = ({path}) => ajax({
+    url: path,
+    method: 'delete'
+});

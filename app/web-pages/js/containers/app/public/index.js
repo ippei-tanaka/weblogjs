@@ -7,24 +7,16 @@ class Public extends Component {
 
     static fetchData({actions, store}) {
         return co(function* () {
-            yield actions.loadPosts();
-            yield actions.loadCategories();
-            yield actions.loadBlogs();
-            yield actions.loadSetting();
+            yield actions.loadPublicPosts();
         }.bind(this));
     }
 
     static getTitle({actions, store}) {
-        const state = store.getState();//.user.toArray()[0].display_name;
-        const front_id = state.setting.front;
-        return `Hey, I am ${front_id}!`;
+        return Promise.resolve(`Hey!`);
     }
 
     componentWillMount () {
-        this.props.loadPosts();
-        this.props.loadCategories();
-        this.props.loadBlogs();
-        this.props.loadSetting();
+        this.props.loadPublicPosts();
     }
 
     render() {
@@ -52,7 +44,7 @@ class Public extends Component {
 
 export default connect(
     state => ({
-        postStore: state.post,
+        postStore: state.post
     }),
     actions
 )(Public);
