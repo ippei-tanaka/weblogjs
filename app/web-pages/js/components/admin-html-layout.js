@@ -5,7 +5,7 @@ const PRODUCTION_MODE = process.env.WEBLOG_ENV === 'production';
 const WP_DEV_SERVER_HOST = process.env.WB_WEBPACK_SERVER_HOST;
 const WP_DEV_SERVER_PORT = process.env.WB_WEBPACK_SERVER_PORT;
 
-export default function HtmlLayout() {
+export default function AdminHtmlLayout() {
     return (
         <html lang="en">
         <head>
@@ -14,7 +14,7 @@ export default function HtmlLayout() {
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <link href="/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
             <link href="/style.css" media="all" rel="stylesheet"/>
-            <title>Weblog JS</title>
+            <title>[TITLE_PLACE_HOLDER]</title>
         </head>
         <body>
         <div id="App" className="module-app">

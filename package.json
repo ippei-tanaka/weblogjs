@@ -4,6 +4,7 @@
   "description": "a library for weblogs",
   "main": "./app",
   "scripts": {
+    "init"              : "WEBLOG_ENV=init node ./runner/index",
     "development"       : "WEBLOG_ENV=development WB_WSERVER_PORT=3001 WB_INTN_WSERVER_PORT=3002 WB_WEBPACK_SERVER_PORT=8001 WB_WEBPACK_SERVER_HOST=localhost node ./runner/index",
     "webpack-dev-server": "WEBLOG_ENV=webpack-dev-server WB_WSERVER_PORT=3001 ./node_modules/.bin/webpack-dev-server --inline --hot --port=8001 --host=localhost",
     "production"        : "WEBLOG_ENV=production WB_WSERVER_PORT=8001 WB_INTN_WSERVER_PORT=3002 node ./runner/index",
