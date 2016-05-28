@@ -4,7 +4,8 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const DEVELOPMENT_MODE = process.env.WEBLOG_ENV === 'webpack-dev-server';
 const STATIC_DIR = path.resolve(__dirname, "./app/web-pages/static");
-const ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/js/routers/browser.js");
+const ADMIN_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/admin-browser.js");
+const PUBLIC_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/public-browser.js");
 
 const regPlugins = [
     new webpack.DefinePlugin({
@@ -28,14 +29,20 @@ const prodPlugins = [
 
 module.exports = {
 
-    entry: [
-        "babel-polyfill",
-        ENTRY_FILE
-    ],
+    entry: {
+        admin: [
+            "babel-polyfill",
+            ADMIN_ENTRY_FILE
+        ],
+        public: [
+            "babel-polyfill",
+            PUBLIC_ENTRY_FILE
+        ]
+    },
 
     output: {
         path: STATIC_DIR,
-        filename: "admin.js"
+        filename: "[name].js"
     },
 
     devtool: DEVELOPMENT_MODE ? 'source-map' : null,
