@@ -17,7 +17,6 @@ const schema = new Schema('post', {
     },
 
     slug: {
-        unique: true,
         required: true,
         type: Types.String,
         sanitize: (value) => value.trim(),
