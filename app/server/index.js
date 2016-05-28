@@ -9,7 +9,9 @@ export default class WebServer {
 
     constructor({
         host, port, sessionSecret,
-        webpageRouter, apiRouter, PassportManager}) {
+        webpageRouter, apiRouter,
+        publicApiRouter, PassportManager})
+    {
         this._host = host;
         this._port = port;
         this._instance = null;
@@ -20,6 +22,7 @@ export default class WebServer {
         });
         this._webpageRouter = webpageRouter;
         this._apiRouter = apiRouter;
+        this._publicApiRouter = publicApiRouter;
         this._PassportManager = PassportManager;
         this._expressApp = this._buildExpressApp();
     }
@@ -64,6 +67,10 @@ export default class WebServer {
 
         if (this._apiRouter) {
             expressApp.use(this._apiRouter.basePath, this._apiRouter.router);
+        }
+
+        if (this._publicApiRouter) {
+            expressApp.use(this._publicApiRouter.basePath, this._publicApiRouter.router);
         }
 
         if (this._webpageRouter) {

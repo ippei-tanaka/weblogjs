@@ -4,30 +4,30 @@ require('babel-polyfill');
 import co from 'co';
 import WebServer from './server';
 import WebpageRouter from './web-pages/router';
-import RestfulApiRouter from './restful-api/router';
+import AdminRestfulApiRouter from './restful-api/admin-router';
+import PublicRestfulApiRouter from './restful-api/public-router';
 import DbClient from './db/db-client';
 import DbSettingOperator from './db/db-setting-operator';
 import PassportManager from './passport-manager';
 import UserModel from './models/user-model';
+import WEBLOG_ENV from '../env-variables';
 
 class WeblogJS {
 
     constructor() {}
 
     init({
-        dbHost = "localhost",
-        dbPort = 27017,
-        dbName = "weblogjs",
-        webHost = "localhost",
-        webPort = 80,
-        webPageRoot = "/",
-        apiRoot = "/api",
-        internalWebHost = "localhost",
-        internalWebPort = 3002,
-        internalApiRoot = "/api",
-        sessionSecret = "keyboard cat"
-        } = {}
-    ) {
+        dbHost = WEBLOG_ENV.db_host,
+        dbPort = WEBLOG_ENV.db_port,
+        dbName = WEBLOG_ENV.db_name,
+        webHost = WEBLOG_ENV.web_host,
+        webPort = WEBLOG_ENV.web_port,
+        webPageRoot = WEBLOG_ENV.webpage_root,
+        apiRoot = WEBLOG_ENV.admin_api_root,
+        publicApiRoot = WEBLOG_ENV.public_api_root,
+        sessionSecret = WEBLOG_ENV.session_secret
+        } = {})
+    {
 
         DbClient.init({
             host: dbHost,
@@ -37,9 +37,12 @@ class WeblogJS {
 
         const webpageRouter = new WebpageRouter(webPageRoot);
 
-        const restfulApiRouter = new RestfulApiRouter({
-            basePath: apiRoot,
-            authProtection: true
+        const restfulApiRouter = new AdminRestfulApiRouter({
+            basePath: apiRoot
+        });
+
+        const publicRestfulApiRouter = new PublicRestfulApiRouter({
+            basePath: publicApiRoot
         });
 
         this._webServer = new WebServer({
@@ -48,19 +51,8 @@ class WeblogJS {
             sessionSecret: sessionSecret,
             webpageRouter: webpageRouter,
             apiRouter: restfulApiRouter,
+            publicApiRouter: publicRestfulApiRouter,
             PassportManager: PassportManager
-        });
-
-        const internalRestfulApiRouter = new RestfulApiRouter({
-            basePath: internalApiRoot,
-            authProtection: false
-        });
-
-        this._internalWebServer =  new WebServer({
-            host: internalWebHost,
-            port: internalWebPort,
-            sessionSecret: sessionSecret,
-            apiRouter: internalRestfulApiRouter
         });
 
         return this;
@@ -71,13 +63,6 @@ class WeblogJS {
      */
     get webServer() {
         return this._webServer;
-    }
-
-    /**
-     * @returns {WebServer}
-     */
-    get internalWebServer() {
-        return this._internalWebServer;
     }
 
     /**

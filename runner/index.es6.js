@@ -1,14 +1,11 @@
 import WeblogJS from '../app';
 import co from 'co';
+import WEBLOG_ENV from '../env-variables';
 
-const WEBSERVER_PORT = process.env.WB_WSERVER_PORT;
-const INTERNAL_WEBSERVER_PORT = process.env.WB_INTN_WSERVER_PORT;
-const INIT = process.env.WEBLOG_ENV === 'init';
+const INIT = WEBLOG_ENV.mode === 'init';
 
 WeblogJS.init({
-    webPort: WEBSERVER_PORT,
-    sessionSecret: "asdfasd9DSAISD",
-    internalWebPort: INTERNAL_WEBSERVER_PORT
+    sessionSecret: "asdfasd9DSAISD"
 });
 
 const admin = Object.freeze({
@@ -36,7 +33,6 @@ co(function* () {
         process.exit();
     } else {
         yield WeblogJS.webServer.start();
-        yield WeblogJS.internalWebServer.start();
         console.log("Web Server has started...");
     }
 }).catch((error) => {

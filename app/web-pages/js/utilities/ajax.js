@@ -1,8 +1,9 @@
 import request from "superagent";
-import { URL_BASE } from "../constants/config";
+import { URL_BASE } from '../constants/config';
 
 export default ({method, url, data}) => {
-    var requestObject = request[method](URL_BASE + url).type('json');
+
+    let requestObject = request[method](URL_BASE + url).type('json');
 
     if (data) {
         requestObject = requestObject.send(data);

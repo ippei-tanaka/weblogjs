@@ -1,9 +1,10 @@
 import React from "react";
+import WEBLOG_ENV from '../../../../env-variables';
 
-const DEVELOPMENT_MODE = process.env.WEBLOG_ENV === 'development';
-const PRODUCTION_MODE = process.env.WEBLOG_ENV === 'production';
-const WP_DEV_SERVER_HOST = process.env.WB_WEBPACK_SERVER_HOST;
-const WP_DEV_SERVER_PORT = process.env.WB_WEBPACK_SERVER_PORT;
+const DEVELOPMENT_MODE = WEBLOG_ENV.mode === 'development';
+const PRODUCTION_MODE = WEBLOG_ENV.mode === 'production';
+const WP_DEV_SERVER_HOST = WEBLOG_ENV.webpack_server_host;
+const WP_DEV_SERVER_PORT = WEBLOG_ENV.webpack_server_port;
 
 export default function AdminHtmlLayout() {
     return (
