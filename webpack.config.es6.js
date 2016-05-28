@@ -11,13 +11,18 @@ const PUBLIC_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/public-browse
 const regPlugins = [
     new webpack.DefinePlugin({
         "process.env": {
-            WEBLOG_ENV: WEBLOG_ENV
+            WEBLOG_WEBPACK_ENV: JSON.stringify(WEBLOG_ENV)
         }
     })
 ];
 
 const prodPlugins = [
     new ExtractTextPlugin('style.css', {allChunks: true}),
+    new webpack.DefinePlugin({
+        "process.env": {
+            NODE_ENV: JSON.stringify("production")
+        }
+    }),
     new webpack.optimize.UglifyJsPlugin({minimize: true})
 ];
 
