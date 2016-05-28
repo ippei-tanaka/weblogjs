@@ -1,4 +1,5 @@
-import { getLoginUser, loginToAdmin, logoutFromAdmin } from '../utilities/web-api-utils';
+import { ADMIN_API_PATH } from '../constants/config';
+import { getFromServer, postOnServer } from '../utilities/web-api-utils';
 
 import {
     AUTH_STATUS_CHECK_REQUEST,
@@ -16,6 +17,22 @@ import {
 } from '../constants/auth-status';
 
 import co from 'co';
+
+const getLoginUser = () =>
+    getFromServer({
+        path:`${ADMIN_API_PATH}/users/me`
+    }).catch(() => null);
+
+const loginToAdmin = ({email, password}) =>
+    postOnServer({
+        path:`${ADMIN_API_PATH}/login`,
+        data: {email, password}
+    }).catch(() => null);
+
+const logoutFromAdmin = () =>
+    getFromServer({
+        path:`${ADMIN_API_PATH}/logout`
+    }).then(() => true).catch(() => false);
 
 export const checkStatus = () => (dispatch, getState) => {
 

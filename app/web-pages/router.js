@@ -55,7 +55,7 @@ const createHtml = (renderProps, htmlContainer) => co(function* () {
     }
 
     if (component.getTitle) {
-        title = component.getTitle({store, actions: _actions});
+        title = yield component.getTitle({store, actions: _actions});
     }
 
     const content = ReactDOMServer.renderToString(

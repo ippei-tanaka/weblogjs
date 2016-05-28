@@ -36,6 +36,8 @@ import {
     TRANSACTION_FINISHED
 } from '../constants/action-types';
 
+import { ADMIN_API_PATH, PUBLIC_API_PATH } from '../constants/config';
+
 import co from 'co';
 
 const modify = (dispatch, actionId, main) => {
@@ -63,7 +65,7 @@ const modify = (dispatch, actionId, main) => {
 
 const load = (path, doneType) => (actionId) => (dispatch, getState) => {
     return modify(dispatch, actionId, () => co(function* () {
-        const response = yield getFromServer({path: `/${path}`});
+        const response = yield getFromServer({path});
         dispatch({
             type: doneType,
             data: response.items
@@ -73,8 +75,8 @@ const load = (path, doneType) => (actionId) => (dispatch, getState) => {
 
 const create = (path, doneType) => (actionId, newUser) => (dispatch, getState) => {
     return modify(dispatch, actionId, () => co(function* () {
-        let response = yield postOnServer({data: newUser, path: `/${path}`});
-        response = yield getFromServer({path: `/${path}/${response._id}`});
+        let response = yield postOnServer({data: newUser, path});
+        response = yield getFromServer({path: `${path}/${response._id}`});
         dispatch({
             type: doneType,
             data: response
@@ -84,8 +86,8 @@ const create = (path, doneType) => (actionId, newUser) => (dispatch, getState) =
 
 const edit = (path, doneType) => (actionId, {id, data}) => (dispatch, getState) => {
     return modify(dispatch, actionId, () => co(function* () {
-        yield putOneOnServer({data, path: `/${path}/${id}`});
-        const response = yield getFromServer({path: `/${path}/${id}`});
+        yield putOneOnServer({data, path: `${path}/${id}`});
+        const response = yield getFromServer({path: `${path}/${id}`});
         dispatch({
             type: doneType,
             data: response
@@ -95,7 +97,7 @@ const edit = (path, doneType) => (actionId, {id, data}) => (dispatch, getState) 
 
 const del = (path, doneType) => (actionId, {id}) => (dispatch, getState) => {
     return modify(dispatch, actionId, () => co(function* () {
-        yield deleteOnServer({path: `/${path}/${id}`});
+        yield deleteOnServer({path: `${path}/${id}`});
         dispatch({
             type: doneType,
             id
@@ -113,17 +115,17 @@ export const finishTransaction = (actionId) => (dispatch, getState) => {
 };
 
 
-export const loadUsers = load('users', LOADED_USER_RECEIVED);
+export const loadUsers = load(`${ADMIN_API_PATH}/users`, LOADED_USER_RECEIVED);
 
-export const createUser = create('users', CREATED_USER_RECEIVED);
+export const createUser = create(`${ADMIN_API_PATH}/users`, CREATED_USER_RECEIVED);
 
-export const editUser = edit('users', EDITED_USER_RECEIVED);
+export const editUser = edit(`${ADMIN_API_PATH}/users`, EDITED_USER_RECEIVED);
 
-export const deleteUser = del('users', DELETED_USER_RECEIVED);
+export const deleteUser = del(`${ADMIN_API_PATH}/users`, DELETED_USER_RECEIVED);
 
 export const editUserPassword = (actionId, {id, data}) => (dispatch, getState) => {
     return modify(dispatch, actionId, () => co(function* () {
-        yield putOneOnServer({data, path: `/users/${id}/password`});
+        yield putOneOnServer({data, path: `${ADMIN_API_PATH}/users/${id}/password`});
         dispatch({
             type: USER_PASSWORD_EDIT_COMPLETE
         });
@@ -131,35 +133,35 @@ export const editUserPassword = (actionId, {id, data}) => (dispatch, getState) =
 };
 
 
-export const loadCategories = load('categories', LOADED_CATEGORY_RECEIVED);
+export const loadCategories = load(`${ADMIN_API_PATH}/categories`, LOADED_CATEGORY_RECEIVED);
 
-export const createCategory = create('categories', CREATED_CATEGORY_RECEIVED);
+export const createCategory = create(`${ADMIN_API_PATH}/categories`, CREATED_CATEGORY_RECEIVED);
 
-export const editCategory = edit('categories', EDITED_CATEGORY_RECEIVED);
+export const editCategory = edit(`${ADMIN_API_PATH}/categories`, EDITED_CATEGORY_RECEIVED);
 
-export const deleteCategory = del('categories', DELETED_CATEGORY_RECEIVED);
-
-
-export const loadBlogs = load('blogs', LOADED_BLOG_RECEIVED);
-
-export const createBlog = create('blogs', CREATED_BLOG_RECEIVED);
-
-export const editBlog = edit('blogs', EDITED_BLOG_RECEIVED);
-
-export const deleteBlog = del('blogs', DELETED_BLOG_RECEIVED);
+export const deleteCategory = del(`${ADMIN_API_PATH}/categories`, DELETED_CATEGORY_RECEIVED);
 
 
-export const loadPosts = load('posts', LOADED_POST_RECEIVED);
+export const loadBlogs = load(`${ADMIN_API_PATH}/blogs`, LOADED_BLOG_RECEIVED);
 
-export const createPost = create('posts', CREATED_POST_RECEIVED);
+export const createBlog = create(`${ADMIN_API_PATH}/blogs`, CREATED_BLOG_RECEIVED);
 
-export const editPost = edit('posts', EDITED_POST_RECEIVED);
+export const editBlog = edit(`${ADMIN_API_PATH}/blogs`, EDITED_BLOG_RECEIVED);
 
-export const deletePost = del('posts', DELETED_POST_RECEIVED);
+export const deleteBlog = del(`${ADMIN_API_PATH}/blogs`, DELETED_BLOG_RECEIVED);
+
+
+export const loadPosts = load(`${ADMIN_API_PATH}/posts`, LOADED_POST_RECEIVED);
+
+export const createPost = create(`${ADMIN_API_PATH}/posts`, CREATED_POST_RECEIVED);
+
+export const editPost = edit(`${ADMIN_API_PATH}/posts`, EDITED_POST_RECEIVED);
+
+export const deletePost = del(`${ADMIN_API_PATH}/posts`, DELETED_POST_RECEIVED);
 
 export const loadSetting = (actionId) => (dispatch, getState) => {
     return modify(dispatch, actionId, () => co(function* () {
-        const response = yield getFromServer({path: `/setting`});
+        const response = yield getFromServer({path: `${ADMIN_API_PATH}/setting`});
         dispatch({
             type: LOADED_SETTING_RECEIVED,
             data: response
@@ -169,11 +171,14 @@ export const loadSetting = (actionId) => (dispatch, getState) => {
 
 export const editSetting  = (actionId, {data}) => (dispatch, getState) => {
     return modify(dispatch, actionId, () => co(function* () {
-        yield putOneOnServer({data, path: `/setting`});
-        const response = yield getFromServer({path: `/setting`});
+        yield putOneOnServer({data, path: `${ADMIN_API_PATH}/setting`});
+        const response = yield getFromServer({path: `${ADMIN_API_PATH}/setting`});
         dispatch({
             type: EDITED_SETTING_RECEIVED,
             data: response
         });
     }));
 };
+
+
+export const loadPublicPosts = load(`${PUBLIC_API_PATH}/posts`, LOADED_POST_RECEIVED);
