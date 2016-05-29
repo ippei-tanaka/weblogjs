@@ -8,6 +8,7 @@ class Public extends Component {
     static prepareForPreRendering({actions, store}) {
         return co(function* () {
             yield actions.loadPublicPosts();
+            yield actions.loadPublicPosts();
             const posts = store.getState().post.toArray();
             return { title: "\\(^v^)/ " + posts.length }
         });
@@ -23,6 +24,7 @@ class Public extends Component {
         const posts = this.props.postStore.toArray();
 
         return (
+
             <div class="module-blog-layout">
                 <div class="m-bll-main">
                     { posts.length > 0 ? (

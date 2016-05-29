@@ -36,6 +36,12 @@ const addRoutes = (router) => {
     const UserModel = Models.getModel('user');
     const CategoryModel = Models.getModel('category');
     const PostModel = Models.getModel('post');
+    const BlogModel = Models.getModel('blog');
+
+    router.get(`/blogs`, (request, response) => co(function* () {
+        const blogModels = yield BlogModel.findMany();
+        successHandler(response, {items: blogModels});
+    }).catch(errorHandler(response)));
 
     router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?\/posts(\/|\/page\/[0-9]+\/?)?$/, (request, response) => co(function* () {
         const blogSlug = parseParam(request.params[0], null);

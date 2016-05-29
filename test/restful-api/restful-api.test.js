@@ -880,6 +880,25 @@ describe('Restful API', function () {
         beforeEach('login', () => login());
         afterEach('logout', () => logout());
 
+        describe('/blogs', () => {
+
+            it('should return all the blogs', (done) => {
+                co(function* () {
+                    yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "5"});
+                    yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 2", slug: "blog-2", posts_per_page: "5"});
+                    yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 3", slug: "blog-3", posts_per_page: "5"});
+                    const blogs = yield httpRequest.get(`${PUBLIC_URL}/blogs`);
+                    expect(blogs.items[0].name).to.equal("Blog 1");
+                    expect(blogs.items[1].name).to.equal("Blog 2");
+                    expect(blogs.items[2].name).to.equal("Blog 3");
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
+        });
+
         describe('[/blog/:slug][/category/:slug][/author/:slug][/tag/:tag]/posts[/page/:page]', () => {
 
             it('should return public posts on the first page of the blog', (done) => {
