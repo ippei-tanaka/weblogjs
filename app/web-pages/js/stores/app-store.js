@@ -10,8 +10,6 @@ import authReducer from '../reducers/auth-reducer';
 import transactionReducer from '../reducers/transaction-reducer';
 //import DevTools from '../containers/dev-tools';
 
-//const DEVELOPMENT_MODE = process.env.WEBLOG_ENV === 'development';
-
 const reducer = combineReducers({
     user: userReducer,
     category: categoryReducer,
