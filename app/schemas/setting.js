@@ -3,7 +3,7 @@ import Types from './lib/types';
 
 const schema = new Schema('setting', {
 
-    front: {
+    front_blog_id: {
         unique: true,
         required: true,
         type: Types.ObjectID,

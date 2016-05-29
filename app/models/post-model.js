@@ -19,4 +19,11 @@ export default class PostModel extends SchemaModel {
         return operator;
     }
 
+    get published () {
+        const values = this.values;
+        const isDraft = values.is_draft || false;
+        const publishTime = values.publish_date ? values.publish_date.getTime() : Number.MAX_SAFE_INTEGER;
+        return !isDraft && publishTime < new Date().getTime();
+    }
+
 }

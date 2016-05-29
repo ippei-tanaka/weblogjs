@@ -36,7 +36,7 @@ export default class SchemaModel {
         return null;
     }
 
-    static findMany({query, sort, limit, skip}) {
+    static findMany({query = {}, sort = {}, limit = 0, skip = 0} = {}) {
         return co(function* () {
             const _query = (new this(query)).values;
             const docs = yield this._operator.findMany(_query, sort, limit, skip);

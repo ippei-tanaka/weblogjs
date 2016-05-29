@@ -47,9 +47,9 @@ class SettingEditor extends Component {
                 <Title>Setting</Title>
 
                 <FieldSet label="Front Blog"
-                          error={errors.front}>
-                    <Select value={values.front}
-                            onChange={this._onChange.bind(this, 'front')}>
+                          error={errors.front_blog_id}>
+                    <Select value={values.front_blog_id}
+                            onChange={this._onChange.bind(this, 'front_blog_id')}>
                         {blogList.map(b => <Option key={b._id} value={b._id}>{b.name}</Option>)}
                     </Select>
                 </FieldSet>
