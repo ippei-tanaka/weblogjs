@@ -44,7 +44,7 @@ class BlogFinder {
         return co(function* () {
             if (!this._setting) {
                 this._setting = yield settingManager.getSetting();
-                this._defaultBlog = yield blogManager.findById(this._setting.front);
+                this._defaultBlog = yield blogManager.findById(this._setting.front_blog_id);
             }
             if (this._blogSlug && !this._blog) {
                 this._blog = yield api.blogManager.findBySlug(this._blogSlug);
