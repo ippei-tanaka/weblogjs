@@ -12,7 +12,7 @@ class PostAdder extends Component {
         super(props);
 
         this.state = {
-            values: {},
+            values: { published_date: new Date() },
             actionId: null,
             blogLoadActionId: null,
             categoryLoadActionId: null,
@@ -49,12 +49,12 @@ class PostAdder extends Component {
 
     render() {
         const {transactionStore, categoryStore, blogStore, userStore} = this.props;
-        const {values, actionId} = this.state;
-        const transaction = transactionStore.get(actionId);
+        const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
         const categoryList = categoryStore.toArray();
         const blogList = blogStore.toArray();
         const userList = userStore.toArray();
+        const values = this.state.values;
 
         return (
             <PostForm title="Create a New Post"

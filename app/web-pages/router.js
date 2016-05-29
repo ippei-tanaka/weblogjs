@@ -43,14 +43,14 @@ const createHtml = (renderProps, htmlContainer) => co(function* () {
     const component = components[components.length - 1].WrappedComponent;
     let title = "Weblog JS";
 
-    const _actions = {};
-    for (let actionName of Object.keys(actions)) {
-        _actions[actionName] = (...args) => {
-            return actions[actionName](...args)(store.dispatch, store.getState);
+    if (component.prepareForPreRendering)
+    {
+        const _actions = {};
+        for (let actionName of Object.keys(actions)) {
+            _actions[actionName] = (...args) => {
+                return actions[actionName](...args)(store.dispatch, store.getState);
+            }
         }
-    }
-
-    if (component.prepareForPreRendering) {
         const data = yield component.prepareForPreRendering({store, actions: _actions});
         title = data.title;
     }
