@@ -13,7 +13,8 @@ export const postOnServer = ({path, data}) => ajax({
 
 export const putOneOnServer = ({path, data}) => ajax({
     url: path,
-    method: 'put'
+    method: 'put',
+    data
 });
 
 export const deleteOnServer = ({path}) => ajax({
