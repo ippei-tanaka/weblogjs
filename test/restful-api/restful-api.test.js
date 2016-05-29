@@ -36,7 +36,7 @@ const testPost = Object.freeze({
     "slug": "my-post",
     "content": "Hello, world!",
     "tags": ["tag1", "tag2", "tag3"],
-    "publish_date": new Date(),
+    "published_date": new Date(),
     "is_draft": false
 });
 
@@ -897,12 +897,12 @@ describe('Restful API', function () {
                     const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
 
                     /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: tomorrow});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: yesterday});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId2, publish_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, published_date: tomorrow});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, published_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, published_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId2, published_date: yesterday});
 
                     let posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/posts`);
                     expect(posts.items.length).to.equal(3);
@@ -933,12 +933,12 @@ describe('Restful API', function () {
                     const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
 
                     /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: tomorrow});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: yesterday});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId2, publish_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, published_date: tomorrow});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, published_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, published_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId2, published_date: yesterday});
 
                     let posts;
 
@@ -971,12 +971,12 @@ describe('Restful API', function () {
                     const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
 
                     /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: tomorrow});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: yesterday});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId2, publish_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, published_date: tomorrow});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, published_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, published_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId2, published_date: yesterday});
 
                     let posts;
 
@@ -1032,13 +1032,13 @@ describe('Restful API', function () {
                     response = yield httpRequest.post(`${ADMIN_URL}/categories`, {name: "Category 2", slug: "category-2"});
                     const categoryId2 = response._id;
 
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, category_id: categoryId1});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, category_id: categoryId1});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: yesterday, category_id: categoryId1});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday, category_id: categoryId1});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, category_id: categoryId1});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, category_id: categoryId2});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, category_id: categoryId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, category_id: categoryId1});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, published_date: yesterday, category_id: categoryId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, published_date: yesterday, category_id: categoryId1});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, category_id: categoryId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, category_id: categoryId2});
 
                     let posts;
                     posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/category/category-1/posts`);
@@ -1100,13 +1100,13 @@ describe('Restful API', function () {
                     response = yield httpRequest.post(`${ADMIN_URL}/users`, {email: "w@w.com", display_name: "User 2", slug: "user-2", password: "wwwwwwww"});
                     const userId2 = response._id;
 
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, author_id: userId1});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, author_id: userId1});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: yesterday, author_id: userId1});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday, author_id: userId1});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, author_id: userId1});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, author_id: userId2});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, author_id: userId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, author_id: userId1});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, published_date: yesterday, author_id: userId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, published_date: yesterday, author_id: userId1});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, author_id: userId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, author_id: userId2});
 
                     let posts;
                     posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/author/user-1/posts`);
@@ -1162,13 +1162,13 @@ describe('Restful API', function () {
 
                     const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
 
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, tags: ["tag1","tag2"]});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, tags: ["tag2"]});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: yesterday, tags: ["tag1","tag2"]});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday, tags: ["tag1","tag2"]});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, tags: []});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, tags: ['tag1']});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, tags: ["tag1","tag2"]});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, tags: ["tag2"]});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, published_date: yesterday, tags: ["tag1","tag2"]});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, published_date: yesterday, tags: ["tag1","tag2"]});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, tags: []});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, tags: ['tag1']});
 
                     let posts;
                     posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/tag/tag1/posts`);
@@ -1196,11 +1196,11 @@ describe('Restful API', function () {
                     const twoDaysAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000) * 2);
                     const threeDaysAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000) * 3);
 
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, publish_date: twoDaysAgo});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: tomorrow});
-                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: threeDaysAgo});
-                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, published_date: twoDaysAgo});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, published_date: tomorrow});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, published_date: threeDaysAgo});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, published_date: yesterday});
 
                     let posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/posts`);
                     expect(posts.items.length).to.equal(3);
@@ -1242,11 +1242,11 @@ describe('Restful API', function () {
 
                     const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
 
-                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, category_id: categoryId1, publish_date: yesterday});
-                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, category_id: categoryId1, publish_date: yesterday});
-                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, category_id: categoryId2, publish_date: yesterday});
+                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, category_id: categoryId1, published_date: yesterday});
+                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, category_id: categoryId1, published_date: yesterday});
+                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, category_id: categoryId2, published_date: yesterday});
                     yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, category_id: categoryId3});
-                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId2, category_id: categoryId4, publish_date: yesterday});
+                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId2, category_id: categoryId4, published_date: yesterday});
 
                     //yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 3", slug: "blog-3", posts_per_page: "5"});
                     let categories;

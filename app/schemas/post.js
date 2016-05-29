@@ -85,7 +85,7 @@ const schema = new Schema('post', {
         }
     },
 
-    publish_date: {
+    published_date: {
         type: Types.Date
     },
 

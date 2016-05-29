@@ -112,10 +112,10 @@ class PostList extends Component {
                 }
             },
 
-            publish_date: {
-                label: "Publish Date",
+            published_date: {
+                label: "Published Date",
                 stringify: value =>
-                    Moment(value).format("YYYY-MM-DD HH:mm Z")
+                    value ? Moment(value).format("YYYY-MM-DD HH:mm Z") : this.noneElement
             },
 
             is_draft: {

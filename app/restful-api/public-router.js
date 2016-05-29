@@ -96,11 +96,11 @@ const addRoutes = (router) => {
                 blog_id: blog._id,
                 category_id: category._id,
                 author_id: user._id,
-                publish_date: {$lt: new Date()},
+                published_date: {$lt: new Date()},
                 is_draft: {$ne: true},
                 tags: {$in: [tag]}
             },
-            sort: {publish_date: -1, created_date: 1},
+            sort: {published_date: -1, created_date: 1},
             skip: blog.posts_per_page * (page - 1),
             limit: blog.posts_per_page
         });
@@ -126,7 +126,7 @@ const addRoutes = (router) => {
             {
                 $match: {
                     blog_id: blog._id,
-                    publish_date: {$lt: new Date()},
+                    published_date: {$lt: new Date()},
                     is_draft: {$ne: true}
                 }
             },
