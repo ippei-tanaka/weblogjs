@@ -51,21 +51,32 @@ const addRoutes = (router) => {
         }
         const blog = blogModel.values;
 
+        let _query = {
+            blog_id: blog._id,
+            published_date: {$lt: new Date()},
+            is_draft: {$ne: true}
+        };
+
+        if (tag) {
+            _query.tags = {$in: [tag]};
+        }
+
         const categoryModel = yield CategoryModel.findOne({slug: categorySlug});
-        const category = categoryModel ? categoryModel.values : {};
+        const category = categoryModel ? categoryModel.values : null;
+
+        if (category) {
+            _query.category_id = category._id;
+        }
 
         const userModel = yield UserModel.findOne({slug: authorSlug});
-        const user = userModel ? userModel.values : {};
+        const user = userModel ? userModel.values : null;
+
+        if (user) {
+            _query.author_id = user._id;
+        }
 
         const postModels = yield PostModel.findMany({
-            query: {
-                blog_id: blog._id,
-                category_id: category._id,
-                author_id: user._id,
-                published_date: {$lt: new Date()},
-                is_draft: {$ne: true},
-                tags: {$in: [tag]}
-            },
+            query: _query,
             sort: {published_date: -1, created_date: 1},
             skip: blog.posts_per_page * (page - 1),
             limit: blog.posts_per_page
