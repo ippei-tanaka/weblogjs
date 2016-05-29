@@ -18,6 +18,7 @@ class CategoryEditor extends Component {
 
     componentWillMount() {
         this.setState({actionId: Symbol()});
+        this.props.loadCategories();
     }
 
     componentWillUnmount() {

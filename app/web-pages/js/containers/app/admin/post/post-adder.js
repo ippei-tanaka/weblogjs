@@ -12,31 +12,20 @@ class PostAdder extends Component {
         super(props);
 
         this.state = {
-            values: { published_date: new Date() },
-            actionId: null,
-            blogLoadActionId: null,
-            categoryLoadActionId: null,
-            userLoadActionId: null
+            values: {published_date: new Date()},
+            actionId: null
         }
     }
 
     componentWillMount() {
-        this.setState({
-            actionId: Symbol(),
-            blogLoadActionId: Symbol(),
-            categoryLoadActionId: Symbol(),
-            userLoadActionId: Symbol()
-        });
-        this.props.loadBlogs(this.state.blogLoadActionId);
-        this.props.loadCategories(this.state.categoryLoadActionId);
-        this.props.loadUsers(this.state.userLoadActionId);
+        this.setState({actionId: Symbol()});
+        this.props.loadBlogs();
+        this.props.loadCategories();
+        this.props.loadUsers();
     }
 
     componentWillUnmount() {
         this.props.finishTransaction(this.state.actionId);
-        this.props.finishTransaction(this.state.blogLoadActionId);
-        this.props.finishTransaction(this.state.categoryLoadActionId);
-        this.props.finishTransaction(this.state.userLoadActionId);
     }
 
     componentWillReceiveProps(props) {

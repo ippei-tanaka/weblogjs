@@ -10,26 +10,18 @@ class SettingEditor extends Component {
 
         this.state = {
             values: {},
-            actionId: null,
-            blogLoadActionId: null,
-            settingLoadActionId: null
+            actionId: null
         }
     }
 
     componentWillMount() {
-        this.setState({
-            actionId: Symbol(),
-            blogLoadActionId: Symbol(),
-            settingLoadActionId: Symbol()
-        });
-        this.props.loadBlogs(this.state.blogLoadActionId);
-        this.props.loadSetting(this.state.settingLoadActionId);
+        this.setState({actionId: Symbol()});
+        this.props.loadBlogs();
+        this.props.loadSetting();
     }
 
     componentWillUnmount() {
         this.props.finishTransaction(this.state.actionId);
-        this.props.finishTransaction(this.state.blogLoadActionId);
-        this.props.finishTransaction(this.state.settingLoadActionId);
     }
 
     render() {

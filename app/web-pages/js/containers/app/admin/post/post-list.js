@@ -7,35 +7,11 @@ import { ADMIN_DIR } from '../../../../constants/config'
 
 class PostList extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            postLoadActionId: null,
-            blogLoadActionId: null,
-            categoryLoadActionId: null,
-            userLoadActionId: null
-        }
-    }
-
     componentWillMount() {
-        this.setState({
-            postLoadActionId: Symbol(),
-            blogLoadActionId: Symbol(),
-            categoryLoadActionId: Symbol(),
-            userLoadActionId: Symbol()
-        });
-        this.props.loadPosts(this.state.postLoadActionId);
-        this.props.loadBlogs(this.state.blogLoadActionId);
-        this.props.loadCategories(this.state.categoryLoadActionId);
-        this.props.loadUsers(this.state.userLoadActionId);
-    }
-
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.postLoadActionId);
-        this.props.finishTransaction(this.state.blogLoadActionId);
-        this.props.finishTransaction(this.state.categoryLoadActionId);
-        this.props.finishTransaction(this.state.userLoadActionId);
+        this.props.loadPosts();
+        this.props.loadBlogs();
+        this.props.loadCategories();
+        this.props.loadUsers();
     }
 
     render() {

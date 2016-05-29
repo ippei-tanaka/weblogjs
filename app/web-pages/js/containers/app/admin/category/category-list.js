@@ -7,21 +7,8 @@ import { ADMIN_DIR } from '../../../../constants/config'
 
 class CategoryList extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            actionId: null
-        }
-    }
-
     componentWillMount() {
-        this.setState({actionId: Symbol()});
-        this.props.loadCategories(this.state.actionId);
-    }
-
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+        this.props.loadCategories();
     }
 
     render() {
