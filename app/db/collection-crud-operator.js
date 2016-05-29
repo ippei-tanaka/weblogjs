@@ -49,6 +49,19 @@ export default class CollectionCrudOperator {
         }.bind(this));
     }
 
+    aggregate(query) {
+        return co(function* () {
+            const collection = yield this._getCollection();
+
+            return yield new Promise((resolve, reject) => {
+                collection.aggregate(query, function (err, result) {
+                    if (err) return reject(err);
+                    resolve(result);
+                });
+            });
+        }.bind(this));
+    }
+
     _getCollection() {
         return co(function* () {
             const db = yield DbClient.connect();

@@ -4,6 +4,7 @@ import { Router } from 'express';
 import pluralize from 'pluralize';
 import PassportManager from '../passport-manager';
 import Models from '../models';
+import { ObjectID } from 'mongodb';
 import { successHandler, errorHandler, parseParameters, isLoggedIn, isLoggedOut, bypass } from './lib/handlers';
 
 const addRoutesForCrudOperations = (schemaName, router, filter) => {
@@ -18,7 +19,7 @@ const addRoutesForCrudOperations = (schemaName, router, filter) => {
     }).catch(errorHandler(response)));
 
     router.get(`/${path}/:id`, filter, (request, response) => co(function* () {
-        const model = yield Model.findOne({_id: request.params.id});
+        const model = yield Model.findOne({_id: new ObjectID(request.params.id)});
         successHandler(response, model);
     }).catch(errorHandler(response)));
 
@@ -29,7 +30,7 @@ const addRoutesForCrudOperations = (schemaName, router, filter) => {
     }).catch(errorHandler(response)));
 
     router.put(`/${path}/:id`, filter, (request, response) => co(function* () {
-        const model = yield Model.findOne({_id: request.params.id});
+        const model = yield Model.findOne({_id: new ObjectID(request.params.id)});
 
         if (model) {
             model.setValues(request.body);
@@ -40,7 +41,7 @@ const addRoutesForCrudOperations = (schemaName, router, filter) => {
     }).catch(errorHandler(response)));
 
     router.delete(`/${path}/:id`, filter, (request, response) => co(function* () {
-        yield Model.deleteOne({_id: request.params.id});
+        yield Model.deleteOne({_id: new ObjectID(request.params.id)});
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
@@ -76,7 +77,7 @@ const addRoutesForUser = (router, filter) => {
 
     router.get(`/users/me`, filter, (request, response) => co(function* () {
         if (request.user) {
-            const model = yield UserModel.findOne({_id: request.user._id});
+            const model = yield UserModel.findOne({_id: new ObjectID(request.user._id)});
             successHandler(response, model);
         } else {
             successHandler(response, null);
@@ -84,7 +85,7 @@ const addRoutesForUser = (router, filter) => {
     }).catch(errorHandler(response)));
 
     router.put(`/users/:id/password`, filter, (request, response) => co(function* () {
-        const model = yield UserModel.findOne({_id: request.params.id});
+        const model = yield UserModel.findOne({_id: new ObjectID(request.params.id)});
 
         if (model) {
             model.setValues(request.body);

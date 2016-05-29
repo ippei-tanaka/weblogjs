@@ -38,17 +38,21 @@ export default class SchemaModel {
 
     static findMany({query = {}, sort = {}, limit = 0, skip = 0} = {}) {
         return co(function* () {
-            const _query = (new this(query)).values;
-            const docs = yield this._operator.findMany(_query, sort, limit, skip);
+            const docs = yield this._operator.findMany(query, sort, limit, skip);
             return docs.map(doc => new this(doc));
         }.bind(this));
     }
 
     static findOne(query) {
         return co(function* () {
-            const _query = (new this(query)).values;
-            const doc = yield this._operator.findOne(_query);
+            const doc = yield this._operator.findOne(query);
             return doc ? new this(doc) : null;
+        }.bind(this));
+    }
+
+    static aggregate(query) {
+        return co(function* () {
+            return yield this._operator.aggregate(query);
         }.bind(this));
     }
 

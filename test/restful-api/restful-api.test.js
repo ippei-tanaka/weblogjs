@@ -880,36 +880,18 @@ describe('Restful API', function () {
         beforeEach('login', () => login());
         afterEach('logout', () => logout());
 
-        describe('/blogs', () => {
+        describe('[/blog/:slug][/category/:slug][/author/:slug][/tag/:tag]/posts[/page/:page]', () => {
 
-            it('should return all the blogs', (done) => {
+            it('should return public posts on the first page of the blog', (done) => {
                 co(function* () {
-                    yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "5"});
-                    yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 2", slug: "blog-2", posts_per_page: "5"});
-                    yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 3", slug: "blog-3", posts_per_page: "5"});
-                    const blogs = yield httpRequest.get(`${PUBLIC_URL}/blogs`);
-                    expect(blogs.items[0].name).to.equal("Blog 1");
-                    expect(blogs.items[1].name).to.equal("Blog 2");
-                    expect(blogs.items[2].name).to.equal("Blog 3");
-                    done();
-                }).catch((e) => {
-                    done(e);
-                });
-            });
 
-        });
+                    let response;
 
-        describe('[/blog/:slug]/posts[/page/:page]', () => {
-
-            it('should return the first page of the public posts on the blog', (done) => {
-                co(function* () {
-                    let response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "10"});
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "10"});
                     const blogId1 = response._id;
 
                     response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 2", slug: "blog-2", posts_per_page: "5"});
                     const blogId2 = response._id;
-
-                    yield httpRequest.put(`${ADMIN_URL}/setting`, {front_blog_id: blogId1});
 
                     const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
                     const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
@@ -928,6 +910,76 @@ describe('Restful API', function () {
                     expect(posts.items[1].title).to.equal("Post 4");
                     expect(posts.items[2].title).to.equal("Post 6");
 
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
+            it('should return public posts on the first page of the front blog', (done) => {
+                co(function* () {
+
+                    let response;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "10"});
+                    const blogId1 = response._id;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 2", slug: "blog-2", posts_per_page: "5"});
+                    const blogId2 = response._id;
+
+                    yield httpRequest.put(`${ADMIN_URL}/setting`, {front_blog_id: blogId1});
+
+                    const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+                    const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
+
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: tomorrow});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId2, publish_date: yesterday});
+
+                    let posts;
+
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/posts`);
+                    expect(posts.items.length).to.equal(3);
+                    expect(posts.items[0].title).to.equal("Post 2");
+                    expect(posts.items[1].title).to.equal("Post 4");
+                    expect(posts.items[2].title).to.equal("Post 6");
+
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
+            it('should return public posts on non-first pages of a blog', (done) => {
+                co(function* () {
+
+                    let response;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "10"});
+                    const blogId1 = response._id;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 2", slug: "blog-2", posts_per_page: "5"});
+                    const blogId2 = response._id;
+
+                    yield httpRequest.put(`${ADMIN_URL}/setting`, {front_blog_id: blogId1});
+
+                    const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+                    const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
+
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: tomorrow});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId2, publish_date: yesterday});
+
+                    let posts;
+
                     posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/posts/page/1`);
                     expect(posts.items.length).to.equal(3);
                     expect(posts.items[0].title).to.equal("Post 2");
@@ -936,12 +988,6 @@ describe('Restful API', function () {
 
                     posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/posts/page/2`);
                     expect(posts.items.length).to.equal(0);
-
-                    posts = yield httpRequest.get(`${PUBLIC_URL}/posts`);
-                    expect(posts.items.length).to.equal(3);
-                    expect(posts.items[0].title).to.equal("Post 2");
-                    expect(posts.items[1].title).to.equal("Post 4");
-                    expect(posts.items[2].title).to.equal("Post 6");
 
                     posts = yield httpRequest.get(`${PUBLIC_URL}/posts/page/1`);
                     expect(posts.items.length).to.equal(3);
@@ -961,6 +1007,268 @@ describe('Restful API', function () {
                     posts = yield httpRequest.get(`${PUBLIC_URL}/posts/page/2`);
                     expect(posts.items.length).to.equal(1);
                     expect(posts.items[0].title).to.equal("Post 6");
+
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
+            it('should return public posts with a specific category', (done) => {
+                co(function* () {
+
+                    let response;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "10"});
+                    const blogId1 = response._id;
+
+                    yield httpRequest.put(`${ADMIN_URL}/setting`, {front_blog_id: blogId1});
+
+                    const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/categories`, {name: "Category 1", slug: "category-1"});
+                    const categoryId1 = response._id;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/categories`, {name: "Category 2", slug: "category-2"});
+                    const categoryId2 = response._id;
+
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, category_id: categoryId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, category_id: categoryId1});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: yesterday, category_id: categoryId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday, category_id: categoryId1});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, category_id: categoryId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, category_id: categoryId2});
+
+                    let posts;
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/category/category-1/posts`);
+                    expect(posts.items.length).to.equal(4);
+                    expect(posts.items[0].title).to.equal("Post 1");
+                    expect(posts.items[1].title).to.equal("Post 3");
+                    expect(posts.items[2].title).to.equal("Post 4");
+                    expect(posts.items[3].title).to.equal("Post 6");
+
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/category/category-1/posts/page/1`);
+                    expect(posts.items.length).to.equal(4);
+                    expect(posts.items[0].title).to.equal("Post 1");
+                    expect(posts.items[1].title).to.equal("Post 3");
+                    expect(posts.items[2].title).to.equal("Post 4");
+                    expect(posts.items[3].title).to.equal("Post 6");
+
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/category/category-1/posts/page/2`);
+                    expect(posts.items.length).to.equal(0);
+
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/category/category-1/posts`);
+                    expect(posts.items.length).to.equal(4);
+                    expect(posts.items[0].title).to.equal("Post 1");
+                    expect(posts.items[1].title).to.equal("Post 3");
+                    expect(posts.items[2].title).to.equal("Post 4");
+                    expect(posts.items[3].title).to.equal("Post 6");
+
+                    yield httpRequest.put(`${ADMIN_URL}/blogs/${blogId1}`, {posts_per_page: 2});
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/category/category-1/posts`);
+                    expect(posts.items.length).to.equal(2);
+                    expect(posts.items[0].title).to.equal("Post 1");
+                    expect(posts.items[1].title).to.equal("Post 3");
+
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/category/category-1/posts/page/2`);
+                    expect(posts.items.length).to.equal(2);
+                    expect(posts.items[0].title).to.equal("Post 4");
+                    expect(posts.items[1].title).to.equal("Post 6");
+
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
+            it('should return public posts with a specific author', (done) => {
+                co(function* () {
+
+                    let response;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "10"});
+                    const blogId1 = response._id;
+
+                    yield httpRequest.put(`${ADMIN_URL}/setting`, {front_blog_id: blogId1});
+
+                    const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/users`, {email: "e@e.com", display_name: "User 1", slug: "user-1", password: "eeeeeeee"});
+                    const userId1 = response._id;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/users`, {email: "w@w.com", display_name: "User 2", slug: "user-2", password: "wwwwwwww"});
+                    const userId2 = response._id;
+
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, author_id: userId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, author_id: userId1});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: yesterday, author_id: userId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday, author_id: userId1});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, author_id: userId1});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, author_id: userId2});
+
+                    let posts;
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/author/user-1/posts`);
+                    expect(posts.items.length).to.equal(4);
+                    expect(posts.items[0].title).to.equal("Post 1");
+                    expect(posts.items[1].title).to.equal("Post 3");
+                    expect(posts.items[2].title).to.equal("Post 4");
+                    expect(posts.items[3].title).to.equal("Post 6");
+
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/author/user-1/posts/page/1`);
+                    expect(posts.items.length).to.equal(4);
+                    expect(posts.items[0].title).to.equal("Post 1");
+                    expect(posts.items[1].title).to.equal("Post 3");
+                    expect(posts.items[2].title).to.equal("Post 4");
+                    expect(posts.items[3].title).to.equal("Post 6");
+
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/author/user-1/posts/page/2`);
+                    expect(posts.items.length).to.equal(0);
+
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/author/user-1/posts`);
+                    expect(posts.items.length).to.equal(4);
+                    expect(posts.items[0].title).to.equal("Post 1");
+                    expect(posts.items[1].title).to.equal("Post 3");
+                    expect(posts.items[2].title).to.equal("Post 4");
+                    expect(posts.items[3].title).to.equal("Post 6");
+
+                    yield httpRequest.put(`${ADMIN_URL}/blogs/${blogId1}`, {posts_per_page: 2});
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/author/user-1/posts`);
+                    expect(posts.items.length).to.equal(2);
+                    expect(posts.items[0].title).to.equal("Post 1");
+                    expect(posts.items[1].title).to.equal("Post 3");
+
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/author/user-1/posts/page/2`);
+                    expect(posts.items.length).to.equal(2);
+                    expect(posts.items[0].title).to.equal("Post 4");
+                    expect(posts.items[1].title).to.equal("Post 6");
+
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
+            it('should return public posts with a specific tag', (done) => {
+                co(function* () {
+
+                    let response;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "10"});
+                    const blogId1 = response._id;
+
+                    yield httpRequest.put(`${ADMIN_URL}/setting`, {front_blog_id: blogId1});
+
+                    const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, tags: ["tag1","tag2"]});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, tags: ["tag2"]});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: yesterday, tags: ["tag1","tag2"]});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday, tags: ["tag1","tag2"]});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 6", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, tags: []});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 7", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday, tags: ['tag1']});
+
+                    let posts;
+                    posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/tag/tag1/posts`);
+                    expect(posts.items.length).to.equal(3);
+                    expect(posts.items[0].title).to.equal("Post 1");
+                    expect(posts.items[1].title).to.equal("Post 4");
+                    expect(posts.items[2].title).to.equal("Post 7");
+
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
+            it('should return public posts in the order of publish data', (done) => {
+                co(function* () {
+
+                    let response;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "10"});
+                    const blogId1 = response._id;
+
+                    const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
+                    const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+                    const twoDaysAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000) * 2);
+                    const threeDaysAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000) * 3);
+
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, publish_date: twoDaysAgo});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, publish_date: yesterday});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, publish_date: tomorrow});
+                    /* yes */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, is_draft: false, publish_date: threeDaysAgo});
+                    /* no  */ yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId1, is_draft: true, publish_date: yesterday});
+
+                    let posts = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/posts`);
+                    expect(posts.items.length).to.equal(3);
+                    expect(posts.items[0].title).to.equal("Post 2");
+                    expect(posts.items[1].title).to.equal("Post 1");
+                    expect(posts.items[2].title).to.equal("Post 4");
+
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
+        });
+
+        describe('[/blogs/:slug]/categories', () => {
+
+            it('should return all the categories used on the blog posts and the numbers of posts', (done) => {
+                co(function* () {
+                    let response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "5"});
+                    const blogId1 = response._id;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 2", slug: "blog-2", posts_per_page: "5"});
+                    const blogId2 = response._id;
+
+                    yield httpRequest.put(`${ADMIN_URL}/setting`, {front_blog_id: blogId1});
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/categories`, {name: "Category 1", slug: "category-1"});
+                    const categoryId1 = response._id;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/categories`, {name: "Category 2", slug: "category-2"});
+                    const categoryId2 = response._id;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/categories`, {name: "Category 3", slug: "category-3"});
+                    const categoryId3 = response._id;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/categories`, {name: "Category 4", slug: "category-4"});
+                    const categoryId4 = response._id;
+
+                    const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+
+                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, category_id: categoryId1, publish_date: yesterday});
+                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, category_id: categoryId1, publish_date: yesterday});
+                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, category_id: categoryId2, publish_date: yesterday});
+                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 4", slug:"post", content: "Test", blog_id: blogId1, category_id: categoryId3});
+                    yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 5", slug:"post", content: "Test", blog_id: blogId2, category_id: categoryId4, publish_date: yesterday});
+
+                    //yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 3", slug: "blog-3", posts_per_page: "5"});
+                    let categories;
+
+                    categories = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-1/categories`);
+                    expect(categories.items.length).to.equal(2);
+                    expect(categories.items[0].name).to.equal("Category 1");
+                    expect(categories.items[0].size).to.equal(2);
+                    expect(categories.items[1].name).to.equal("Category 2");
+                    expect(categories.items[1].size).to.equal(1);
+
+                    categories = yield httpRequest.get(`${PUBLIC_URL}/blog/blog-2/categories`);
+                    expect(categories.items.length).to.equal(1);
+                    expect(categories.items[0].name).to.equal("Category 4");
+                    expect(categories.items[0].size).to.equal(1);
+
+                    categories= yield httpRequest.get(`${PUBLIC_URL}/categories`);
+                    expect(categories.items.length).to.equal(2);
+                    expect(categories.items[0].name).to.equal("Category 1");
+                    expect(categories.items[0].size).to.equal(2);
+                    expect(categories.items[1].name).to.equal("Category 2");
+                    expect(categories.items[1].size).to.equal(1);
 
                     done();
                 }).catch((e) => {
