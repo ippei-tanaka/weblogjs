@@ -18,6 +18,7 @@ class UserEditor extends Component {
 
     componentWillMount() {
         this.setState({actionId: Symbol()});
+        this.props.loadUsers();
     }
 
     componentWillUnmount() {

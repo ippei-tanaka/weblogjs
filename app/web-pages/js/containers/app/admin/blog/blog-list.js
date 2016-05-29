@@ -7,21 +7,8 @@ import { ADMIN_DIR } from '../../../../constants/config'
 
 class BlogList extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            actionId: null
-        }
-    }
-
     componentWillMount() {
-        this.setState({actionId: Symbol()});
-        this.props.loadBlogs(this.state.actionId);
-    }
-
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+        this.props.loadBlogs();
     }
 
     render() {

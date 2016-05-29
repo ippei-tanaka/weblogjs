@@ -7,21 +7,8 @@ import { ADMIN_DIR } from '../../../../constants/config'
 
 class UserList extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            actionId: null
-        }
-    }
-
     componentWillMount() {
-        this.setState({actionId: Symbol()});
-        this.props.loadUsers(this.state.actionId);
-    }
-
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+        this.props.loadUsers();
     }
 
     render() {

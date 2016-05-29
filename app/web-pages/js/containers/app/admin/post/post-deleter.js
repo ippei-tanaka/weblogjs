@@ -17,6 +17,7 @@ class PostDeleter extends Component {
 
     componentWillMount() {
         this.setState({actionId: Symbol()});
+        this.props.loadPosts();
     }
 
     componentWillUnmount() {

@@ -17,6 +17,7 @@ class BlogDeleter extends Component {
 
     componentWillMount() {
         this.setState({actionId: Symbol()});
+        this.props.loadBlogs();
     }
 
     componentWillUnmount() {
