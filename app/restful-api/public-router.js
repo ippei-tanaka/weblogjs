@@ -44,43 +44,112 @@ const parseParam = (str, defaultValue) => {
     return arr.length >= 3 && arr[2] ? arr[2] : defaultValue;
 };
 
+const findBlog = (blogSlug) => co(function* () {
+
+    const BlogModel = Models.getModel('blog');
+    const SettingModel = Models.getModel('setting');
+
+    let blogModel = yield BlogModel.findOne({slug: blogSlug});
+
+    if (blogModel) return blogModel;
+
+    const settingModel = yield SettingModel.getSetting();
+
+    if (!settingModel) return null;
+
+    const setting = settingModel.values;
+
+    if (!setting || !setting.front_blog_id) return null;
+
+    return yield BlogModel.findOne({_id: setting.front_blog_id});
+
+});
+
 const addRoutes = (router) => {
 
-    const SettingModel = Models.getModel('setting');
     const UserModel = Models.getModel('user');
     const CategoryModel = Models.getModel('category');
     const PostModel = Models.getModel('post');
-    const BlogModel = Models.getModel('blog');
 
-    router.get(`/blogs`, (request, response) => co(function* () {
-        const blogModels = yield BlogModel.findMany({});
-        successHandler(response, {items: blogModels});
-    }).catch(errorHandler(response)));
-
-    router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?\/posts(\/page\/[0-9]+\/?)?$/, (request, response) => co(function* () {
+    router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?\/posts(\/|\/page\/[0-9]+\/?)?$/, (request, response) => co(function* () {
         const blogSlug = parseParam(request.params[0], null);
+        const categorySlug = parseParam(request.params[1], null);
+        const authorSlug = parseParam(request.params[2], null);
+        const tag = parseParam(request.params[3], null);
         const page = parseParam(request.params[4], 1);
 
-        let blogModel = yield BlogModel.findOne({slug: blogSlug});
+        const blogModel = yield findBlog(blogSlug);
+        if (!blogModel) {
+            successHandler(response, {items: []});
+            return;
+        }
+        const blog = blogModel.values;
+
+        const categoryModel = yield CategoryModel.findOne({slug: categorySlug});
+        const category = categoryModel ? categoryModel.values : {};
+
+        const userModel = yield UserModel.findOne({slug: authorSlug});
+        const user = userModel ? userModel.values : {};
+
+        const postModels = yield PostModel.findMany({
+            query: {
+                blog_id: blog._id,
+                category_id: category._id,
+                author_id: user._id,
+                publish_date: {$lt: new Date()},
+                is_draft: {$ne: true},
+                tags: {$in: [tag]}
+            },
+            sort: {publish_date: -1, created_date: 1},
+            skip: blog.posts_per_page * (page - 1),
+            limit: blog.posts_per_page
+        });
+
+        successHandler(response, {items: postModels});
+
+    }).catch(errorHandler(response)));
+
+    router.get(/^(\/blog\/[^/]+)?\/categories\/?$/, (request, response) => co(function* () {
+
+        const blogSlug = parseParam(request.params[0], null);
+
+        const blogModel = yield findBlog(blogSlug);
 
         if (!blogModel) {
-            const settingModel = yield SettingModel.getSetting();
-            blogModel = yield BlogModel.findOne({_id: settingModel.values.front_blog_id});
+            successHandler(response, {items: []});
+            return;
         }
 
-        if (!blogModel) {
-            throw new Error("Invalid request.");
-        }
+        const blog = blogModel.values;
 
-        const blogValues = blogModel.values;
+        const categorySums = yield PostModel.aggregate([
+            {
+                $match: {
+                    blog_id: blog._id,
+                    publish_date: {$lt: new Date()},
+                    is_draft: {$ne: true}
+                }
+            },
+            {
+                $group: {
+                    _id: "$category_id",
+                    size: {$sum: 1}
+                }
+            }
+        ]);
 
-        // TODO Use db query, skip and limit instead of using model method.
-        const postModels = yield PostModel.findMany({query: {blog_id: blogValues._id}});
-        const publishedPostModels = postModels.filter(post => post.published);
-        const start = blogValues.posts_per_page * (page - 1);
+        const categoryModels = yield CategoryModel.findMany({
+            query: {_id: {$in: categorySums.map(obj => obj._id)}}
+        });
 
-        const selectedPostModels = publishedPostModels.slice(start, start + blogValues.posts_per_page);
-        successHandler(response, {items: selectedPostModels});
+        const categories = categoryModels.map((model) => {
+            const values = model.values;
+            const sumObj = categorySums.find(obj => obj._id.equals(values._id));
+            return Object.assign({}, values, {size: sumObj.size});
+        });
+
+        successHandler(response, {items: categories});
+
     }).catch(errorHandler(response)));
 
     return router;
@@ -92,15 +161,6 @@ export default class PublicRestfulApiRouter {
         this._basePath = basePath;
 
         let router = new Router();
-
-        /*
-        router = addRoutesForCrudOperations("user", router);
-        router = addRoutesForCrudOperations("category", router);
-        router = addRoutesForCrudOperations("blog", router);
-        router = addRoutesForCrudOperations("post", router);
-        router = addRoutesForSetting(router);
-        */
-
         router = addRoutes(router);
 
         this._router = router

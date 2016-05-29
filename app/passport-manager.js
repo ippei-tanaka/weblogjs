@@ -2,6 +2,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import co from 'co';
 import UserModel from './models/user-model';
+import { ObjectID } from 'mongodb';
 
 let localAuth = passport.authenticate('local');
 
@@ -51,7 +52,7 @@ class PassportManager {
 
     _deserializeUser (_id, done) {
         return co(function* () {
-            const model = yield UserModel.findOne({_id});
+            const model = yield UserModel.findOne({_id: new ObjectID(_id)});
 
             if (!model) {
                 return done();
