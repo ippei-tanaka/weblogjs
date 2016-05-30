@@ -37,10 +37,16 @@ const addRoutes = (router) => {
     const CategoryModel = Models.getModel('category');
     const PostModel = Models.getModel('post');
     const BlogModel = Models.getModel('blog');
+    const SettingModel = Models.getModel('setting');
 
     router.get(`/blogs`, (request, response) => co(function* () {
         const blogModels = yield BlogModel.findMany();
         successHandler(response, {items: blogModels});
+    }).catch(errorHandler(response)));
+
+    router.get(`/setting`, (request, response) => co(function* () {
+        const settingModel = yield SettingModel.getSetting();
+        successHandler(response, settingModel);
     }).catch(errorHandler(response)));
 
     router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?\/posts(\/|\/page\/[0-9]+\/?)?$/, (request, response) => co(function* () {
