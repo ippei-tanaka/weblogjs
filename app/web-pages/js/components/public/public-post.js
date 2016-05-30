@@ -9,13 +9,13 @@ export default ({
     }) =>
     <div className="module-post">
 
-        <h2 className="m-pst-title"><a className="m-pst-link" href="#">{post.title}</a></h2>
+        <h2 className="m-pst-title"><a className="m-pst-link" href={post.link}>{post.title}</a></h2>
 
         <div className="m-pst-content">
             <article className="module-article">{post.content}</article>
         </div>
 
-        <date className="m-pst-date">Published on {post.published_date}</date>
+        <date className="m-pst-date">Published on {Moment(post.published_date).format("YYYY-MM-DD HH:mm Z")}</date>
 
         {author ?
             <p className="m-pst-author">Written by <a className="m-pst-author-link" href={"#"}>{author.name}</a></p>

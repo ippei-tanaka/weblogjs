@@ -63,8 +63,8 @@ const modify = (dispatch, actionId, main) => {
     });
 };
 
-const load = (path, doneType) => (actionId) => (dispatch, getState) => {
-    return modify(dispatch, actionId, () => co(function* () {
+const load = (path, doneType) => () => (dispatch, getState) => {
+    return modify(dispatch, null, () => co(function* () {
         const response = yield getFromServer({path});
         dispatch({
             type: doneType,
@@ -159,8 +159,8 @@ export const editPost = edit(`${ADMIN_API_PATH}/posts`, EDITED_POST_RECEIVED);
 
 export const deletePost = del(`${ADMIN_API_PATH}/posts`, DELETED_POST_RECEIVED);
 
-export const loadSetting = (actionId) => (dispatch, getState) => {
-    return modify(dispatch, actionId, () => co(function* () {
+export const loadSetting = () => (dispatch, getState) => {
+    return modify(dispatch, null, () => co(function* () {
         const response = yield getFromServer({path: `${ADMIN_API_PATH}/setting`});
         dispatch({
             type: LOADED_SETTING_RECEIVED,
@@ -185,8 +185,8 @@ export const loadPublicPosts = load(`${PUBLIC_API_PATH}/posts`, LOADED_POST_RECE
 
 export const loadPublicBlogs = load(`${PUBLIC_API_PATH}/blogs`, LOADED_BLOG_RECEIVED);
 
-export const loadPublicSetting  = (actionId) => (dispatch) => {
-    return modify(dispatch, actionId, () => co(function* () {
+export const loadPublicSetting  = () => (dispatch) => {
+    return modify(dispatch, null, () => co(function* () {
         const response = yield getFromServer({path: `${PUBLIC_API_PATH}/setting`});
         dispatch({
             type: LOADED_SETTING_RECEIVED,

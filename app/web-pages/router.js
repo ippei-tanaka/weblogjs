@@ -5,7 +5,7 @@ import { match, RoutingContext } from 'react-router';
 import adminRoutes from './js/routers/admin-routes';
 import publicRoutes from './js/routers/public-routes';
 import AdminHtmlLayout from './js/components/admin-html-layout';
-import PublicHtmlLayout from './js/components/public-html-layout';
+import PublicHtmlLayout from './js/components/public/public-html-layout';
 import store from './js/stores/app-store';
 import actions from './js/actions';
 import express from "express";

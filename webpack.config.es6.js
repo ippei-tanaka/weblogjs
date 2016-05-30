@@ -3,7 +3,7 @@ import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import WEBLOG_ENV from './env-variables';
 
-const WEBPACK_DEV_MODE = WEBLOG_ENV === 'webpack-dev-server';
+const WEBPACK_DEV_MODE = WEBLOG_ENV.mode === 'webpack-dev-server';
 const STATIC_DIR = path.resolve(__dirname, "./app/web-pages/static");
 const ADMIN_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/admin-browser.js");
 const PUBLIC_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/public-browser.js");
