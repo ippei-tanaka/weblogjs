@@ -19,7 +19,9 @@ export default function AdminHtmlLayout() {
             { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/admin.js`}></script> : null }
             { PRODUCTION_MODE ? <script src="/admin.js"></script> : null }
         </head>
-        <body>[CONTENT_PLACE_HOLDER]</body>
+        <body>
+            <div id="AppContainer" className="module-admin">[CONTENT_PLACE_HOLDER]</div>
+        </body>
         </html>
     )
 };

@@ -16,5 +16,5 @@ document.addEventListener("DOMContentLoaded", () =>
                 {publicRoutes}
             </Router>
         </Provider>,
-        document.body
+        document.getElementById('AppContainer')
     ));
