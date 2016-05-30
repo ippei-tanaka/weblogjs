@@ -14,10 +14,10 @@ export default function AdminHtmlLayout() {
             <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <link href="/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
-            <link href="/admin-style.css" media="all" rel="stylesheet"/>
+            { PRODUCTION_MODE ? <link href="/bundle/admin-style.css" media="all" rel="stylesheet"/> : null }
             <title>[TITLE_PLACE_HOLDER]</title>
-            { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/admin.js`}></script> : null }
-            { PRODUCTION_MODE ? <script src="/admin.js"></script> : null }
+            { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/bundle/admin.js`}></script> : null }
+            { PRODUCTION_MODE ? <script src="/bundle/admin.js"></script> : null }
         </head>
         <body>
             <div id="AppContainer" className="module-admin">[CONTENT_PLACE_HOLDER]</div>

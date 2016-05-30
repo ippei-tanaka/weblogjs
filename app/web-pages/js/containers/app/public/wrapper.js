@@ -9,7 +9,6 @@ class Public extends Component {
     static prepareForPreRendering({actions, store}) {
         return co(function* () {
             // TODO create reducers for public pages. For instance, this-blog-reducer.
-            yield actions.loadPublicPosts();
             yield actions.loadPublicBlogs();
             yield actions.loadPublicSetting();
 
@@ -30,29 +29,28 @@ class Public extends Component {
     }
 
     componentWillMount() {
-        this.props.loadPublicPosts();
+        this.props.loadPublicBlogs();
+        this.props.loadPublicSetting();
     }
 
     render() {
 
-        const posts = this.props.postStore.toArray().map(post => Object.assign({}, post, { link: `/p/${post._id}/${post.slug}` }));
-
-        console.log(posts);
+        const setting = this.props.settingStore || {};
+        const blog = this.props.blogStore.get(setting.front_blog_id);
+        let thisBlog = blog || this.props.blogStore.toArray()[0];
+        thisBlog = thisBlog || {};
 
         return (
-            <div className="module-blog-layout">
-                <div className="m-bll-main">
-                    {posts.map(post =>
-                        <section key={post._id} className="m-bll-section">
-                            <PublicPost post={post} />
-                        </section>
-                    )}
-                    {posts.length === 0 ?
-                        <section className="m-bll-section">
-                            No posts to show.
-                        </section>
-                        : null}
+            <div className="module-header-footer-layout">
+                <header className="m-hfl-header">
+                    <h1><a className="m-hfl-header-link" href="/">{thisBlog.name}</a></h1>
+                </header>
+                <div className="m-hfl-body">
+                    {this.props.children}
                 </div>
+                <header className="m-hfl-footer">
+                    <span>&copy;{thisBlog.name}</span>
+                </header>
             </div>
         );
     }
@@ -60,7 +58,8 @@ class Public extends Component {
 
 export default connect(
     state => ({
-        postStore: state.post
+        settingStore: state.setting,
+        blogStore: state.blog
     }),
     actions
 )(Public);
