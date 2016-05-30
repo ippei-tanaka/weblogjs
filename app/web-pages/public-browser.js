@@ -9,11 +9,12 @@ import publicRoutes from './js/routers/public-routes';
 const history = createBrowserHistory();
 require('./sass/public/main.scss');
 
-ReactDOM.render(
-    <Provider store={store}>
-        <Router history={history}>
-            {publicRoutes}
-        </Router>
-    </Provider>,
-    document.getElementById('App')
-);
+document.addEventListener("DOMContentLoaded", () =>
+    ReactDOM.render(
+        <Provider store={store}>
+            <Router history={history}>
+                {publicRoutes}
+            </Router>
+        </Provider>,
+        document.body
+    ));
