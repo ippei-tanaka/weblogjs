@@ -7,7 +7,7 @@ import store from './js/stores/app-store';
 import publicRoutes from './js/routers/public-routes';
 
 const history = createBrowserHistory();
-require('./sass/admin/main.scss');
+require('./sass/public/main.scss');
 
 ReactDOM.render(
     <Provider store={store}>

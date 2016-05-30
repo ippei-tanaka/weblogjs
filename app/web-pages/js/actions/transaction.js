@@ -184,3 +184,13 @@ export const editSetting  = (actionId, {data}) => (dispatch, getState) => {
 export const loadPublicPosts = load(`${PUBLIC_API_PATH}/posts`, LOADED_POST_RECEIVED);
 
 export const loadPublicBlogs = load(`${PUBLIC_API_PATH}/blogs`, LOADED_BLOG_RECEIVED);
+
+export const loadPublicSetting  = (actionId) => (dispatch) => {
+    return modify(dispatch, actionId, () => co(function* () {
+        const response = yield getFromServer({path: `${PUBLIC_API_PATH}/setting`});
+        dispatch({
+            type: LOADED_SETTING_RECEIVED,
+            data: response
+        });
+    }));
+};
