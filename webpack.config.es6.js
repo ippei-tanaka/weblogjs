@@ -14,7 +14,8 @@ const regPlugins = [
         "process.env": {
             WEBLOG_WEBPACK_ENV: JSON.stringify(WEBLOG_ENV)
         }
-    })
+    }),
+    new webpack.optimize.CommonsChunkPlugin("vendor.js")
 ];
 
 const prodPlugins = [

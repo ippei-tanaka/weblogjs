@@ -37,8 +37,6 @@ class Public extends Component {
 
         const posts = this.props.postStore.toArray().map(post => Object.assign({}, post, { link: `/p/${post._id}/${post.slug}` }));
 
-        console.log(posts);
-
         return (
             <div className="module-blog-layout">
                 <div className="m-bll-main">
