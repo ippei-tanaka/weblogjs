@@ -44,7 +44,6 @@ class Public extends Component {
         const setting = this.props.settingStore || {};
         const blog = this.props.blogStore.get(setting.front_blog_id);
         const thisBlog = blog || this.props.blogStore.toArray()[0];
-        console.log(posts);
 
         return (
             <div className="module-header-footer-layout">
