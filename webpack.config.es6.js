@@ -4,6 +4,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import WEBLOG_ENV from './env-variables';
 
 const WEBPACK_DEV_MODE = WEBLOG_ENV.mode === 'webpack-dev-server';
+const WEBPACK_SERVER_PORT = WEBLOG_ENV.webpack_server_port;
 const STATIC_DIR = path.resolve(__dirname, "./app/web-pages/static");
 const ADMIN_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/admin-browser.js");
 const PUBLIC_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/public-browser.js");
@@ -45,8 +46,9 @@ export default {
     },
 
     output: {
-        path: STATIC_DIR,
-        filename: "[name].js"
+        path: path.resolve(STATIC_DIR, 'bundle'),
+        filename: "[name].js",
+        publicPath: `http://localhost:${WEBPACK_SERVER_PORT}/bundle/`
     },
 
     devtool: WEBPACK_DEV_MODE ? 'source-map' : null,

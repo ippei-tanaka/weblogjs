@@ -14,11 +14,10 @@ export default function PublicHtmlLayout() {
             <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <link href="/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
-            <link href="/public-style.css" media="all" rel="stylesheet"/>
+            { PRODUCTION_MODE ? <link href="/bundle/public-style.css" media="all" rel="stylesheet"/> : null }
             <title>[TITLE_PLACE_HOLDER]</title>
-            { DEVELOPMENT_MODE ?
-                <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/public.js`}></script> : null }
-            { PRODUCTION_MODE ? <script src="/public.js"></script> : null }
+            { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/bundle/public.js`}></script> : null }
+            {/*{ PRODUCTION_MODE ? <script src="/bundle/public.js"></script> : null }*/}
         </head>
         <body>
             <div id="AppContainer">[CONTENT_PLACE_HOLDER]</div>

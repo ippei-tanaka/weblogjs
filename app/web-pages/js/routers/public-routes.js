@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Route, IndexRoute } from 'react-router';
-import Public from "../containers/app/public";
+import Index from "../containers/app/public/index";
+import Wrapper from "../containers/app/public/wrapper";
 import Single from "../containers/app/public/single";
 
 const routes = (
-    <Route path="/" component={Public}>
-        <Route path=":short_id/:slug" component={Single}  />
+    <Route path="/" component={Wrapper}>
+        <IndexRoute component={Index}/>
+        <Route path="p/:id/:slug" component={Single}  />
     </Route>
 );
 
