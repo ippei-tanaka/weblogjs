@@ -80,12 +80,12 @@ export default class WebpageRouter {
         co(function* () {
             const location = this._basePath + request.url;
 
-            let htmlContainer = publicHtmlContainer;
-            let result = yield routing({routes: publicRoutes, location});
+            let htmlContainer = adminHtmlContainer;
+            let result = yield routing({routes: adminRoutes, location});
 
             if (result.statusCode === NOT_FOUND) {
-                result = yield routing({routes: adminRoutes, location});
-                htmlContainer = adminHtmlContainer;
+                result = yield routing({routes: publicRoutes, location});
+                htmlContainer = publicHtmlContainer;
             }
 
             const { statusCode, data } = result;

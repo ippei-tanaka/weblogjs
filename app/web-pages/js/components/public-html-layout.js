@@ -16,14 +16,10 @@ export default function PublicHtmlLayout() {
             <link href="/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
             <link href="/public-style.css" media="all" rel="stylesheet"/>
             <title>[TITLE_PLACE_HOLDER]</title>
+            { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/public.js`}></script> : null }
+            { PRODUCTION_MODE ? <script src="/public.js"></script> : null }
         </head>
-        <body>
-        <div id="App">
-            [CONTENT_PLACE_HOLDER]
-        </div>
-        { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/public.js`}></script> : null }
-        { PRODUCTION_MODE ? <script src="/public.js"></script> : null }
-        </body>
+        <body>[CONTENT_PLACE_HOLDER]</body>
         </html>
     )
 };

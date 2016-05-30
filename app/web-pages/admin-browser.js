@@ -9,11 +9,12 @@ import adminRoutes from './js/routers/admin-routes';
 const history = createBrowserHistory();
 require('./sass/admin/main.scss');
 
-ReactDOM.render(
-    <Provider store={store}>
-        <Router history={history}>
-            {adminRoutes}
-        </Router>
-    </Provider>,
-    document.getElementById('App')
-);
+document.addEventListener("DOMContentLoaded", () =>
+    ReactDOM.render(
+        <Provider store={store}>
+            <Router history={history}>
+                {adminRoutes}
+            </Router>
+        </Provider>,
+        document.body
+    ));

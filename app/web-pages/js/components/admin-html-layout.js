@@ -16,14 +16,10 @@ export default function AdminHtmlLayout() {
             <link href="/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
             <link href="/admin-style.css" media="all" rel="stylesheet"/>
             <title>[TITLE_PLACE_HOLDER]</title>
+            { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/admin.js`}></script> : null }
+            { PRODUCTION_MODE ? <script src="/admin.js"></script> : null }
         </head>
-        <body>
-        <div id="App" className="module-app">
-            [CONTENT_PLACE_HOLDER]
-        </div>
-        { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/admin.js`}></script> : null }
-        { PRODUCTION_MODE ? <script src="/admin.js"></script> : null }
-        </body>
+        <body>[CONTENT_PLACE_HOLDER]</body>
         </html>
     )
 };
