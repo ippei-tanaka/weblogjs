@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import actions from '../../../actions';
 import { connect } from 'react-redux';
 import co from 'co';
-import PublicPost from '../../../components/public-post';
+import PublicPost from '../../../components/public/public-post';
 
 class Single extends Component {
 

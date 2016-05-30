@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import actions from '../../../actions';
 import { connect } from 'react-redux';
 import co from 'co';
-import PublicPost from '../../../components/public-post';
+import PublicPost from '../../../components/public/public-post';
+import Base62 from 'base62';
 
 class Public extends Component {
 
@@ -37,10 +38,13 @@ class Public extends Component {
 
     render() {
 
-        const posts = this.props.postStore.toArray();
+        const posts = this.props.postStore.toArray().map(post => {
+            return Object.assign({}, post, { link: `/${Base62.encode(post._id)}/${post.slug}` });
+        });
         const setting = this.props.settingStore || {};
         const blog = this.props.blogStore.get(setting.front_blog_id);
         const thisBlog = blog || this.props.blogStore.toArray()[0];
+        console.log(posts);
 
         return (
             <div className="module-header-footer-layout">
