@@ -46,13 +46,18 @@ const createHtml = (renderProps, htmlContainer) => co(function* () {
     if (component.prepareForPreRendering)
     {
         const _actions = {};
+
         for (let actionName of Object.keys(actions)) {
             _actions[actionName] = (...args) => {
                 return actions[actionName](...args)(store.dispatch, store.getState);
             }
         }
+
         const data = yield component.prepareForPreRendering({store, actions: _actions});
-        title = data.title;
+
+        if (data && data.title) {
+            title = data.title;
+        }
     }
 
     const content = ReactDOMServer.renderToString(
@@ -66,7 +71,8 @@ const createHtml = (renderProps, htmlContainer) => co(function* () {
     html = "<!DOCTYPE html>" + html;
 
     return html;
-});
+
+}).catch(error => console.error(error));
 
 export default class WebpageRouter {
 

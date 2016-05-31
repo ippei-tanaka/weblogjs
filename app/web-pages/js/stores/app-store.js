@@ -8,6 +8,7 @@ import postReducer from '../reducers/post-reducer';
 import settingReducer from '../reducers/setting-reducer';
 import authReducer from '../reducers/auth-reducer';
 import transactionReducer from '../reducers/transaction-reducer';
+import publicPageReducer from '../reducers/public-page-reducer';
 //import DevTools from '../containers/dev-tools';
 
 const reducer = combineReducers({
@@ -17,7 +18,8 @@ const reducer = combineReducers({
     post: postReducer,
     setting: settingReducer,
     auth: authReducer,
-    transaction: transactionReducer
+    transaction: transactionReducer,
+    publicPage: publicPageReducer
 });
 
 const enhancers = [applyMiddleware(functionMiddleWare, promiseMiddleWare)];

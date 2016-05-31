@@ -49,6 +49,26 @@ const addRoutes = (router) => {
         successHandler(response, settingModel);
     }).catch(errorHandler(response)));
 
+    router.get(`/front-blog`, (request, response) => co(function* () {
+        const settingModel = yield SettingModel.getSetting();
+
+        if (!settingModel) {
+            successHandler(response, {});
+            return;
+        }
+
+        const setting = settingModel.values;
+
+        if (!setting || !setting.front_blog_id) {
+            successHandler(response, {});
+            return;
+        }
+
+        const blog = yield BlogModel.findOne({_id: setting.front_blog_id});
+        successHandler(response, blog);
+
+    }).catch(errorHandler(response)));
+
     router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?\/posts(\/|\/page\/[0-9]+\/?)?$/, (request, response) => co(function* () {
         const blogSlug = parseParam(request.params[0], null);
         const categorySlug = parseParam(request.params[1], null);
