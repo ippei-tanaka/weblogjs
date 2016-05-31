@@ -1,30 +1,34 @@
-import Immutable from 'immutable';
-
 import {
     LOADED_FRONT_BLOG_RECEIVED,
     LOADED_POST_RECEIVED
 } from '../constants/action-types';
 
-const initialState = Immutable.Map({
+const initialState = {
     blog: {},
-    posts: Immutable.Map({}),
-    categories: {}
-});
+    posts: [],
+    categories: []
+};
 
 export default (state = initialState, action) => {
 
     switch (action.type) {
 
         case LOADED_FRONT_BLOG_RECEIVED:
-            return state.set('blog', action.data);
+            if (action.data) {
+                state['blog'] = action.data;
+            }
+            return state;
 
         case LOADED_POST_RECEIVED:
             if (action.data) {
+                /*
                 const posts = {};
                 action.data.forEach((data) => {
                     posts[data._id] = data;
                 });
-                state = state.set('posts', Immutable.Map(posts));
+                state['posts'] = posts;
+                */
+                state['posts'] = action.data;
             }
             return state;
 

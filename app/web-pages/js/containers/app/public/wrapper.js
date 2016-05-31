@@ -9,7 +9,7 @@ class Public extends Component {
     static prepareForPreRendering({actions, store}) {
         return co(function* () {
             yield actions.loadPublicFrontBlog();
-            return {title: store.getState().publicPage.get('blog').name}
+            return {title: store.getState().publicPage['blog'].name}
         });
     }
 
@@ -20,7 +20,7 @@ class Public extends Component {
     render() {
 
         const publicPageStore = this.props.publicPageStore;
-        const blogName = publicPageStore.get('blog').name || "";
+        const blogName = publicPageStore['blog'].name || "";
 
         return (
             <div className="module-header-footer-layout">

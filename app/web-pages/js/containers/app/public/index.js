@@ -11,18 +11,18 @@ class Public extends Component {
             yield actions.loadPublicPosts();
             yield actions.loadPublicFrontBlog();
             const publicPageStore = store.getState().publicPage;
-            return {title: publicPageStore.get('blog').name}
+            return {title: publicPageStore['blog'].name}
         });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.loadPublicFrontBlog();
         this.props.loadPublicPosts();
     }
 
     render() {
         const publicPageStore = this.props.publicPageStore;
-        const posts = publicPageStore.get('posts').toArray();
+        const posts = publicPageStore['posts'];
 
         return (
             <div className="module-blog-layout">

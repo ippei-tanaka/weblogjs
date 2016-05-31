@@ -1,12 +1,17 @@
 import React from "react";
 import WEBLOG_ENV from '../../../../env-variables';
+import Immutable from 'immutable';
 
 const DEVELOPMENT_MODE = WEBLOG_ENV.mode === 'development';
 const PRODUCTION_MODE = WEBLOG_ENV.mode === 'production';
 const WP_DEV_SERVER_HOST = WEBLOG_ENV.webpack_server_host;
 const WP_DEV_SERVER_PORT = WEBLOG_ENV.webpack_server_port;
 
-export default function PublicHtmlLayout() {
+function safeStringify(obj) {
+    return JSON.stringify(obj).replace(/<\/script/g, '<\\/script').replace(/<!--/g, '<\\!--')
+}
+
+export default function PublicHtmlLayout({title, children, preloadedState}) {
     return (
         <html lang="en">
         <head>
@@ -15,14 +20,15 @@ export default function PublicHtmlLayout() {
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <link href="/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
             { PRODUCTION_MODE ? <link href="/bundle/public-style.css" media="all" rel="stylesheet"/> : null }
-            <title>[TITLE_PLACE_HOLDER]</title>
+            <title>{title}</title>
+            { preloadedState ? <script dangerouslySetInnerHTML={{__html:`window.__PRELOADED_STATE__ = ${safeStringify(preloadedState)}`}}></script> : null }
             { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/bundle/vendor.js`}></script> : null }
             { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/bundle/public.js`}></script> : null }
             { PRODUCTION_MODE ? <script src="/bundle/vendor.js"></script> : null }
             { PRODUCTION_MODE ? <script src="/bundle/public.js"></script> : null }
         </head>
         <body>
-            <div id="AppContainer">[CONTENT_PLACE_HOLDER]</div>
+            <div id="AppContainer">{children}</div>
         </body>
         </html>
     )
