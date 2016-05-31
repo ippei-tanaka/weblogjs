@@ -899,6 +899,37 @@ describe('Restful API', function () {
 
         });
 
+        describe('/front-blog', () => {
+
+            it('should return the front blog', (done) => {
+                co(function* () {
+                    let response;
+                    let frontBlog;
+
+                    frontBlog = yield httpRequest.get(`${PUBLIC_URL}/front-blog`);
+                    expect(Object.keys(frontBlog).length).to.equal(0);
+
+                    yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "5"});
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 2", slug: "blog-2", posts_per_page: "5"});
+                    const blogId2 = response._id;
+
+                    yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 3", slug: "blog-3", posts_per_page: "5"});
+
+                    yield httpRequest.put(`${ADMIN_URL}/setting`, {front_blog_id: blogId2});
+
+                    frontBlog = yield httpRequest.get(`${PUBLIC_URL}/front-blog`);
+
+                    expect(frontBlog.name).to.equal("Blog 2");
+
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
+        });
+
         describe('[/blog/:slug][/category/:slug][/author/:slug][/tag/:tag]/posts[/page/:page]', () => {
 
             it('should return public posts on the first page of the blog', (done) => {

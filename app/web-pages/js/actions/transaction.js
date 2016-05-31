@@ -33,7 +33,9 @@ import {
     TRANSACTION_REQUEST,
     TRANSACTION_REJECTED,
     TRANSACTION_RESOLVED,
-    TRANSACTION_FINISHED
+    TRANSACTION_FINISHED,
+
+    LOADED_FRONT_BLOG_RECEIVED
 } from '../constants/action-types';
 
 import { ADMIN_API_PATH, PUBLIC_API_PATH } from '../constants/config';
@@ -63,7 +65,18 @@ const modify = (dispatch, actionId, main) => {
     });
 };
 
-const load = (path, doneType) => () => (dispatch, getState) => {
+
+const loadOne = (path, doneType) => () => (dispatch, getState) => {
+    return modify(dispatch, null, () => co(function* () {
+        const response = yield getFromServer({path});
+        dispatch({
+            type: doneType,
+            data: response
+        });
+    }));
+};
+
+const loadMany = (path, doneType) => () => (dispatch, getState) => {
     return modify(dispatch, null, () => co(function* () {
         const response = yield getFromServer({path});
         dispatch({
@@ -115,7 +128,7 @@ export const finishTransaction = (actionId) => (dispatch, getState) => {
 };
 
 
-export const loadUsers = load(`${ADMIN_API_PATH}/users`, LOADED_USER_RECEIVED);
+export const loadUsers = loadMany(`${ADMIN_API_PATH}/users`, LOADED_USER_RECEIVED);
 
 export const createUser = create(`${ADMIN_API_PATH}/users`, CREATED_USER_RECEIVED);
 
@@ -133,7 +146,7 @@ export const editUserPassword = (actionId, {id, data}) => (dispatch, getState) =
 };
 
 
-export const loadCategories = load(`${ADMIN_API_PATH}/categories`, LOADED_CATEGORY_RECEIVED);
+export const loadCategories = loadMany(`${ADMIN_API_PATH}/categories`, LOADED_CATEGORY_RECEIVED);
 
 export const createCategory = create(`${ADMIN_API_PATH}/categories`, CREATED_CATEGORY_RECEIVED);
 
@@ -142,7 +155,7 @@ export const editCategory = edit(`${ADMIN_API_PATH}/categories`, EDITED_CATEGORY
 export const deleteCategory = del(`${ADMIN_API_PATH}/categories`, DELETED_CATEGORY_RECEIVED);
 
 
-export const loadBlogs = load(`${ADMIN_API_PATH}/blogs`, LOADED_BLOG_RECEIVED);
+export const loadBlogs = loadMany(`${ADMIN_API_PATH}/blogs`, LOADED_BLOG_RECEIVED);
 
 export const createBlog = create(`${ADMIN_API_PATH}/blogs`, CREATED_BLOG_RECEIVED);
 
@@ -151,7 +164,7 @@ export const editBlog = edit(`${ADMIN_API_PATH}/blogs`, EDITED_BLOG_RECEIVED);
 export const deleteBlog = del(`${ADMIN_API_PATH}/blogs`, DELETED_BLOG_RECEIVED);
 
 
-export const loadPosts = load(`${ADMIN_API_PATH}/posts`, LOADED_POST_RECEIVED);
+export const loadPosts = loadMany(`${ADMIN_API_PATH}/posts`, LOADED_POST_RECEIVED);
 
 export const createPost = create(`${ADMIN_API_PATH}/posts`, CREATED_POST_RECEIVED);
 
@@ -181,16 +194,6 @@ export const editSetting  = (actionId, {data}) => (dispatch, getState) => {
 };
 
 
-export const loadPublicPosts = load(`${PUBLIC_API_PATH}/posts`, LOADED_POST_RECEIVED);
+export const loadPublicPosts = loadMany(`${PUBLIC_API_PATH}/posts`, LOADED_POST_RECEIVED);
 
-export const loadPublicBlogs = load(`${PUBLIC_API_PATH}/blogs`, LOADED_BLOG_RECEIVED);
-
-export const loadPublicSetting  = () => (dispatch) => {
-    return modify(dispatch, null, () => co(function* () {
-        const response = yield getFromServer({path: `${PUBLIC_API_PATH}/setting`});
-        dispatch({
-            type: LOADED_SETTING_RECEIVED,
-            data: response
-        });
-    }));
-};
+export const loadPublicFrontBlog = loadOne(`${PUBLIC_API_PATH}/front-blog`, LOADED_FRONT_BLOG_RECEIVED);
