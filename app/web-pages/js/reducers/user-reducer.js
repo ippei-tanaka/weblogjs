@@ -12,8 +12,6 @@ const initialState = Immutable.Map({});
 
 export default (state = initialState, action) => {
 
-    const users = state.get('users');
-
     switch (action.type) {
 
         case LOADED_USER_RECEIVED:

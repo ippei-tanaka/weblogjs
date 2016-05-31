@@ -20,9 +20,6 @@ const FOUND = 302;
 const NOT_FOUND = 404;
 const ERROR = 500;
 
-const adminHtmlContainer = ReactDOMServer.renderToStaticMarkup(<AdminHtmlLayout />);
-const publicHtmlContainer = ReactDOMServer.renderToStaticMarkup(<PublicHtmlLayout />);
-
 const routing = ({routes, location}) => new Promise((resolve, reject) => {
     match({routes, location}, (error, redirectLocation, renderProps) => {
         if (renderProps) {
@@ -37,7 +34,7 @@ const routing = ({routes, location}) => new Promise((resolve, reject) => {
     });
 });
 
-const createHtml = (renderProps, htmlContainer) => co(function* () {
+const createHtml = (renderProps, LayoutComponent) => co(function* () {
 
     const components = renderProps.components;
     const component = components[components.length - 1].WrappedComponent;
@@ -60,14 +57,14 @@ const createHtml = (renderProps, htmlContainer) => co(function* () {
         }
     }
 
-    const content = ReactDOMServer.renderToString(
-        <Provider store={store}>
-            <RoutingContext {...renderProps} />
-        </Provider>
+    let html = ReactDOMServer.renderToStaticMarkup(
+        <LayoutComponent title={title} preloadedState={store.getState()}>
+            <Provider store={store}>
+                <RoutingContext {...renderProps} />
+            </Provider>
+        </LayoutComponent>
     );
 
-    let html = htmlContainer.replace("[TITLE_PLACE_HOLDER]", title);
-    html = html.replace("[CONTENT_PLACE_HOLDER]", content);
     html = "<!DOCTYPE html>" + html;
 
     return html;
@@ -86,18 +83,18 @@ export default class WebpageRouter {
         co(function* () {
             const location = this._basePath + request.url;
 
-            let htmlContainer = adminHtmlContainer;
+            let LayoutComponent = AdminHtmlLayout;
             let result = yield routing({routes: adminRoutes, location});
 
             if (result.statusCode === NOT_FOUND) {
                 result = yield routing({routes: publicRoutes, location});
-                htmlContainer = publicHtmlContainer;
+                LayoutComponent = PublicHtmlLayout;
             }
 
             const { statusCode, data } = result;
 
             if (statusCode === OK) {
-                createHtml(data, htmlContainer).then((html) => response.status(OK).send(html));
+                createHtml(data, LayoutComponent).then((html) => response.status(OK).send(html));
             } else if (statusCode === FOUND) {
                 response.redirect(FOUND, data.pathname);
             } else if (statusCode === ERROR) {
