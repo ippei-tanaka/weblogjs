@@ -1,5 +1,5 @@
 import React from "react";
-import WEBLOG_ENV from '../../../../../env-variables';
+import WEBLOG_ENV from '../../../../env-variables';
 
 const DEVELOPMENT_MODE = WEBLOG_ENV.mode === 'development';
 const PRODUCTION_MODE = WEBLOG_ENV.mode === 'production';
