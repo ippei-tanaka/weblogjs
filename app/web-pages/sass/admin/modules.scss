@@ -13,6 +13,7 @@
     border: 0;
     color: $color-btn-calm-text;
     cursor: pointer;
+    text-decoration: none;
     @include background-gradient(
                     $color-btn-calm-bg-start,
                     $color-btn-calm-bg-end);
@@ -288,6 +289,16 @@
         margin-right: 4px;
         color: $color-unimportant;
         font-size: $font-size-unimportant;
+    }
+}
+
+/*----------------------------
+ Dashboard
+----------------------------*/
+.module-dashboard {
+    .m-dsb-title {
+        font-size: $font-size-sub-header;
+        margin-bottom: 20px;
     }
 }
 
