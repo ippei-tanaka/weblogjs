@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import PostForm from '../../../../components/post-form';
-import actions from '../../../../actions';
+import CategoryForm from '../../../components/category-form';
+import actions from '../../../actions';
 import { connect } from 'react-redux';
-import { RESOLVED } from '../../../../constants/transaction-status';
-import { ADMIN_DIR } from '../../../../constants/config'
+import { RESOLVED } from '../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../constants/config'
 
-class PostEditor extends Component {
-
+class CategoryEditor extends Component {
     constructor(props) {
         super(props);
 
@@ -19,10 +18,7 @@ class PostEditor extends Component {
 
     componentDidMount() {
         this.setState({actionId: Symbol()});
-        this.props.loadPosts();
-        this.props.loadBlogs();
         this.props.loadCategories();
-        this.props.loadUsers();
     }
 
     componentWillUnmount() {
@@ -38,23 +34,17 @@ class PostEditor extends Component {
     }
 
     render() {
-        const {params: {id}, postStore, transactionStore, categoryStore, blogStore, userStore} = this.props;
-        const editedPost = postStore.get(id) || null;
+        const {params: {id}, categoryStore, transactionStore} = this.props;
+        const editedCategory = categoryStore.get(id) || null;
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
-        const values = Object.assign({}, editedPost, this.state.values);
-        const categoryList = categoryStore.toArray();
-        const blogList = blogStore.toArray();
-        const userList = userStore.toArray();
+        const values = Object.assign({}, editedCategory, this.state.values);
 
-        return editedPost ? (
+        return editedCategory ? (
             <div>
-                <PostForm title={`Edit the Post "${editedPost.title}"`}
+                <CategoryForm title={`Edit the Category "${editedCategory.display_name}"`}
                           errors={errors}
                           values={values}
-                          categoryList={categoryList}
-                          blogList={blogList}
-                          authorList={userList}
                           onChange={this._onChange.bind(this)}
                           onSubmit={this._onSubmit.bind(this)}
                           onClickBackButton={this._goToListPage.bind(this)}
@@ -63,7 +53,7 @@ class PostEditor extends Component {
             </div>
         ) : (
             <div className="module-data-editor">
-                <h2 className="m-dte-title">The post doesn't exist.</h2>
+                <h2 className="m-dte-title">The category doesn't exist.</h2>
             </div>
         );
     }
@@ -75,12 +65,12 @@ class PostEditor extends Component {
     }
 
     _onSubmit () {
-        const { params : {id}, editPost } = this.props;
-        editPost(this.state.actionId, {id, data: this.state.values});
+        const { params : {id}, editCategory } = this.props;
+        editCategory(this.state.actionId, {id, data: this.state.values});
     }
 
     _goToListPage() {
-        this.context.history.pushState(null, `${ADMIN_DIR}/posts`);
+        this.context.history.pushState(null, `${ADMIN_DIR}/categories`);
     }
 
     static get contextTypes () {
@@ -99,11 +89,8 @@ class PostEditor extends Component {
 
 export default connect(
     state => ({
-        postStore: state.post,
-        blogStore: state.blog,
-        userStore: state.user,
         categoryStore: state.category,
         transactionStore: state.transaction
     }),
     actions
-)(PostEditor);
+)(CategoryEditor);

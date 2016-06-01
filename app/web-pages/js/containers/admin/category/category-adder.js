@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import BlogForm from '../../../../components/blog-form';
-import actions from '../../../../actions';
+import CategoryForm from '../../../components/category-form';
+import actions from '../../../actions';
 import { connect } from 'react-redux';
-import { RESOLVED } from '../../../../constants/transaction-status';
-import { ADMIN_DIR } from '../../../../constants/config'
+import { RESOLVED } from '../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../constants/config'
 
-class BlogAdder extends Component {
+class CategoryAdder extends Component {
     constructor(props) {
         super(props);
 
@@ -39,7 +39,7 @@ class BlogAdder extends Component {
         const errors = transaction ? transaction.get('errors') : {};
 
         return (
-            <BlogForm title="Create a New Blog"
+            <CategoryForm title="Create a New Category"
                           errors={errors}
                           values={values}
                           onChange={this._onChange.bind(this)}
@@ -57,11 +57,11 @@ class BlogAdder extends Component {
     }
 
     _onSubmit() {
-        this.props.createBlog(this.state.actionId, this.state.values);
+        this.props.createCategory(this.state.actionId, this.state.values);
     }
 
     _goToListPage() {
-        this.context.history.pushState(null, `${ADMIN_DIR}/blogs`);
+        this.context.history.pushState(null, `${ADMIN_DIR}/categories`);
     }
 
     static get contextTypes() {
@@ -77,4 +77,4 @@ export default connect(
         transactionStore: state.transaction
     }),
     actions
-)(BlogAdder);
+)(CategoryAdder);

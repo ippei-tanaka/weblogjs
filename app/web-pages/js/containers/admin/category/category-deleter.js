@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Confirmation from '../../../../components/confirmation';
-import actions from '../../../../actions';
+import Confirmation from '../../../components/confirmation';
+import actions from '../../../actions';
 import { connect } from 'react-redux';
-import { RESOLVED } from '../../../../constants/transaction-status';
-import { ADMIN_DIR } from '../../../../constants/config'
+import { RESOLVED } from '../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../constants/config'
 
 class CategoryDeleter extends Component {
 

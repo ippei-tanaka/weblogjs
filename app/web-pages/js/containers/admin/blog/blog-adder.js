@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import UserForm from '../../../../components/user-form';
-import actions from '../../../../actions';
+import BlogForm from '../../../components/blog-form';
+import actions from '../../../actions';
 import { connect } from 'react-redux';
-import { RESOLVED } from '../../../../constants/transaction-status';
-import { ADMIN_DIR } from '../../../../constants/config'
+import { RESOLVED } from '../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../constants/config'
 
-class UserAdder extends Component {
+class BlogAdder extends Component {
     constructor(props) {
         super(props);
 
@@ -39,14 +39,13 @@ class UserAdder extends Component {
         const errors = transaction ? transaction.get('errors') : {};
 
         return (
-            <UserForm title="Create a New User"
-                      errors={errors}
-                      values={values}
-                      passwordField={true}
-                      onChange={this._onChange.bind(this)}
-                      onSubmit={this._onSubmit.bind(this)}
-                      onClickBackButton={this._goToListPage.bind(this)}
-                      submitButtonLabel="Create"
+            <BlogForm title="Create a New Blog"
+                          errors={errors}
+                          values={values}
+                          onChange={this._onChange.bind(this)}
+                          onSubmit={this._onSubmit.bind(this)}
+                          onClickBackButton={this._goToListPage.bind(this)}
+                          submitButtonLabel="Create"
             />
         );
     }
@@ -58,11 +57,11 @@ class UserAdder extends Component {
     }
 
     _onSubmit() {
-        this.props.createUser(this.state.actionId, this.state.values);
+        this.props.createBlog(this.state.actionId, this.state.values);
     }
 
     _goToListPage() {
-        this.context.history.pushState(null, `${ADMIN_DIR}/users`);
+        this.context.history.pushState(null, `${ADMIN_DIR}/blogs`);
     }
 
     static get contextTypes() {
@@ -78,4 +77,4 @@ export default connect(
         transactionStore: state.transaction
     }),
     actions
-)(UserAdder);
+)(BlogAdder);

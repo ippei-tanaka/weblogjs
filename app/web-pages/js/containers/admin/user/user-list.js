@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Moment from 'moment';
-import List from '../../../../components/list';
-import actions from '../../../../actions';
+import List from '../../../components/list';
+import actions from '../../../actions';
 import { connect } from 'react-redux';
-import { ADMIN_DIR } from '../../../../constants/config'
+import { ADMIN_DIR } from '../../../constants/config'
 
 class UserList extends Component {
 

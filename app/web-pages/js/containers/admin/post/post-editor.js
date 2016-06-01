@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import BlogForm from '../../../../components/blog-form';
-import actions from '../../../../actions';
+import PostForm from '../../../components/post-form';
+import actions from '../../../actions';
 import { connect } from 'react-redux';
-import { RESOLVED } from '../../../../constants/transaction-status';
-import { ADMIN_DIR } from '../../../../constants/config'
+import { RESOLVED } from '../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../constants/config'
 
-class BlogEditor extends Component {
+class PostEditor extends Component {
 
     constructor(props) {
         super(props);
@@ -19,7 +19,10 @@ class BlogEditor extends Component {
 
     componentDidMount() {
         this.setState({actionId: Symbol()});
+        this.props.loadPosts();
         this.props.loadBlogs();
+        this.props.loadCategories();
+        this.props.loadUsers();
     }
 
     componentWillUnmount() {
@@ -35,17 +38,23 @@ class BlogEditor extends Component {
     }
 
     render() {
-        const {params: {id}, blogStore, transactionStore} = this.props;
-        const editedBlog = blogStore.get(id) || null;
+        const {params: {id}, postStore, transactionStore, categoryStore, blogStore, userStore} = this.props;
+        const editedPost = postStore.get(id) || null;
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
-        const values = Object.assign({}, editedBlog, this.state.values);
+        const values = Object.assign({}, editedPost, this.state.values);
+        const categoryList = categoryStore.toArray();
+        const blogList = blogStore.toArray();
+        const userList = userStore.toArray();
 
-        return editedBlog ? (
+        return editedPost ? (
             <div>
-                <BlogForm title={`Edit the Blog "${editedBlog.display_name}"`}
+                <PostForm title={`Edit the Post "${editedPost.title}"`}
                           errors={errors}
                           values={values}
+                          categoryList={categoryList}
+                          blogList={blogList}
+                          authorList={userList}
                           onChange={this._onChange.bind(this)}
                           onSubmit={this._onSubmit.bind(this)}
                           onClickBackButton={this._goToListPage.bind(this)}
@@ -54,7 +63,7 @@ class BlogEditor extends Component {
             </div>
         ) : (
             <div className="module-data-editor">
-                <h2 className="m-dte-title">The blog doesn't exist.</h2>
+                <h2 className="m-dte-title">The post doesn't exist.</h2>
             </div>
         );
     }
@@ -66,12 +75,12 @@ class BlogEditor extends Component {
     }
 
     _onSubmit () {
-        const { params : {id}, editBlog } = this.props;
-        editBlog(this.state.actionId, {id, data: this.state.values});
+        const { params : {id}, editPost } = this.props;
+        editPost(this.state.actionId, {id, data: this.state.values});
     }
 
-    _goToListPage () {
-        this.context.history.pushState(null, `${ADMIN_DIR}/blogs`);
+    _goToListPage() {
+        this.context.history.pushState(null, `${ADMIN_DIR}/posts`);
     }
 
     static get contextTypes () {
@@ -90,8 +99,11 @@ class BlogEditor extends Component {
 
 export default connect(
     state => ({
+        postStore: state.post,
         blogStore: state.blog,
+        userStore: state.user,
+        categoryStore: state.category,
         transactionStore: state.transaction
     }),
     actions
-)(BlogEditor);
+)(PostEditor);

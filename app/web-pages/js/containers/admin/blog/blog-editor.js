@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import UserForm from '../../../../components/user-form';
-import actions from '../../../../actions';
+import BlogForm from '../../../components/blog-form';
+import actions from '../../../actions';
 import { connect } from 'react-redux';
-import { RESOLVED } from '../../../../constants/transaction-status';
-import { ADMIN_DIR } from '../../../../constants/config'
+import { RESOLVED } from '../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../constants/config'
 
-class UserEditor extends Component {
+class BlogEditor extends Component {
+
     constructor(props) {
         super(props);
 
@@ -18,7 +19,7 @@ class UserEditor extends Component {
 
     componentDidMount() {
         this.setState({actionId: Symbol()});
-        this.props.loadUsers();
+        this.props.loadBlogs();
     }
 
     componentWillUnmount() {
@@ -34,28 +35,26 @@ class UserEditor extends Component {
     }
 
     render() {
-        const {params: {id}, userStore, transactionStore} = this.props;
-        const editedUser = userStore.get(id) || null;
+        const {params: {id}, blogStore, transactionStore} = this.props;
+        const editedBlog = blogStore.get(id) || null;
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
-        const values = Object.assign({}, editedUser, this.state.values);
+        const values = Object.assign({}, editedBlog, this.state.values);
 
-        return editedUser ? (
+        return editedBlog ? (
             <div>
-                <UserForm title={`Edit the User "${editedUser.display_name}"`}
+                <BlogForm title={`Edit the Blog "${editedBlog.display_name}"`}
                           errors={errors}
                           values={values}
-                          passwordField={false}
                           onChange={this._onChange.bind(this)}
                           onSubmit={this._onSubmit.bind(this)}
                           onClickBackButton={this._goToListPage.bind(this)}
                           submitButtonLabel="Update"
                 />
-                <div><Link to={`${ADMIN_DIR}/users/${id}/password-editor`}>Change the password</Link></div>
             </div>
         ) : (
             <div className="module-data-editor">
-                <h2 className="m-dte-title">The user doesn't exist.</h2>
+                <h2 className="m-dte-title">The blog doesn't exist.</h2>
             </div>
         );
     }
@@ -67,12 +66,12 @@ class UserEditor extends Component {
     }
 
     _onSubmit () {
-        const { params : {id}, editUser } = this.props;
-        editUser(this.state.actionId, {id, data: this.state.values});
+        const { params : {id}, editBlog } = this.props;
+        editBlog(this.state.actionId, {id, data: this.state.values});
     }
 
-    _goToListPage() {
-        this.context.history.pushState(null, `${ADMIN_DIR}/users`);
+    _goToListPage () {
+        this.context.history.pushState(null, `${ADMIN_DIR}/blogs`);
     }
 
     static get contextTypes () {
@@ -91,8 +90,8 @@ class UserEditor extends Component {
 
 export default connect(
     state => ({
-        userStore: state.user,
+        blogStore: state.blog,
         transactionStore: state.transaction
     }),
     actions
-)(UserEditor);
+)(BlogEditor);
