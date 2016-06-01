@@ -7,7 +7,7 @@ import { ADMIN_DIR } from '../../../../constants/config'
 
 class PostList extends Component {
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.loadPosts();
         this.props.loadBlogs();
         this.props.loadCategories();

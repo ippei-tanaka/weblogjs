@@ -29,7 +29,7 @@ class Public extends Component {
         });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.loadPublicPosts();
     }
 

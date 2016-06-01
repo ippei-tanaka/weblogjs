@@ -7,7 +7,7 @@ import { ADMIN_DIR } from '../../../../constants/config'
 
 class CategoryList extends Component {
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.loadCategories();
     }
 

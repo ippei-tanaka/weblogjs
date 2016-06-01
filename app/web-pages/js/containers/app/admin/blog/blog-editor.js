@@ -17,7 +17,7 @@ class BlogEditor extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState({actionId: Symbol()});
         this.props.loadBlogs();
     }

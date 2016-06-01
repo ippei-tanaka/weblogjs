@@ -18,7 +18,7 @@ class Datetime extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setDateTimeState(this.props.value);
     }
 
