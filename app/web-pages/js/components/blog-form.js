@@ -1,6 +1,6 @@
 import React from 'react';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form } from './form';
-import PostsPerPageList from './posts-per-page-list';
+import { PostsPerPageList } from '../constants/config';
 
 export default function BlogForm({
     title,
