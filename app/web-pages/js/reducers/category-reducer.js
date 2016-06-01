@@ -11,6 +11,10 @@ const initialState = Immutable.Map({});
 
 export default (state = initialState, action) => {
 
+    if (!(state instanceof Immutable.Map)) {
+        state = Immutable.Map(state);
+    }
+
     switch (action.type) {
 
         case LOADED_CATEGORY_RECEIVED:

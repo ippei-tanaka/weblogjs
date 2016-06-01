@@ -9,18 +9,18 @@ class Public extends Component {
     static prepareForPreRendering({actions, store}) {
         return co(function* () {
             yield actions.loadPublicFrontBlog();
-            return {title: store.getState().publicPage['blog'].name}
+            return {title: store.getState().publicPage.get('blog').name}
         });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.loadPublicFrontBlog();
     }
 
     render() {
 
         const publicPageStore = this.props.publicPageStore;
-        const blogName = publicPageStore['blog'].name || "";
+        const blogName = publicPageStore.get('blog').name || "";
 
         return (
             <div className="module-header-footer-layout">
