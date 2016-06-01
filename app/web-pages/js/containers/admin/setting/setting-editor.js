@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { FieldSet, SubmitButton, ButtonList, Select, Option, Title, Form, FlushMessage } from '../../../../components/form';
-import actions from '../../../../actions';
+import { FieldSet, SubmitButton, ButtonList, Select, Option, Title, Form, FlushMessage } from '../../../components/form';
+import actions from '../../../actions';
 import { connect } from 'react-redux';
-import { RESOLVED } from '../../../../constants/transaction-status';
+import { RESOLVED } from '../../../constants/transaction-status';
 
 class SettingEditor extends Component {
     constructor(props) {

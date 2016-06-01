@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import UserPasswordForm from '../../../../components/user-password-form';
-import actions from '../../../../actions';
+import UserPasswordForm from '../../../components/user-password-form';
+import actions from '../../../actions';
 import { connect } from 'react-redux';
-import { RESOLVED } from '../../../../constants/transaction-status';
-import { ADMIN_DIR } from '../../../../constants/config'
+import { RESOLVED } from '../../../constants/transaction-status';
+import { ADMIN_DIR } from '../../../constants/config'
 
 class UserPasswordEditor extends Component {
     constructor(props) {

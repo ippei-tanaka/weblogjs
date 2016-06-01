@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import LoginForm from '../../../components/login-form';
-import AdminMenu from '../../../components/admin-menu';
-import Loader from '../../../components/loader';
+import LoginForm from '../../components/login-form';
+import AdminMenu from '../../components/admin-menu';
+import Loader from '../../components/loader';
 import { Link, IndexLink } from 'react-router';
 import { connect } from 'react-redux';
-import actions from '../../../actions';
-import { LOGOUT_FAILED } from '../../../constants/auth-status';
+import actions from '../../actions';
+import { LOGOUT_FAILED } from '../../constants/auth-status';
 
 
 class AdminWrapper extends Component {

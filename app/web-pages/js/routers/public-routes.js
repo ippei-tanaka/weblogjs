@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Route, IndexRoute } from 'react-router';
-import Index from "../containers/app/public/index";
-import Wrapper from "../containers/app/public/wrapper";
-import Single from "../containers/app/public/single";
+import Index from "../containers/public/index";
+import Wrapper from "../containers/public/wrapper";
+import Single from "../containers/public/single";
 
 const routes = (
     <Route path="/" component={Wrapper}>

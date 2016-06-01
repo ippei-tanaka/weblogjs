@@ -38,3 +38,5 @@ co(function* () {
 }).catch((error) => {
     console.error(error);
 });
+
+process.on('uncaughtException', (error) => console.log(error.stack));
