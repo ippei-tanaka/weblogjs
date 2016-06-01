@@ -7,7 +7,7 @@ import { ADMIN_DIR } from '../../../../constants/config'
 
 class UserList extends Component {
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.loadUsers();
     }
 

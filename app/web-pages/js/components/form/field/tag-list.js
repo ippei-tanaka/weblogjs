@@ -15,7 +15,7 @@ class TagList extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState({
             tags: this.props.value || []
         });

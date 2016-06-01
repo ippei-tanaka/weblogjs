@@ -15,7 +15,7 @@ class CategoryDeleter extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState({actionId: Symbol()});
         this.props.loadCategories();
     }

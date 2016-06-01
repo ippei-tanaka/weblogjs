@@ -16,7 +16,7 @@ class UserAdder extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState({actionId: Symbol()});
     }
 

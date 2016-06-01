@@ -14,7 +14,7 @@ class SettingEditor extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState({actionId: Symbol()});
         this.props.loadBlogs();
         this.props.loadSetting();

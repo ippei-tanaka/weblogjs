@@ -16,7 +16,7 @@ class CategoryAdder extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState({actionId: Symbol()});
     }
 
