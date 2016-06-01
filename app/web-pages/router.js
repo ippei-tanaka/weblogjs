@@ -6,7 +6,8 @@ import adminRoutes from './js/routers/admin-routes';
 import publicRoutes from './js/routers/public-routes';
 import AdminHtmlLayout from './js/components/admin-html-layout';
 import PublicHtmlLayout from './js/components/public-html-layout';
-import store from './js/stores/app-store';
+import reducers from './js/reducers';
+import createStore from './js/stores/create-store';
 import actions from './js/actions';
 import express from "express";
 import co from 'co';
@@ -38,6 +39,7 @@ const createHtml = (renderProps, LayoutComponent) => co(function* () {
 
     const components = renderProps.components;
     const component = components[components.length - 1].WrappedComponent;
+    const store = createStore(reducers);
     let title = "Weblog JS";
 
     if (component.prepareForPreRendering)
