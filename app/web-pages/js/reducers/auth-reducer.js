@@ -27,8 +27,11 @@ const initialState = Immutable.Map({
     user: null
 });
 
-
 export default (state = initialState, action) => {
+
+    if (!(state instanceof Immutable.Map)) {
+        state = Immutable.Map(state);
+    }
 
     switch (action.type) {
 

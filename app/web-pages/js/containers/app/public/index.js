@@ -11,7 +11,7 @@ class Public extends Component {
             yield actions.loadPublicPosts();
             yield actions.loadPublicFrontBlog();
             const publicPageStore = store.getState().publicPage;
-            return {title: publicPageStore['blog'].name}
+            return {title: publicPageStore.get('blog').name}
         });
     }
 
@@ -22,7 +22,7 @@ class Public extends Component {
 
     render() {
         const publicPageStore = this.props.publicPageStore;
-        const posts = publicPageStore['posts'];
+        const posts = publicPageStore.get('posts');
 
         return (
             <div className="module-blog-layout">

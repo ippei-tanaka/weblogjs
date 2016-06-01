@@ -17,7 +17,9 @@ const initialState = Immutable.Map({});
 
 export default (state = initialState, action) => {
 
-    //console.log(state.toArray());
+    if (!(state instanceof Immutable.Map)) {
+        state = Immutable.Map(state);
+    }
 
     if (!action.id) {
         return state;
