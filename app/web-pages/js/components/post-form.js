@@ -1,6 +1,5 @@
 import React from 'react';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Checkbox, Textarea, Datetime, TagList, Title, Form } from './form';
-import { trimObjValues, slugfy } from '../utilities';
 
 export default function PostForm({
     title,

@@ -2,7 +2,7 @@ require('../../babel-request');
 
 import co from 'co';
 import { expect } from 'chai';
-import httpRequest from '../../utils/http-request';
+import httpRequest from '../../utilities/http-request';
 import WeblogJS from '../../app';
 import WEBLOG_ENV from '../../env-variables';
 
