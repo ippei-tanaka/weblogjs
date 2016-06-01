@@ -9,8 +9,8 @@ class Dashboard extends Component {
 
         return (
             <div className="module-dashboard">
-                <p>Today, {user.display_name} will feel {Math.random() > 0.5 ? "lucky!" : "unlucky..."}</p>
-                <p><a href="/" target="_black">Public Page</a></p>
+                <h1 className="m-dsb-title">Welcome to Weblog Admin Page!</h1>
+                <p><a href="/" className="module-button" target="_black"><i className="fa fa-sign-out" /> Public Page</a></p>
             </div>
         );
     }
