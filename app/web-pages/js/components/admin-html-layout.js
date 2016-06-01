@@ -27,7 +27,7 @@ export default function AdminHtmlLayout({title, children, preloadedState}) {
             { PRODUCTION_MODE ? <script src="/bundle/admin.js"></script> : null }
         </head>
         <body>
-            <div id="AppContainer" className="module-admin">{children}</div>
+            <div id="AppContainer" className="module-app">{children}</div>
         </body>
         </html>
     )

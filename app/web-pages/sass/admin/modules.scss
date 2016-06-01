@@ -1,8 +1,6 @@
 @import "mixins";
 @import "variables";
 
-
-
 /*----------------------------
  Button
 ----------------------------*/
@@ -16,16 +14,16 @@
     color: $color-btn-calm-text;
     cursor: pointer;
     @include background-gradient(
-            $color-btn-calm-bg-start,
-            $color-btn-calm-bg-end);
+                    $color-btn-calm-bg-start,
+                    $color-btn-calm-bg-end);
     @include box-sizing();
     @include border-radius(20px);
     @include outline-radius(20px);
 
     &:hover {
         @include background-gradient(
-                $color-btn-calm-hover-bg-start,
-                $color-btn-calm-hover-bg-end);
+                        $color-btn-calm-hover-bg-start,
+                        $color-btn-calm-hover-bg-end);
     }
 }
 
@@ -41,13 +39,13 @@
     color: $color-btn-alert-text;
 
     @include background-gradient(
-            $color-btn-alert-bg-start,
-            $color-btn-alert-bg-end);
+                    $color-btn-alert-bg-start,
+                    $color-btn-alert-bg-end);
 
     &:hover {
         @include background-gradient(
-                $color-btn-alert-hover-bg-start,
-                $color-btn-alert-hover-bg-end);
+                        $color-btn-alert-hover-bg-start,
+                        $color-btn-alert-hover-bg-end);
     }
 }
 
@@ -55,13 +53,13 @@
     color: $color-btn-plain-text;
 
     @include background-gradient(
-            $color-btn-plain-bg-start,
-            $color-btn-plain-bg-end);
+                    $color-btn-plain-bg-start,
+                    $color-btn-plain-bg-end);
 
     &:hover {
         @include background-gradient(
-                $color-btn-plain-hover-bg-start,
-                $color-btn-plain-hover-bg-end);
+                        $color-btn-plain-hover-bg-start,
+                        $color-btn-plain-hover-bg-end);
     }
 }
 
@@ -79,15 +77,6 @@
 ----------------------------*/
 
 .module-admin {
-    width: 100%;
-    height: 100%;
-}
-
-/*----------------------------
- Login Page
-----------------------------*/
-
-.module-login-page {
     width: 100%;
     height: 100%;
 }
@@ -245,8 +234,23 @@
         text-align: center;
     }
 
-}
+    .m-nvg-mobile-tab-stopper {
+        z-index: 0;
+        position: absolute;
+        @include opacity(0);
+        //height: 20px;
+        //background: red;
+        display: none;
 
+        &.m-nvg-stopper-show {
+            @include media-phone {
+                //display: block;
+                display: inline;
+            }
+        }
+    }
+
+}
 
 /*----------------------------
  Location Bar
@@ -287,7 +291,6 @@
     }
 }
 
-
 /*----------------------------
  Data List
 ----------------------------*/
@@ -319,7 +322,7 @@
         white-space: nowrap;
     }
 
-    .m-dtl-button-list{
+    .m-dtl-button-list {
         display: inline-block;
         margin: 0 7px;
     }
@@ -378,7 +381,8 @@
         margin-top: 30px;
     }
 
-    .m-dte-button-list {}
+    .m-dte-button-list {
+    }
 
     .m-dte-button-list-item {
         display: inline-block;
@@ -395,7 +399,6 @@
         @include border-radius(5px);
     }
 }
-
 
 /*----------------------------
  Form Field Items (Modules)
@@ -429,7 +432,6 @@
 .module-datetime {
     display: block;
 }
-
 
 /*----------------------------
  Popup
