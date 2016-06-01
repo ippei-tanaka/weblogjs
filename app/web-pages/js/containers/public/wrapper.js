@@ -4,17 +4,14 @@ import { connect } from 'react-redux';
 import co from 'co';
 import PublicPost from '../../components/public-post';
 
-class Public extends Component {
+class PublicWrapper extends Component {
 
     static prepareForPreRendering({actions, store}) {
         return co(function* () {
             yield actions.loadPublicFrontBlog();
-            return {title: store.getState().publicPage.get('blog').name}
+            const state = store.getState();
+            return {title: state.publicPage.get('blog').name};
         });
-    }
-
-    componentDidMount() {
-        this.props.loadPublicFrontBlog();
     }
 
     render() {
@@ -43,4 +40,4 @@ export default connect(
         publicPageStore: state.publicPage
     }),
     actions
-)(Public);
+)(PublicWrapper);

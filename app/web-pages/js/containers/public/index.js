@@ -4,25 +4,17 @@ import { connect } from 'react-redux';
 import co from 'co';
 import PublicPost from '../../components/public-post';
 
-class Public extends Component {
+class PublicIndex extends Component {
 
-    static prepareForPreRendering({actions, store}) {
+    static prepareForPreRendering({actions}) {
         return co(function* () {
             yield actions.loadPublicPosts();
-            yield actions.loadPublicFrontBlog();
-            const publicPageStore = store.getState().publicPage;
-            return {title: publicPageStore.get('blog').name}
         });
-    }
-
-    componentDidMount() {
-        this.props.loadPublicFrontBlog();
-        this.props.loadPublicPosts();
     }
 
     render() {
         const publicPageStore = this.props.publicPageStore;
-        const posts = publicPageStore.get('posts');
+        const posts = publicPageStore.get('posts').map(post => Object.assign({}, {link: `/p/${post._id}/${post.slug}`}, post));
 
         return (
             <div className="module-blog-layout">
@@ -48,4 +40,4 @@ export default connect(
         publicPageStore: state.publicPage
     }),
     actions
-)(Public);
+)(PublicIndex);

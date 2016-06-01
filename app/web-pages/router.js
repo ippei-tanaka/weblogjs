@@ -37,25 +37,30 @@ const routing = ({routes, location}) => new Promise((resolve, reject) => {
 
 const createHtml = (renderProps, LayoutComponent) => co(function* () {
 
-    const components = renderProps.components;
-    const component = components[components.length - 1].WrappedComponent;
+    const { components, params } = renderProps;
+    //const component = components[components.length - 1].WrappedComponent;
     const store = createStore(reducers);
+
+    const _actions = {};
+    for (let actionName of Object.keys(actions)) {
+        _actions[actionName] = (...args) => {
+            return actions[actionName](...args)(store.dispatch, store.getState);
+        }
+    }
+
     let title = "Weblog JS";
 
-    if (component.prepareForPreRendering)
+    for (const component of components)
     {
-        const _actions = {};
+        let data = null;
 
-        for (let actionName of Object.keys(actions)) {
-            _actions[actionName] = (...args) => {
-                return actions[actionName](...args)(store.dispatch, store.getState);
+        if (component && component.prepareForPreRendering)
+        {
+            data = yield component.prepareForPreRendering({store, actions:_actions, params});
+
+            if (data && data.title) {
+                title = data.title;
             }
-        }
-
-        const data = yield component.prepareForPreRendering({store, actions: _actions});
-
-        if (data && data.title) {
-            title = data.title;
         }
     }
 
