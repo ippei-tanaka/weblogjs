@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import co from 'co';
+import { Link } from 'react-router';
 import PublicPost from '../../components/public-post';
 
 class PublicWrapper extends Component {
@@ -22,7 +23,7 @@ class PublicWrapper extends Component {
         return (
             <div className="module-header-footer-layout">
                 <header className="m-hfl-header">
-                    <h1><a className="m-hfl-header-link" href="/">{blogName}</a></h1>
+                    <h1><Link className="m-hfl-header-link" to="/">{blogName}</Link></h1>
                 </header>
                 <div className="m-hfl-body">
                     {this.props.children}

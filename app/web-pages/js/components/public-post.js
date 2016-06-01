@@ -9,7 +9,7 @@ export default ({
     }) =>
     <div className="module-post">
 
-        <h2 className="m-pst-title"><a className="m-pst-link" href={post.link}>{post.title}</a></h2>
+        <h2 className="m-pst-title"><Link className="m-pst-link" to={post.link}>{post.title}</Link></h2>
 
         <div className="m-pst-content">
             <article className="module-article">{post.content}</article>
