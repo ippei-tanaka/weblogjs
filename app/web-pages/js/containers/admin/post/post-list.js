@@ -21,8 +21,6 @@ class PostList extends Component {
         const blogList = blogStore.toArray();
         const authorList = userStore.toArray();
 
-        console.log(posts);
-
         return <List title="Post List"
                      adderLocation={`${ADMIN_DIR}/posts/adder`}
                      fields={this._getFields({authorList, blogList, categoryList})}
