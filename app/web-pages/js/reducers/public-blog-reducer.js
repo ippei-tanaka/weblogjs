@@ -1,15 +1,10 @@
 import Immutable from 'immutable';
 
 import {
-    LOADED_FRONT_BLOG_RECEIVED,
-    LOADED_POST_RECEIVED
+    LOADED_FRONT_BLOG_RECEIVED
 } from '../constants/action-types';
 
-const initialState = Immutable.Map({
-    blog: {},
-    posts: [],
-    categories: []
-});
+const initialState = null;
 
 export default (state = initialState, action) => {
 
@@ -20,10 +15,7 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case LOADED_FRONT_BLOG_RECEIVED:
-            return action.data ? state.set('blog', action.data) : state;
-
-        case LOADED_POST_RECEIVED:
-            return action.data ? state.set('posts', action.data) : state;
+            return Immutable.Map(action.data || {});
 
         default:
             return state;

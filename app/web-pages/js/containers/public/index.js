@@ -6,22 +6,24 @@ import PublicPost from '../../components/public-post';
 
 class PublicIndex extends Component {
 
-    static prepareForPreRendering({actions}) {
+    static prepareForPreRendering({actions, params}) {
         return co(function* () {
             yield actions.loadPublicPosts();
+            yield actions.loadPublicCategories();
         });
     }
 
     render() {
-        const publicPageStore = this.props.publicPageStore;
-        const posts = publicPageStore.get('posts').map(post => Object.assign({}, {link: `/p/${post._id}/${post.slug}`}, post));
+        const { publicPost, publicCategory } = this.props;
+        const categories = publicCategory.toObject();
+        const posts = publicPost.toArray();
 
         return (
             <div className="module-blog-layout">
                 <div className="m-bll-main">
                     {posts.map(post =>
                         <section key={post._id} className="m-bll-section">
-                            <PublicPost post={post} />
+                            <PublicPost categories={categories} post={post}/>
                         </section>
                     )}
                     {posts.length === 0 ?
@@ -37,7 +39,8 @@ class PublicIndex extends Component {
 
 export default connect(
     state => ({
-        publicPageStore: state.publicPage
+        publicPost: state.publicPost,
+        publicCategory: state.publicCategory
     }),
     actions
 )(PublicIndex);

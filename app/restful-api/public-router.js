@@ -135,6 +135,7 @@ const addRoutes = (router) => {
             {
                 $match: {
                     blog_id: blog._id,
+                    category_id: {$ne: null},
                     published_date: {$lt: new Date()},
                     is_draft: {$ne: true}
                 }

@@ -8,12 +8,14 @@ class SinglePage extends Component {
 
     static prepareForPreRendering({actions, store, params}) {
         return co(function* () {
+            yield actions.loadPublicFrontBlog();
             yield actions.loadPublicPosts();
+            yield actions.loadPublicCategories();
             const state = store.getState();
-            const blogName = state.publicPage.get('blog').name;
-            const post = state.post.get(params.id);
-            let postName =  "";
+            const blogName = state.publicBlog.get('title');
+            const post = state.publicPost.get(params.id);
 
+            let postName =  "";
             if (post && post.title && post.slug === params.slug) {
                 postName = post.title + " - ";
             }
@@ -24,22 +26,19 @@ class SinglePage extends Component {
 
     render() {
 
-        const { params: {id, slug}, postStore } = this.props;
-        let post = postStore.get(id);
+        const { params: {id, slug}, publicPost, publicCategory } = this.props;
+        const categories = publicCategory.toObject();
+        let post = publicPost.get(id);
 
-        if (!post || !post.title || post.slug !== slug) {
+        if (!post || post.slug !== slug) {
             post = null;
-        }
-
-        if (post) {
-            post.link = `/p/${post._id}/${post.slug}`;
         }
 
         return (
             <div className="module-blog-layout">
                 <div className="m-bll-main">
                     <section className="m-bll-section">
-                        { post ? <PublicPost post={post}/> : <div>No post exists.</div>}
+                        { post ? <PublicPost categories={categories} post={post}/> : <div>No post exists.</div>}
                     </section>
                 </div>
             </div>
@@ -49,7 +48,8 @@ class SinglePage extends Component {
 
 export default connect(
     state => ({
-        postStore: state.post
+        publicPost: state.publicPost,
+        publicCategory: state.publicCategory
     }),
     actions
 )(SinglePage);

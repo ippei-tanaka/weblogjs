@@ -35,7 +35,10 @@ import {
     TRANSACTION_RESOLVED,
     TRANSACTION_FINISHED,
 
-    LOADED_FRONT_BLOG_RECEIVED
+    LOADED_FRONT_BLOG_RECEIVED,
+    LOADED_PUBLIC_CATEGORIES_RECEIVED,
+    LOADED_PUBLIC_POST_RECEIVED
+
 } from '../constants/action-types';
 
 import { ADMIN_API_PATH, PUBLIC_API_PATH } from '../constants/config';
@@ -194,6 +197,8 @@ export const editSetting  = (actionId, {data}) => (dispatch, getState) => {
 };
 
 
-export const loadPublicPosts = loadMany(`${PUBLIC_API_PATH}/posts`, LOADED_POST_RECEIVED);
+export const loadPublicPosts = loadMany(`${PUBLIC_API_PATH}/posts`, LOADED_PUBLIC_POST_RECEIVED);
 
 export const loadPublicFrontBlog = loadOne(`${PUBLIC_API_PATH}/front-blog`, LOADED_FRONT_BLOG_RECEIVED);
+
+export const loadPublicCategories = loadMany(`${PUBLIC_API_PATH}/categories`, LOADED_PUBLIC_CATEGORIES_RECEIVED);

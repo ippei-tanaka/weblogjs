@@ -6,7 +6,7 @@ import Wrapper from "../containers/public/wrapper";
 import Single from "../containers/public/single";
 
 const routes = (
-    <Route path="/" component={Wrapper}>
+    <Route path="/(category/:category)(page/:page)" component={Wrapper}>
         <IndexRoute component={Index}/>
         <Route path="p/:id/:slug" component={Single}  />
     </Route>
