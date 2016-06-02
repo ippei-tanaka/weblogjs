@@ -49,14 +49,13 @@ const createHtml = (renderProps, LayoutComponent) => co(function* () {
     }
 
     let title = "Weblog JS";
+    let data = {};
 
     for (const component of components)
     {
-        let data = null;
-
         if (component && component.prepareForPreRendering)
         {
-            data = yield component.prepareForPreRendering({store, actions:_actions, params});
+            data = yield component.prepareForPreRendering({store, actions:_actions, params, parentData: data});
 
             if (data && data.title) {
                 title = data.title;

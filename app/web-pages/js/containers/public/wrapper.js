@@ -10,15 +10,11 @@ class PublicWrapper extends Component {
     static prepareForPreRendering({actions, store}) {
         return co(function* () {
             yield actions.loadPublicFrontBlog();
-            const state = store.getState();
-            return {title: state.publicPage.get('blog').name};
         });
     }
 
     render() {
-
-        const publicPageStore = this.props.publicPageStore;
-        const blogName = publicPageStore.get('blog').name || "";
+        const blogName = this.props.publicBlog.get('name') || "";
 
         return (
             <div className="module-header-footer-layout">
@@ -38,7 +34,7 @@ class PublicWrapper extends Component {
 
 export default connect(
     state => ({
-        publicPageStore: state.publicPage
+        publicBlog: state.publicBlog
     }),
     actions
 )(PublicWrapper);

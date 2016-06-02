@@ -6,7 +6,9 @@ import postReducer from './post-reducer';
 import settingReducer from './setting-reducer';
 import authReducer from './auth-reducer';
 import transactionReducer from './transaction-reducer';
-import publicPageReducer from './public-page-reducer';
+import publicBlogReducer from './public-blog-reducer';
+import publicPostReducer from './public-post-reducer';
+import publicCategoryReducer from './public-category-reducer';
 
 export default combineReducers({
     user: userReducer,
@@ -16,5 +18,7 @@ export default combineReducers({
     setting: settingReducer,
     auth: authReducer,
     transaction: transactionReducer,
-    publicPage: publicPageReducer
+    publicBlog: publicBlogReducer,
+    publicPost: publicPostReducer,
+    publicCategory: publicCategoryReducer
 });
