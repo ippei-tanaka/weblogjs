@@ -65,11 +65,11 @@ class PublicIndex extends Component {
     }
 
     _paginationLinkBuilder(page) {
-        const { params } = this.props;
-        const category = params.category;
-        const pageParam = page > 1 ? `/page/${page}` : "";
-        const categoryParam = category ? `/category/${category}` : "";
-        return `${categoryParam}${pageParam}/`;
+        const { params : { category, tag } } = this.props;
+        const categoryQuery = category ? `/category/${category}` : "";
+        const tagQuery = tag ? `/tag/${tag}` : "";
+        const pageQuery = page > 1 ? `/page/${page}` : "";
+        return `${categoryQuery}${tagQuery}${pageQuery}/`;
     }
 
     static get contextTypes() {

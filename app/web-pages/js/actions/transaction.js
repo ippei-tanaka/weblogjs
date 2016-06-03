@@ -191,11 +191,12 @@ export const editSetting  = (actionId, {data}) => (dispatch, getState) => {
 };
 
 
-export const loadPublicPosts = ({category, page} = {}) => {
+export const loadPublicPosts = ({category, tag, page} = {}) => {
     const categoryQuery = category ? `/category/${category}` : "";
+    const tagQuery = tag ? `/tag/${tag}` : "";
     const pageQuery = page ? `/page/${page}` : "";
     return load((response) => ({ posts: response.items, totalPages: response.totalPages }),
-        `${PUBLIC_API_PATH}${categoryQuery}/posts${pageQuery}`,
+        `${PUBLIC_API_PATH}${categoryQuery}${tagQuery}/posts${pageQuery}`,
         LOADED_PUBLIC_POSTS_RECEIVED
     )();
 };

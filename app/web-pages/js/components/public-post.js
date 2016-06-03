@@ -36,7 +36,7 @@ export default ({
             <div className="m-pst-tag-container">
                 <ul className="m-pst-tags">
                     {post.tags.map(tag =>
-                        <li key={`${post._id}_${tag}`} className="m-pst-tag"><Link className="m-pst-tag-link" to="#">#{tag}</Link></li>
+                        <li key={`${post._id}_${tag}`} className="m-pst-tag"><Link className="m-pst-tag-link" to={`/tag/${tag}`}>#{tag}</Link></li>
                     )}
                 </ul>
             </div>
