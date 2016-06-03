@@ -69,7 +69,7 @@ const createHtml = (renderProps, LayoutComponent) => co(function* () {
 
     return html;
 
-}).catch(error => console.error(error.stack));
+}).catch(error => console.error(error.stack ? error.stack : error));
 
 export default class WebpageRouter {
 

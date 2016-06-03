@@ -1,5 +1,6 @@
 import co from 'co';
 import { Router } from 'express';
+import { ObjectID } from 'mongodb';
 import pluralize from 'pluralize';
 import PassportManager from '../passport-manager';
 import Models from '../models';
@@ -180,6 +181,15 @@ const addRoutes = (router) => {
         successHandler(response, {items: categories});
 
     }).catch(errorHandler(response)));
+
+
+    // TODO write tests for this route
+    router.get("/post/:id/", (request, response) => co(function* () {
+        const post = yield PostModel.findOne({_id: new ObjectID(request.params.id)});
+        successHandler(response, post || {});
+
+    }).catch(errorHandler(response)));
+
 
     return router;
 };

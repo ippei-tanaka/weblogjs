@@ -37,7 +37,8 @@ import {
 
     LOADED_FRONT_BLOG_RECEIVED,
     LOADED_PUBLIC_CATEGORIES_RECEIVED,
-    LOADED_PUBLIC_POST_RECEIVED
+    LOADED_PUBLIC_POSTS_RECEIVED,
+    LOADED_PUBLIC_SINGLE_POST_RECEIVED
 
 } from '../constants/action-types';
 
@@ -195,8 +196,12 @@ export const loadPublicPosts = ({category, page} = {}) => {
     const pageQuery = page ? `/page/${page}` : "";
     return load((response) => ({ posts: response.items, totalPages: response.totalPages }),
         `${PUBLIC_API_PATH}${categoryQuery}/posts${pageQuery}`,
-        LOADED_PUBLIC_POST_RECEIVED
+        LOADED_PUBLIC_POSTS_RECEIVED
     )();
+};
+
+export const loadPublicSinglePost = (id) => {
+    return loadOne(`${PUBLIC_API_PATH}/post/${id}`, LOADED_PUBLIC_SINGLE_POST_RECEIVED)();
 };
 
 export const loadPublicFrontBlog = loadOne(`${PUBLIC_API_PATH}/front-blog`, LOADED_FRONT_BLOG_RECEIVED);

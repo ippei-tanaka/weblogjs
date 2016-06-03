@@ -20,11 +20,11 @@ class SinglePage extends Component {
     static _loadContent({params, actions, store}) {
         return co(function* () {
             yield actions.loadPublicFrontBlog();
-            yield actions.loadPublicPosts();
+            yield actions.loadPublicSinglePost(params.id);
             yield actions.loadPublicCategories();
             const state = store.getState();
             const blogName = state.publicBlog.get('name');
-            const post = state.publicPost.get('posts').get(params.id);
+            const post = state.publicSinglePost.toObject();
 
             let postName = "";
             if (post && post.title && post.slug === params.slug) {
@@ -37,9 +37,9 @@ class SinglePage extends Component {
 
     render() {
 
-        const { params: {id, slug}, publicPost, publicCategory } = this.props;
+        const { params: {slug}, publicSinglePost, publicCategory } = this.props;
         const categories = publicCategory.toObject();
-        let post = publicPost.get('posts').get(id);
+        let post = publicSinglePost.toObject();
 
         if (!post || post.slug !== slug) {
             post = null;
@@ -59,7 +59,7 @@ class SinglePage extends Component {
 
 export default connect(
     state => ({
-        publicPost: state.publicPost,
+        publicSinglePost: state.publicSinglePost,
         publicCategory: state.publicCategory
     }),
     actions
