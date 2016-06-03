@@ -12,7 +12,7 @@ class SinglePage extends Component {
             yield actions.loadPublicPosts();
             yield actions.loadPublicCategories();
             const state = store.getState();
-            const blogName = state.publicBlog.get('title');
+            const blogName = state.publicBlog.get('name');
             const post = state.publicPost.get(params.id);
 
             let postName =  "";
@@ -28,7 +28,7 @@ class SinglePage extends Component {
 
         const { params: {id, slug}, publicPost, publicCategory } = this.props;
         const categories = publicCategory.toObject();
-        let post = publicPost.get(id);
+        let post = publicPost.get('posts').get(id);
 
         if (!post || post.slug !== slug) {
             post = null;

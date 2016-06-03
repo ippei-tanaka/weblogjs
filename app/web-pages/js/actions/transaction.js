@@ -68,26 +68,19 @@ const modify = (dispatch, actionId, main) => {
     });
 };
 
-
-const loadOne = (path, doneType) => () => (dispatch, getState) => {
+const load = (processData, path, doneType) => () => (dispatch, getState) => {
     return modify(dispatch, null, () => co(function* () {
         const response = yield getFromServer({path});
         dispatch({
             type: doneType,
-            data: response
+            data: processData(response)
         });
     }));
 };
 
-const loadMany = (path, doneType) => () => (dispatch, getState) => {
-    return modify(dispatch, null, () => co(function* () {
-        const response = yield getFromServer({path});
-        dispatch({
-            type: doneType,
-            data: response.items
-        });
-    }));
-};
+const loadOne = load.bind(null, (response) => response);
+
+const loadMany = load.bind(null, (response) => response.items);
 
 const create = (path, doneType) => (actionId, newUser) => (dispatch, getState) => {
     return modify(dispatch, actionId, () => co(function* () {
@@ -197,7 +190,14 @@ export const editSetting  = (actionId, {data}) => (dispatch, getState) => {
 };
 
 
-export const loadPublicPosts = loadMany(`${PUBLIC_API_PATH}/posts`, LOADED_PUBLIC_POST_RECEIVED);
+export const loadPublicPosts = ({category, page} = {}) => {
+    const categoryQuery = category ? `/category/${category}` : "";
+    const pageQuery = page ? `/page/${page}` : "";
+    return load((response) => ({ posts: response.items, totalPages: response.totalPages }),
+        `${PUBLIC_API_PATH}${categoryQuery}/posts${pageQuery}`,
+        LOADED_PUBLIC_POST_RECEIVED
+    )();
+};
 
 export const loadPublicFrontBlog = loadOne(`${PUBLIC_API_PATH}/front-blog`, LOADED_FRONT_BLOG_RECEIVED);
 

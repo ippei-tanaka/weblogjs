@@ -24,8 +24,10 @@ export default function PublicHtmlLayout({title, children, preloadedState}) {
             { preloadedState ? <script dangerouslySetInnerHTML={{__html:`window.__PRELOADED_STATE__ = ${safeStringify(preloadedState)}`}}></script> : null }
             { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/bundle/vendor.js`}></script> : null }
             { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/bundle/public.js`}></script> : null }
+            {/*
             { PRODUCTION_MODE ? <script src="/bundle/vendor.js"></script> : null }
             { PRODUCTION_MODE ? <script src="/bundle/public.js"></script> : null }
+            */}
         </head>
         <body>
             <div id="AppContainer">{children}</div>
