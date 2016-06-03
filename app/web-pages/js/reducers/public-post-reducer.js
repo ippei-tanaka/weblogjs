@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 import {
-    LOADED_PUBLIC_POST_RECEIVED
+    LOADED_PUBLIC_POSTS_RECEIVED
 } from '../constants/action-types';
 
 const initialState = Immutable.Map({
@@ -18,7 +18,7 @@ export default (state = initialState, action) => {
 
     switch (action.type) {
 
-        case LOADED_PUBLIC_POST_RECEIVED:
+        case LOADED_PUBLIC_POSTS_RECEIVED:
             let posts = Immutable.Map({});
 
             action.data.posts.forEach(p => {

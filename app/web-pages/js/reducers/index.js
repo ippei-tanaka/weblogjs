@@ -8,6 +8,7 @@ import authReducer from './auth-reducer';
 import transactionReducer from './transaction-reducer';
 import publicBlogReducer from './public-blog-reducer';
 import publicPostReducer from './public-post-reducer';
+import publicSinglePostReducer from './public-single-post-reducer';
 import publicCategoryReducer from './public-category-reducer';
 
 export default combineReducers({
@@ -20,5 +21,6 @@ export default combineReducers({
     transaction: transactionReducer,
     publicBlog: publicBlogReducer,
     publicPost: publicPostReducer,
+    publicSinglePost: publicSinglePostReducer,
     publicCategory: publicCategoryReducer
 });
