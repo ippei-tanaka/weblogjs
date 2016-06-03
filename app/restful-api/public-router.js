@@ -114,7 +114,25 @@ const addRoutes = (router) => {
             limit: blog.posts_per_page
         });
 
-        successHandler(response, {items: postModels});
+        // TODO write tests for total pages
+
+        const sums = yield PostModel.aggregate([
+            {
+                $match: _query
+            },
+            {
+                $group: {
+                    _id: null,
+                    size: {$sum: 1}
+                }
+            }
+        ]);
+
+        const sum = sums[0];
+
+        const totalPages = Math.ceil(sum.size / blog.posts_per_page);
+
+        successHandler(response, {items: postModels, totalPages: totalPages});
 
     }).catch(errorHandler(response)));
 
@@ -131,6 +149,7 @@ const addRoutes = (router) => {
 
         const blog = blogModel.values;
 
+        // TODO write tests for category_id: {$ne: null}
         const categorySums = yield PostModel.aggregate([
             {
                 $match: {

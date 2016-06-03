@@ -15,7 +15,7 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case LOADED_FRONT_BLOG_RECEIVED:
-            return Immutable.Map(action.data || {});
+            return Immutable.Map(action.data);
 
         default:
             return state;
