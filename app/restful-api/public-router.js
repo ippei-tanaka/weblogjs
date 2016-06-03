@@ -115,8 +115,6 @@ const addRoutes = (router) => {
             limit: blog.posts_per_page
         });
 
-        // TODO write tests for total pages
-
         const sums = yield PostModel.aggregate([
             {
                 $match: _query
@@ -129,9 +127,12 @@ const addRoutes = (router) => {
             }
         ]);
 
-        const sum = sums[0];
+        let totalPages = 0;
 
-        const totalPages = Math.ceil(sum.size / blog.posts_per_page);
+        if (sums.length > 0) {
+            const sum = sums[0];
+            totalPages = Math.ceil(sum.size / blog.posts_per_page);
+        }
 
         successHandler(response, {items: postModels, totalPages: totalPages});
 

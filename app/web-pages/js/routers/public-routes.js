@@ -22,7 +22,7 @@ const onEnterHandler = (_callback, store, actions) => {
 
 export default ({store, actions} = {}) => {
     return (
-        <Route path="/(category/:category)(/)(page/:page)" component={Wrapper}>
+        <Route path="/(category/:category)(tag/:tag)(/)(page/:page)" component={Wrapper}>
             <IndexRoute
                 component={Index}
                 onEnter={onEnterHandler(Index.onEnterRoute.bind(Index.WrappedComponent), store, actions)}
