@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case LOADED_PUBLIC_POST_RECEIVED:
-            let posts = state.get('posts');
+            let posts = Immutable.Map({});
 
             action.data.posts.forEach(p => {
                 posts = posts.set(p._id, p);

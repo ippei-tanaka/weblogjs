@@ -15,6 +15,15 @@ class PublicIndex extends Component {
         });
     }
 
+    /*
+    componentDidMount() {
+        const { params, loadPublicPosts, loadPublicCategories } = this.props;
+        const { category, page } = params;
+        loadPublicPosts({category, page});
+        loadPublicCategories();
+    }
+    */
+
     render() {
         const { publicPost, publicCategory, params } = this.props;
         const categories = publicCategory.toObject();
@@ -50,7 +59,7 @@ class PublicIndex extends Component {
         );
     }
 
-    _paginationLinkBuilder (page) {
+    _paginationLinkBuilder(page) {
         const { params } = this.props;
         const category = params.category;
         const pageParam = page > 1 ? `/page/${page}` : "";
@@ -58,7 +67,7 @@ class PublicIndex extends Component {
         return `${categoryParam}${pageParam}/`;
     }
 
-    static get contextTypes () {
+    static get contextTypes() {
         return {
             history: React.PropTypes.object,
             location: React.PropTypes.object
