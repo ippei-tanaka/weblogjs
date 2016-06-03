@@ -50,9 +50,11 @@
  Blog Layout
 ----------------------------*/
 .module-blog-layout {
-    display: flex;
-    align-items: stretch;
-    flex-wrap: wrap;
+    //display: flex;
+    //align-items: stretch;
+    //flex-wrap: wrap;
+    //flex-direction: row;
+
     @include media-phone {
 
     }
@@ -65,21 +67,25 @@
         }
     }
 
-    .m-bll-section {
-        padding: 45px 40px 50px;
+    .m-bll-sidebar {
+        //display: flex;
+        //flex-direction: column;
+    }
+}
 
-        &:last-child {
-            border-bottom: 0;
-        }
 
-        &.m-bll-short-section {
-            padding: 20px 40px;
-        }
+/*----------------------------
+ Section
+----------------------------*/
+.module-section {
+    padding: 45px 40px 50px;
+
+    &:last-child {
+        border-bottom: 0;
     }
 
-    .m-bll-sidebar {
-        display: flex;
-        flex-direction: row;
+    &.m-sct-short-section {
+        padding: 20px 40px;
     }
 }
 

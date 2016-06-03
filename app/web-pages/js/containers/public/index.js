@@ -40,28 +40,26 @@ class PublicIndex extends Component {
         const totalPages = publicPost.get('totalPages');
 
         return (
-            <div className="module-blog-layout">
-                <div className="m-bll-main">
-                    {posts.map(post =>
-                        <section key={post._id} className="m-bll-section">
-                            <PublicPost categories={categories} post={post}/>
-                        </section>
-                    )}
+            <div>
+                {posts.map(post =>
+                    <section key={post._id} className="module-section">
+                        <PublicPost categories={categories} post={post}/>
+                    </section>
+                )}
 
-                    {posts.length === 0 ?
-                        <section className="m-bll-section">
-                            No posts to show.
-                        </section>
-                        : null}
+                {posts.length === 0 ?
+                    <section className="module-section">
+                        No posts to show.
+                    </section>
+                    : null}
 
-                    {posts.length > 0 && totalPages > 1 && page > 0 ?
-                        <section className="m-bll-section m-bll-short-section">
-                            <PublicPagination totalPages={totalPages}
-                                              currentPage={page}
-                                              linkBuilder={this._paginationLinkBuilder.bind(this)}/>
-                        </section> : null
-                    }
-                </div>
+                {posts.length > 0 && totalPages > 1 && page > 0 ?
+                    <section className="module-section m-sct-short-section">
+                        <PublicPagination totalPages={totalPages}
+                                          currentPage={page}
+                                          linkBuilder={this._paginationLinkBuilder.bind(this)}/>
+                    </section> : null
+                }
             </div>
         );
     }
@@ -74,7 +72,7 @@ class PublicIndex extends Component {
         return `${categoryParam}${pageParam}/`;
     }
 
-    static get contextTypes () {
+    static get contextTypes() {
         return {
             router: React.PropTypes.object.isRequired
         };

@@ -46,13 +46,9 @@ class SinglePage extends Component {
         }
 
         return (
-            <div className="module-blog-layout">
-                <div className="m-bll-main">
-                    <section className="m-bll-section">
-                        { post ? <PublicPost categories={categories} post={post}/> : <div>No post exists.</div>}
-                    </section>
-                </div>
-            </div>
+            <section className="module-section">
+                { post ? <PublicPost categories={categories} post={post}/> : <div>No post exists.</div>}
+            </section>
         )
     }
 }

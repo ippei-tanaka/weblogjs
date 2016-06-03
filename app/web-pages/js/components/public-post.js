@@ -20,7 +20,7 @@ export default ({
             <article className="module-article">{post.content}</article>
         </div>
 
-        <date className="m-pst-date">Published on {Moment(post.published_date).format("YYYY-MM-DD HH:mm Z")}</date>
+        <date className="m-pst-date">Published on {Moment(post.published_date).format("MMM DD, YYYY")}</date>
 
         {author ?
             <div className="m-pst-author">Written by <Link className="m-pst-author-link" to={`/author/${author.slug}`}>{author.name}</Link></div>
