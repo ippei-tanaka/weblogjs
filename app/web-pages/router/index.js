@@ -1,26 +1,18 @@
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import { Provider } from 'react-redux';
-import { match, RouterContext } from 'react-router';
-import adminRoutes from './js/routers/admin-routes';
-import publicRoutes from './js/routers/public-routes';
-import AdminHtmlLayout from './js/components/admin-html-layout';
-import PublicHtmlLayout from './js/components/public-html-layout';
-import reducers from './js/reducers';
-import createStore from './js/stores/create-store';
-import createActions from './js/stores/create-actions';
+import { match } from 'react-router';
+import adminRoutes from '../js/routers/admin-routes';
+import publicRoutes from '../js/routers/public-routes';
+import AdminHtmlLayout from '../js/components/admin-html-layout';
+import PublicHtmlLayout from '../js/components/public-html-layout';
+import createHtml from './lib/create-html';
 import express from "express";
 import co from 'co';
 import path from 'path';
 import url from 'url';
+import {OK, FOUND, NOT_FOUND, ERROR} from './lib/status-codes';
 
-const FAVICON_DIR = path.resolve(__dirname, './favicons/favicon.ico');
-const STATIC_DIR = path.resolve(__dirname, './static');
-
-const OK = 200;
-const FOUND = 302;
-const NOT_FOUND = 404;
-const ERROR = 500;
+const FAVICON_DIR = path.resolve(__dirname, '../favicons/favicon.ico');
+const STATIC_DIR = path.resolve(__dirname, '../static');
 
 const routing = ({routes, location}) => new Promise((resolve, reject) => {
     match({routes, location}, (error, redirectLocation, renderProps) => {
@@ -35,41 +27,6 @@ const routing = ({routes, location}) => new Promise((resolve, reject) => {
         }
     });
 });
-
-const createHtml = (renderProps, LayoutComponent) => co(function* () {
-
-    const { components, params } = renderProps;
-    const store = createStore(reducers);
-    const actions = createActions(store);
-
-    let title = "Weblog JS";
-    let data = {};
-
-    for (const component of components)
-    {
-        if (component && component.prepareForPreRendering)
-        {
-            data = yield component.prepareForPreRendering({store, actions, params, parentData: data});
-
-            if (data && data.title) {
-                title = data.title;
-            }
-        }
-    }
-
-    let html = ReactDOMServer.renderToStaticMarkup(
-        <LayoutComponent title={title} preloadedState={store.getState()}>
-            <Provider store={store}>
-                <RouterContext {...renderProps} />
-            </Provider>
-        </LayoutComponent>
-    );
-
-    html = "<!DOCTYPE html>" + html;
-
-    return html;
-
-}).catch(error => console.error(error.stack ? error.stack : error));
 
 export default class WebpageRouter {
 
