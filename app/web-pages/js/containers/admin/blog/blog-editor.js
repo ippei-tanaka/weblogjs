@@ -43,7 +43,7 @@ class BlogEditor extends Component {
 
         return editedBlog ? (
             <div>
-                <BlogForm title={`Edit the Blog "${editedBlog.display_name}"`}
+                <BlogForm title={`Edit the Blog "${editedBlog.name}"`}
                           errors={errors}
                           values={values}
                           onChange={this._onChange.bind(this)}

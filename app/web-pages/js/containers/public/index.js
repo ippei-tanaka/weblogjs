@@ -26,8 +26,9 @@ class PublicIndex extends Component {
             const state = store.getState();
             const blogName = state.publicBlog.get('name');
             const categoryName = params.category ? params.category + ' - ' : '';
+            const tagName = params.tag ? params.tag + ' - ' : '';
 
-            return {title: `${categoryName}${blogName}`}
+            return {title: `${categoryName}${tagName}${blogName}`}
         });
     }
 

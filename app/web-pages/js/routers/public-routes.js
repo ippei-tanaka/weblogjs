@@ -21,12 +21,15 @@ const onEnterHandler = (_callback, store, actions) => {
 };
 
 export default ({store, actions} = {}) => {
+
+    const indexOnEnterHandler = onEnterHandler(Index.onEnterRoute.bind(Index.WrappedComponent), store, actions);
+
     return (
-        <Route path="/(category/:category)(tag/:tag)(/)(page/:page)" component={Wrapper}>
-            <IndexRoute
-                component={Index}
-                onEnter={onEnterHandler(Index.onEnterRoute.bind(Index.WrappedComponent), store, actions)}
-            />
+        <Route path="/" component={Wrapper}>
+            <IndexRoute component={Index} onEnter={indexOnEnterHandler} />
+            <Route path="(page/:page)" component={Index} onEnter={indexOnEnterHandler} />
+            <Route path="(category/:category)(/)(page/:page)" component={Index} onEnter={indexOnEnterHandler} />
+            <Route path="(tag/:tag)(/)(page/:page)" component={Index} onEnter={indexOnEnterHandler} />
             <Route path="post/:id/:slug"
                    component={Single}
                    onEnter={onEnterHandler(Single.onEnterRoute.bind(Single.WrappedComponent), store, actions)}/>
