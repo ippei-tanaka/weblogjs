@@ -87,7 +87,7 @@ class PostEditor extends Component {
         return {
             history: React.PropTypes.object
         };
-    };
+    }
 
     static get propTypes() {
         return {
