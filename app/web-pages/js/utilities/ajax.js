@@ -1,21 +1,21 @@
-import request from "superagent";
+import superagent from "superagent";
 import { URL_BASE } from '../constants/config';
 
 export default ({method, url, data}) => {
 
-    let requestObject = request[method](URL_BASE + url).type('json');
+    let requestObject = superagent[method](URL_BASE + url).type('json');
 
     if (data) {
         requestObject = requestObject.send(data);
     }
 
     return new Promise((resolve, reject) => {
-        requestObject.end(function (err, res) {
-            if (err) {
-                reject(res.body);
+        requestObject.end(function (error, response) {
+            if (error) {
+                reject(response.body);
                 return;
             }
-            resolve(res.body);
+            resolve(response.body);
         });
     });
 }

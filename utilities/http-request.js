@@ -1,34 +1,36 @@
-import Request from "request";
+import superagent from "superagent";
 
-var request = Request.defaults({jar: true});
+const agent = superagent.agent();
 
+export let req = function (method, path, data) {
 
-export let req = function (method, path, data, username, password) {
-    return new Promise((resolve, reject) => {
-        var options = {
-            method: method,
-            json: true,
-            url: path,
-            body: data || {}
-        };
+    let requestObject;
 
-        var requestObject = request(options, (error, response, body) => {
-            if (error) {
-                reject(error);
-            }
+    requestObject = superagent[method](path).type('json');
 
+    agent.attachCookies(requestObject);
+
+    if (data) {
+        requestObject = requestObject.send(data);
+    }
+
+    return new Promise((resolve, reject) =>
+    {
+        requestObject.end((error, response) =>
+        {
             if (response.statusCode !== 200) {
-                reject({response, body});
+                reject({response, body: response.body});
+                return;
             }
 
-            resolve(body);
-        });
+            if (error) {
+                throw error;
+            }
 
-        if (username && password) {
-            requestObject.auth(
-                username,
-                password);
-        }
+            agent.saveCookies(response);
+
+            resolve(response.body);
+        });
     });
 };
 
