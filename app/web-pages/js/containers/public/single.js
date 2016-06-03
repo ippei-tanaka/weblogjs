@@ -6,16 +6,27 @@ import PublicPost from '../../components/public-post';
 
 class SinglePage extends Component {
 
-    static prepareForPreRendering({actions, store, params}) {
+    static prepareForPreRendering({params, actions, store}) {
+        return this._loadContent({params, actions, store});
+    }
+
+    static onEnterRoute({params, actions, store}) {
+        this._loadContent({params, actions, store})
+            .then(({title}) => {
+                document.title = title;
+            });
+    }
+
+    static _loadContent({params, actions, store}) {
         return co(function* () {
             yield actions.loadPublicFrontBlog();
             yield actions.loadPublicPosts();
             yield actions.loadPublicCategories();
             const state = store.getState();
             const blogName = state.publicBlog.get('name');
-            const post = state.publicPost.get(params.id);
+            const post = state.publicPost.get('posts').get(params.id);
 
-            let postName =  "";
+            let postName = "";
             if (post && post.title && post.slug === params.slug) {
                 postName = post.title + " - ";
             }

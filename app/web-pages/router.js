@@ -1,17 +1,18 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Provider } from 'react-redux';
-import { match, RoutingContext } from 'react-router';
+import { match, RouterContext } from 'react-router';
 import adminRoutes from './js/routers/admin-routes';
 import publicRoutes from './js/routers/public-routes';
 import AdminHtmlLayout from './js/components/admin-html-layout';
 import PublicHtmlLayout from './js/components/public-html-layout';
 import reducers from './js/reducers';
 import createStore from './js/stores/create-store';
-import actions from './js/actions';
+import createActions from './js/stores/create-actions';
 import express from "express";
 import co from 'co';
 import path from 'path';
+import url from 'url';
 
 const FAVICON_DIR = path.resolve(__dirname, './favicons/favicon.ico');
 const STATIC_DIR = path.resolve(__dirname, './static');
@@ -38,15 +39,8 @@ const routing = ({routes, location}) => new Promise((resolve, reject) => {
 const createHtml = (renderProps, LayoutComponent) => co(function* () {
 
     const { components, params } = renderProps;
-    //const component = components[components.length - 1].WrappedComponent;
     const store = createStore(reducers);
-
-    const _actions = {};
-    for (let actionName of Object.keys(actions)) {
-        _actions[actionName] = (...args) => {
-            return actions[actionName](...args)(store.dispatch, store.getState);
-        }
-    }
+    const actions = createActions(store);
 
     let title = "Weblog JS";
     let data = {};
@@ -55,7 +49,7 @@ const createHtml = (renderProps, LayoutComponent) => co(function* () {
     {
         if (component && component.prepareForPreRendering)
         {
-            data = yield component.prepareForPreRendering({store, actions:_actions, params, parentData: data});
+            data = yield component.prepareForPreRendering({store, actions, params, parentData: data});
 
             if (data && data.title) {
                 title = data.title;
@@ -66,7 +60,7 @@ const createHtml = (renderProps, LayoutComponent) => co(function* () {
     let html = ReactDOMServer.renderToStaticMarkup(
         <LayoutComponent title={title} preloadedState={store.getState()}>
             <Provider store={store}>
-                <RoutingContext {...renderProps} />
+                <RouterContext {...renderProps} />
             </Provider>
         </LayoutComponent>
     );
@@ -87,13 +81,13 @@ export default class WebpageRouter {
 
     _handler(request, response) {
         co(function* () {
-            const location = this._basePath + request.url;
+            const location = url.resolve(this._basePath, request.url);
 
             let LayoutComponent = AdminHtmlLayout;
-            let result = yield routing({routes: adminRoutes, location});
+            let result = yield routing({routes: adminRoutes(), location});
 
             if (result.statusCode === NOT_FOUND) {
-                result = yield routing({routes: publicRoutes, location});
+                result = yield routing({routes: publicRoutes(), location});
                 LayoutComponent = PublicHtmlLayout;
             }
 

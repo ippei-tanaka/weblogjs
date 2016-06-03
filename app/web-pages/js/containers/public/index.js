@@ -7,22 +7,29 @@ import PublicPagination from '../../components/public-pagination';
 
 class PublicIndex extends Component {
 
-    static prepareForPreRendering({actions, params}) {
-        return co(function* () {
-            const { category, page } = params;
-            yield actions.loadPublicPosts({category, page});
-            yield actions.loadPublicCategories();
-        });
+    static prepareForPreRendering({params, actions, store}) {
+        return this._loadContent({params, actions, store});
     }
 
-    /*
-    componentDidMount() {
-        const { params, loadPublicPosts, loadPublicCategories } = this.props;
-        const { category, page } = params;
-        loadPublicPosts({category, page});
-        loadPublicCategories();
+    static onEnterRoute({params, actions, store}) {
+        this._loadContent({params, actions, store})
+            .then(({title}) => {
+                document.title = title;
+            });
     }
-    */
+
+    static _loadContent({params, actions, store}) {
+        return co(function* () {
+            yield actions.loadPublicFrontBlog();
+            yield actions.loadPublicPosts(params);
+            yield actions.loadPublicCategories();
+            const state = store.getState();
+            const blogName = state.publicBlog.get('name');
+            const categoryName = params.category ? params.category + ' - ' : '';
+
+            return {title: `${categoryName}${blogName}`}
+        });
+    }
 
     render() {
         const { publicPost, publicCategory, params } = this.props;
@@ -67,13 +74,11 @@ class PublicIndex extends Component {
         return `${categoryParam}${pageParam}/`;
     }
 
-    static get contextTypes() {
+    static get contextTypes () {
         return {
-            history: React.PropTypes.object,
-            location: React.PropTypes.object
+            router: React.PropTypes.object.isRequired
         };
     };
-
 }
 
 export default connect(
