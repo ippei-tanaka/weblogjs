@@ -1,35 +1,25 @@
 import React from 'react';
 
+const wrapOnChange = (onChange) => {
+    return (e) => {
+        onChange(e.target.value);
+    };
+};
 
-class Input extends React.Component {
-
-    render() {
-        return <input id={this.props.id}
-                      type={this.props.type}
-                      value={this.props.value}
-                      className={this.props.className}
-                      autoFocus={this.props.autoFocus}
-                      onChange={this.wrapOnChange.call(this, this.props.onChange)}/>;
-    }
-
-    wrapOnChange(onChange) {
-        return (e) => {
-            onChange(e.target.value);
-        };
-    }
-
-    static get defaultProps() {
-        return {
-            id: null,
-            type: "text",
-            className: "module-field-text",
-            value: null,
-            autoFocus: false,
-            onChange: function () {
-            }
-        }
-    }
-
-}
+const Input = ({
+    id = null,
+    type = "text",
+    className = "module-field-text",
+    value = "",
+    autoFocus = false,
+    onChange = () => {}
+    }) => (
+    <input id={id}
+           type={type}
+           value={value}
+           className={className}
+           autoFocus={autoFocus}
+           onChange={wrapOnChange(onChange)}/>
+);
 
 export default Input;

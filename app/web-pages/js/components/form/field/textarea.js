@@ -1,33 +1,23 @@
 import React from 'react';
 
-
-class Textarea extends React.Component {
-
-    render() {
-        return <textarea id={this.props.id}
-                         value={this.props.value}
-                         className={this.props.className}
-                         autoFocus={this.props.autoFocus}
-                         onChange={this.wrapOnChange.call(this, this.props.onChange)}/>;
-    }
-
-    wrapOnChange(onChange) {
-        return (e) => {
-            onChange(e.target.value);
-        };
-    }
-
-}
-
-
-Textarea.defaultProps = {
-    id: null,
-    className: "module-textarea",
-    value: null,
-    autoFocus: false,
-    onChange: function () {
-    }
+const wrapOnChange = (onChange) => {
+    return (e) => {
+        onChange(e.target.value);
+    };
 };
 
+const Textarea = ({
+    id = null,
+    className = "module-textarea",
+    value = "",
+    autoFocus = false,
+    onChange = () => {}
+    }) => (
+    <textarea id={id}
+              value={value}
+              className={className}
+              autoFocus={autoFocus}
+              onChange={wrapOnChange(onChange)}/>
+);
 
 export default Textarea;

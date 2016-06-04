@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function Title({children}) {
-    return (
-        <h2 className="m-dte-title">
-            {children}
-        </h2>
-    )
-};
+const Title = ({children}) => (
+    <h2 className="m-dte-title">
+        {children}
+    </h2>
+);
+
+export default Title;
