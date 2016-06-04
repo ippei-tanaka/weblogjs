@@ -68,12 +68,6 @@ class SettingEditor extends Component {
         e.preventDefault();
         this.props.editSetting(this.state.actionId, {data: this.state.values});
     }
-
-    static get contextTypes() {
-        return {
-            history: React.PropTypes.object
-        };
-    };
 }
 
 export default connect(

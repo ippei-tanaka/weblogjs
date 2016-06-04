@@ -61,14 +61,14 @@ class CategoryAdder extends Component {
     }
 
     _goToListPage() {
-        this.context.history.pushState(null, `${ADMIN_DIR}/categories`);
+        this.context.router.push(`${ADMIN_DIR}/categories`);
     }
 
     static get contextTypes() {
         return {
-            history: React.PropTypes.object
+            router: React.PropTypes.object.isRequired
         };
-    };
+    }
 
 }
 

@@ -59,18 +59,18 @@ class CategoryDeleter extends Component {
     }
 
     _goToListPage() {
-        this.context.history.pushState(null, `${ADMIN_DIR}/categories`);
+        this.context.router.push(`${ADMIN_DIR}/categories`);
     }
 
-    static get contextTypes () {
+    static get contextTypes() {
         return {
-            history: React.PropTypes.object
+            router: React.PropTypes.object.isRequired
         };
-    };
+    }
 
     static get propTypes() {
         return {
-            params: React.PropTypes.object
+            params: React.PropTypes.object.isRequired
         };
     }
 

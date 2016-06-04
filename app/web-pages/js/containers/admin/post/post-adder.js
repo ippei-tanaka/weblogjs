@@ -71,14 +71,14 @@ class PostAdder extends Component {
     }
 
     _goToListPage() {
-        this.context.history.pushState(null, `${ADMIN_DIR}/posts`);
+        this.context.router.push(`${ADMIN_DIR}/posts`);
     }
 
     static get contextTypes() {
         return {
-            history: React.PropTypes.object
+            router: React.PropTypes.object.isRequired
         };
-    };
+    }
 
 }
 

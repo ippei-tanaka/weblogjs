@@ -61,14 +61,14 @@ class BlogAdder extends Component {
     }
 
     _goToListPage() {
-        this.context.history.pushState(null, `${ADMIN_DIR}/blogs`);
+        this.context.router.push(`${ADMIN_DIR}/blogs`);
     }
 
     static get contextTypes() {
         return {
-            history: React.PropTypes.object
+            router: React.PropTypes.object.isRequired
         };
-    };
+    }
 
 }
 

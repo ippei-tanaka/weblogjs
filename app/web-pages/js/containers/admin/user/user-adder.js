@@ -62,14 +62,14 @@ class UserAdder extends Component {
     }
 
     _goToListPage() {
-        this.context.history.pushState(null, `${ADMIN_DIR}/users`);
+        this.context.router.push(`${ADMIN_DIR}/users`);
     }
 
     static get contextTypes() {
         return {
-            history: React.PropTypes.object
+            router: React.PropTypes.object.isRequired
         };
-    };
+    }
 
 }
 

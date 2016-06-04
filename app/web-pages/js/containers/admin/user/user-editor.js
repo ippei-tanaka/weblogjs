@@ -59,30 +59,30 @@ class UserEditor extends Component {
         );
     }
 
-    _onChange (field, value) {
+    _onChange(field, value) {
         this.setState(state => {
             state.values[field] = value;
         });
     }
 
-    _onSubmit () {
+    _onSubmit() {
         const { params : {id}, editUser } = this.props;
         editUser(this.state.actionId, {id, data: this.state.values});
     }
 
     _goToListPage() {
-        this.context.history.pushState(null, `${ADMIN_DIR}/users`);
+        this.context.router.push(`${ADMIN_DIR}/users`);
     }
 
-    static get contextTypes () {
+    static get contextTypes() {
         return {
-            history: React.PropTypes.object
+            router: React.PropTypes.object.isRequired
         };
-    };
+    }
 
     static get propTypes() {
         return {
-            params: React.PropTypes.object
+            params: React.PropTypes.object.isRequired
         };
     }
 
