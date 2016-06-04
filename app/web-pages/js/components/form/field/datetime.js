@@ -2,233 +2,219 @@ import React from 'react';
 import moment from 'moment';
 import classnames from 'classnames';
 
+const listOfMonths = Object.freeze([
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+]);
 
-class Datetime extends React.Component {
+/*
+const listOfOffsets = Object.freeze([
+    "-12:00",
+    "-11:00",
+    "-10:00",
+    "-09:30",
+    "-09:00",
+    "-08:00",
+    "-07:00",
+    "-06:00",
+    "-05:00",
+    "-04:30",
+    "-04:00",
+    "-03:30",
+    "-03:00",
+    "-02:00",
+    "-01:00",
+    "+00:00",
+    "+01:00",
+    "+02:00",
+    "+03:00",
+    "+03:30",
+    "+04:00",
+    "+04:30",
+    "+05:00",
+    "+05:30",
+    "+05:45",
+    "+06:00",
+    "+06:30",
+    "+07:00",
+    "+08:00",
+    "+08:30",
+    "+08:45",
+    "+09:00",
+    "+09:30",
+    "+10:00",
+    "+10:30",
+    "+11:00",
+    "+12:00",
+    "+12:45",
+    "+13:00",
+    "+14:00"
+]);
+*/
 
-    constructor(props) {
-        super(props);
+const range = (start, end, func) => {
+    const results = [];
 
-        this.state = {
-            year: "",
-            month: "",
-            date: "",
-            hour: "",
-            minute: "",
-            utcOffset: ""
-        };
+    for (let i = start; i <= end; i++) {
+        results.push(func(i));
     }
 
-    componentDidMount() {
-        this.setDateTimeState(this.props.value);
-    }
+    return results;
+};
 
-    componentWillReceiveProps(newProps) {
-        this.setDateTimeState(newProps.value);
-    }
+const onValueChanged = (field, onChange, originalValue) =>
+{
+    return (event) =>
+    {
+        const value = new Date(originalValue);
 
-    render() {
-        return (
-            <div className={classnames(this.props.className, "element-datetime-field")}>
-                <fieldset className="e-dtf-field-set">
-                    <label className="e-dtf-select-container">
-                        <select className="e-dtf-select" value={this.state.month}
-                                id={this.props.id}
-                                autoFocus={this.props.autoFocus}
-                                onChange={this.onValueChanged.call(this, 'month')}>
-                            {this.listOfMonths.map((name, index) =>
-                            <option value={index + 1} key={index + 1}>{name}</option>
-                                )}
-                        </select>
-                        <small className="e-dtf-label">Month</small>
-                    </label>
+        value.setSeconds(0);
+        value.setMilliseconds(0);
 
-                    <label className="e-dtf-select-container">
-                        <select className="e-dtf-select" value={this.state.date}
-                                onChange={this.onValueChanged.call(this, 'date')}>
-                            {this.range(1, 31, i =>
-                            <option value={i} key={i}>{i}</option>
-                                )}
-                        </select>
-                        <small className="e-dtf-label">Date</small>
-                    </label>
-
-                    <label className="e-dtf-select-container">
-                        <select className="e-dtf-select" value={this.state.year}
-                                onChange={this.onValueChanged.call(this, 'year')}>
-                            {this.range(1970, 2100, i =>
-                            <option value={i} key={i}>{i}</option>
-                                )}
-                        </select>
-                        <small className="e-dtf-label">Year</small>
-                    </label>
-                </fieldset>
-
-                <fieldset className="e-dtf-field-set">
-                    <label className="e-dtf-select-container">
-                        <select className="e-dtf-select" value={this.state.hour}
-                                onChange={this.onValueChanged.call(this, 'hour')}>
-                            {this.range(0, 23, i =>
-                            <option value={i} key={i}>{i}</option>
-                                )}
-                        </select>
-                        <small className="e-dtf-label">Hour</small>
-                    </label>
-                    <span className="e-dtf-separator">:</span>
-                    <label className="e-dtf-select-container">
-                        <select className="e-dtf-select" value={this.state.minute}
-                                onChange={this.onValueChanged.call(this, 'minute')}>
-                            {this.range(0, 59, i =>
-                            <option value={i} key={i}>{i}</option>
-                                )}
-                        </select>
-                        <small className="e-dtf-label">Minute</small>
-                    </label>
-                </fieldset>
-
-                <fieldset className="e-dtf-field-set">
-                    <label className="e-dtf-select-container">
-                        <select className="e-dtf-select"
-                                value={this.state.utcOffset}
-                                disabled="true">
-                            {this.listOfOffsets.map((offset, index) =>
-                            <option value={offset} key={index}>{offset}</option>
-                                )}
-                        </select>
-                        <small className="e-dtf-label">UTC Offset</small>
-                    </label>
-                </fieldset>
-            </div>
-        );
-    }
-
-
-    get formats() {
-        return {
-            year: "YYYY",
-            month: "M",
-            date: "D",
-            hour: "H",
-            minute: "m",
-            utcOffset: "Z"
+        switch (field) {
+            case 'year':
+                value.setFullYear(event.target.value);
+                break;
+            case 'month':
+                value.setMonth(event.target.value - 1);
+                break;
+            case 'date':
+                value.setDate(event.target.value);
+                break;
+            case 'hours':
+                value.setHours(event.target.value);
+                break;
+            case 'minutes':
+                value.setMinutes(event.target.value);
+                break;
+            default:
+                break;
         }
-    }
 
-    setDateTimeState(dateTimeString) {
-        var thisMoment = moment(dateTimeString);
-        var newState = {};
-
-        Object.keys(this.formats).forEach(key => {
-            newState[key] = thisMoment.format(this.formats[key]);
-        });
-
-        this.setState(newState);
-    }
-
-    buildDateFromState() {
-
-        var thisMoment = moment({
-            year: this.state.year,
-            month: this.state.month - 1,
-            date: this.state.date,
-            hour: this.state.hour,
-            minute: this.state.minute,
-            second: 0
-        });
-
-        return thisMoment.toDate();
-    }
-
-    onValueChanged(field) {
-        return e => {
-            var obj = {};
-            obj[field] = e.target.value.trim();
-            this.setState(obj, () => {
-                this.props.onChange(this.buildDateFromState());
-            });
-        };
-    }
-
-    range(start, end, func) {
-        var results = [];
-        for (var i = start; i <= end; i++) {
-            results.push(func(i));
-        }
-        return results;
-    }
-
-    get listOfMonths() {
-        return [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-        ];
-    }
-
-    get listOfOffsets() {
-        return [
-            "-12:00",
-            "-11:00",
-            "-10:00",
-            "-09:30",
-            "-09:00",
-            "-08:00",
-            "-07:00",
-            "-06:00",
-            "-05:00",
-            "-04:30",
-            "-04:00",
-            "-03:30",
-            "-03:00",
-            "-02:00",
-            "-01:00",
-            "+00:00",
-            "+01:00",
-            "+02:00",
-            "+03:00",
-            "+03:30",
-            "+04:00",
-            "+04:30",
-            "+05:00",
-            "+05:30",
-            "+05:45",
-            "+06:00",
-            "+06:30",
-            "+07:00",
-            "+08:00",
-            "+08:30",
-            "+08:45",
-            "+09:00",
-            "+09:30",
-            "+10:00",
-            "+10:30",
-            "+11:00",
-            "+12:00",
-            "+12:45",
-            "+13:00",
-            "+14:00"
-        ]
-    }
-
-}
-
-
-Datetime.defaultProps = {
-    id: null,
-    className: "module-datetime",
-    value: null,
-    autoFocus: false,
-    onChange: function () {
+        onChange(value);
     }
 };
 
+/*
+const createUtcOffsetString = (utcOffset) => {
 
-export default Datetime;
+    const sign = utcOffset >= 0 ? "+" : "-";
+    const hours = Math.abs(Math.floor(utcOffset));
+    const hourString = ('0' + hours).slice(-2);
+    const minutes = 60 * (Math.abs(utcOffset) - Math.abs(Math.floor(utcOffset)));
+    const minuteString = ('0' + minutes).slice(-2);
+
+    return `${sign}${hourString}:${minuteString}`;
+
+};
+*/
+
+const DateTime = ({
+    id = null,
+    className = "module-datetime",
+    value = null,
+    autoFocus = false,
+    onChange = () => {}
+    }) => {
+
+    if (value === null)
+        throw new Error("The value can't be empty.");
+
+    if (!(value instanceof Date))
+        throw new Error("The value for DateTime has to be a Date object.");
+
+    const year = value.getFullYear();
+    const month = value.getMonth() + 1;
+    const date = value.getDate();
+    const hours = value.getHours();
+    const minutes = value.getMinutes();
+    //const utcOffset = -1 * (value.getTimezoneOffset() / 60);
+    //const utcOffsetString = createUtcOffsetString(utcOffset);
+
+    return (
+        <div className={classnames(className, "element-datetime-field")}>
+            <fieldset className="e-dtf-field-set">
+                <label className="e-dtf-select-container">
+                    <select className="e-dtf-select" value={month}
+                            id={id}
+                            autoFocus={autoFocus}
+                            onChange={onValueChanged('month', onChange, value)}>
+                        {listOfMonths.map((name, index) =>
+                            <option value={index + 1} key={index + 1}>{name}</option>
+                        )}
+                    </select>
+                    <small className="e-dtf-label">Month</small>
+                </label>
+
+                <label className="e-dtf-select-container">
+                    <select className="e-dtf-select" value={date}
+                            onChange={onValueChanged('date', onChange, value)}>
+                        {range(1, 31, i =>
+                            <option value={i} key={i}>{i}</option>
+                        )}
+                    </select>
+                    <small className="e-dtf-label">Date</small>
+                </label>
+
+                <label className="e-dtf-select-container">
+                    <select className="e-dtf-select" value={year}
+                            onChange={onValueChanged('year', onChange, value)}>
+                        {range(1970, 2100, i =>
+                            <option value={i} key={i}>{i}</option>
+                        )}
+                    </select>
+                    <small className="e-dtf-label">Year</small>
+                </label>
+            </fieldset>
+
+            <fieldset className="e-dtf-field-set">
+                <label className="e-dtf-select-container">
+                    <select className="e-dtf-select" value={hours}
+                            onChange={onValueChanged('hours', onChange, value)}>
+                        {range(0, 23, i =>
+                            <option value={i} key={i}>{('0' + i).slice(-2)}</option>
+                        )}
+                    </select>
+                    <small className="e-dtf-label">Hours</small>
+                </label>
+                <span className="e-dtf-separator">:</span>
+                <label className="e-dtf-select-container">
+                    <select className="e-dtf-select" value={minutes}
+                            onChange={onValueChanged('minutes', onChange, value)}>
+                        {range(0, 59, i =>
+                            <option value={i} key={i}>{('0' + i).slice(-2)}</option>
+                        )}
+                    </select>
+                    <small className="e-dtf-label">Minutes</small>
+                </label>
+            </fieldset>
+
+            {/*
+            <fieldset className="e-dtf-field-set">
+                <label className="e-dtf-select-container">
+                    <select className="e-dtf-select"
+                            value={utcOffsetString}
+                            disabled="true">
+                        {listOfOffsets.map((offset, index) =>
+                            <option value={offset} key={index}>{offset}</option>
+                        )}
+                    </select>
+                    <small className="e-dtf-label">UTC Offset</small>
+                </label>
+            </fieldset>
+            */}
+        </div>
+    )
+};
+
+export default DateTime;

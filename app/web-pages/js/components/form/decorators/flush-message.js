@@ -1,15 +1,11 @@
 import React from 'react';
 
-export default class FlushMessage extends React.Component {
+const FlushMessage = ({children}) => children && (
+    <div className="m-dte-field-container">
+        <div className="m-dte-flush-message">
+            {children}
+        </div>
+    </div>
+);
 
-    render () {
-        return this.props.children ? (
-            <div className="m-dte-field-container">
-                <div className="m-dte-flush-message">
-                    {this.props.children}
-                </div>
-            </div>
-        ) : null;
-    }
-
-}
+export default FlushMessage;

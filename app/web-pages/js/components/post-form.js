@@ -78,7 +78,7 @@ export default function PostForm({
 
             <FieldSet label="Published Date"
                       error={errors.published_date}>
-                <Datetime value={values.published_date}
+                <Datetime value={new Date(values.published_date)}
                           onChange={_onChange("published_date")}/>
             </FieldSet>
 

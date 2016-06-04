@@ -108,16 +108,15 @@ class TagList extends React.Component {
             });
         }
     }
-}
 
-
-TagList.defaultProps = {
-    id: null,
-    value: null,
-    autoFocus: false,
-    onChange: function () {
+    static get defaultProps() {
+        return {
+            id: null,
+            value: "",
+            autoFocus: false,
+            onChange: () => {}
+        }
     }
-};
-
+}
 
 export default TagList;

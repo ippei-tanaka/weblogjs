@@ -1,35 +1,27 @@
 import React from 'react';
 
 
-class Checkbox extends React.Component {
-
-    render() {
-        return <label>
-            <input
-                id={this.props.id}
-                type="checkbox"
-                name={this.props.name}
-                checked={this.props.value}
-                autoFocus={this.props.autoFocus}
-                className={this.props.className}
-                onChange={this.props.onChange}
-            />
-            <span>
-                {this.props.label}
-            </span>
-        </label>
-    }
-
-}
-
-Checkbox.defaultProps = {
-    id: null,
-    name: null,
-    value: false,
-    className: "module-checkbox",
-    autoFocus: false,
-    onChange: function () {
-    }
-};
+const Checkbox = ({
+    id = null,
+    name = null,
+    label = null,
+    value = false,
+    className = "module-checkbox",
+    autoFocus = false,
+    onChange = () => {}
+    }) => (
+    <label>
+        <input
+            id={id}
+            type="checkbox"
+            name={name}
+            checked={value}
+            autoFocus={autoFocus}
+            className={className}
+            onChange={onChange}
+        />
+        {label && <span>{label}</span>}
+    </label>
+);
 
 export default Checkbox;

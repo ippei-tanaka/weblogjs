@@ -1,25 +1,13 @@
 import React from 'react';
 
-export default class ErrorMessage extends React.Component {
+const ErrorMessage = ({error = []}) => error.length > 0 && (
+    <ul>
+        {error.map((error, index) =>
+            <li className="module-field-error-message" key={index}>
+                {error.message}
+            </li>
+        )}
+    </ul>
+);
 
-    render () {
-        return (
-            this.props.error.length > 0 ? (
-                <ul>
-                    {this.props.error.map((error, index) =>
-                        <li className="module-field-error-message" key={index}>
-                            {error.message}
-                        </li>
-                    )}
-                </ul>
-            ) : null
-        );
-    }
-
-    static get defaultProps() {
-        return {
-            error: []
-        }
-    }
-
-}
+export default ErrorMessage;
