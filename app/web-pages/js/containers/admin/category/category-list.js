@@ -36,13 +36,13 @@ class CategoryList extends Component {
             created_date: {
                 label: "Created Date",
                 stringify: value =>
-                    value ? Moment(value).format("YYYY-MM-DD HH:mm Z") : this.noneElement
+                    value ? Moment(value).format("YYYY-MM-DD HH:mm") : this.noneElement
             },
 
             updated_date: {
                 label: "Updated Date",
                 stringify: value =>
-                    value ? Moment(value).format("YYYY-MM-DD HH:mm Z") : this.noneElement
+                    value ? Moment(value).format("YYYY-MM-DD HH:mm") : this.noneElement
             }
         }
     }

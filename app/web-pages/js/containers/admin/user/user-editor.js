@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import UserForm from '../../../components/user-form';
 import actions from '../../../actions';
 import { connect } from 'react-redux';
@@ -50,8 +49,8 @@ class UserEditor extends Component {
                           onSubmit={this._onSubmit.bind(this)}
                           onClickBackButton={this._goToListPage.bind(this)}
                           submitButtonLabel="Update"
+                          pathToPasswordForm={`${ADMIN_DIR}/users/${id}/password-editor`}
                 />
-                <div><Link to={`${ADMIN_DIR}/users/${id}/password-editor`}>Change the password</Link></div>
             </div>
         ) : (
             <div className="module-data-editor">
