@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form } from './form';
 
 export default function UserForm({
@@ -9,7 +10,8 @@ export default function UserForm({
     onSubmit,
     onClickBackButton,
     passwordField,
-    submitButtonLabel
+    submitButtonLabel,
+    pathToPasswordForm
     }) {
 
     const _onChange = field => {
@@ -60,6 +62,12 @@ export default function UserForm({
                       className="module-button">
                     Back
                 </Button>
+                {pathToPasswordForm && (
+                    <Link className="module-button"
+                          to={pathToPasswordForm}>
+                        <i className="fa fa-key" /> Change the password
+                    </Link>
+                )}
             </ButtonList>
 
         </Form>

@@ -97,7 +97,6 @@ class PostList extends Component {
             is_draft: {
                 label: "Is Draft",
                 stringify: value => (value === true) ? "Yes" : "No"
-
             },
 
             created_date: {
