@@ -67,7 +67,7 @@ export default class SchemaModel {
     constructor(values) {
         this._pathModels = this._instantiatePathModelsWithValues(values);
         this._initialRawValues = values;
-        this._additionalRawValues = {};
+        this._rawUpdatedValues = {};
         this._rawValues = values;
         this._updated = false;
     }
@@ -97,7 +97,7 @@ export default class SchemaModel {
 
     setValues(values) {
         this._rawValues = Object.assign({}, this._rawValues, values);
-        this._additionalRawValues = Object.assign({}, this._additionalRawValues, values);
+        this._rawUpdatedValues = Object.assign({}, this._rawUpdatedValues, values);
         this._pathModels = this._instantiatePathModelsWithValues(this._rawValues);
         this._updated = true;
     }
@@ -120,7 +120,7 @@ export default class SchemaModel {
         for (let pathName of Object.keys(this._pathModels)) {
             const pathModel = this._pathModels[pathName];
 
-            if (this._updated && this._additionalRawValues[pathName] === undefined)
+            if (this._updated && this._rawUpdatedValues[pathName] === undefined)
                 continue;
 
             try {
@@ -139,7 +139,7 @@ export default class SchemaModel {
             if (!this._updated) {
                 return yield this.constructor._schema._preCreate(this.values, this._rawValues);
             } else {
-                return yield this.constructor._schema._preUpdate(this.values, this._rawValues, this._initialRawValues, this._additionalRawValues);
+                return yield this.constructor._schema._preUpdate(this.values, this._rawValues, this._initialRawValues, this._rawUpdatedValues);
             }
         }.bind(this)).catch((error) => {
             throw new ValidationErrorMap(error);
