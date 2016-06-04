@@ -4,6 +4,7 @@ import { Route, IndexRoute } from 'react-router';
 import Index from "../containers/public/index";
 import Wrapper from "../containers/public/wrapper";
 import Single from "../containers/public/single";
+import NotFoundError from "../containers/public/not-found-error";
 
 
 const onEnterHandler = (_callback, store, actions) => {
@@ -33,6 +34,7 @@ export default ({store, actions} = {}) => {
             <Route path="post/:id/:slug"
                    component={Single}
                    onEnter={onEnterHandler(Single.onEnterRoute.bind(Single.WrappedComponent), store, actions)}/>
+            <Route path="*" component={NotFoundError} />
         </Route>
     )
 }

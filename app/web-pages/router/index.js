@@ -51,7 +51,8 @@ export default class WebpageRouter {
             const { statusCode, data } = result;
 
             if (statusCode === OK) {
-                createHtml(data, LayoutComponent).then((html) => response.status(OK).send(html));
+                createHtml(LayoutComponent, data)
+                    .then(({html, statusCode}) => response.status(statusCode).send(html));
             } else if (statusCode === FOUND) {
                 response.redirect(FOUND, data.pathname);
             } else if (statusCode === ERROR) {
