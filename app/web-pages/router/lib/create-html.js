@@ -6,8 +6,9 @@ import reducers from '../../js/reducers';
 import createStore from '../../js/stores/create-store';
 import createActions from '../../js/stores/create-actions';
 import co from 'co';
+import { OK } from './status-codes';
 
-export default (renderProps, LayoutComponent) => co(function* () {
+export default (LayoutComponent, renderProps) => co(function* () {
 
     const { components, params } = renderProps;
     const store = createStore(reducers);
@@ -15,6 +16,7 @@ export default (renderProps, LayoutComponent) => co(function* () {
 
     let title = "Weblog JS";
     let data = {};
+    let statusCode = OK;
 
     for (const component of components)
     {
@@ -24,6 +26,10 @@ export default (renderProps, LayoutComponent) => co(function* () {
 
             if (data && data.title) {
                 title = data.title;
+            }
+
+            if (data && data.statusCode) {
+                statusCode = data.statusCode;
             }
         }
     }
@@ -38,6 +44,6 @@ export default (renderProps, LayoutComponent) => co(function* () {
 
     html = "<!DOCTYPE html>" + html;
 
-    return html;
+    return {html, statusCode};
 
 }).catch(error => console.error(error.stack ? error.stack : error));

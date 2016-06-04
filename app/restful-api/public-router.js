@@ -186,9 +186,10 @@ const addRoutes = (router) => {
 
     // TODO write tests for this route
     router.get("/post/:id/", (request, response) => co(function* () {
-        const post = yield PostModel.findOne({_id: new ObjectID(request.params.id)});
+        let objctId = null;
+        try { objctId = new ObjectID(request.params.id); } catch (error) {}
+        const post = yield PostModel.findOne({_id: objctId});
         successHandler(response, post || {});
-
     }).catch(errorHandler(response)));
 
 
