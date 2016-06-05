@@ -75,18 +75,27 @@ export default class SchemaModel {
         const _values = {};
         const projection = this.constructor._schema.projection;
 
-        for (let pathName of Object.keys(this._pathModels)) {
+        for (let path of this.constructor._schema) {
+            let pathName = path.name;
 
             if (projection[pathName] === false) continue;
 
             const pathModel = this._pathModels[pathName];
-            const value = pathModel.value;
+            let value = undefined;
 
-            if (value === undefined) continue;
+            if (pathModel) {
+                value = pathModel.value;
+            }
 
-            _values[pathName] = value;
+            if (value === undefined && path.hasDefaultValue) {
+                value = path.defaultValue;
+            }
+
+            if (value !== undefined) {
+                _values[pathName] = value;
+            }
         }
-
+        
         return _values;
     }
 
