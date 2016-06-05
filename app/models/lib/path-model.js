@@ -12,15 +12,19 @@ class PathModel {
     }
 
     constructor (value) {
-        this.value = value;
+        this._value = value;
     }
 
     get value () {
-        return this._value;
-    }
+        let value;
 
-    set value (value) {
-        this._value = this._normalize(value);
+        try {
+            value = this._normalize(this._value);
+        } catch (error) {
+            value = undefined;
+        }
+
+        return value;
     }
 
     examine ({updated}) {
@@ -39,6 +43,12 @@ class PathModel {
 
         if (isEmpty) {
             return true;
+        }
+
+        try {
+            this._normalize(this._value);
+        } catch (error) {
+            throw [error];
         }
 
         const messages = [];
