@@ -919,7 +919,6 @@ describe('Restful API', function () {
                 });
             });
 
-            /*
             it('should get the required error message when updating the setting with an empty value', (done) => {
                 co(function* () {
                     let error = null;
@@ -930,14 +929,13 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.front_blog_id[0].message).to.equal('The front blog ID is required.');
+                    expect(error.body.front_blog_id[0].message).to.equal('A front blog ID is required.');
 
                     done();
                 }).catch((e) => {
                     done(e);
                 });
             });
-            */
 
         });
 
