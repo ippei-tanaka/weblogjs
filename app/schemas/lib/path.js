@@ -52,8 +52,17 @@ export default class Path {
     /**
      * @returns {boolean}
      */
-    get isRequired () {
-        return !!this._pathObj.required;
+    get isRequiredWhenCreated () {
+        const required = this._pathObj.required;
+        return required === true || (Array.isArray(required) && required.indexOf('created') !== -1);
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    get isRequiredWhenUpdated (){
+        const required = this._pathObj.required;
+        return required === true || (Array.isArray(required) && required.indexOf('updated') !== -1);
     }
 
     get requiredErrorMessageBuilder () {

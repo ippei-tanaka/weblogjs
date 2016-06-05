@@ -69,7 +69,6 @@ export default class SchemaModel {
         this._initialRawValues = values;
         this._rawUpdatedValues = {};
         this._rawValues = values;
-        this._updated = false;
     }
 
     get values() {
@@ -95,11 +94,15 @@ export default class SchemaModel {
         return this._rawValues;
     }
 
+    get updated () {
+        const idModel = this._pathModels._id;
+        return !!idModel && !!idModel.value;
+    }
+
     setValues(values) {
         this._rawValues = Object.assign({}, this._rawValues, values);
         this._rawUpdatedValues = Object.assign({}, this._rawUpdatedValues, values);
         this._pathModels = this._instantiatePathModelsWithValues(this._rawValues);
-        this._updated = true;
     }
 
     save() {
@@ -120,11 +123,8 @@ export default class SchemaModel {
         for (let pathName of Object.keys(this._pathModels)) {
             const pathModel = this._pathModels[pathName];
 
-            if (this._updated && this._rawUpdatedValues[pathName] === undefined)
-                continue;
-
             try {
-                pathModel.examine();
+                pathModel.examine({updated: this.updated});
             } catch (e) {
                 error[pathName] = e;
             }
@@ -136,7 +136,7 @@ export default class SchemaModel {
 
     _executeHooks() {
         return co(function* () {
-            if (!this._updated) {
+            if (!this.updated) {
                 return yield this.constructor._schema._preCreate(this.values, this._rawValues);
             } else {
                 return yield this.constructor._schema._preUpdate(this.values, this._rawValues, this._initialRawValues, this._rawUpdatedValues);
@@ -146,14 +146,14 @@ export default class SchemaModel {
         });
     }
 
-    _executeDbOperation (values) {
+    _executeDbOperation(values) {
         return co(function* () {
-            if (!this._updated) {
+            if (!this.updated) {
                 return yield this.constructor._operator.insertOne(values);
             } else {
                 return yield this.constructor._operator.updateOne({_id: values._id}, values);
             }
-        }.bind(this)).catch(function(error) {
+        }.bind(this)).catch(function (error) {
             if (error instanceof MongoError && error.code === 11000) {
                 const match = error.message.match(/\s[\w.]+\$([\w]+)_\d+\s.+\{.+:\s"(.+)"\s\}/);
                 const pathName = match[1];
