@@ -67,20 +67,20 @@ export default class Schema {
         return this._paths[pathName];
     }
 
-    _preCreate(doc, rowDoc) {
-        const _doc = deepcopy(doc);
+    _preCreate({values, rawValues, errorMap}) {
+        const _values = deepcopy(values);
 
-        _doc.created_date = new Date();
-        _doc.updated_date = null;
+        _values.created_date = new Date();
+        _values.updated_date = null;
 
-        return Promise.resolve(_doc);
+        return Promise.resolve({values: _values, errorMap});
     }
 
-    _preUpdate(doc, rowDoc, oldDoc, newValues) {
-        const _doc = deepcopy(doc);
+    _preUpdate({values, rawValues, rawInitialValues, rawUpdatedValues, errorMap}) {
+        const _values = deepcopy(values);
 
-        _doc.updated_date = new Date();
+        _values.updated_date = new Date();
 
-        return Promise.resolve(_doc);
+        return Promise.resolve({values: _values, errorMap});
     }
 }
