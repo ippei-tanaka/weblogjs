@@ -253,6 +253,31 @@ describe('Restful API', function () {
                 });
             });
 
+            it("should return proper error messages when the new password got a validation error", (done) => {
+                co(function* () {
+                    const { _id } = yield httpRequest.post(`${ADMIN_URL}/users`, testUser);
+                    let error;
+
+                    try {
+                        yield httpRequest.put(`${ADMIN_URL}/users/${_id}/password`, {
+                            password: "p ss wo r d",
+                            password_confirmed: "",
+                            old_password: "Wrong Pass"
+                        });
+                    } catch (e) {
+                        error = e;
+                    }
+
+                    expect(error.body.password[0].message).to.equal('Only alphabets, numbers and some symbols (#, !, @, %, &, *) are allowed for a password.');
+                    expect(error.body.password_confirmed[0].message).to.equal('The confirmed password is required.');
+                    expect(error.body.old_password[0].message).to.equal('The current password sent is not correct.');
+
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
             it("should not update a user's password if their old password is wrong", (done) => {
                 co(function* () {
 

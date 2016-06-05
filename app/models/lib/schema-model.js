@@ -94,7 +94,7 @@ export default class SchemaModel {
         return this._rawValues;
     }
 
-    get updated () {
+    get updated() {
         const idModel = this._pathModels._id;
         return !!idModel && !!idModel.value;
     }
@@ -107,10 +107,12 @@ export default class SchemaModel {
 
     save() {
         return co(function* () {
-            this._examine();
-            let values = yield this._executeHooks();
-            return yield this._executeDbOperation(values);
-        }.bind(this));
+            const errorMap = this._examine();
+            const ret = yield this._executeHooks(errorMap);
+            return yield this._executeDbOperation(ret);
+        }.bind(this)).catch((errorMap) => {
+            throw new ValidationErrorMap(errorMap);
+        });
     }
 
     toJSON() {
@@ -118,7 +120,7 @@ export default class SchemaModel {
     }
 
     _examine() {
-        const error = {};
+        const errorMap = {};
 
         for (let pathName of Object.keys(this._pathModels)) {
             const pathModel = this._pathModels[pathName];
@@ -126,28 +128,38 @@ export default class SchemaModel {
             try {
                 pathModel.examine({updated: this.updated});
             } catch (e) {
-                error[pathName] = e;
+                errorMap[pathName] = e;
             }
         }
 
-        if (Object.keys(error).length > 0)
-            throw new ValidationErrorMap(error);
+        return errorMap;
     }
 
-    _executeHooks() {
+    _executeHooks(errorMap) {
         return co(function* () {
             if (!this.updated) {
-                return yield this.constructor._schema._preCreate(this.values, this._rawValues);
+                return yield this.constructor._schema._preCreate({
+                    values: this.values,
+                    rawValues: this._rawValues,
+                    errorMap
+                });
             } else {
-                return yield this.constructor._schema._preUpdate(this.values, this._rawValues, this._initialRawValues, this._rawUpdatedValues);
+                return yield this.constructor._schema._preUpdate({
+                    values: this.values,
+                    rawValues: this._rawValues,
+                    rawInitialValues: this._initialRawValues,
+                    rawUpdatedValues: this._rawUpdatedValues,
+                    errorMap
+                });
             }
-        }.bind(this)).catch((error) => {
-            throw new ValidationErrorMap(error);
-        });
+        }.bind(this));
     }
 
-    _executeDbOperation(values) {
+    _executeDbOperation({values, errorMap}) {
         return co(function* () {
+            if (Object.keys(errorMap).length > 0)
+                throw errorMap;
+
             if (!this.updated) {
                 return yield this.constructor._operator.insertOne(values);
             } else {
@@ -158,10 +170,10 @@ export default class SchemaModel {
                 const match = error.message.match(/\s[\w.]+\$([\w]+)_\d+\s.+\{.+:\s"(.+)"\s\}/);
                 const pathName = match[1];
                 const value = match[2];
-                const errorMap = new ValidationErrorMap();
-                errorMap.setError(pathName, [this.constructor._schema.getPath(pathName).uniqueErrorMessageBuilder(value)]);
-                throw errorMap;
+                throw {[pathName]: [this.constructor._schema.getPath(pathName).uniqueErrorMessageBuilder(value)]};
             }
+
+            throw error;
         }.bind(this));
     }
 

@@ -120,64 +120,61 @@ class UserSchema extends Schema {
         return compareHashedStrings(plainString, hashedString);
     }
 
-    _preCreate(doc, rowDoc) {
+    _preCreate(arg) {
         const superFunc = super._preCreate.bind(this);
 
         return co(function* () {
-            const _doc = deepcopy(yield superFunc(doc, rowDoc));
-            _doc[HASHED_PASSWORD] = yield generateHash(rowDoc[PASSWORD]);
-            _doc[PASSWORD] = rowDoc[PASSWORD];
-            return _doc;
+            const ret = deepcopy(yield superFunc(arg));
+            const {rawValues} = arg;
+            ret.values[HASHED_PASSWORD] = yield generateHash(rawValues[PASSWORD]);
+            delete ret.values[PASSWORD];
+            return ret;
         });
     }
 
-    _preUpdate(doc, rowDoc, oldDoc, newValues) {
+    _preUpdate(arg) {
         const superFunc = super._preUpdate.bind(this);
 
         return co(function* () {
-            const _doc = deepcopy(yield superFunc(doc, rowDoc, oldDoc, newValues));
-            const errors = {};
+            const ret = deepcopy(yield superFunc(arg));
+            const {rawInitialValues, rawUpdatedValues} = arg;
 
-            if (newValues[PASSWORD_UPDATE]) {
-                if (!newValues.hasOwnProperty(PASSWORD) || !newValues[PASSWORD]) {
-                    errors[PASSWORD] = ["A new password is required."];
+            if (rawUpdatedValues[PASSWORD_UPDATE]) {
+                if (!rawUpdatedValues.hasOwnProperty(PASSWORD) || !rawUpdatedValues[PASSWORD]) {
+                    ret.errorMap[PASSWORD] = ["A new password is required."];
                 }
 
-                if (!newValues.hasOwnProperty(OLD_PASSWORD) || !newValues[OLD_PASSWORD]) {
-                    errors[OLD_PASSWORD] = ["The current password is required."];
+                if (!rawUpdatedValues.hasOwnProperty(OLD_PASSWORD) || !rawUpdatedValues[OLD_PASSWORD]) {
+                    ret.errorMap[OLD_PASSWORD] = ["The current password is required."];
                 }
 
-                if (!newValues.hasOwnProperty(PASSWORD_CONFIRMED) || !newValues[PASSWORD_CONFIRMED]) {
-                    errors[PASSWORD_CONFIRMED] = ["The confirmed password is required."];
+                if (!rawUpdatedValues.hasOwnProperty(PASSWORD_CONFIRMED) || !rawUpdatedValues[PASSWORD_CONFIRMED]) {
+                    ret.errorMap[PASSWORD_CONFIRMED] = ["The confirmed password is required."];
                 }
 
-                if (newValues.hasOwnProperty(PASSWORD_CONFIRMED)
-                    && newValues[PASSWORD_CONFIRMED] !== ""
-                    && newValues[PASSWORD] !== newValues[PASSWORD_CONFIRMED]) {
-                    errors[PASSWORD_CONFIRMED] = ['The confirmed password sent is not the same as the new password.'];
+                if (rawUpdatedValues.hasOwnProperty(PASSWORD_CONFIRMED)
+                    && rawUpdatedValues[PASSWORD_CONFIRMED] !== ""
+                    && rawUpdatedValues[PASSWORD] !== rawUpdatedValues[PASSWORD_CONFIRMED]) {
+                    ret.errorMap[PASSWORD_CONFIRMED] = ['The confirmed password sent is not the same as the new password.'];
                 }
 
-                if (newValues.hasOwnProperty(OLD_PASSWORD) && newValues[OLD_PASSWORD] !== "") {
-                    const result = yield this.compareHashedStrings(newValues[OLD_PASSWORD], oldDoc[HASHED_PASSWORD]);
+                if (rawUpdatedValues.hasOwnProperty(OLD_PASSWORD) && rawUpdatedValues[OLD_PASSWORD] !== "") {
+                    const result = yield this.compareHashedStrings(rawUpdatedValues[OLD_PASSWORD], rawInitialValues[HASHED_PASSWORD]);
                     if (!result) {
-                        errors[OLD_PASSWORD] = ["The current password sent is not correct."];
+                        ret.errorMap[OLD_PASSWORD] = ["The current password sent is not correct."];
                     }
                 }
 
-                if (Object.keys(errors).length === 0) {
-                    _doc[HASHED_PASSWORD] = yield generateHash(newValues[PASSWORD]);
+                if (Object.keys(ret.errorMap).length === 0) {
+                    ret.values[HASHED_PASSWORD] = yield generateHash(rawUpdatedValues[PASSWORD]);
                 }
             } else {
-                if (newValues.hasOwnProperty(PASSWORD)) {
-                    errors[PASSWORD] = ["The password can't be updated."];
+                if (rawUpdatedValues.hasOwnProperty(PASSWORD)) {
+                    ret.errorMap[PASSWORD] = ["The password can't be updated."];
                 }
             }
 
-            if (Object.keys(errors).length > 0) {
-                throw errors;
-            }
-
-            return _doc;
+            return ret;
         }.bind(this));
     }
 
