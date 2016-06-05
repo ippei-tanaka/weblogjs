@@ -943,7 +943,6 @@ describe('Restful API', function () {
                 });
             });
 
-            /*
             it('should return the setting with the default value', (done) => {
                 co(function* () {
                     const { _id } = yield httpRequest.post(`${ADMIN_URL}/blogs`, testBlog);
@@ -957,7 +956,6 @@ describe('Restful API', function () {
                     done(e);
                 });
             });
-            */
         });
 
     });

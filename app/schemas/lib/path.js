@@ -42,6 +42,14 @@ export default class Path {
         return this._pathObj.type;
     }
 
+    get hasDefaultValue () {
+        return this._pathObj.default_value !== undefined;
+    }
+
+    get defaultValue () {
+        return this._pathObj.default_value;
+    }
+
     /**
      * @returns {boolean}
      */
