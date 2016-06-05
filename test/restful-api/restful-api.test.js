@@ -213,6 +213,30 @@ describe('Restful API', function () {
                 });
             });
 
+            it("should not update a user's password if the new password isn't sent", (done) => {
+                co(function* () {
+                    let error;
+
+                    try {
+                        const { _id } = yield httpRequest.post(`${ADMIN_URL}/users`, testUser);
+                        yield httpRequest.put(`${ADMIN_URL}/users/${_id}/password`, {
+                            password: "",
+                            password_confirmed: "NewPassword@@@",
+                            old_password: testUser.password
+                        });
+                    } catch (e) {
+                        error = e;
+                    }
+
+                    expect(error.body.password[0].message).to.equal('A new password is required.');
+
+                    done();
+
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
             it("should update a user's password if the confirmed password and their old password is sent", (done) => {
                 co(function* () {
                     const { _id } = yield httpRequest.post(`${ADMIN_URL}/users`, testUser);
@@ -869,6 +893,26 @@ describe('Restful API', function () {
                     done(e);
                 });
             });
+
+            /*
+            it('should get the required error message when updating the setting with an empty value', (done) => {
+                co(function* () {
+                    let error = null;
+                    try {
+                        yield httpRequest.post(`${ADMIN_URL}/blogs`, testBlog);
+                        yield httpRequest.put(`${ADMIN_URL}/setting`, {front_blog_id: ""});
+                    } catch (e) {
+                        error = e;
+                    }
+
+                    expect(error.body.front_blog_id[0].message).to.equal('The front blog ID is required.');
+
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+            */
 
         });
 

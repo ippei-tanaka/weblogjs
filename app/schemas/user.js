@@ -20,7 +20,7 @@ const paths = {
     },
 
     password: {
-        required: true,
+        required: ['created'],
         type: Types.String,
         validate: function* (value) {
             const range = {min: 8, max: 16};

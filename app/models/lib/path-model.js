@@ -23,11 +23,16 @@ class PathModel {
         this._value = this._normalize(value);
     }
 
-    examine () {
+    examine ({updated}) {
 
         const isEmpty = this.constructor._checkIfEmpty(this._value);
 
-        if (isEmpty && this.constructor._path.isRequired)
+        if (isEmpty && !updated && this.constructor._path.isRequiredWhenCreated)
+        {
+            throw [this.constructor._path.requiredErrorMessageBuilder()];
+        }
+
+        if (isEmpty && updated && this.constructor._path.isRequiredWhenUpdated)
         {
             throw [this.constructor._path.requiredErrorMessageBuilder()];
         }
