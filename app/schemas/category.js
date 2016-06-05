@@ -28,7 +28,7 @@ const schema = new Schema('category', {
             }
 
             if (!validator.matches(value, /^[a-zA-Z0-9\-_]*$/)) {
-                yield `Only alphabets, numbers and some symbols (-, _) are allowed for a ${this.name}.`;
+                yield `Only alphabets, numbers and some symbols (-, _) are allowed for a ${this.displayName}.`;
             }
         }
     }

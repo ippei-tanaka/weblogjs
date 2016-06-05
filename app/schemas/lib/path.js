@@ -1,5 +1,5 @@
 const requiredErrorDefaultMessage = function () {
-    return `A ${this.displayName} is required.`;
+    return `The ${this.displayName} is required.`;
 };
 
 const uniqueErrorDefaultMessage = function (value) {
