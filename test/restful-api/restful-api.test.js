@@ -228,7 +228,7 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.password[0].message).to.equal('A new password is required.');
+                    expect(error.body.password[0].message).to.equal('The new password is required.');
 
                     done();
 
@@ -373,7 +373,7 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.name[0].message).to.equal('A name is required.');
+                    expect(error.body.name[0].message).to.equal('The name is required.');
 
                     done();
                 }).catch((e) => {
@@ -574,7 +574,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.posts_per_page[0].message).to.equal('A posts_per_page is required.');
+                    expect(error.body.posts_per_page[0].message).to.equal('The posts per page is required.');
                     done();
                 }).catch((e) => {
                     done(e);
@@ -612,7 +612,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.posts_per_page[0].message).to.equal('The posts_per_page, "test", is invalid.');
+                    expect(error.body.posts_per_page[0].message).to.equal('The posts per page, "test", is invalid.');
                     done();
                 }).catch((e) => {
                     done(e);
@@ -668,7 +668,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.posts_per_page[0].message).to.equal('A posts_per_page should be greater than 0.');
+                    expect(error.body.posts_per_page[0].message).to.equal('The posts per page should be greater than 0.');
                     done();
                 }).catch((e) => {
                     done(e);
@@ -910,7 +910,10 @@ describe('Restful API', function () {
             it('should set a blog to the setting', (done) => {
                 co(function* () {
                     const { _id } = yield httpRequest.post(`${ADMIN_URL}/blogs`, testBlog);
-                    yield httpRequest.put(`${ADMIN_URL}/setting`, {front_blog_id: _id});
+                    yield httpRequest.put(`${ADMIN_URL}/setting`, {
+                        front_blog_id: _id,
+                        posts_per_page: 10
+                    });
                     const setting = yield httpRequest.get(`${ADMIN_URL}/setting`);
                     expect(setting.front_blog_id).to.equal(_id);
                     done();
@@ -924,12 +927,15 @@ describe('Restful API', function () {
                     let error = null;
                     try {
                         yield httpRequest.post(`${ADMIN_URL}/blogs`, testBlog);
-                        yield httpRequest.put(`${ADMIN_URL}/setting`, {front_blog_id: ""});
+                        yield httpRequest.put(`${ADMIN_URL}/setting`, {
+                            front_blog_id: "",
+                            posts_per_page: 5
+                        });
                     } catch (e) {
                         error = e;
                     }
 
-                    expect(error.body.front_blog_id[0].message).to.equal('A front blog ID is required.');
+                    expect(error.body.front_blog_id[0].message).to.equal('The front blog ID is required.');
 
                     done();
                 }).catch((e) => {
@@ -937,6 +943,21 @@ describe('Restful API', function () {
                 });
             });
 
+            /*
+            it('should return the setting with the default value', (done) => {
+                co(function* () {
+                    const { _id } = yield httpRequest.post(`${ADMIN_URL}/blogs`, testBlog);
+                    yield httpRequest.put(`${ADMIN_URL}/setting`, {
+                        front_blog_id: _id
+                    });
+                    const setting = yield httpRequest.get(`${ADMIN_URL}/setting`);
+                    expect(setting.posts_per_page).to.equal(10);
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+            */
         });
 
     });

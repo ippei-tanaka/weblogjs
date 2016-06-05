@@ -11,7 +11,7 @@ const schema = new Schema('post', {
         validate: function* (value) {
             const range = {min:1, max: 200};
             if (!validator.isLength(value, range)) {
-                yield `A ${this.name} should be between ${range.min} and ${range.max} characters.`;
+                yield `A ${this.displayName} should be between ${range.min} and ${range.max} characters.`;
             }
         }
     },
@@ -23,7 +23,7 @@ const schema = new Schema('post', {
         validate: function* (value) {
             const range = {min:1, max: 200};
             if (!validator.isLength(value, range)) {
-                yield `A ${this.name} should be between ${range.min} and ${range.max} characters.`;
+                yield `A ${this.displayName} should be between ${range.min} and ${range.max} characters.`;
             }
 
             if (!validator.matches(value, /^[a-zA-Z0-9\-_]*$/)) {
@@ -38,7 +38,7 @@ const schema = new Schema('post', {
         validate: function* (value) {
             const range = {min:1, max: 30000};
             if (!validator.isLength(value, range)) {
-                yield `A ${this.name} should be between ${range.min} and ${range.max} characters.`;
+                yield `A ${this.displayName} should be between ${range.min} and ${range.max} characters.`;
             }
         }
     },

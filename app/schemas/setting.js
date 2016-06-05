@@ -13,6 +13,17 @@ const schema = new Schema('setting', {
                 yield `"${value}" is an invalid ID.`
             }
         }
+    },
+
+    posts_per_page: {
+        display_name: "posts per page",
+        type: Types.Integer,
+        default_value: 10,
+        validate: function* (value) {
+            if (value < 1) {
+                yield `The ${this.displayName} should be greater than 0.`;
+            }
+        }
     }
 
 });

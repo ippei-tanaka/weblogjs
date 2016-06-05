@@ -11,7 +11,7 @@ const schema = new Schema('blog', {
         validate: function* (value) {
             const range = {min:1, max: 200};
             if (!validator.isLength(value, range)) {
-                yield `A ${this.name} should be between ${range.min} and ${range.max} characters.`;
+                yield `A ${this.displayName} should be between ${range.min} and ${range.max} characters.`;
             }
         }
     },
@@ -24,7 +24,7 @@ const schema = new Schema('blog', {
         validate: function* (value) {
             const range = {min:1, max: 200};
             if (!validator.isLength(value, range)) {
-                yield `A ${this.name} should be between ${range.min} and ${range.max} characters.`;
+                yield `A ${this.displayName} should be between ${range.min} and ${range.max} characters.`;
             }
 
             if (!validator.matches(value, /^[a-zA-Z0-9\-_]*$/)) {
@@ -35,10 +35,11 @@ const schema = new Schema('blog', {
 
     posts_per_page: {
         required: true,
+        display_name: "posts per page",
         type: Types.Integer,
         validate: function* (value) {
             if (value < 1) {
-                yield `A ${this.name} should be greater than 0.`;
+                yield `The ${this.displayName} should be greater than 0.`;
             }
         }
     }

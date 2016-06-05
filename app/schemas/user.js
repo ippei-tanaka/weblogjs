@@ -141,7 +141,7 @@ class UserSchema extends Schema {
 
             if (rawUpdatedValues[PASSWORD_UPDATE]) {
                 if (!rawUpdatedValues.hasOwnProperty(PASSWORD) || !rawUpdatedValues[PASSWORD]) {
-                    ret.errorMap[PASSWORD] = ["A new password is required."];
+                    ret.errorMap[PASSWORD] = ["The new password is required."];
                 }
 
                 if (!rawUpdatedValues.hasOwnProperty(OLD_PASSWORD) || !rawUpdatedValues[OLD_PASSWORD]) {
