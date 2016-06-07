@@ -21,6 +21,7 @@
     "url": "https://github.com/ippei-tanaka/weblogjs.git"
   },
   "license": "MIT",
+  "bin": "./bin/weblogjs",
   "dependencies": {
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-builtin-extend": "^1.1.0",
