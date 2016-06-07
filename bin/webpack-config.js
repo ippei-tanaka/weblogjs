@@ -1,17 +1,17 @@
 import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import { getEnv } from './env-variables';
+import { getEnv } from '../env-variables';
 
 const ENV = getEnv();
 const WEBPACK_DEV_MODE = ENV.mode === 'webpack-dev-server';
 const WEBPACK_SERVER_PORT = ENV.webpack_server_port;
 const WEBPACK_SERVER_HOST = ENV.webpack_server_host;
 const BUNDLE_DIR = "bundle";
-const OUTPUT_DIR = path.resolve(__dirname, `./app/web-pages/static/${BUNDLE_DIR}`);
-const ADMIN_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/admin-browser.js");
-const PUBLIC_ENTRY_FILE = path.resolve(__dirname, "./app/web-pages/public-browser.js");
-const NODE_MODULE_DIR = path.resolve(__dirname, "./node_modules");
+const OUTPUT_DIR = path.resolve(__dirname, `../app/web-pages/static/${BUNDLE_DIR}`);
+const ADMIN_ENTRY_FILE = path.resolve(__dirname, "../app/web-pages/admin-browser.js");
+const PUBLIC_ENTRY_FILE = path.resolve(__dirname, "../app/web-pages/public-browser.js");
+const NODE_MODULE_DIR = path.resolve(__dirname, "../node_modules");
 
 const regPlugins = [
     new webpack.DefinePlugin({
