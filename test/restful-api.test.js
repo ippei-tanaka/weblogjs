@@ -1,5 +1,3 @@
-require('../babel-request');
-
 import co from 'co';
 import { expect } from 'chai';
 import httpRequest from '../utilities/http-request';
@@ -131,6 +129,25 @@ describe('Restful API', function () {
                     const { _id } = yield httpRequest.post(`${ADMIN_URL}/users`, testUser);
                     const user = yield httpRequest.get(`${ADMIN_URL}/users/${_id}`);
                     expect(user._id).to.equal(_id);
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
+            it('should return error messages if failing to create a new user', (done) => {
+                co(function* () {
+                    let errors;
+
+                    try {
+                        yield httpRequest.post(`${ADMIN_URL}/users`, {});
+                    } catch (e) {
+                        errors = e;
+                    }
+                    expect(errors.body.email[0].message).to.equal("The email is required.");
+                    expect(errors.body.password[0].message).to.equal("The password is required.");
+                    expect(errors.body.display_name[0].message).to.equal("The display name is required.");
+                    expect(errors.body.slug[0].message).to.equal("The slug is required.");
                     done();
                 }).catch((e) => {
                     done(e);
