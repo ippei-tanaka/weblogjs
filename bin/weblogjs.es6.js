@@ -57,7 +57,7 @@ envVariables.setEnv(options);
 const ENV = envVariables.getEnv();
 
 const getWebpackConfig = () =>
-    require(path.join(dir, '../webpack.config')).default;
+    require(path.join(dir, './webpack-config')).default;
 
 const runWebpack = () => {
     webpack(getWebpackConfig(), (err, stats) => {
