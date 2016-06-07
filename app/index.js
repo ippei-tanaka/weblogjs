@@ -1,6 +1,3 @@
-require('babel-register');
-require('babel-polyfill');
-
 import co from 'co';
 import WebServer from './server';
 import WebpageRouter from './web-pages/router';
