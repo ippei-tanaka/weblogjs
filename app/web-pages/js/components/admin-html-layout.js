@@ -1,6 +1,7 @@
 import React from "react";
-import WEBLOG_ENV from '../../../../env-variables';
+import { getEnv } from '../../../../env-variables';
 
+const WEBLOG_ENV = getEnv();
 const DEVELOPMENT_MODE = WEBLOG_ENV.mode === 'development';
 const PRODUCTION_MODE = WEBLOG_ENV.mode === 'production';
 const WP_DEV_SERVER_HOST = WEBLOG_ENV.webpack_server_host;
