@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, browserHistory } from 'react-router'
 import { Provider } from 'react-redux';
-import reducers from '../js/reducers';
-import createStore from './../js/stores/create-store';
-import adminRoutes from './../js/routers/admin-routes';
+import reducers from '../client-app/reducers';
+import createStore from '../client-app/stores/create-store';
+import adminRoutes from '../client-app/routers/admin-routes';
 
 require('./../sass/admin/main.scss');
 
