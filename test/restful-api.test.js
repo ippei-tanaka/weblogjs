@@ -1,10 +1,12 @@
-require('../../babel-request');
+require('../babel-request');
 
 import co from 'co';
 import { expect } from 'chai';
-import httpRequest from '../../utilities/http-request';
-import WeblogJS from '../../app';
-import WEBLOG_ENV from '../../env-variables';
+import httpRequest from '../utilities/http-request';
+import WeblogJS from '../app';
+import { getEnv } from '../env-variables';
+
+const WEBLOG_ENV = getEnv();
 
 const admin = Object.freeze(Object.assign({
     email: "ttt@ttt.com",

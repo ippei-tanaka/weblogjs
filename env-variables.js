@@ -1,8 +1,4 @@
-let ENV = process.env.WEBLOG_ENV || process.env.WEBLOG_WEBPACK_ENV;
-
-if (typeof ENV === 'string') {
-    ENV = JSON.parse(ENV.replace(/\^/g, '"'));
-}
+const variables = {};
 
 const defaultVariables = {
     mode: null,
@@ -14,7 +10,17 @@ const defaultVariables = {
     webpage_root: "/",
     admin_api_root: "/api",
     public_api_root: "/public-api",
-    session_secret: "huahui155HOUDSDe21"
+    session_secret: "huahui155HOUDSDe21",
+    webpack_server_host: null,
+    webpack_server_port: null
 };
 
-export default Object.assign({}, defaultVariables, ENV);
+export const setEnv = (_variables) => {
+    for (let key of Object.keys(_variables)) {
+        if (defaultVariables.hasOwnProperty(key)) {
+            variables[key] = _variables[key];
+        }
+    }
+};
+
+export const getEnv = () => Object.assign({}, defaultVariables, variables);
