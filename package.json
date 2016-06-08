@@ -4,6 +4,9 @@
   "description": "a library for weblogs",
   "main": "./app",
   "scripts": {
+    "build": "npm run build:clean && npm run build:server",
+    "build:clean": "./node_modules/.bin/rimraf lib",
+    "build:server": " ./node_modules/.bin/babel src --out-dir lib --ignore static,browser-entry",
     "init": "./bin/weblogjs --mode init",
     "development": "./bin/weblogjs --mode development --web_port 3001 --webpack_server_host localhost --webpack_server_port 8001",
     "webpack-dev-server": "./bin/weblogjs --mode webpack-dev-server --web_port 3001 --webpack_server_port 8001 ./node_modules/.bin/webpack-dev-server --inline --hot --port=8001 --host=localhost",
@@ -70,5 +73,8 @@
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1",
     "webpack-sources": "^0.1.2"
+  },
+  "devDependencies": {
+    "rimraf": "^2.5.2"
   }
 }

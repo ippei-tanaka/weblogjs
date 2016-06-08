@@ -11,7 +11,6 @@ import path from 'path';
 import url from 'url';
 import {OK, FOUND, NOT_FOUND, ERROR} from './lib/status-codes';
 
-const FAVICON_DIR = path.resolve(__dirname, '../favicons/favicon.ico');
 const STATIC_DIR = path.resolve(__dirname, '../static');
 
 const routing = ({routes, location}) => new Promise((resolve, reject) => {
@@ -70,10 +69,6 @@ export default class WebpageRouter {
 
     get router() {
         return this._router;
-    }
-
-    get faviconDir() {
-        return FAVICON_DIR;
     }
 
     get staticDir() {

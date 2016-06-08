@@ -1,6 +1,6 @@
 import React from "react";
 import Immutable from 'immutable';
-import { getEnv } from '../../../../env-variables';
+import { getEnv } from '../../../env-variables';
 
 const WEBLOG_ENV = getEnv();
 const DEVELOPMENT_MODE = WEBLOG_ENV.mode === 'development';
@@ -20,6 +20,7 @@ export default function PublicHtmlLayout({title, children, preloadedState}) {
             <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <link href="/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
+            <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
             { PRODUCTION_MODE ? <link href="/bundle/public-style.css" media="all" rel="stylesheet"/> : null }
             <title>{title}</title>
             { preloadedState ? <script dangerouslySetInnerHTML={{__html:`window.__PRELOADED_STATE__ = ${safeStringify(preloadedState)}`}}></script> : null }

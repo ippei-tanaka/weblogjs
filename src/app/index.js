@@ -7,7 +7,7 @@ import DbClient from './db/db-client';
 import DbSettingOperator from './db/db-setting-operator';
 import PassportManager from './passport-manager';
 import UserModel from './models/user-model';
-import { getEnv } from '../../env-variables';
+import { getEnv } from '../env-variables';
 
 const WEBLOG_ENV = getEnv();
 
