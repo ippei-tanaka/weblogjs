@@ -3,13 +3,13 @@
 var fs = require('fs');
 var path = require('path');
 var dir  = path.dirname(fs.realpathSync(__filename));
-var babelRCFile = fs.readFileSync(path.join(dir, '../.babelrc'));
+var babelRCFile = fs.readFileSync(path.join(dir, '../../.babelrc'));
 var babelRC = JSON.parse(babelRCFile);
 
 console.log("Loading Babel...");
 
-require(path.join(dir, '../node_modules/babel-register'))(babelRC);
-require(path.join(dir, '../node_modules/babel-polyfill'));
+require(path.join(dir, '../../node_modules/babel-register'))(babelRC);
+require(path.join(dir, '../../node_modules/babel-polyfill'));
 
 console.log("Interpreting JS files...");
 
