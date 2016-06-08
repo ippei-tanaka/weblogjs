@@ -11,7 +11,7 @@ import path from 'path';
 import url from 'url';
 import {OK, FOUND, NOT_FOUND, ERROR} from './lib/status-codes';
 
-const STATIC_DIR = path.resolve(__dirname, '../static');
+const STATIC_DIR = path.resolve(__dirname, "../../../client/static");
 
 const routing = ({routes, location}) => new Promise((resolve, reject) => {
     match({routes, location}, (error, redirectLocation, renderProps) => {

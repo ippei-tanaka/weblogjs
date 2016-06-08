@@ -8,9 +8,9 @@ const WEBPACK_DEV_MODE = ENV.mode === 'webpack-dev-server';
 const WEBPACK_SERVER_PORT = ENV.webpack_server_port;
 const WEBPACK_SERVER_HOST = ENV.webpack_server_host;
 const BUNDLE_DIR = "bundle";
-const OUTPUT_DIR = path.resolve(__dirname, `../app/web-pages/static/${BUNDLE_DIR}`);
-const ADMIN_ENTRY_FILE = path.resolve(__dirname, "../app/web-pages/browser-entry/admin-browser.js");
-const PUBLIC_ENTRY_FILE = path.resolve(__dirname, "../app/web-pages/browser-entry/public-browser.js");
+const OUTPUT_DIR = path.resolve(__dirname, `../client/static/${BUNDLE_DIR}`);
+const ADMIN_ENTRY_FILE = path.resolve(__dirname, "../client/browser-entry/admin-browser.js");
+const PUBLIC_ENTRY_FILE = path.resolve(__dirname, "../client/browser-entry/public-browser.js");
 const NODE_MODULE_DIR = path.resolve(__dirname, "../node_modules");
 
 const regPlugins = [
