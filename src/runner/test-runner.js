@@ -1,5 +1,3 @@
-import webpack from "webpack";
-import webpackConfig from './webpack.config';
 import Mocha from 'mocha';
 import fs from 'fs';
 import path from 'path';
