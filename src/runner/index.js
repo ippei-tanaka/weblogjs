@@ -3,17 +3,31 @@
 import { getEnv, setEnv } from '../env-variables';
 
 const options = {};
-const argsArr = process.argv;
-const command = argsArr[2];
+const argsArr = process.argv.slice(2);
+let command = null;
 
-// Parsing options
-argsArr.slice(3).forEach(function (arg, index) {
-    if (arg.indexOf("--") === 0) {
-        const key = arg.split("--")[1];
-        const value = argsArr[index + 1];
+// Parsing Options
+for (let i = 0; i < argsArr.length; i++)
+{
+    const arg = argsArr[i];
+
+    if (arg.indexOf("--") === 0)
+    {
+        const pairStr = arg.split("--")[1];
+
+        if (!pairStr) continue;
+
+        const pair = pairStr.split("=");
+        const key = pair[0];
+        const value = pair[1];
+
+        if (!key || !value) continue;
+
         options[key] = value;
+    } else {
+        command = arg;
     }
-});
+}
 
 switch (command) {
     case 'init':
@@ -31,19 +45,17 @@ switch (command) {
         options.webpack_server_host = options.webpack_server_host || "localhost";
         options.webpack_server_port = options.webpack_server_port || 8081;
         break;
-    case 'production':
-        options.mode = "production";
-        options.web_port = options.web_port || 3000;
-        break;
     case 'webpack':
-        options.mode = "production";
-        options.web_port = options.web_port || 3000;
+        options.mode = "webpack";
         break;
     case 'test':
         options.mode = "test";
         options.web_port = options.web_port || 3002;
         break;
+    case 'production':
     default:
+        options.mode = "production";
+        options.web_port = options.web_port || 80;
         break;
 }
 
@@ -52,10 +64,6 @@ setEnv(options);
 switch (command) {
     case 'init':
         require('./db-init-runner').run();
-        break;
-    case 'development':
-    case 'production':
-        require('./server-runner').run();
         break;
     case 'webpack':
         require('./webpack-runner').run();
@@ -66,7 +74,9 @@ switch (command) {
     case 'test':
         require('./test-runner').run();
         break;
+    case 'development':
+    case 'production':
     default:
-        process.exit();
+        require('./server-runner').run();
         break;
 }
