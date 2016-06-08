@@ -1,5 +1,4 @@
 import express from 'express';
-import favicon from 'serve-favicon';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -74,7 +73,6 @@ export default class WebServer {
         }
 
         if (this._webpageRouter) {
-            expressApp.use(favicon(this._webpageRouter.faviconDir));
             expressApp.use(express.static(this._webpageRouter.staticDir));
             expressApp.use(this._webpageRouter.basePath, this._webpageRouter.router);
         }
