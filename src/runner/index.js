@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { getEnv, setEnv } from '../env-variables';
 
 const options = {};
