@@ -1,6 +1,6 @@
 import WeblogJS from '../app';
 import co from 'co';
-import { getEnv } from '../env-variables';
+import { getEnv } from '../../env-variables';
 
 const WEBLOG_ENV = getEnv();
 const INIT = WEBLOG_ENV.mode === 'init';

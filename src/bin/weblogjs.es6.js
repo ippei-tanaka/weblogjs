@@ -5,7 +5,7 @@ import WebpackDevServer from 'webpack-dev-server';
 import Mocha from 'mocha';
 
 const dir = path.dirname(fs.realpathSync(__filename));
-const envVariables = require(path.join(dir, '../env-variables'));
+const envVariables = require(path.join(dir, '../../env-variables'));
 
 const options = {};
 const argsArr = process.argv;
@@ -87,7 +87,7 @@ const runTest = () => {
         ui: 'bdd'
     });
 
-    const testDir = path.join(dir, '../test');
+    const testDir = path.join(dir, '../../test');
 
     fs.readdirSync(testDir).filter((file) => {
         return file.substr(-3) === '.js';
