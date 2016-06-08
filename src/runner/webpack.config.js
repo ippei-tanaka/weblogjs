@@ -1,7 +1,7 @@
 import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import { getEnv } from '../../env-variables';
+import { getEnv } from '../env-variables';
 
 const ENV = getEnv();
 const WEBPACK_DEV_MODE = ENV.mode === 'webpack-dev-server';
