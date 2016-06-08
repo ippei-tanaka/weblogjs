@@ -13,7 +13,6 @@
     "dev:production": "./node_modules/.bin/babel-node ./src/runner production",
     "dev:init": "./node_modules/.bin/babel-node ./src/runner init",
     "dev:test": "./node_modules/.bin/babel-node ./src/runner test"
-    "weblogjs": "node ./lib/runner production"
   },
   "author": {
     "name": "Ippei Tanaka",
@@ -25,7 +24,9 @@
     "url": "https://github.com/ippei-tanaka/weblogjs.git"
   },
   "license": "MIT",
-  "bin": "./bin/weblogjs",
+  "bin": {
+    "weblogjs": "./lib/runner production"
+  },
   "dependencies": {
     "babel-cli": "^6.9.0",
     "babel-loader": "^6.2.4",
