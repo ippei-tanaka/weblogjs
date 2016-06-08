@@ -1,6 +1,6 @@
 import co from 'co';
 import { expect } from 'chai';
-import httpRequest from './utilities/http-request';
+import httpRequest from './lib/http-request';
 import WeblogJS from '../src/app';
 import { getEnv } from '../src/env-variables';
 
