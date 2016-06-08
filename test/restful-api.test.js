@@ -2,6 +2,7 @@ import co from 'co';
 import { expect } from 'chai';
 import httpRequest from './utilities/http-request';
 import WeblogJS from '../src/app';
+import { getEnv } from '../src/env-variables';
 
 const admin = Object.freeze(Object.assign({
     email: "ttt@ttt.com",
@@ -37,10 +38,11 @@ const testPost = Object.freeze({
     "is_draft": false
 });
 
-const WEBSERVER_HOST = WEBLOG_ENV.web_host;
-const WEBSERVER_PORT = WEBLOG_ENV.web_port;
-const ADMIN_API_ROOT = WEBLOG_ENV.admin_api_root;
-const PUBLIC_API_ROOT = WEBLOG_ENV.public_api_root;
+const ENV = getEnv();
+const WEBSERVER_HOST = ENV.web_host;
+const WEBSERVER_PORT = ENV.web_port;
+const ADMIN_API_ROOT = ENV.admin_api_root;
+const PUBLIC_API_ROOT = ENV.public_api_root;
 const ADMIN_URL = `http://${WEBSERVER_HOST}:${WEBSERVER_PORT}${ADMIN_API_ROOT}`;
 const PUBLIC_URL = `http://${WEBSERVER_HOST}:${WEBSERVER_PORT}${PUBLIC_API_ROOT}`;
 
