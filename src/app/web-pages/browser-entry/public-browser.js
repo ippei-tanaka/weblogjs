@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, browserHistory } from 'react-router'
 import { Provider } from 'react-redux';
-import reducers from '../client-app/reducers';
-import createStore from '../client-app/stores/create-store';
-import createActions from '../client-app/stores/create-actions';
-import publicRoutes from '../client-app/routers/public-routes';
+import reducers from '../web-app/reducers';
+import createStore from '../web-app/stores/create-store';
+import createActions from '../web-app/stores/create-actions';
+import publicRoutes from '../web-app/routers/public-routes';
 
 require('./../sass/public/main.scss');
 

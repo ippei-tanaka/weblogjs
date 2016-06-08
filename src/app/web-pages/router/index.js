@@ -1,7 +1,7 @@
 import React from 'react';
 import { match } from 'react-router';
-import adminRoutes from '../client-app/routers/admin-routes';
-import publicRoutes from '../client-app/routers/public-routes';
+import adminRoutes from '../web-app/routers/admin-routes';
+import publicRoutes from '../web-app/routers/public-routes';
 import AdminHtmlLayout from '../layouts/admin-html-layout';
 import PublicHtmlLayout from '../layouts/public-html-layout';
 import createHtml from './lib/create-html';
