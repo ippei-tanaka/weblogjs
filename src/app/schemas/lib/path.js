@@ -12,8 +12,6 @@ const typeErrorDefaultMessage = function (value) {
 
 const defaultSanitizer = (value) => value;
 
-const defaultValidator = function* (value) {};
-
 export default class Path {
 
     constructor (name, pathObj) {
@@ -102,6 +100,6 @@ export default class Path {
     get validator() {
         return typeof this._pathObj.validate === 'function'
             ? this._pathObj.validate.bind(this)
-            : defaultValidator;
+            : function* (value) {};
     }
 }

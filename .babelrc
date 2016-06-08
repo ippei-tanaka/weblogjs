@@ -3,10 +3,6 @@
     "plugins": [
         ["babel-plugin-transform-builtin-extend", {
             "globals": ["Error"]
-        }],
-        ["transform-runtime", {
-            "polyfill": false,
-            "regenerator": true
         }]
     ]
 }
