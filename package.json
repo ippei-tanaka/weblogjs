@@ -7,12 +7,13 @@
     "build": "npm run build:clean && npm run build:server",
     "build:clean": "./node_modules/.bin/rimraf lib",
     "build:server": " ./node_modules/.bin/babel src --out-dir lib --ignore static,browser-entry",
-    "init": "./bin/weblogjs --mode init",
-    "development": "./bin/weblogjs --mode development --web_port 3001 --webpack_server_host localhost --webpack_server_port 8001",
-    "webpack-dev-server": "./bin/weblogjs --mode webpack-dev-server --web_port 3001 --webpack_server_port 8001 ./node_modules/.bin/webpack-dev-server --inline --hot --port=8001 --host=localhost",
-    "production": "./bin/weblogjs --mode production --web_port 3001",
-    "webpack": "./bin/weblogjs --mode production --web_port 3001 ./node_modules/.bin/webpack",
-    "test": "WEBLOG_ENV={^mode^:^test^,^web_port^:3002} ./node_modules/.bin/mocha $(find test -name '*.test.js') --compilers js:babel-core/register"
+    "dev:webpack-dev-server": "./node_modules/.bin/babel-node ./src/runner webpack-dev-server",
+    "dev:development": "./node_modules/.bin/babel-node ./src/runner development",
+    "dev:webpack": "./node_modules/.bin/babel-node ./src/runner webpack",
+    "dev:production": "./node_modules/.bin/babel-node ./src/runner production",
+    "dev:init": "./node_modules/.bin/babel-node ./src/runner init",
+    "dev:test": "./node_modules/.bin/babel-node ./src/runner test"
+    "weblogjs": "node ./lib/runner production"
   },
   "author": {
     "name": "Ippei Tanaka",
