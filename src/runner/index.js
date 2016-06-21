@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import "babel-polyfill";
 import { getEnv, setEnv } from '../env-variables';
 
 const options = {};
