@@ -1,7 +1,8 @@
 import validator from 'validator';
-import { MongoSchema, types } from '../../../../simple-odm';
+import { types, eventHub } from '../../../../simple-odm';
+import { WeblogJsSchema, modifyDateData } from './weblogjs-schema';
 
-const schema = new MongoSchema({
+const schema = new WeblogJsSchema({
 
     name: 'blog',
 
@@ -55,5 +56,7 @@ const schema = new MongoSchema({
 
     }
 });
+
+eventHub.on(schema.BEFORE_SAVED, modifyDateData);
 
 export default schema;

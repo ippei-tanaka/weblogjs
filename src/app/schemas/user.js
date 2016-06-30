@@ -1,7 +1,8 @@
 import co from 'co';
 import validator from 'validator';
 import { generateHash, compareHashedStrings } from '../utils';
-import { MongoSchema, types, eventHub } from '../../../../simple-odm';
+import { types, eventHub } from '../../../../simple-odm';
+import { WeblogJsSchema, modifyDateData } from './weblogjs-schema';
 
 const paths = {
 
@@ -85,7 +86,7 @@ const PASSWORD_UPDATE = "password_update";
 const PASSWORD = "password";
 const PASSWORD_CONFIRMED = "password_confirmed";
 
-class UserSchema extends MongoSchema {
+class UserSchema extends WeblogJsSchema {
 
     /**
      * @override
@@ -98,6 +99,8 @@ class UserSchema extends MongoSchema {
 }
 
 const schema = new UserSchema();
+
+eventHub.on(schema.BEFORE_SAVED, modifyDateData);
 
 eventHub.on(schema.BEFORE_SAVED, ({errors, values, initialValues}) =>
 {
@@ -168,8 +171,6 @@ eventHub.on(schema.BEFORE_SAVED, ({errors, values, initialValues}) =>
             }
             else
             {
-                console.log(values[PASSWORD]);
-                console.log(typeof values[PASSWORD]);
                 if (values.hasOwnProperty(PASSWORD) && values[PASSWORD])
                 {
                     _errors[PASSWORD] = ["The password can't be updated."];
