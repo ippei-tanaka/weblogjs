@@ -26,7 +26,7 @@ export default class SettingModel extends MongoModel {
         const findOne = super.findOne.bind(this);
 
         return co(function* () {
-            const model = yield findOne({});
+            const model = yield findOne();
             return model ? model : {};
         }.bind(this));
     }
@@ -35,10 +35,10 @@ export default class SettingModel extends MongoModel {
         const findOne = super.findOne.bind(this);
 
         return co(function* () {
-            let model = yield findOne({});
+            let model = yield findOne();
 
             if (model) {
-                model.setValues(values);
+                Object.assign(model.values, values);
                 yield model.save();
             } else {
                 model = new this(values);
