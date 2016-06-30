@@ -95,74 +95,6 @@ class UserSchema extends MongoSchema {
         super({name: 'user', paths});
     }
 
-    /*
-    _preCreate(arg) {
-        const superFunc = super._preCreate.bind(this);
-
-        return co(function* () {
-            const { values, errorMap } = deepcopy(yield superFunc(arg));
-
-            const {rawValues} = arg;
-
-            if (!errorMap[PASSWORD]
-                || !Array.isArray(errorMap[PASSWORD])
-                || errorMap[PASSWORD].length === 0)
-            {
-                values[HASHED_PASSWORD] = yield generateHash(rawValues[PASSWORD]);
-            }
-
-            delete values[PASSWORD];
-
-            return {values, errorMap};
-        });
-    }
-
-    _preUpdate(arg) {
-        const superFunc = super._preUpdate.bind(this);
-
-        return co(function* () {
-            const { values, errorMap } = deepcopy(yield superFunc(arg));
-            const {rawInitialValues, rawUpdatedValues} = arg;
-
-            if (rawUpdatedValues[PASSWORD_UPDATE]) {
-                if (!rawUpdatedValues.hasOwnProperty(PASSWORD) || !rawUpdatedValues[PASSWORD]) {
-                    errorMap[PASSWORD] = ["The new password is required."];
-                }
-
-                if (!rawUpdatedValues.hasOwnProperty(OLD_PASSWORD) || !rawUpdatedValues[OLD_PASSWORD]) {
-                    errorMap[OLD_PASSWORD] = ["The current password is required."];
-                }
-
-                if (!rawUpdatedValues.hasOwnProperty(PASSWORD_CONFIRMED) || !rawUpdatedValues[PASSWORD_CONFIRMED]) {
-                    errorMap[PASSWORD_CONFIRMED] = ["The confirmed password is required."];
-                }
-
-                if (rawUpdatedValues.hasOwnProperty(PASSWORD_CONFIRMED)
-                    && rawUpdatedValues[PASSWORD_CONFIRMED] !== ""
-                    && rawUpdatedValues[PASSWORD] !== rawUpdatedValues[PASSWORD_CONFIRMED]) {
-                    errorMap[PASSWORD_CONFIRMED] = ['The confirmed password sent is not the same as the new password.'];
-                }
-
-                if (rawUpdatedValues.hasOwnProperty(OLD_PASSWORD) && rawUpdatedValues[OLD_PASSWORD] !== "") {
-                    const result = yield this.compareHashedStrings(rawUpdatedValues[OLD_PASSWORD], rawInitialValues[HASHED_PASSWORD]);
-                    if (!result) {
-                        errorMap[OLD_PASSWORD] = ["The current password sent is not correct."];
-                    }
-                }
-
-                if (Object.keys(errorMap).length === 0) {
-                    values[HASHED_PASSWORD] = yield generateHash(rawUpdatedValues[PASSWORD]);
-                }
-            } else {
-                if (rawUpdatedValues.hasOwnProperty(PASSWORD)) {
-                    errorMap[PASSWORD] = ["The password can't be updated."];
-                }
-            }
-
-            return { values, errorMap };
-        }.bind(this));
-    }
-    */
 }
 
 const schema = new UserSchema();
@@ -171,7 +103,8 @@ eventHub.on(schema.BEFORE_SAVED, ({errors, values, initialValues}) =>
 {
     if (!values._id)
     {
-        return co(function* () {
+        return co(function* ()
+        {
             const _values = Object.assign({}, values);
 
             if (!errors[PASSWORD]
@@ -190,12 +123,65 @@ eventHub.on(schema.BEFORE_SAVED, ({errors, values, initialValues}) =>
     {
         // The model is updated
 
-        /*
-        model.addOverriddenValues({
-            email: model.getValues().email + "?",
-            age: 20
+        return co(function* ()
+        {
+            const _values = Object.assign({}, values);
+            const _errors = Object.assign({}, errors);
+
+            if (values[PASSWORD_UPDATE])
+            {
+                if (!values.hasOwnProperty(PASSWORD) || !values[PASSWORD])
+                {
+                    _errors[PASSWORD] = ["The new password is required."];
+                }
+
+                if (!values.hasOwnProperty(OLD_PASSWORD) || !values[OLD_PASSWORD])
+                {
+                    _errors[OLD_PASSWORD] = ["The current password is required."];
+                }
+
+                if (!values.hasOwnProperty(PASSWORD_CONFIRMED) || !values[PASSWORD_CONFIRMED])
+                {
+                    _errors[PASSWORD_CONFIRMED] = ["The confirmed password is required."];
+                }
+
+                if (values.hasOwnProperty(PASSWORD_CONFIRMED)
+                    && values[PASSWORD_CONFIRMED] !== ""
+                    && values[PASSWORD] !== values[PASSWORD_CONFIRMED])
+                {
+                    _errors[PASSWORD_CONFIRMED] = ['The confirmed password sent is not the same as the new password.'];
+                }
+
+                if (values.hasOwnProperty(OLD_PASSWORD) && values[OLD_PASSWORD] !== "")
+                {
+                    const result = yield compareHashedStrings(values[OLD_PASSWORD], initialValues[HASHED_PASSWORD]);
+                    if (!result)
+                    {
+                        _errors[OLD_PASSWORD] = ["The current password sent is not correct."];
+                    }
+                }
+
+                if (Object.keys(_errors).length === 0)
+                {
+                    values[HASHED_PASSWORD] = yield generateHash(values[PASSWORD]);
+                }
+            }
+            else
+            {
+                console.log(values[PASSWORD]);
+                console.log(typeof values[PASSWORD]);
+                if (values.hasOwnProperty(PASSWORD) && values[PASSWORD])
+                {
+                    _errors[PASSWORD] = ["The password can't be updated."];
+                }
+            }
+
+            return {
+                values: _values,
+                errors: _errors
+            };
         });
-        */
+
     }
 });
 
