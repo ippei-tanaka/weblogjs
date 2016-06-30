@@ -1,22 +1,16 @@
-import SchemaModel from './lib/schema-model';
+import { MongoModel } from '../../../../simple-odm';
 import Schemas from '../schemas';
-import CollectionCrudOperator from '../db/collection-crud-operator';
 
-const operator = new CollectionCrudOperator({collectionName: 'posts'});
 const schema = Schemas.getSchema('post');
 
-export default class PostModel extends SchemaModel {
+export default class PostModel extends MongoModel {
 
     static get name () {
-        return "post";
+        return schema.name;
     }
 
-    static get _schema () {
+    static get schema () {
         return schema;
-    }
-
-    static get _operator () {
-        return operator;
     }
 
 }

@@ -1,24 +1,17 @@
-import SchemaModel from './lib/schema-model';
-import Schemas from '../schemas';
-import PathModel from './lib/path-model';
-import CollectionCrudOperator from '../db/collection-crud-operator';
 import co from 'co';
+import { MongoModel } from '../../../../simple-odm';
+import Schemas from '../schemas';
 
-const operator = new CollectionCrudOperator({collectionName: 'settings'});
 const schema = Schemas.getSchema('setting');
 
-export default class SettingModel extends SchemaModel {
+export default class SettingModel extends MongoModel {
 
     static get name () {
-        return "setting";
+        return schema.name;
     }
 
-    static get _schema () {
+    static get schema () {
         return schema;
-    }
-
-    static get _operator () {
-        return operator;
     }
 
     static findMany () {
@@ -53,5 +46,4 @@ export default class SettingModel extends SchemaModel {
             }
         }.bind(this));
     }
-
 }

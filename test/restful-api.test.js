@@ -58,9 +58,8 @@ describe('Restful API', function () {
     this.timeout(5000);
 
     before('web server starting', () => WeblogJS.webServer.start());
-    before('dropping darabase', () => WeblogJS.dbSettingOperator.dropDatabase());
-    before('creating indexes', () => WeblogJS.dbSettingOperator.createIndexes());
-    beforeEach('emptying collections', () => WeblogJS.dbSettingOperator.removeAllDocuments());
+    before('dropping darabase', () => WeblogJS.dropDatabase());
+    beforeEach('emptying collections', () => WeblogJS.removeAllDocuments());
     beforeEach('creating admin', () => WeblogJS.createUser(admin));
 
     describe('Admin API', () => {
@@ -143,10 +142,11 @@ describe('Restful API', function () {
                     } catch (e) {
                         errors = e;
                     }
-                    expect(errors.body.email[0].message).to.equal("The email is required.");
-                    expect(errors.body.password[0].message).to.equal("The password is required.");
-                    expect(errors.body.display_name[0].message).to.equal("The display name is required.");
-                    expect(errors.body.slug[0].message).to.equal("The slug is required.");
+
+                    expect(errors.body.email[0]).to.equal("The email is required.");
+                    expect(errors.body.password[0]).to.equal("The password is required.");
+                    expect(errors.body.display_name[0]).to.equal("The display name is required.");
+                    expect(errors.body.slug[0]).to.equal("The slug is required.");
                     done();
                 }).catch((e) => {
                     done(e);
@@ -199,7 +199,7 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.password[0].message).to.equal("The password can't be updated.");
+                    expect(error.body.password[0]).to.equal("The password can't be updated.");
 
                     done();
 
@@ -221,8 +221,8 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.old_password[0].message).to.equal('The current password is required.');
-                    expect(error.body.password_confirmed[0].message).to.equal('The confirmed password is required.');
+                    expect(error.body.old_password[0]).to.equal('The current password is required.');
+                    expect(error.body.password_confirmed[0]).to.equal('The confirmed password is required.');
 
                     done();
 
@@ -246,7 +246,7 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.password[0].message).to.equal('The new password is required.');
+                    expect(error.body.password[0]).to.equal('The new password is required.');
 
                     done();
 
@@ -286,9 +286,9 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.password[0].message).to.equal('Only alphabets, numbers and some symbols (#, !, @, %, &, *) are allowed for a password.');
-                    expect(error.body.password_confirmed[0].message).to.equal('The confirmed password is required.');
-                    expect(error.body.old_password[0].message).to.equal('The current password sent is not correct.');
+                    expect(error.body.password[0]).to.equal('Only alphabets, numbers and some symbols (#, !, @, %, &, *) are allowed for a password.');
+                    expect(error.body.password_confirmed[0]).to.equal('The confirmed password is required.');
+                    expect(error.body.old_password[0]).to.equal('The current password sent is not correct.');
 
                     done();
                 }).catch((e) => {
@@ -313,7 +313,7 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.old_password[0].message).to.equal('The current password sent is not correct.');
+                    expect(error.body.old_password[0]).to.equal('The current password sent is not correct.');
 
                     done();
                 }).catch((e) => {
@@ -338,7 +338,7 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.password_confirmed[0].message).to.equal('The confirmed password sent is not the same as the new password.');
+                    expect(error.body.password_confirmed[0]).to.equal('The confirmed password sent is not the same as the new password.');
 
                     done();
                 }).catch((e) => {
@@ -391,7 +391,7 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.name[0].message).to.equal('The name is required.');
+                    expect(error.body.name[0]).to.equal('The name is required.');
 
                     done();
                 }).catch((e) => {
@@ -411,7 +411,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+                    expect(error.body.slug[0]).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
                     done();
                 }).catch((e) => {
                     done(e);
@@ -450,7 +450,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.slug[0].message).to.equal('The slug, "foo", has already been taken.');
+                    expect(error.body.slug[0]).to.equal('The slug, "foo", has already been taken.');
 
                     done();
                 }).catch((e) => {
@@ -474,7 +474,7 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+                    expect(error.body.slug[0]).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
 
                     done();
                 }).catch((e) => {
@@ -574,7 +574,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.slug[0].message).to.equal('The slug, "heremyblog", has already been taken.');
+                    expect(error.body.slug[0]).to.equal('The slug, "heremyblog", has already been taken.');
                     done();
                 }).catch((e) => {
                     done(e);
@@ -592,7 +592,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.posts_per_page[0].message).to.equal('The posts per page is required.');
+                    expect(error.body.posts_per_page[0]).to.equal('The posts per page is required.');
                     done();
                 }).catch((e) => {
                     done(e);
@@ -611,7 +611,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.slug[0].message).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
+                    expect(error.body.slug[0]).to.equal('Only alphabets, numbers and some symbols (-, _) are allowed for a slug.');
                     done();
                 }).catch((e) => {
                     done(e);
@@ -630,7 +630,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.posts_per_page[0].message).to.equal('The posts per page, "test", is invalid.');
+                    expect(error.body.posts_per_page[0]).to.equal('The posts per page, "test", is invalid.');
                     done();
                 }).catch((e) => {
                     done(e);
@@ -670,7 +670,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.slug[0].message).to.equal('The slug, "foo", has already been taken.');
+                    expect(error.body.slug[0]).to.equal('The slug, "foo", has already been taken.');
                     done();
                 }).catch((e) => {
                     done(e);
@@ -686,7 +686,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.posts_per_page[0].message).to.equal('The posts per page should be greater than 0.');
+                    expect(error.body.posts_per_page[0]).to.equal('The posts per page should be greater than 0.');
                     done();
                 }).catch((e) => {
                     done(e);
@@ -822,7 +822,7 @@ describe('Restful API', function () {
                     } catch (e) {
                         error = e;
                     }
-                    expect(error.body.author_id[0].message).to.equal('The author ID, "ddddd", is invalid.');
+                    expect(error.body.author_id[0]).to.equal('The author ID, "ddddd", is invalid.');
                     done();
                 }).catch((e) => {
                     done(e);
@@ -953,7 +953,7 @@ describe('Restful API', function () {
                         error = e;
                     }
 
-                    expect(error.body.front_blog_id[0].message).to.equal('The front blog ID is required.');
+                    expect(error.body.front_blog_id[0]).to.equal('The front blog ID is required.');
 
                     done();
                 }).catch((e) => {

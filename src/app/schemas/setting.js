@@ -1,31 +1,38 @@
-import Schema from './lib/schema';
-import Types from './lib/types';
+import { MongoSchema, types } from '../../../../simple-odm';
 
-const schema = new Schema('setting', {
+const schema = new MongoSchema({
 
-    front_blog_id: {
-        unique: true,
-        required: true,
-        display_name: "front blog ID",
-        type: Types.ObjectID,
-        validate: function* (value) {
-            if (!value) {
-                yield `"${value}" is an invalid ID.`
+    name: 'setting',
+
+    paths: {
+
+        front_blog_id: {
+            unique: true,
+            required: true,
+            display_name: "front blog ID",
+            type: types.MongoObjectID,
+            validate: function* (value)
+            {
+                if (!value)
+                {
+                    yield `"${value}" is an invalid ID.`
+                }
             }
-        }
-    },
+        },
 
-    posts_per_page: {
-        display_name: "posts per page",
-        type: Types.Integer,
-        default_value: 10,
-        validate: function* (value) {
-            if (value < 1) {
-                yield `The ${this.displayName} should be greater than 0.`;
+        posts_per_page: {
+            display_name: "posts per page",
+            type: types.Integer,
+            default_value: 10,
+            validate: function* (value)
+            {
+                if (value < 1)
+                {
+                    yield `The ${this.displayName} should be greater than 0.`;
+                }
             }
         }
     }
-
 });
 
 export default schema;

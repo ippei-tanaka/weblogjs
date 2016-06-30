@@ -1,26 +1,22 @@
-import SchemaModel from './lib/schema-model';
+import { MongoModel } from '../../../../simple-odm';
 import Schemas from '../schemas';
-import PathModel from './lib/path-model';
-import CollectionCrudOperator from '../db/collection-crud-operator';
+import { generateHash, compareHashedStrings } from '../utils';
 
-const operator = new CollectionCrudOperator({collectionName: 'users'});
 const schema = Schemas.getSchema('user');
 
-export default class UserModel extends SchemaModel {
+export default class UserModel extends MongoModel {
 
     static get name () {
-        return "user";
+        return schema.name;
     }
 
-    static get _schema () {
+    static get schema () {
         return schema;
     }
 
-    static get _operator () {
-        return operator;
+    checkPassword (password)
+    {
+        return compareHashedStrings(password, this.values.hashed_password);
     }
 
-    checkPassword (password) {
-        return this.constructor._schema.compareHashedStrings(password, this.rawValues.hashed_password);
-    }
 }
