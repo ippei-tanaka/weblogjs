@@ -15,13 +15,10 @@ export const run = () => new Promise((resolve, reject) => {
 
     co(function* () {
         console.log("Dropping the database...");
-        yield WeblogJS.dbSettingOperator.dropDatabase();
-
-        console.log("Creating indexes for collections...");
-        yield WeblogJS.dbSettingOperator.createIndexes();
+        yield WeblogJS.dropDatabase();
 
         console.log("Removing all the documents in the database...");
-        yield WeblogJS.dbSettingOperator.removeAllDocuments();
+        yield WeblogJS.removeAllDocuments();
 
         console.log("Creating the admin account...");
         yield WeblogJS.createUser(admin);

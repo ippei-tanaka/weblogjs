@@ -25,18 +25,16 @@ const addRoutesForCrudOperations = (schemaName, router, filter) => {
 
     router.post(`/${path}`, filter, (request, response) => co(function* () {
         const model = new Model(request.body);
-        const result = yield model.save();
-        successHandler(response, {_id: result.insertedId});
+        yield model.save();
+        successHandler(response, {_id: model.id});
     }).catch(errorHandler(response)));
 
     router.put(`/${path}/:id`, filter, (request, response) => co(function* () {
         const model = yield Model.findOne({_id: new ObjectID(request.params.id)});
-
         if (model) {
-            model.setValues(request.body);
+            Object.assign(model.values, request.body);
             yield model.save();
         }
-
         successHandler(response, {});
     }).catch(errorHandler(response)));
 
@@ -88,8 +86,7 @@ const addRoutesForUser = (router, filter) => {
         const model = yield UserModel.findOne({_id: new ObjectID(request.params.id)});
 
         if (model) {
-            model.setValues(request.body);
-            model.setValues({password_update: true});
+            Object.assign(model.values, request.body, {password_update: true});
             yield model.save();
         }
 
