@@ -3,7 +3,7 @@ import WebServer from './server';
 import WebpageRouter from './web-pages/router';
 import AdminRestfulApiRouter from './restful-api/admin-router';
 import PublicRestfulApiRouter from './restful-api/public-router';
-import { mongoDriver, mongoDbBaseOperator, types } from '../../../simple-odm'
+import { mongoDriver, mongoDbBaseOperator, types } from 'simple-odm'
 import PassportManager from './passport-manager';
 import UserModel from './models/user-model';
 import { getEnv } from '../env-variables';

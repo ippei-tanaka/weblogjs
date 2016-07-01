@@ -1,4 +1,4 @@
-import { MongoSchema, types } from '../../../../simple-odm';
+import { MongoSchema, types } from 'simple-odm';
 
 const commonPaths = {
 
