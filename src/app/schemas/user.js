@@ -110,14 +110,17 @@ eventHub.on(schema.BEFORE_SAVED, ({errors, values, initialValues}) =>
         {
             const _values = Object.assign({}, values);
 
+            delete _values[PASSWORD];
+            delete _values[OLD_PASSWORD];
+            delete _values[PASSWORD_UPDATE];
+            delete _values[PASSWORD_CONFIRMED];
+
             if (!errors[PASSWORD]
                 || !Array.isArray(errors[PASSWORD])
                 || errors[PASSWORD].length === 0)
             {
                 _values[HASHED_PASSWORD] = yield generateHash(values[PASSWORD]);
             }
-
-            delete _values[PASSWORD];
 
             return {values: _values};
         });
@@ -130,6 +133,11 @@ eventHub.on(schema.BEFORE_SAVED, ({errors, values, initialValues}) =>
         {
             const _values = Object.assign({}, values);
             const _errors = Object.assign({}, errors);
+
+            delete _values[PASSWORD];
+            delete _values[OLD_PASSWORD];
+            delete _values[PASSWORD_UPDATE];
+            delete _values[PASSWORD_CONFIRMED];
 
             if (values[PASSWORD_UPDATE])
             {
@@ -166,7 +174,7 @@ eventHub.on(schema.BEFORE_SAVED, ({errors, values, initialValues}) =>
 
                 if (Object.keys(_errors).length === 0)
                 {
-                    values[HASHED_PASSWORD] = yield generateHash(values[PASSWORD]);
+                    _values[HASHED_PASSWORD] = yield generateHash(values[PASSWORD]);
                 }
             }
             else
