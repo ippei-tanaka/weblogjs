@@ -52,6 +52,27 @@ const schema = new WeblogJsSchema({
                     yield `The ${this.displayName} should be greater than 0.`;
                 }
             }
+        },
+
+        script_snippet: {
+            type: types.String,
+            display_name: "script snippet",
+            sanitize: (value) => String(value).trim(),
+            validate: function* (value)
+            {
+                const range = {min: 1, max: 100000};
+
+                if (!validator.isLength(value, range))
+                {
+                    yield `A ${this.displayName} should be between ${range.min} and ${range.max} characters.`;
+                }
+
+                try {
+                    new Function(value);
+                } catch (e) {
+                    yield `A ${this.displayName} is not valid javascript code.`;
+                }
+            }
         }
 
     }

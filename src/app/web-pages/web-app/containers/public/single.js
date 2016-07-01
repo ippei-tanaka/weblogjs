@@ -37,9 +37,10 @@ class SinglePage extends Component {
 
     render() {
 
-        const { params: {slug}, publicSinglePost, publicCategory } = this.props;
+        const { params: {slug}, publicSinglePost, publicBlog, publicCategory } = this.props;
         const categories = publicCategory.toObject();
         let post = publicSinglePost.toObject();
+        let blog = publicBlog.toObject();
 
         if (!post || post.slug !== slug) {
             post = null;
@@ -47,7 +48,7 @@ class SinglePage extends Component {
 
         return (
             <section className="module-section">
-                { post ? <PublicPost categories={categories} post={post}/> : <div>No post exists.</div>}
+                { post ? <PublicPost blog={blog} categories={categories} post={post}/> : <div>No post exists.</div>}
             </section>
         )
     }
@@ -56,7 +57,8 @@ class SinglePage extends Component {
 export default connect(
     state => ({
         publicSinglePost: state.publicSinglePost,
-        publicCategory: state.publicCategory
+        publicCategory: state.publicCategory,
+        publicBlog: state.publicBlog
     }),
     actions
 )(SinglePage);

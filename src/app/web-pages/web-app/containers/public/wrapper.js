@@ -17,13 +17,13 @@ class PublicWrapper extends Component {
 
     render() {
         const { publicBlog, publicCategory } = this.props;
-        const blogName = publicBlog.get('name') || "";
+        const blog = publicBlog.toObject();
         const categories = publicCategory.toArray();
 
         return (
             <div className="module-header-footer-layout">
                 <header className="m-hfl-header">
-                    <h1><Link className="m-hfl-header-link" to="/">{blogName}</Link></h1>
+                    <h1><Link className="m-hfl-header-link" to="/">{blog.name}</Link></h1>
                 </header>
                 <div className="m-hfl-body">
                     <div className="module-blog-layout">
@@ -38,8 +38,9 @@ class PublicWrapper extends Component {
                     </div>
                 </div>
                 <footer className="m-hfl-footer">
-                    <span>&copy;{blogName}</span>
+                    <span>&copy;{blog.name}</span>
                 </footer>
+                <script dangerouslySetInnerHTML={{__html: blog.script_snippet}}></script>
             </div>
         );
     }
