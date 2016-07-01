@@ -56,6 +56,10 @@ const schema = new WeblogJsSchema({
             type: types.MongoObjectID,
             validate: function* (value)
             {
+                if (value === null || value === undefined) {
+                    return;
+                }
+
                 if (!value)
                 {
                     yield `"${value}" is an invalid ID.`
@@ -68,6 +72,10 @@ const schema = new WeblogJsSchema({
             type: types.MongoObjectID,
             validate: function* (value)
             {
+                if (value === null || value === undefined) {
+                    return;
+                }
+
                 if (!value)
                 {
                     yield `"${value}" is an invalid ID.`
@@ -80,6 +88,10 @@ const schema = new WeblogJsSchema({
             type: types.MongoObjectID,
             validate: function* (value)
             {
+                if (value === null || value === undefined) {
+                    return;
+                }
+
                 if (!value)
                 {
                     yield `"${value}" is an invalid ID.`
@@ -91,7 +103,12 @@ const schema = new WeblogJsSchema({
             type: [types.String],
             validate: function* (value)
             {
+                if (value === null || value === undefined) {
+                    return;
+                }
+
                 const range = {min: 1, max: 100};
+
                 for (let item of value)
                 {
                     if (!validator.isLength(item, range))
