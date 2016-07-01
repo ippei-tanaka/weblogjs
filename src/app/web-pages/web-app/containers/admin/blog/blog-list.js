@@ -37,6 +37,10 @@ class BlogList extends Component {
                 label: "Posts Per Page"
             },
 
+            script_snippet: {
+                label: "Script Snippet"
+            },
+
             created_date: {
                 label: "Created Date",
                 stringify: value =>

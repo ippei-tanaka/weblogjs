@@ -1,5 +1,5 @@
 import React from 'react';
-import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form } from './form';
+import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form, Textarea } from './form';
 import { PostsPerPageList } from '../constants/config';
 
 export default function BlogForm({
@@ -49,6 +49,12 @@ export default function BlogForm({
                         </Option>
                     )}
                 </Select>
+            </FieldSet>
+
+            <FieldSet label="Script Snippet"
+                      error={errors.script_snippet}>
+                <Textarea value={values.script_snippet}
+                          onChange={_onChange("script_snippet")}/>
             </FieldSet>
 
             <ButtonList>

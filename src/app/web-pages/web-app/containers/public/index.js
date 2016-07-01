@@ -33,8 +33,9 @@ class PublicIndex extends Component {
     }
 
     render() {
-        const { publicPost, publicCategory, params } = this.props;
+        const { publicPost, publicCategory, publicBlog, params } = this.props;
         const categories = publicCategory.toObject();
+        const blog = publicBlog.toObject();
         const posts = publicPost.get('posts').toArray();
 
         const page = params.page || 1;
@@ -44,7 +45,7 @@ class PublicIndex extends Component {
             <div>
                 {posts.map(post =>
                     <section key={post._id} className="module-section">
-                        <PublicPost categories={categories} post={post}/>
+                        <PublicPost blog={blog} categories={categories} post={post}/>
                     </section>
                 )}
 
@@ -83,7 +84,8 @@ class PublicIndex extends Component {
 export default connect(
     state => ({
         publicPost: state.publicPost,
-        publicCategory: state.publicCategory
+        publicCategory: state.publicCategory,
+        publicBlog: state.publicBlog
     }),
     actions
 )(PublicIndex);
