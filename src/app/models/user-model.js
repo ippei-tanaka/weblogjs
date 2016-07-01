@@ -1,4 +1,4 @@
-import { MongoModel } from '../../../../simple-odm';
+import { MongoModel } from 'simple-odm';
 import Schemas from '../schemas';
 import { generateHash, compareHashedStrings } from '../utils';
 

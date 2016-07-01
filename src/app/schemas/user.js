@@ -1,7 +1,7 @@
 import co from 'co';
 import validator from 'validator';
 import { generateHash, compareHashedStrings } from '../utils';
-import { types, eventHub } from '../../../../simple-odm';
+import { types, eventHub } from 'simple-odm';
 import { WeblogJsSchema, modifyDateData } from './weblogjs-schema';
 
 const paths = {

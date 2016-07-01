@@ -1,4 +1,4 @@
-import { types, eventHub } from '../../../../simple-odm';
+import { types, eventHub } from 'simple-odm';
 import { WeblogJsSchema, modifyDateData } from './weblogjs-schema';
 
 const schema = new WeblogJsSchema({

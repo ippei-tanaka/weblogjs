@@ -1,6 +1,6 @@
 import { SyntaxError } from '../../errors';
 import url from 'url';
-import { SimpleOdmValidationError } from '../../../../../simple-odm'
+import { SimpleOdmValidationError } from 'simple-odm'
 
 export const bypass = (request, response, next) => next();
 

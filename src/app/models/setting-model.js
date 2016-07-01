@@ -1,5 +1,5 @@
 import co from 'co';
-import { MongoModel } from '../../../../simple-odm';
+import { MongoModel } from 'simple-odm';
 import Schemas from '../schemas';
 
 const schema = Schemas.getSchema('setting');
