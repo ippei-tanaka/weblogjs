@@ -17,7 +17,9 @@ export default ({
         <h2 className="m-pst-title"><Link className="m-pst-link" to={`/post/${post._id}/${post.slug}`}>{post.title}</Link></h2>
 
         <div className="m-pst-content">
-            <article className="module-article">{post.content}</article>
+            <article className="module-article"
+                     dangerouslySetInnerHTML={{__html: post.content}}
+            />
         </div>
 
         <date className="m-pst-date">Published on {Moment(post.published_date).format("MMM DD, YYYY")}</date>
