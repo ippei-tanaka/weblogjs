@@ -1,10 +1,10 @@
 import React from 'react';
 import { match } from 'react-router';
-import adminRoutes from '../web-app/routers/admin-routes';
 import publicRoutes from '../web-app/routers/public-routes';
 import AdminHtmlLayout from '../layouts/admin-html-layout';
 import PublicHtmlLayout from '../layouts/public-html-layout';
-import createHtml from './lib/create-html';
+import { createHtmlLayoutAndStatus, renderHtmlLayout } from './lib/create-html';
+import { ADMIN_DIR, PUBLIC_DIR } from '../web-app/constants/config'
 import express from "express";
 import co from 'co';
 import path from 'path';
@@ -32,25 +32,25 @@ export default class WebpageRouter {
     constructor(basePath) {
         this._basePath = basePath;
         this._router = express.Router();
-        this._router.get('*', this._handler.bind(this));
+        this._router.get(path.resolve(ADMIN_DIR, "*"), this._adminHandler.bind(this));
+        this._router.get(path.resolve(PUBLIC_DIR, "*"), this._publicHandler.bind(this));
     }
 
-    _handler(request, response) {
+    _adminHandler(request, response) {
+        co(function* () {
+            response.status(OK).send(
+                renderHtmlLayout(<AdminHtmlLayout title="Weblog JS Admin" />)
+            );
+        }.bind(this));
+    }
+
+    _publicHandler(request, response) {
         co(function* () {
             const location = url.resolve(this._basePath, request.url);
-
-            let LayoutComponent = AdminHtmlLayout;
-            let result = yield routing({routes: adminRoutes(), location});
-
-            if (result.statusCode === NOT_FOUND) {
-                result = yield routing({routes: publicRoutes(), location});
-                LayoutComponent = PublicHtmlLayout;
-            }
-
-            const { statusCode, data } = result;
+            const { statusCode, data } = yield routing({routes: publicRoutes(), location});
 
             if (statusCode === OK) {
-                createHtml(LayoutComponent, data)
+                createHtmlLayoutAndStatus(PublicHtmlLayout, data)
                     .then(({html, statusCode}) => response.status(statusCode).send(html));
             } else if (statusCode === FOUND) {
                 response.redirect(FOUND, data.pathname);
@@ -59,7 +59,6 @@ export default class WebpageRouter {
             } else if (statusCode === NOT_FOUND) {
                 response.status(NOT_FOUND).send("Not Found!");
             }
-
         }.bind(this));
     }
 

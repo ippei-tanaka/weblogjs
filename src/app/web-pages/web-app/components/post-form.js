@@ -1,5 +1,8 @@
 import React from 'react';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Checkbox, Textarea, Datetime, TagList, Title, Form } from './form';
+import AceEditor from 'react-ace';
+import 'brace/mode/html';
+import 'brace/theme/chrome';
 
 export default function PostForm({
     title,
@@ -42,8 +45,12 @@ export default function PostForm({
 
             <FieldSet label="Content"
                       error={errors.content}>
-                    <Textarea value={values.content}
-                              onChange={_onChange("content")}/>
+                    <AceEditor value={values.content}
+                               mode="html"
+                               theme="chrome"
+                               width="100%"
+                               fontSize="14px"
+                               onChange={_onChange("content")}/>
             </FieldSet>
 
             <FieldSet label="Category"

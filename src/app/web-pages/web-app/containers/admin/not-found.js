@@ -3,16 +3,8 @@ import actions from '../../actions';
 import { connect } from 'react-redux';
 import co from 'co';
 import { Link } from 'react-router';
-import PublicPost from '../../components/public-post';
-import PublicCategoryList from '../../components/public-category-list';
-import { NOT_FOUND } from '../../../router/lib/status-codes';
 
-class NotFoundError extends Component {
-
-    static prepareForPreRendering({actions, store}) {
-        return Promise.resolve({ statusCode: NOT_FOUND });
-    }
-
+class NotFound extends Component {
     render() {
         return (
             <section className="module-section">
@@ -25,4 +17,4 @@ class NotFoundError extends Component {
 export default connect(
     null,
     null
-)(NotFoundError);
+)(NotFound);

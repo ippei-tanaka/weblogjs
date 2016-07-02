@@ -19,7 +19,7 @@ const Select = ({
     }) => (
     <select id={id}
             className={className}
-            value={value}
+            value={value !== null ? value : undefined}
             autoFocus={autoFocus}
             onChange={onSelectChanged(onChange)}>
 
