@@ -22,6 +22,7 @@ import PostAdder from "../containers/admin/post/post-adder";
 import PostEditor from "../containers/admin/post/post-editor";
 import PostDeleter from "../containers/admin/post/post-deleter";
 import SettingEditor from "../containers/admin/setting/setting-editor";
+import NotFound from "../containers/admin/not-found";
 import { ADMIN_DIR } from "../constants/config";
 
 const routes = (
@@ -56,6 +57,7 @@ const routes = (
             <Route path="setting">
                 <IndexRoute component={SettingEditor}/>
             </Route>
+            <Route path="*" component={NotFound} />
         </Route>
     </Route>
 );

@@ -1,6 +1,9 @@
 import React from 'react';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form, Textarea } from './form';
 import { PostsPerPageList } from '../constants/config';
+import AceEditor from 'react-ace';
+import 'brace/mode/javascript';
+import 'brace/theme/chrome';
 
 export default function BlogForm({
     title,
@@ -53,8 +56,13 @@ export default function BlogForm({
 
             <FieldSet label="Script Snippet"
                       error={errors.script_snippet}>
-                <Textarea value={values.script_snippet}
-                          onChange={_onChange("script_snippet")}/>
+                <AceEditor value={values.script_snippet}
+                           mode="javascript"
+                           theme="chrome"
+                           width="100%"
+                           height="300px"
+                           fontSize="14px"
+                           onChange={_onChange("script_snippet")}/>
             </FieldSet>
 
             <ButtonList>

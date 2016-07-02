@@ -8,7 +8,8 @@ import createActions from '../../web-app/stores/create-actions';
 import co from 'co';
 import { OK } from './status-codes';
 
-export default (LayoutComponent, renderProps) => co(function* () {
+export const createHtmlLayoutAndStatus = (LayoutComponent, renderProps) => co(function* ()
+{
 
     const { components, params } = renderProps;
     const store = createStore(reducers);
@@ -24,17 +25,19 @@ export default (LayoutComponent, renderProps) => co(function* () {
         {
             data = yield component.prepareForPreRendering({store, actions, params, parentData: data});
 
-            if (data && data.title) {
+            if (data && data.title)
+            {
                 title = data.title;
             }
 
-            if (data && data.statusCode) {
+            if (data && data.statusCode)
+            {
                 statusCode = data.statusCode;
             }
         }
     }
 
-    let html = ReactDOMServer.renderToStaticMarkup(
+    const html = renderHtmlLayout(
         <LayoutComponent title={title} preloadedState={store.getState()}>
             <Provider store={store}>
                 <RouterContext {...renderProps} />
@@ -42,8 +45,12 @@ export default (LayoutComponent, renderProps) => co(function* () {
         </LayoutComponent>
     );
 
-    html = "<!DOCTYPE html>" + html;
-
     return {html, statusCode};
 
 }).catch(error => console.error(error.stack ? error.stack : error));
+
+export const renderHtmlLayout = (Component) =>
+{
+    let html = ReactDOMServer.renderToStaticMarkup(Component);
+    return "<!DOCTYPE html>" + html;
+};
