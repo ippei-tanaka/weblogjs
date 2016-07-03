@@ -1,5 +1,6 @@
 import React from 'react';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Checkbox, Textarea, Datetime, TagList, Title, Form } from './form';
+import PublicPost from './public-post';
 import AceEditor from 'react-ace';
 import 'brace/mode/html';
 import 'brace/theme/chrome';
@@ -49,9 +50,14 @@ export default function PostForm({
                                mode="html"
                                theme="chrome"
                                width="100%"
+                               height="300px"
                                fontSize="14px"
                                onChange={_onChange("content")}/>
             </FieldSet>
+
+            <div className="m-dte-preview">
+                <PublicPost post={values}/>
+            </div>
 
             <FieldSet label="Category"
                       error={errors.category_id}>

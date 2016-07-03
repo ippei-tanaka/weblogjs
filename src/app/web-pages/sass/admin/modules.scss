@@ -1,4 +1,4 @@
-@import "mixins";
+@import "../shared/mixins";
 @import "variables";
 
 /*----------------------------
@@ -409,6 +409,13 @@
         padding: 20px;
         @include border-radius(5px);
     }
+
+    .m-dte-preview {
+        padding: 20px;
+        margin-top: 20px;
+        @include border-radius(5px);
+        border: 1px solid $color-border-plain;
+    }
 }
 
 /*----------------------------
@@ -538,7 +545,6 @@
 
 }
 
-
 /*----------------------------
  Loading
 ----------------------------*/
@@ -550,5 +556,6 @@
     align-items: center;
     justify-content: center;
 
-    .m-lod-image {}
+    .m-lod-image {
+    }
 }
