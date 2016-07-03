@@ -32,6 +32,7 @@ export default class WebpageRouter {
     constructor(basePath) {
         this._basePath = basePath;
         this._router = express.Router();
+        this._router.get(path.resolve(ADMIN_DIR, "."), this._adminHandler.bind(this));
         this._router.get(path.resolve(ADMIN_DIR, "*"), this._adminHandler.bind(this));
         this._router.get(path.resolve(PUBLIC_DIR, "*"), this._publicHandler.bind(this));
     }

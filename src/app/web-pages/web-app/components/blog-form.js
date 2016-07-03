@@ -61,7 +61,7 @@ export default function BlogForm({
                            theme="chrome"
                            width="100%"
                            height="300px"
-                           fontSize="14px"
+                           fontSize={14}
                            onChange={_onChange("script_snippet")}/>
             </FieldSet>
 
