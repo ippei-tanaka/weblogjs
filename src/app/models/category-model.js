@@ -1,7 +1,5 @@
 import { MongoModel } from 'simple-odm';
-import Schemas from '../schemas';
-
-const schema = Schemas.getSchema('category');
+import schema from './category-schema';
 
 export default class CategoryModel extends MongoModel {
 

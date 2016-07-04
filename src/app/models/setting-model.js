@@ -1,8 +1,6 @@
 import co from 'co';
 import { MongoModel } from 'simple-odm';
-import Schemas from '../schemas';
-
-const schema = Schemas.getSchema('setting');
+import schema from './setting-schema';
 
 export default class SettingModel extends MongoModel {
 
