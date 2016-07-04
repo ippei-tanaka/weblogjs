@@ -1,5 +1,5 @@
 import co from 'co';
-import WebServer from './server';
+import WebServer from './web-server';
 import WebpageRouter from './routers/webpage-router';
 import RestfulApiAdminRouter from './routers/restful-api-admin-router';
 import RestfulApiPublicRouter from './routers/restful-api-public-router';
