@@ -1432,6 +1432,38 @@ describe('Restful API', function () {
 
         });
 
+        describe('/post/:id', () => {
+
+            it('should return all the categories used on the blog posts and the numbers of posts', (done) => {
+                co(function* () {
+                    let response;
+
+                    response = yield httpRequest.post(`${ADMIN_URL}/blogs`, {name: "Blog 1", slug: "blog-1", posts_per_page: "10"});
+                    const blogId1 = response._id;
+
+                    const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
+                    const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+
+                    /* yes */ const post1 = yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 1", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday});
+                    /* no  */ const post2 = yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 2", slug:"post", content: "Test", blog_id: blogId1, published_date: yesterday, is_draft: true});
+                    /* no  */ const post3 = yield httpRequest.post(`${ADMIN_URL}/posts`, {title: "Post 3", slug:"post", content: "Test", blog_id: blogId1, published_date: tomorrow});
+
+                    const _post1 = yield httpRequest.get(`${PUBLIC_URL}/post/${post1._id}`);
+                    const _post2 = yield httpRequest.get(`${PUBLIC_URL}/post/${post2._id}`);
+                    const _post3 = yield httpRequest.get(`${PUBLIC_URL}/post/${post3._id}`);
+
+                    expect(_post1.title).to.equal("Post 1");
+                    expect(Object.keys(_post2).length).to.equal(0);
+                    expect(Object.keys(_post3).length).to.equal(0);
+
+                    done();
+                }).catch((e) => {
+                    done(e);
+                });
+            });
+
+        });
+
     });
 
 });

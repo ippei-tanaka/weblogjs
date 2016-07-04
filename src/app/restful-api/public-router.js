@@ -188,7 +188,11 @@ const addRoutes = (router) => {
     router.get("/post/:id/", (request, response) => co(function* () {
         let objctId = null;
         try { objctId = new ObjectID(request.params.id); } catch (error) {}
-        const post = yield PostModel.findOne({_id: objctId});
+        const post = yield PostModel.findOne({
+            _id: objctId,
+           published_date: {$lt: new Date()},
+           is_draft: {$ne: true}
+        });
         successHandler(response, post || {});
     }).catch(errorHandler(response)));
 
