@@ -1,4 +1,4 @@
-import WeblogJS from '../app';
+import WeblogJS from '../index';
 import co from 'co';
 
 export const run = () => new Promise((resolve, reject) => {

@@ -1,6 +1,5 @@
 import React from "react";
-import Immutable from 'immutable';
-import { getEnv } from '../../../env-variables';
+import { getEnv } from '../../env-variables';
 
 const WEBLOG_ENV = getEnv();
 const DEVELOPMENT_MODE = WEBLOG_ENV.mode === 'development';
@@ -12,7 +11,7 @@ function safeStringify(obj) {
     return JSON.stringify(obj).replace(/<\/script/g, '<\\/script').replace(/<!--/g, '<\\!--')
 }
 
-export default function PublicHtmlLayout({title, children, preloadedState}) {
+export default function AdminHtmlLayout({title, children, preloadedState}) {
     return (
         <html lang="en">
         <head>
@@ -21,18 +20,16 @@ export default function PublicHtmlLayout({title, children, preloadedState}) {
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <link href="/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
             <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
-            { PRODUCTION_MODE ? <link href="/bundle/public-style.css" media="all" rel="stylesheet"/> : null }
+            { PRODUCTION_MODE ? <link href="/bundle/admin-style.css" media="all" rel="stylesheet"/> : null }
             <title>{title}</title>
             { preloadedState ? <script dangerouslySetInnerHTML={{__html:`window.__PRELOADED_STATE__ = ${safeStringify(preloadedState)}`}}></script> : null }
             { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/bundle/vendor.js`}></script> : null }
-            { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/bundle/public.js`}></script> : null }
-            {/*
+            { DEVELOPMENT_MODE ? <script src={`//${WP_DEV_SERVER_HOST}:${WP_DEV_SERVER_PORT}/bundle/admin.js`}></script> : null }
             { PRODUCTION_MODE ? <script src="/bundle/vendor.js"></script> : null }
-            { PRODUCTION_MODE ? <script src="/bundle/public.js"></script> : null }
-            */}
+            { PRODUCTION_MODE ? <script src="/bundle/admin.js"></script> : null }
         </head>
         <body>
-            <div id="AppContainer">{children}</div>
+            <div id="AppContainer" className="module-app">{children}</div>
         </body>
         </html>
     )

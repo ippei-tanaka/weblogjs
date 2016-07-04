@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
+import ReactDOMServer from '../../../node_modules/react-dom/server';
 import { Provider } from 'react-redux';
 import { RouterContext } from 'react-router';
 import reducers from '../../views/reducers';

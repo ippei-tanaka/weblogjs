@@ -2,7 +2,7 @@ import React from 'react';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Checkbox, Textarea, Datetime, TagList, Title, Form } from './form';
 import PublicPost from './public-post';
 import AceEditor from 'react-ace';
-import 'brace/mode/html';
+import '../../../node_modules/brace/mode/html';
 import 'brace/theme/chrome';
 
 export default function PostForm({

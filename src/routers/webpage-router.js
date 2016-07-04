@@ -11,7 +11,7 @@ import { ADMIN_DIR, PUBLIC_DIR } from '../views/constants/config'
 import {OK, FOUND, NOT_FOUND, ERROR} from './lib/status-codes';
 import { createHtmlLayoutAndStatus, renderHtmlLayout } from './lib/create-html';
 
-const STATIC_DIR = path.resolve(__dirname, "../../client/static");
+const STATIC_DIR = path.resolve(__dirname, "../client/static");
 
 const routing = ({routes, location}) => new Promise((resolve, reject) => {
     match({routes, location}, (error, redirectLocation, renderProps) => {
