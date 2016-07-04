@@ -44,14 +44,18 @@ class PostAdder extends Component {
         const blogList = blogStore.toArray();
         const userList = userStore.toArray();
         const values = this.state.values;
+        const userMap = userStore.toObject();
+        const categoryMap = categoryStore.toObject();
 
         return (
             <PostForm title="Create a New Post"
                       errors={errors}
                       values={values}
-                      categoryList={categoryList}
                       blogList={blogList}
+                      categoryList={categoryList}
                       authorList={userList}
+                      categoryMap={categoryMap}
+                      authorMap={userMap}
                       onChange={this._onChange.bind(this)}
                       onSubmit={this._onSubmit.bind(this)}
                       onClickBackButton={this._goToListPage.bind(this)}
