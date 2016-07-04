@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Route, IndexRoute } from 'react-router';
-import Index from "../containers/public/index";
-import Wrapper from "../containers/public/wrapper";
-import Single from "../containers/public/single";
-import NotFound from "../containers/public/not-found";
+import Index from "../web-pages/web-app/containers/public/index";
+import Wrapper from "../web-pages/web-app/containers/public/wrapper";
+import Single from "../web-pages/web-app/containers/public/single";
+import NotFound from "../web-pages/web-app/containers/public/not-found";
 
 
 const onEnterHandler = (_callback, store, actions) => {

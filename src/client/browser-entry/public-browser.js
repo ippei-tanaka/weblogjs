@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import reducers from '../../app/web-pages/web-app/reducers';
 import createStore from '../../app/web-pages/web-app/stores/create-store';
 import createActions from '../../app/web-pages/web-app/stores/create-actions';
-import publicRoutes from '../../app/web-pages/web-app/routers/public-routes';
+import publicRoutes from '../../app/routers/webpage-public-routes';
 
 require('../../app/web-pages/sass/public/main.scss');
 

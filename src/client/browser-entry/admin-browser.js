@@ -4,7 +4,7 @@ import { Router, browserHistory } from 'react-router'
 import { Provider } from 'react-redux';
 import reducers from '../../app/web-pages/web-app/reducers';
 import createStore from '../../app/web-pages/web-app/stores/create-store';
-import adminRoutes from '../../app/web-pages/web-app/routers/admin-routes';
+import adminRoutes from '../../app/routers/webpage-admin-routes';
 
 require('../../app/web-pages/sass/admin/main.scss');
 

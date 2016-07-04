@@ -1,8 +1,8 @@
 import co from 'co';
 import WebServer from './server';
-import WebpageRouter from './web-pages/router';
-import AdminRestfulApiRouter from './restful-api/admin-router';
-import PublicRestfulApiRouter from './restful-api/public-router';
+import WebpageRouter from './routers/webpage-router';
+import RestfulApiAdminRouter from './routers/restful-api-admin-router';
+import RestfulApiPublicRouter from './routers/restful-api-public-router';
 import { mongoDriver, mongoDbBaseOperator, types } from 'simple-odm'
 import PassportManager from './passport-manager';
 import UserModel from './models/user-model';
@@ -39,11 +39,11 @@ class WeblogJS {
 
         const webpageRouter = new WebpageRouter(webPageRoot);
 
-        const restfulApiRouter = new AdminRestfulApiRouter({
+        const restfulApiRouter = new RestfulApiAdminRouter({
             basePath: apiRoot
         });
 
-        const publicRestfulApiRouter = new PublicRestfulApiRouter({
+        const publicRestfulApiRouter = new RestfulApiPublicRouter({
             basePath: publicApiRoot
         });
 
@@ -68,9 +68,6 @@ class WeblogJS {
         return this._webServer;
     }
 
-    /**
-     * @returns {DbSettingOperator}
-     */
     dropDatabase ()
     {
         return this._dbOperator.dropDatabase();
