@@ -6,12 +6,14 @@ import PassportManager from '../passport-manager';
 import Models from '../models';
 import { successHandler, errorHandler, parseParameters } from './lib/handlers';
 
-const parseParam = (str, defaultValue) => {
+const parseParam = (str, defaultValue) =>
+{
     const arr = str ? str.split('/') : [];
     return arr.length >= 3 && arr[2] ? arr[2] : defaultValue;
 };
 
-const findBlog = (blogSlug) => co(function* () {
+const findBlog = (blogSlug) => co(function* ()
+{
 
     const BlogModel = Models.getModel('blog');
     const SettingModel = Models.getModel('setting');
@@ -32,7 +34,8 @@ const findBlog = (blogSlug) => co(function* () {
 
 });
 
-const addRoutes = (router) => {
+const addRoutes = (router) =>
+{
 
     const UserModel = Models.getModel('user');
     const CategoryModel = Models.getModel('category');
@@ -40,27 +43,32 @@ const addRoutes = (router) => {
     const BlogModel = Models.getModel('blog');
     const SettingModel = Models.getModel('setting');
 
-    router.get(`/blogs`, (request, response) => co(function* () {
+    router.get(`/blogs`, (request, response) => co(function* ()
+    {
         const blogModels = yield BlogModel.findMany();
         successHandler(response, {items: blogModels});
     }).catch(errorHandler(response)));
 
-    router.get(`/setting`, (request, response) => co(function* () {
+    router.get(`/setting`, (request, response) => co(function* ()
+    {
         const settingModel = yield SettingModel.getSetting();
         successHandler(response, settingModel);
     }).catch(errorHandler(response)));
 
-    router.get(`/front-blog`, (request, response) => co(function* () {
+    router.get(`/front-blog`, (request, response) => co(function* ()
+    {
         const settingModel = yield SettingModel.getSetting();
 
-        if (!settingModel) {
+        if (!settingModel)
+        {
             successHandler(response, {});
             return;
         }
 
         const setting = settingModel.values;
 
-        if (!setting || !setting.front_blog_id) {
+        if (!setting || !setting.front_blog_id)
+        {
             successHandler(response, {});
             return;
         }
@@ -70,7 +78,11 @@ const addRoutes = (router) => {
 
     }).catch(errorHandler(response)));
 
-    router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?\/posts(\/|\/page\/[0-9]+\/?)?$/, (request, response) => co(function* () {
+    router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?\/posts(\/|\/page\/[0-9]+\/?)?$/, (
+        request,
+        response
+    ) => co(function* ()
+    {
         const blogSlug = parseParam(request.params[0], null);
         const categorySlug = parseParam(request.params[1], null);
         const authorSlug = parseParam(request.params[2], null);
@@ -78,7 +90,8 @@ const addRoutes = (router) => {
         const page = parseParam(request.params[4], 1);
 
         const blogModel = yield findBlog(blogSlug);
-        if (!blogModel) {
+        if (!blogModel)
+        {
             successHandler(response, {items: []});
             return;
         }
@@ -90,21 +103,24 @@ const addRoutes = (router) => {
             is_draft: {$ne: true}
         };
 
-        if (tag) {
+        if (tag)
+        {
             _query.tags = {$in: [tag]};
         }
 
         const categoryModel = yield CategoryModel.findOne({slug: categorySlug});
         const category = categoryModel ? categoryModel.values : null;
 
-        if (category) {
+        if (category)
+        {
             _query.category_id = category._id;
         }
 
         const userModel = yield UserModel.findOne({slug: authorSlug});
         const user = userModel ? userModel.values : null;
 
-        if (user) {
+        if (user)
+        {
             _query.author_id = user._id;
         }
 
@@ -129,7 +145,8 @@ const addRoutes = (router) => {
 
         let totalPages = 0;
 
-        if (sums.length > 0) {
+        if (sums.length > 0)
+        {
             const sum = sums[0];
             totalPages = Math.ceil(sum.size / blog.posts_per_page);
         }
@@ -138,13 +155,15 @@ const addRoutes = (router) => {
 
     }).catch(errorHandler(response)));
 
-    router.get(/^(\/blog\/[^/]+)?\/categories\/?$/, (request, response) => co(function* () {
+    router.get(/^(\/blog\/[^/]+)?\/categories\/?$/, (request, response) => co(function* ()
+    {
 
         const blogSlug = parseParam(request.params[0], null);
 
         const blogModel = yield findBlog(blogSlug);
 
-        if (!blogModel) {
+        if (!blogModel)
+        {
             successHandler(response, {items: []});
             return;
         }
@@ -173,7 +192,8 @@ const addRoutes = (router) => {
             query: {_id: {$in: categorySums.map(obj => obj._id)}}
         });
 
-        const categories = categoryModels.map((model) => {
+        const categories = categoryModels.map((model) =>
+        {
             const values = model.values;
             const sumObj = categorySums.find(obj => obj._id.equals(values._id));
             return Object.assign({}, values, {size: sumObj.size});
@@ -183,26 +203,28 @@ const addRoutes = (router) => {
 
     }).catch(errorHandler(response)));
 
-
-    // TODO write tests for this route
-    router.get("/post/:id/", (request, response) => co(function* () {
+    router.get("/post/:id/", (request, response) => co(function* ()
+    {
         let objctId = null;
-        try { objctId = new ObjectID(request.params.id); } catch (error) {}
+        try
+        { objctId = new ObjectID(request.params.id); }
+        catch (error)
+        {}
         const post = yield PostModel.findOne({
             _id: objctId,
-           published_date: {$lt: new Date()},
-           is_draft: {$ne: true}
+            published_date: {$lt: new Date()},
+            is_draft: {$ne: true}
         });
         successHandler(response, post || {});
     }).catch(errorHandler(response)));
-
 
     return router;
 };
 
 export default class PublicRestfulApiRouter {
 
-    constructor({basePath}) {
+    constructor ({basePath})
+    {
         this._basePath = basePath;
 
         let router = new Router();
@@ -211,11 +233,13 @@ export default class PublicRestfulApiRouter {
         this._router = router
     }
 
-    get basePath() {
+    get basePath ()
+    {
         return this._basePath;
     }
 
-    get router() {
+    get router ()
+    {
         return this._router;
     }
 

@@ -20,18 +20,6 @@ class WeblogJsError extends Error {
     }
 }
 
-export let DbError = class WeblogJsDatabaseError extends WeblogJsError {
-    constructor(message) {
-        super(message);
-    }
-};
-
-export let ValidationError = class WeblogJsValidationError extends WeblogJsError {
-    constructor(message) {
-        super(message);
-    }
-};
-
 export let SyntaxError = class WeblogJsSyntaxError extends WeblogJsError {
     constructor(message) {
         super(message);

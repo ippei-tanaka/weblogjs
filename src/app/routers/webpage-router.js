@@ -7,9 +7,9 @@ import { match } from 'react-router';
 import publicRoutes from './webpage-public-routes';
 import AdminHtmlLayout from '../views/layouts/admin-html-layout';
 import PublicHtmlLayout from '../views/layouts/public-html-layout';
-import { createHtmlLayoutAndStatus, renderHtmlLayout } from './lib/create-html';
 import { ADMIN_DIR, PUBLIC_DIR } from '../views/web-app/constants/config'
 import {OK, FOUND, NOT_FOUND, ERROR} from './lib/status-codes';
+import { createHtmlLayoutAndStatus, renderHtmlLayout } from './lib/create-html';
 
 const STATIC_DIR = path.resolve(__dirname, "../../client/static");
 
