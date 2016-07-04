@@ -1,7 +1,7 @@
 import co from 'co';
 import { expect } from 'chai';
 import httpRequest from './lib/http-request';
-import WeblogJS from '../src/app';
+import WeblogJS from '../src/index';
 import { getEnv } from '../src/env-variables';
 
 const admin = Object.freeze(Object.assign({

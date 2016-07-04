@@ -2,7 +2,7 @@
   "name": "weblogjs",
   "version": "0.5.0",
   "description": "a library for weblogs",
-  "main": "./app",
+  "main": "./lib",
   "scripts": {
     "build": "npm run build:clean && npm run build:server && npm run build:client && npm run build:copy-client",
     "build:clean": "./node_modules/.bin/rimraf lib",

@@ -6,7 +6,7 @@ import RestfulApiPublicRouter from './routers/restful-api-public-router';
 import { mongoDriver, mongoDbBaseOperator, types } from 'simple-odm'
 import PassportManager from './passport-manager';
 import UserModel from './models/user-model';
-import { getEnv } from '../env-variables';
+import { getEnv } from './env-variables';
 
 const WEBLOG_ENV = getEnv();
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form, Textarea } from './form';
 import { PostsPerPageList } from '../constants/config';
 import AceEditor from 'react-ace';
-import 'brace/mode/javascript';
+import '../../../node_modules/brace/mode/javascript';
 import 'brace/theme/chrome';
 
 export default function BlogForm({

@@ -1,8 +1,8 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import co from 'co';
-import UserModel from './models/user-model';
 import { ObjectID } from 'mongodb';
+import UserModel from './models/user-model';
 
 const localAuth = passport.authenticate('local');
 

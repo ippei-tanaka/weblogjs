@@ -2,12 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, browserHistory } from 'react-router'
 import { Provider } from 'react-redux';
-import reducers from '../../app/views/reducers';
-import createStore from '../../app/views/stores/create-store';
-import createActions from '../../app/views/stores/create-actions';
-import publicRoutes from '../../app/routers/webpage-public-routes';
+import reducers from '../../views/reducers';
+import createStore from '../../views/stores/create-store';
+import createActions from '../../views/stores/create-actions';
+import publicRoutes from '../../routers/webpage-public-routes';
 
-require('../../app/views/sass/public/main.scss');
+require('../../views/sass/public/main.scss');
 
 const preloadedState = window.__PRELOADED_STATE__;
 const store = createStore(reducers, preloadedState);
