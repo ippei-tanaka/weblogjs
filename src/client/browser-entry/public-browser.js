@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, browserHistory } from 'react-router'
 import { Provider } from 'react-redux';
-import reducers from '../../app/views/web-app/reducers';
-import createStore from '../../app/views/web-app/stores/create-store';
-import createActions from '../../app/views/web-app/stores/create-actions';
+import reducers from '../../app/views/reducers';
+import createStore from '../../app/views/stores/create-store';
+import createActions from '../../app/views/stores/create-actions';
 import publicRoutes from '../../app/routers/webpage-public-routes';
 
 require('../../app/views/sass/public/main.scss');
