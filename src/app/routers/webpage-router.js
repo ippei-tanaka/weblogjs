@@ -1,17 +1,17 @@
 import React from 'react';
 import { match } from 'react-router';
-import publicRoutes from '../web-app/routers/public-routes';
-import AdminHtmlLayout from '../layouts/admin-html-layout';
-import PublicHtmlLayout from '../layouts/public-html-layout';
+import publicRoutes from './webpage-public-routes';
+import AdminHtmlLayout from '../web-pages/layouts/admin-html-layout';
+import PublicHtmlLayout from '../web-pages/layouts/public-html-layout';
 import { createHtmlLayoutAndStatus, renderHtmlLayout } from './lib/create-html';
-import { ADMIN_DIR, PUBLIC_DIR } from '../web-app/constants/config'
+import { ADMIN_DIR, PUBLIC_DIR } from '../web-pages/web-app/constants/config'
 import express from "express";
 import co from 'co';
 import path from 'path';
 import url from 'url';
 import {OK, FOUND, NOT_FOUND, ERROR} from './lib/status-codes';
 
-const STATIC_DIR = path.resolve(__dirname, "../../../client/static");
+const STATIC_DIR = path.resolve(__dirname, "../../client/static");
 
 const routing = ({routes, location}) => new Promise((resolve, reject) => {
     match({routes, location}, (error, redirectLocation, renderProps) => {
