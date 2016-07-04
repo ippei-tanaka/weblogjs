@@ -1,3 +1,4 @@
+import co from 'co';
 import React from 'react';
 import ReactDOMServer from '../../../node_modules/react-dom/server';
 import { Provider } from 'react-redux';
@@ -5,7 +6,6 @@ import { RouterContext } from 'react-router';
 import reducers from '../../views/reducers';
 import createStore from '../../views/stores/create-store';
 import createActions from '../../views/stores/create-actions';
-import co from 'co';
 import { OK } from './status-codes';
 
 export const createHtmlLayoutAndStatus = (LayoutComponent, renderProps) => co(function* ()

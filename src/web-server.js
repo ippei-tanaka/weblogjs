@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
 
-const buildExpressApp = ({session, PassportManager, adminApiRouter, publicApiRouter, webpageRouter}) =>
+const buildExpressApp = ({session, PassportManager, adminApiRouter, publicApiRouter, webpageRouter, staticPath}) =>
 {
     const expressApp = express();
 
@@ -30,9 +30,13 @@ const buildExpressApp = ({session, PassportManager, adminApiRouter, publicApiRou
         expressApp.use(publicApiRouter.basePath, publicApiRouter.router);
     }
 
+    if (staticPath)
+    {
+        expressApp.use(express.static(staticPath));
+    }
+
     if (webpageRouter)
     {
-        expressApp.use(express.static(webpageRouter.staticDir));
         expressApp.use(webpageRouter.basePath, webpageRouter.router);
     }
 
@@ -41,12 +45,7 @@ const buildExpressApp = ({session, PassportManager, adminApiRouter, publicApiRou
 
 export default class WebServer {
 
-    constructor (
-        {
-            host, port, sessionSecret,
-            webpageRouter, apiRouter,
-            publicApiRouter, PassportManager}
-    )
+    constructor ({host, port, sessionSecret, webpageRouter, adminApiRouter, publicApiRouter, PassportManager, staticPath})
     {
         this._host = host;
         this._port = port;
@@ -58,9 +57,10 @@ export default class WebServer {
                 saveUninitialized: false
             }),
             PassportManager,
-            adminApiRouter: apiRouter,
+            adminApiRouter,
             publicApiRouter,
-            webpageRouter
+            webpageRouter,
+            staticPath
         });
     }
 
@@ -75,18 +75,4 @@ export default class WebServer {
             );
         });
     }
-
-    /*
-    stop() {
-        return new Promise((resolve, reject) => {
-            if (!this._instance) {
-                resolve();
-                return;
-            }
-
-            this._instance.close(error =>
-                !error ? resolve() : reject(error));
-        });
-    }
-    */
 }

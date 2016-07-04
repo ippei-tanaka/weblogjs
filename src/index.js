@@ -23,6 +23,10 @@ class WeblogJS {
             webPort = WEBLOG_ENV.web_port,
             apiRoot = WEBLOG_ENV.admin_api_root,
             publicApiRoot = WEBLOG_ENV.public_api_root,
+            staticPath = WEBLOG_ENV.static_path,
+            adminDir = WEBLOG_ENV.admin_dir,
+            publicDir = WEBLOG_ENV.public_dir,
+            webpageRoot = WEBLOG_ENV.webpage_root,
             sessionSecret = WEBLOG_ENV.session_secret
             } = {}
     )
@@ -36,24 +40,29 @@ class WeblogJS {
 
         this._dbOperator = mongoDbBaseOperator;
 
-        const webpageRouter = new WebpageRouter();
+        const webpageRouter = new WebpageRouter({
+            adminDir,
+            publicDir,
+            webpageRoot
+        });
 
-        const restfulApiRouter = new RestfulApiAdminRouter({
+        const adminApiRouter = new RestfulApiAdminRouter({
             basePath: apiRoot
         });
 
-        const publicRestfulApiRouter = new RestfulApiPublicRouter({
+        const publicApiRouter = new RestfulApiPublicRouter({
             basePath: publicApiRoot
         });
 
         this._webServer = new WebServer({
             host: webHost,
             port: webPort,
-            sessionSecret: sessionSecret,
-            webpageRouter: webpageRouter,
-            apiRouter: restfulApiRouter,
-            publicApiRouter: publicRestfulApiRouter,
-            PassportManager: PassportManager
+            sessionSecret,
+            webpageRouter,
+            adminApiRouter,
+            publicApiRouter,
+            PassportManager,
+            staticPath
         });
 
         return this;
@@ -79,7 +88,8 @@ class WeblogJS {
 
     createUser (user)
     {
-        return co(function* () {
+        return co(function* ()
+        {
             const model = new UserModel(user);
             yield model.save();
         })
