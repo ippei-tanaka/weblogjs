@@ -21,7 +21,6 @@ class WeblogJS {
             dbName = WEBLOG_ENV.db_name,
             webHost = WEBLOG_ENV.web_host,
             webPort = WEBLOG_ENV.web_port,
-            webPageRoot = WEBLOG_ENV.webpage_root,
             apiRoot = WEBLOG_ENV.admin_api_root,
             publicApiRoot = WEBLOG_ENV.public_api_root,
             sessionSecret = WEBLOG_ENV.session_secret
@@ -37,7 +36,7 @@ class WeblogJS {
 
         this._dbOperator = mongoDbBaseOperator;
 
-        const webpageRouter = new WebpageRouter(webPageRoot);
+        const webpageRouter = new WebpageRouter();
 
         const restfulApiRouter = new RestfulApiAdminRouter({
             basePath: apiRoot

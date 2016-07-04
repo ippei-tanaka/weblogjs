@@ -1,3 +1,5 @@
+import path from 'path';
+
 const variables = {};
 
 const defaultVariables = {
@@ -8,6 +10,9 @@ const defaultVariables = {
     web_host: "localhost",
     web_port: 80,
     webpage_root: "/",
+    admin_dir: "admin",
+    public_dir: "",
+    static_path: path.resolve(__dirname, "./client/static"),
     admin_api_root: "/api",
     public_api_root: "/public-api",
     session_secret: "huahui155HOUDSDe21",

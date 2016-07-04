@@ -7,11 +7,9 @@ import { match } from 'react-router';
 import publicRoutes from './webpage-public-routes';
 import AdminHtmlLayout from '../views/layouts/admin-html-layout';
 import PublicHtmlLayout from '../views/layouts/public-html-layout';
-import { ADMIN_DIR, PUBLIC_DIR } from '../views/constants/config'
 import {OK, FOUND, NOT_FOUND, ERROR} from './lib/status-codes';
 import { createHtmlLayoutAndStatus, renderHtmlLayout } from './lib/create-html';
-
-const STATIC_DIR = path.resolve(__dirname, "../client/static");
+import { getEnv } from '../env-variables';
 
 const routing = ({routes, location}) => new Promise((resolve, reject) => {
     match({routes, location}, (error, redirectLocation, renderProps) => {
@@ -29,12 +27,13 @@ const routing = ({routes, location}) => new Promise((resolve, reject) => {
 
 export default class WebpageRouter {
 
-    constructor(basePath) {
-        this._basePath = basePath;
+    constructor() {
+        const ENV = getEnv();
+        this._basePath = ENV.webpage_root;
         this._router = Router();
-        this._router.get(path.resolve(ADMIN_DIR, "."), this._adminHandler.bind(this));
-        this._router.get(path.resolve(ADMIN_DIR, "*"), this._adminHandler.bind(this));
-        this._router.get(path.resolve(PUBLIC_DIR, "*"), this._publicHandler.bind(this));
+        this._router.get(path.resolve(ENV.webpage_root, ENV.admin_dir, "."), this._adminHandler.bind(this));
+        this._router.get(path.resolve(ENV.webpage_root, ENV.admin_dir, "*"), this._adminHandler.bind(this));
+        this._router.get(path.resolve(ENV.webpage_root, ENV.public_dir, "*"), this._publicHandler.bind(this));
     }
 
     _adminHandler(request, response) {
@@ -72,6 +71,6 @@ export default class WebpageRouter {
     }
 
     get staticDir() {
-        return STATIC_DIR;
+        return getEnv().static_path;
     }
 }
