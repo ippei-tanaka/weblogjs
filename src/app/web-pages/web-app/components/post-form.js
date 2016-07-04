@@ -10,7 +10,9 @@ export default function PostForm({
     values,
     errors,
     categoryList,
+    categoryMap,
     authorList,
+    authorMap,
     blogList,
     onChange,
     onSubmit,
@@ -55,8 +57,9 @@ export default function PostForm({
                                onChange={_onChange("content")}/>
             </FieldSet>
 
+
             <div className="m-dte-preview">
-                <PublicPost post={values}/>
+                <PublicPost post={values} categories={categoryMap} authors={authorMap} />
             </div>
 
             <FieldSet label="Category"

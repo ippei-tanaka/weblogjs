@@ -43,9 +43,11 @@ class PostEditor extends Component {
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
         const values = Object.assign({}, editedPost, this.state.values);
-        const categoryList = categoryStore.toArray();
         const blogList = blogStore.toArray();
         const userList = userStore.toArray();
+        const categoryList = categoryStore.toArray();
+        const userMap = userStore.toObject();
+        const categoryMap = categoryStore.toObject();
 
         return editedPost ? (
             <div>
@@ -53,8 +55,10 @@ class PostEditor extends Component {
                           errors={errors}
                           values={values}
                           categoryList={categoryList}
-                          blogList={blogList}
                           authorList={userList}
+                          categoryMap={categoryMap}
+                          authorMap={userMap}
+                          blogList={blogList}
                           onChange={this._onChange.bind(this)}
                           onSubmit={this._onSubmit.bind(this)}
                           onClickBackButton={this._goToListPage.bind(this)}

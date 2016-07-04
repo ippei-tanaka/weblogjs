@@ -29,17 +29,15 @@ export default (
 
             <date className="m-pst-date">Published on {Moment(post.published_date).format("MMM DD, YYYY")}</date>
 
-            {author ?
+            {author &&
                 <div className="m-pst-author">Written by <Link className="m-pst-author-link"
-                                                               to={`/author/${author.slug}`}>{author.name}</Link></div>
-                : null
+                                                               to={`/author/${author.slug}`}>{author.display_name}</Link></div>
             }
 
-            {category ?
+            {category &&
                 <div className="m-pst-category">Category: <Link className="m-pst-category-link"
                                                                 to={`/category/${category.slug}`}>{category.name}</Link>
                 </div>
-                : null
             }
 
             {post.tags && post.tags.length > 0 ?
