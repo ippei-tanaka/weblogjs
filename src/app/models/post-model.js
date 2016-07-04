@@ -1,7 +1,5 @@
 import { MongoModel } from 'simple-odm';
-import Schemas from '../schemas';
-
-const schema = Schemas.getSchema('post');
+import schema from './post-schema';
 
 export default class PostModel extends MongoModel {
 

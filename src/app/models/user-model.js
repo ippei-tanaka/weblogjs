@@ -1,8 +1,6 @@
 import { MongoModel } from 'simple-odm';
-import Schemas from '../schemas';
+import schema from './user-schema';
 import { generateHash, compareHashedStrings } from '../utils';
-
-const schema = Schemas.getSchema('user');
 
 export default class UserModel extends MongoModel {
 
