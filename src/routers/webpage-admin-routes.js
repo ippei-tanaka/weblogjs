@@ -23,7 +23,11 @@ import PostEditor from "../views/containers/admin/post/post-editor";
 import PostDeleter from "../views/containers/admin/post/post-deleter";
 import SettingEditor from "../views/containers/admin/setting/setting-editor";
 import NotFound from "../views/containers/admin/not-found";
-import { ADMIN_DIR } from "../views/constants/config";
+import path from 'path';
+import { getEnv } from '../env-variables';
+
+const ENV = process.env.WEBLOG_WEBPACK_ENV || getEnv();
+const ADMIN_DIR = path.resolve(ENV.webpage_root, ENV.admin_dir);
 
 const routes = (
     <Route path={ADMIN_DIR} component={Admin}>
