@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Route, IndexRoute } from 'react-router';
-import Wrapper from "../views/web-app/containers/public/wrapper";
-import Multiple from "../views/web-app/containers/public/multiple";
-import Single from "../views/web-app/containers/public/single";
-import NotFound from "../views/web-app/containers/public/not-found";
+import Wrapper from "../views/containers/public/wrapper";
+import Multiple from "../views/containers/public/multiple";
+import Single from "../views/containers/public/single";
+import NotFound from "../views/containers/public/not-found";
 
 const onEnterHandler = (_callback, store, actions) =>
 {

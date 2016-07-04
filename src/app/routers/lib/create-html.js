@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { RouterContext } from 'react-router';
-import reducers from '../../views/web-app/reducers';
-import createStore from '../../views/web-app/stores/create-store';
-import createActions from '../../views/web-app/stores/create-actions';
+import reducers from '../../views/reducers';
+import createStore from '../../views/stores/create-store';
+import createActions from '../../views/stores/create-actions';
 import co from 'co';
 import { OK } from './status-codes';
 
