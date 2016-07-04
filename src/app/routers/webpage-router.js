@@ -1,14 +1,14 @@
-import React from 'react';
-import { match } from 'react-router';
-import publicRoutes from './webpage-public-routes';
-import AdminHtmlLayout from '../web-pages/layouts/admin-html-layout';
-import PublicHtmlLayout from '../web-pages/layouts/public-html-layout';
-import { createHtmlLayoutAndStatus, renderHtmlLayout } from './lib/create-html';
-import { ADMIN_DIR, PUBLIC_DIR } from '../web-pages/web-app/constants/config'
-import express from "express";
+import { Router } from "express";
 import co from 'co';
 import path from 'path';
 import url from 'url';
+import React from 'react';
+import { match } from 'react-router';
+import publicRoutes from './webpage-public-routes';
+import AdminHtmlLayout from '../views/layouts/admin-html-layout';
+import PublicHtmlLayout from '../views/layouts/public-html-layout';
+import { createHtmlLayoutAndStatus, renderHtmlLayout } from './lib/create-html';
+import { ADMIN_DIR, PUBLIC_DIR } from '../views/web-app/constants/config'
 import {OK, FOUND, NOT_FOUND, ERROR} from './lib/status-codes';
 
 const STATIC_DIR = path.resolve(__dirname, "../../client/static");
@@ -31,7 +31,7 @@ export default class WebpageRouter {
 
     constructor(basePath) {
         this._basePath = basePath;
-        this._router = express.Router();
+        this._router = Router();
         this._router.get(path.resolve(ADMIN_DIR, "."), this._adminHandler.bind(this));
         this._router.get(path.resolve(ADMIN_DIR, "*"), this._adminHandler.bind(this));
         this._router.get(path.resolve(PUBLIC_DIR, "*"), this._publicHandler.bind(this));

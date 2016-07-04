@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, browserHistory } from 'react-router'
 import { Provider } from 'react-redux';
-import reducers from '../../app/web-pages/web-app/reducers';
-import createStore from '../../app/web-pages/web-app/stores/create-store';
+import reducers from '../../app/views/web-app/reducers';
+import createStore from '../../app/views/web-app/stores/create-store';
 import adminRoutes from '../../app/routers/webpage-admin-routes';
 
-require('../../app/web-pages/sass/admin/main.scss');
+require('../../app/views/sass/admin/main.scss');
 
 const preloadedState = window.__PRELOADED_STATE__;
 const store = createStore(reducers, preloadedState);
