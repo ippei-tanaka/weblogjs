@@ -102,96 +102,90 @@ const schema = new UserSchema();
 
 eventHub.on(schema.BEFORE_SAVED, modifyDateData);
 
-eventHub.on(schema.BEFORE_SAVED, ({errors, values, initialValues}) =>
+const onUpdate = ({errors, values, initialValues}) => co(function* ()
 {
-    if (!values._id)
+    const _values = Object.assign({}, values);
+    const _errors = Object.assign({}, errors);
+
+    delete _values[PASSWORD];
+    delete _values[OLD_PASSWORD];
+    delete _values[PASSWORD_UPDATE];
+    delete _values[PASSWORD_CONFIRMED];
+
+    if (values[PASSWORD_UPDATE])
     {
-        return co(function* ()
+        if (!values.hasOwnProperty(PASSWORD) || !values[PASSWORD])
         {
-            const _values = Object.assign({}, values);
+            _errors[PASSWORD] = ["The new password is required."];
+        }
 
-            delete _values[PASSWORD];
-            delete _values[OLD_PASSWORD];
-            delete _values[PASSWORD_UPDATE];
-            delete _values[PASSWORD_CONFIRMED];
+        if (!values.hasOwnProperty(OLD_PASSWORD) || !values[OLD_PASSWORD])
+        {
+            _errors[OLD_PASSWORD] = ["The current password is required."];
+        }
 
-            if (!errors[PASSWORD]
-                || !Array.isArray(errors[PASSWORD])
-                || errors[PASSWORD].length === 0)
+        if (!values.hasOwnProperty(PASSWORD_CONFIRMED) || !values[PASSWORD_CONFIRMED])
+        {
+            _errors[PASSWORD_CONFIRMED] = ["The confirmed password is required."];
+        }
+
+        if (values.hasOwnProperty(PASSWORD_CONFIRMED)
+            && values[PASSWORD_CONFIRMED] !== ""
+            && values[PASSWORD] !== values[PASSWORD_CONFIRMED])
+        {
+            _errors[PASSWORD_CONFIRMED] = ['The confirmed password sent is not the same as the new password.'];
+        }
+
+        if (values.hasOwnProperty(OLD_PASSWORD) && values[OLD_PASSWORD] !== "")
+        {
+            const result = yield compareHashedStrings(values[OLD_PASSWORD], initialValues[HASHED_PASSWORD]);
+            if (!result)
             {
-                _values[HASHED_PASSWORD] = yield generateHash(values[PASSWORD]);
+                _errors[OLD_PASSWORD] = ["The current password sent is not correct."];
             }
+        }
 
-            return {values: _values};
-        });
+        if (Object.keys(_errors).length === 0)
+        {
+            _values[HASHED_PASSWORD] = yield generateHash(values[PASSWORD]);
+        }
     }
     else
     {
-        // The model is updated
-
-        return co(function* ()
+        if (values.hasOwnProperty(PASSWORD) && values[PASSWORD])
         {
-            const _values = Object.assign({}, values);
-            const _errors = Object.assign({}, errors);
-
-            delete _values[PASSWORD];
-            delete _values[OLD_PASSWORD];
-            delete _values[PASSWORD_UPDATE];
-            delete _values[PASSWORD_CONFIRMED];
-
-            if (values[PASSWORD_UPDATE])
-            {
-                if (!values.hasOwnProperty(PASSWORD) || !values[PASSWORD])
-                {
-                    _errors[PASSWORD] = ["The new password is required."];
-                }
-
-                if (!values.hasOwnProperty(OLD_PASSWORD) || !values[OLD_PASSWORD])
-                {
-                    _errors[OLD_PASSWORD] = ["The current password is required."];
-                }
-
-                if (!values.hasOwnProperty(PASSWORD_CONFIRMED) || !values[PASSWORD_CONFIRMED])
-                {
-                    _errors[PASSWORD_CONFIRMED] = ["The confirmed password is required."];
-                }
-
-                if (values.hasOwnProperty(PASSWORD_CONFIRMED)
-                    && values[PASSWORD_CONFIRMED] !== ""
-                    && values[PASSWORD] !== values[PASSWORD_CONFIRMED])
-                {
-                    _errors[PASSWORD_CONFIRMED] = ['The confirmed password sent is not the same as the new password.'];
-                }
-
-                if (values.hasOwnProperty(OLD_PASSWORD) && values[OLD_PASSWORD] !== "")
-                {
-                    const result = yield compareHashedStrings(values[OLD_PASSWORD], initialValues[HASHED_PASSWORD]);
-                    if (!result)
-                    {
-                        _errors[OLD_PASSWORD] = ["The current password sent is not correct."];
-                    }
-                }
-
-                if (Object.keys(_errors).length === 0)
-                {
-                    _values[HASHED_PASSWORD] = yield generateHash(values[PASSWORD]);
-                }
-            }
-            else
-            {
-                if (values.hasOwnProperty(PASSWORD) && values[PASSWORD])
-                {
-                    _errors[PASSWORD] = ["The password can't be updated."];
-                }
-            }
-
-            return {
-                values: _values,
-                errors: _errors
-            };
-        });
-
+            _errors[PASSWORD] = ["The password can't be updated."];
+        }
     }
+
+    return {
+        values: _values,
+        errors: _errors
+    };
+});
+
+const onCreate = ({errors, values, initialValues}) => co(function* ()
+{
+    const _values = Object.assign({}, values);
+
+    delete _values[PASSWORD];
+    delete _values[OLD_PASSWORD];
+    delete _values[PASSWORD_UPDATE];
+    delete _values[PASSWORD_CONFIRMED];
+
+    if (!errors[PASSWORD]
+        || !Array.isArray(errors[PASSWORD])
+        || errors[PASSWORD].length === 0)
+    {
+        _values[HASHED_PASSWORD] = yield generateHash(values[PASSWORD]);
+    }
+
+    return {values: _values};
+});
+
+eventHub.on(schema.BEFORE_SAVED, ({errors, values, initialValues}) =>
+{
+    return !values._id ? onCreate({errors, values, initialValues}) : onUpdate({errors, values, initialValues});
 });
 
 export default schema;
