@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NOT_FOUND } from '../../../routers/lib/status-codes';
+import { NOT_FOUND } from '../../../constants/status-codes';
 
 class NotFoundError extends Component {
 
