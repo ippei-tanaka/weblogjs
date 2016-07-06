@@ -71,7 +71,7 @@ const routing = ({routes, location}) => new Promise((resolve, reject) =>
     });
 });
 
-export default (location) => co(function* ()
+export default ({location}) => co(function* ()
 {
     const { statusCode, data } = yield routing({routes: publicRoutes(), location});
 
