@@ -1,6 +1,6 @@
 import { MongoModel } from 'simple-odm';
 import schema from './user-schema';
-import { generateHash, compareHashedStrings } from '../utils';
+import compareHashedStrings from '../utilities/compare-hashed-strings';
 
 export default class UserModel extends MongoModel {
 
