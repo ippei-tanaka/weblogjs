@@ -2,7 +2,7 @@ import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-export default ({
+const build = ({
     webpackServerHost = "localhost",
     webpackServerPort = 8080,
     envVariables = {},
@@ -94,7 +94,14 @@ export default ({
             root: nodeModuleDir
         },
 
-        plugins: plugins
+        plugins: plugins,
+
+        weblogjs: {
+            webpack_server_port: webpackServerPort,
+            webpack_server_host: webpackServerHost
+        }
 
     };
-}
+};
+
+export default Object.freeze({build});

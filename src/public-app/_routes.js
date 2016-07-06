@@ -22,13 +22,13 @@ const onEnterHandler = (_callback, store, actions) =>
     }
 };
 
-export default ({root, store, actions} = {}) =>
+export default ({store, actions} = {}) =>
 {
     const multipleOnEnterHandler = onEnterHandler(Multiple.onEnterRoute.bind(Multiple.WrappedComponent), store, actions);
     const singleOnEnterHandler = onEnterHandler(Single.onEnterRoute.bind(Single.WrappedComponent), store, actions);
 
     return (
-        <Route path={root} component={Wrapper}>
+        <Route path="/" component={Wrapper}>
             <IndexRoute component={Multiple} onEnter={multipleOnEnterHandler}/>
             <Route path="(page/:page)" component={Multiple} onEnter={multipleOnEnterHandler}/>
             <Route path="(category/:category)(/)(page/:page)" component={Multiple} onEnter={multipleOnEnterHandler}/>

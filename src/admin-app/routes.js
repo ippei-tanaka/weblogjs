@@ -24,8 +24,8 @@ import PostDeleter from "./containers/post/post-deleter";
 import SettingEditor from "./containers/setting/setting-editor";
 import NotFound from "./containers/not-found";
 
-export default (adminDir) => (
-    <Route path={adminDir} component={Admin}>
+export default ({root}) => (
+    <Route path={root} component={Admin}>
         <Route component={AdminWrapper}>
             <IndexRoute component={DashBoard}/>
             <Route path="users">

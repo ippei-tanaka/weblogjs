@@ -9,7 +9,7 @@ const renderHtmlLayout = (component) =>
     return "<!DOCTYPE html>" + html;
 };
 
-export default (location) => co(function* ()
+export default ({layoutAttributes}) => co(function* ()
 {
-    return renderHtmlLayout(<AdminLayout title="Weblog JS Admin"/>);
+    return renderHtmlLayout(<AdminLayout {...layoutAttributes} />);
 });

@@ -1,8 +1,8 @@
 import React from 'react';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form, Textarea } from './form';
-import AceEditor from 'react-ace';
-import 'brace/mode/javascript';
-import 'brace/theme/chrome';
+//import AceEditor from 'react-ace';
+//import 'brace/mode/javascript';
+//import 'brace/theme/chrome';
 
 export default function BlogForm({
     title,
@@ -23,6 +23,16 @@ export default function BlogForm({
         event.preventDefault();
         onSubmit();
     };
+
+    let AceEditor;
+
+    try {
+        AceEditor = require('react-ace');
+        require('brace/mode/javascript');
+        require('brace/theme/chrome');
+    } catch (e) {
+        console.log(e);
+    }
 
     return (
         <Form onSubmit={_onSubmit}>
