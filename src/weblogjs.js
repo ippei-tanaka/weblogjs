@@ -93,10 +93,8 @@ class WeblogJS {
         return webpackDevServerRunner.start({
             webpackServerHost: config.webpackDevServerHost,
             webpackServerPort: config.webpackDevServerPort,
-            envVariables: {
-                webpageRootForAdmin: path.resolve(config.webpageRoot, config.adminDir),
-                adminApiRoot: config.adminApiRoot
-            }
+            webpageRootForAdmin: path.resolve(config.webpageRoot, config.adminDir),
+            adminApiRoot: config.adminApiRoot
         });
     }
 
