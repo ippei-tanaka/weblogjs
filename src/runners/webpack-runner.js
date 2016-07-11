@@ -2,6 +2,7 @@ import webpack from "webpack";
 import webpackConfigBuilder from './webpack-config-builder';
 
 const build = ({
+    staticPath,
     webpageRootForAdmin,
     adminApiRoot,
     webpageRootForPublic,
@@ -13,6 +14,7 @@ const build = ({
 {
     const webpackConfig = webpackConfigBuilder.build({
         production: true,
+        staticPath,
         envVariables: {
             webpageRootForAdmin,
             adminApiRoot,

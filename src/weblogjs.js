@@ -22,7 +22,7 @@ const config =
 
     adminApiRoot: "/api",
     publicApiRoot: "/public-api",
-    staticPath: path.resolve(__dirname, "./client/static"),
+    staticPath: path.resolve(__dirname, "../static"),
 
     sessionSecret: "huashui155HOUDSDe21",
 
@@ -85,6 +85,7 @@ class WeblogJS {
     static buildBrowserEntryFiles ()
     {
         return webpackRunner.build({
+            staticPath: config.staticPath,
             webpageRootForAdmin: path.resolve(config.webpageRoot, config.adminDir),
             webpageRootForPublic: path.resolve(config.webpageRoot, config.publicDir),
             adminApiRoot: config.adminApiRoot,
@@ -98,6 +99,7 @@ class WeblogJS {
     static startBrowserEntryFileServer ()
     {
         return webpackDevServerRunner.start({
+            staticPath: config.staticPath,
             webpackServerHost: config.webpackDevServerHost,
             webpackServerPort: config.webpackDevServerPort,
             webpageRootForAdmin: path.resolve(config.webpageRoot, config.adminDir),
