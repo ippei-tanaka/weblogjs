@@ -17,7 +17,8 @@ co(function* () {
     const conf = WeblogJS.getConfig();
     console.log("");
     console.log("Web Server started...");
-    console.log(`Go to ${conf.webProtocol}://${conf.webHost}:${conf.webPort}`);
+    console.log(`Go to ${conf.webProtocol}://${conf.webHost}:${conf.webPort}/${conf.adminDir}`);
+
 }).catch(e => {
     console.error(e);
 });

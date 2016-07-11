@@ -3,6 +3,7 @@ import WebpackDevServer from 'webpack-dev-server';
 import webpackConfigBuilder from './webpack-config-builder';
 
 const start = ({
+    staticPath,
     webpackServerHost,
     webpackServerPort,
     webpageRootForAdmin,
@@ -15,6 +16,7 @@ const start = ({
     }) => new Promise((resolve, reject) =>
 {
     const webpackConfig = webpackConfigBuilder.build({
+        staticPath,
         webpackDevServer: true,
         webpackServerHost,
         webpackServerPort,

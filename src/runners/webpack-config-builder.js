@@ -9,7 +9,7 @@ const build = ({
     envNamespace = 'WEBLOG_WEBPACK_ENV',
     production = false,
     sourceMap = false,
-    staticDir = path.resolve(__dirname, '../client/static'),
+    staticPath = null,
     bundleDirName = "bundle",
     adminEntryFile = path.resolve(__dirname, "../admin-app/browser-entry.js"),
     publicEntryFile = path.resolve(__dirname, "../public-app/browser-entry.js"),
@@ -19,7 +19,7 @@ const build = ({
     }) =>
 {
 
-    const outputDir = path.resolve(staticDir, bundleDirName);
+    const outputDir = path.resolve(staticPath, bundleDirName);
 
     let plugins = [
         new webpack.DefinePlugin({
