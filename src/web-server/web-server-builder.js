@@ -20,6 +20,7 @@ import PassportManager from '../passport-manager';
 
 const build = ({
     webHost, webPort,
+    webpackDevServerHost, webpackDevServerPort,
     adminDir, publicDir,
     webpageRoot, adminApiRoot, publicApiRoot,
     sessionSecret, staticPath}) => {
@@ -30,7 +31,9 @@ const build = ({
 
     const AdminLayout = adminLayoutBuilder.build({
         title: "WeblogJS Admin",
-        webpackDevServer: false
+        webpackDevServer: true,
+        webpackDevServerHost,
+        webpackDevServerPort
     });
 
     const adminRenderer = new WebpageRenderer({Layout: AdminLayout});

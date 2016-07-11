@@ -1,9 +1,9 @@
 import React from "react";
 import Immutable from 'immutable';
-import { getEnv } from '../env-variables';
+//import { getEnv } from '../env-variables';
 
 // TODO Make those variable parameters
-const WEBLOG_ENV = getEnv();
+const WEBLOG_ENV = {};//getEnv();
 const DEVELOPMENT_MODE = WEBLOG_ENV.mode === 'development';
 const PRODUCTION_MODE = WEBLOG_ENV.mode === 'production';
 const WP_DEV_SERVER_HOST = WEBLOG_ENV.webpack_server_host;

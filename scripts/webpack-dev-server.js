@@ -1,3 +1,3 @@
-import WeblogJS from '../src';
+import WeblogJS from '../src/index';
 
 WeblogJS.startBrowserEntryFileServer();

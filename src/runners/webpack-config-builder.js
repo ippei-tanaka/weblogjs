@@ -94,12 +94,7 @@ const build = ({
             root: nodeModuleDir
         },
 
-        plugins: plugins,
-
-        weblogjs: {
-            webpack_server_port: webpackServerPort,
-            webpack_server_host: webpackServerHost
-        }
+        plugins: plugins
 
     };
 };

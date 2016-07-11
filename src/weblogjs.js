@@ -111,6 +111,8 @@ class WeblogJS {
             adminApiRoot: config.adminApiRoot,
             publicApiRoot: config.publicApiRoot,
             sessionSecret: config.sessionSecret,
+            webpackDevServerHost: config.webpackDevServerHost,
+            webpackDevServerPort: config.webpackDevServerPort,
             staticPath: config.staticPath
         });
     }

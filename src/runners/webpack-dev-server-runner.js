@@ -21,8 +21,8 @@ const start = ({webpackServerHost, webpackServerPort, envVariables}) => new Prom
     });
 
     server.listen(
-        webpackConfig.weblogjs.webpack_server_port,
-        webpackConfig.weblogjs.webpack_server_host,
+        webpackServerPort,
+        webpackServerHost,
         () =>
         {
             resolve();
