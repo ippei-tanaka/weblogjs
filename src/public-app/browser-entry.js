@@ -7,6 +7,7 @@ import createStore from '../redux-store/create-store'
 import createActions from '../redux-store/create-actions';
 import bareActions from './actions';
 import publicRoutes from './routes';
+import { PUBLIC_DIR } from './constants/config';
 
 require('./styles/main.scss');
 
@@ -18,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () =>
     ReactDOM.render(
         <Provider store={store}>
             <Router history={browserHistory}>
-                {publicRoutes({store, actions})}
+                {publicRoutes({root: PUBLIC_DIR, store, actions})}
             </Router>
         </Provider>,
         document.getElementById('AppContainer')
