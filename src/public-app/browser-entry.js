@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import reducers from './reducers';
 import createStore from '../redux-store/create-store'
 import createActions from '../redux-store/create-actions';
-import bareActions from './actions';
+import actionBuilder from './actions/builder';
 import publicRoutes from './routes';
 
 require('./styles/main.scss');
@@ -16,16 +16,7 @@ const API_BASE = `${ENV.webProtocol}://${ENV.webHost}:${ENV.webPort}${ENV.public
 const preloadedState = window.__PRELOADED_STATE__;
 const store = createStore(reducers, preloadedState);
 
-const _actions = {};
-for (const key of Object.keys(bareActions))
-{
-    _actions[key] = (arg = {}) => {
-        arg.apiRoot = API_BASE;
-        return bareActions[key](arg);
-    }
-}
-
-const actions = createActions(store, _actions);
+const actions = createActions(store, actionBuilder.build({apiRoot: API_BASE}));
 
 document.addEventListener("DOMContentLoaded", () =>
     ReactDOM.render(
