@@ -2,7 +2,6 @@ import co from 'co';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import actions from '../actions';
 import PublicPost from '../../react-components/public-post';
 import PublicCategoryList from '../../react-components/public-category-list';
 
@@ -51,5 +50,5 @@ export default connect(
         publicBlog: state.publicBlog,
         publicCategory: state.publicCategory
     }),
-    actions
+    null
 )(PublicWrapper);
