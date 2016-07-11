@@ -16,8 +16,6 @@ import {
     TRANSACTION_FINISHED
 } from '../constants/action-types';
 
-import { PUBLIC_API_PATH } from '../constants/config';
-
 import co from 'co';
 
 const modify = (dispatch, actionId, main) => {
@@ -55,63 +53,26 @@ const load = (processData, path, doneType) => () => (dispatch, getState) => {
 
 const loadOne = load.bind(null, (response) => response);
 
-const loadMany = load.bind(null, (response) => response.items);
-
-const create = (path, doneType) => (actionId, newUser) => (dispatch, getState) => {
-    return modify(dispatch, actionId, () => co(function* () {
-        let response = yield postOnServer({data: newUser, path});
-        response = yield getFromServer({path: `${path}/${response._id}`});
-        dispatch({
-            type: doneType,
-            data: response
-        });
-    }));
-};
-
-const edit = (path, doneType) => (actionId, {id, data}) => (dispatch, getState) => {
-    return modify(dispatch, actionId, () => co(function* () {
-        yield putOneOnServer({data, path: `${path}/${id}`});
-        const response = yield getFromServer({path: `${path}/${id}`});
-        dispatch({
-            type: doneType,
-            data: response
-        });
-    }));
-};
-
-const del = (path, doneType) => (actionId, {id}) => (dispatch, getState) => {
-    return modify(dispatch, actionId, () => co(function* () {
-        yield deleteOnServer({path: `${path}/${id}`});
-        dispatch({
-            type: doneType,
-            id
-        });
-    }));
-};
-
 //------------
 
-export const finishTransaction = (actionId) => (dispatch, getState) => {
-    dispatch({
-        type: TRANSACTION_FINISHED,
-        id: actionId
-    });
-};
-
-export const loadPublicPosts = ({category, tag, page} = {}) => {
+export const loadPublicPosts = ({apiRoot, category, tag, page} = {}) => {
     const categoryQuery = category ? `/category/${category}` : "";
     const tagQuery = tag ? `/tag/${tag}` : "";
     const pageQuery = page ? `/page/${page}` : "";
     return load((response) => ({ posts: response.items, totalPages: response.totalPages }),
-        `${PUBLIC_API_PATH}${categoryQuery}${tagQuery}/posts${pageQuery}`,
+        `${apiRoot}${categoryQuery}${tagQuery}/posts${pageQuery}`,
         LOADED_PUBLIC_POSTS_RECEIVED
     )();
 };
 
-export const loadPublicSinglePost = (id) => {
-    return loadOne(`${PUBLIC_API_PATH}/post/${id}`, LOADED_PUBLIC_SINGLE_POST_RECEIVED)();
+export const loadPublicSinglePost = ({apiRoot, id}) => {
+    return loadOne(`${apiRoot}/post/${id}`, LOADED_PUBLIC_SINGLE_POST_RECEIVED)();
 };
 
-export const loadPublicFrontBlog = loadOne(`${PUBLIC_API_PATH}/front-blog`, LOADED_FRONT_BLOG_RECEIVED);
+export const loadPublicFrontBlog = ({apiRoot}) => {
+    return loadOne(`${apiRoot}/front-blog`, LOADED_FRONT_BLOG_RECEIVED)();
+};
 
-export const loadPublicCategories = loadMany(`${PUBLIC_API_PATH}/categories`, LOADED_PUBLIC_CATEGORIES_RECEIVED);
+export const loadPublicCategories = ({apiRoot}) => {
+    return loadOne(`${apiRoot}/categories`, LOADED_PUBLIC_CATEGORIES_RECEIVED)();
+};

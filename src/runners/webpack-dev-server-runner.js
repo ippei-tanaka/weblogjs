@@ -6,7 +6,13 @@ const start = ({
     webpackServerHost,
     webpackServerPort,
     webpageRootForAdmin,
-    adminApiRoot}) => new Promise((resolve, reject) =>
+    adminApiRoot,
+    webpageRootForPublic,
+    publicApiRoot,
+    webProtocol,
+    webHost,
+    webPort
+    }) => new Promise((resolve, reject) =>
 {
     const webpackConfig = webpackConfigBuilder.build({
         webpackDevServer: true,
@@ -15,7 +21,12 @@ const start = ({
         sourceMap: true,
         envVariables: {
             webpageRootForAdmin,
-            adminApiRoot
+            adminApiRoot,
+            webpageRootForPublic,
+            publicApiRoot,
+            webProtocol,
+            webHost,
+            webPort
         }
     });
 

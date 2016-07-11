@@ -5,8 +5,11 @@ const config = {
     webpackDevServer: true
 };
 
-WeblogJS.setConfig(config).startWebServer().then(() => {
+WeblogJS.setConfig(config);
+
+WeblogJS.startWebServer().then(() => {
     console.log("Web Server started...");
+    WeblogJS.startBrowserEntryFileServer();
 }).catch(e => {
     console.error(e);
 });
