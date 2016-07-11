@@ -20,8 +20,8 @@ const build = ({webpackDevServer, webpackDevServerHost, webpackDevServerPort}) =
             { preloadedState && <script dangerouslySetInnerHTML={{__html:`window.__PRELOADED_STATE__ = ${safeStringify(preloadedState)}`}}></script> }
             { webpackDevServer && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/bundle/vendor.js`}></script> }
             { webpackDevServer && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/bundle/public.js`}></script> }
-            { !webpackDevServer && <script src="/bundle/vendor.js"></script> }
-            { !webpackDevServer && <script src="/bundle/public.js"></script> }
+            {/* !webpackDevServer && <script src="/bundle/vendor.js"></script> */}
+            {/* !webpackDevServer && <script src="/bundle/public.js"></script> */}
         </head>
         <body>
         <div id="AppContainer">{children}</div>

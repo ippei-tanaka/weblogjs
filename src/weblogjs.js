@@ -85,7 +85,13 @@ class WeblogJS {
     static buildBrowserEntryFiles ()
     {
         return webpackRunner.build({
-            envVariables: config
+            webpageRootForAdmin: path.resolve(config.webpageRoot, config.adminDir),
+            webpageRootForPublic: path.resolve(config.webpageRoot, config.publicDir),
+            adminApiRoot: config.adminApiRoot,
+            publicApiRoot: config.publicApiRoot,
+            webProtocol: config.webProtocol,
+            webHost: config.webHost,
+            webPort: config.webPort
         });
     }
 
