@@ -5,10 +5,9 @@ import { Provider } from 'react-redux';
 import reducers from './reducers';
 import createStore from '../redux-store/create-store';
 import adminRoutes from './routes';
+import { ADMIN_DIR } from './constants/config';
 require('./styles/main.scss');
 
-const ENV = process.env.WEBLOG_WEBPACK_ENV;
-const ADMIN_DIR = ENV.webpage_root + ENV.admin_dir;
 const preloadedState = window.__PRELOADED_STATE__;
 const store = createStore(reducers, preloadedState);
 
@@ -16,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () =>
     ReactDOM.render(
         <Provider store={store}>
             <Router history={browserHistory}>
-                {adminRoutes(ADMIN_DIR)}
+                {adminRoutes({root: ADMIN_DIR})}
             </Router>
         </Provider>,
         document.getElementById('AppContainer')
