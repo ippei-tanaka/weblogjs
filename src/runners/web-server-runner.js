@@ -11,23 +11,12 @@ const setupMongoDriver = (arg) =>
     })
 };
 
-const start = ({
-    webHost, webPort,
-    dbHost, dbPort, dbName,
-    webpackDevServerHost, webpackDevServerPort,
-    adminDir, publicDir,
-    webpageRoot, adminApiRoot, publicApiRoot,
-    sessionSecret, staticPath}) => co(function* ()
+const start = (args) => co(function* ()
 {
+    const {dbHost, dbPort, dbName} = args;
     setupMongoDriver({dbHost, dbPort, dbName});
 
-    const server = webServerBuilder.build({
-        webHost, webPort,
-        webpackDevServerHost, webpackDevServerPort,
-        adminDir, publicDir,
-        webpageRoot, adminApiRoot, publicApiRoot,
-        sessionSecret, staticPath
-    });
+    const server = webServerBuilder.build(args);
 
     yield server.start();
 });

@@ -16,7 +16,7 @@ import {
     TRANSACTION_FINISHED
 } from '../constants/action-types';
 
-import { ADMIN_API_PATH, PUBLIC_API_PATH } from '../constants/config';
+import { PUBLIC_API_PATH } from '../constants/config';
 
 import co from 'co';
 

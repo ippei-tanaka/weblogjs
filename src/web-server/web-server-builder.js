@@ -6,24 +6,38 @@ import WebpageRouter from '../routers/webpage-router';
 import WebpageRenderer from './webpage-renderer';
 import WebpackRouteHookRunner from './webpage-route-hook-runner';
 import webpageRouteHandlerBuilder from './webpage-route-handler-builder';
+
 import adminRoutes from '../admin-app/routes';
 import adminReducers from '../admin-app/reducers/index';
 import adminActions from '../admin-app/actions/index';
 import adminLayoutBuilder from '../admin-app/layout-builder';
+
 import publicRoutes from '../public-app/routes';
 import publicReducers from '../public-app/reducers/index';
 import publicActions from '../public-app/actions/index';
+import publicLayoutBuilder from '../public-app/layout-builder';
 
 import RestfulApiAdminRouter from '../routers/restful-api-admin-router';
 import RestfulApiPublicRouter from '../routers/restful-api-public-router';
 import PassportManager from '../passport-manager';
 
 const build = ({
-    webHost, webPort,
-    webpackDevServerHost, webpackDevServerPort,
-    adminDir, publicDir,
-    webpageRoot, adminApiRoot, publicApiRoot,
-    sessionSecret, staticPath}) => {
+    webHost,
+    webPort,
+
+    webpackDevServer = false,
+    webpackDevServerHost,
+    webpackDevServerPort,
+
+    adminDir,
+    publicDir,
+    webpageRoot,
+
+    adminApiRoot,
+    publicApiRoot,
+
+    sessionSecret,
+    staticPath}) => {
 
     const webpageRouter = new WebpageRouter({
         basePath: webpageRoot
@@ -31,7 +45,7 @@ const build = ({
 
     const AdminLayout = adminLayoutBuilder.build({
         title: "WeblogJS Admin",
-        webpackDevServer: true,
+        webpackDevServer,
         webpackDevServerHost,
         webpackDevServerPort
     });
@@ -52,11 +66,29 @@ const build = ({
 
     webpageRouter.setHandler(path.resolve(webpageRoot, adminDir, "."), adminHandler);
     webpageRouter.setHandler(path.resolve(webpageRoot, adminDir, "*"), adminHandler);
-    //webpageRouter.setHandler(path.resolve(webpageRoot, publicDir, "*"), publicHandler);
-    //this._router.get(path.resolve(webpageRoot, adminDir, "."), adminHandler());
-    //this._router.get(path.resolve(webpageRoot, adminDir, "*"), adminHandler());
-    //this._router.get(path.resolve(webpageRoot, publicDir, "*"), publicHandler(webpageRoot));
 
+    const PublicLayout = publicLayoutBuilder.build({
+        title: "WeblogJS Public",
+        webpackDevServer,
+        webpackDevServerHost,
+        webpackDevServerPort
+    });
+
+    const pubicRenderer = new WebpageRenderer({Layout: PublicLayout});
+
+    const publicHookRunner = new WebpackRouteHookRunner ({
+        reducers: publicReducers,
+        actions: publicActions
+    });
+
+    const publicHandler = webpageRouteHandlerBuilder.build({
+        basePath: webpageRoot,
+        renderer: pubicRenderer,
+        routes: publicRoutes({root: path.resolve(webpageRoot, publicDir)}),
+        hookRunner: publicHookRunner
+    });
+
+    webpageRouter.setHandler(path.resolve(webpageRoot, publicDir, "*"), publicHandler);
 
     const adminApiRouter = new RestfulApiAdminRouter({
         basePath: adminApiRoot

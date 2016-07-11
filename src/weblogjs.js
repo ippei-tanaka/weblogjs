@@ -94,6 +94,7 @@ class WeblogJS {
             webpackServerHost: config.webpackDevServerHost,
             webpackServerPort: config.webpackDevServerPort,
             webpageRootForAdmin: path.resolve(config.webpageRoot, config.adminDir),
+            webpageRootForPublic: path.resolve(config.webpageRoot, config.publicDir),
             adminApiRoot: config.adminApiRoot
         });
     }
@@ -112,6 +113,7 @@ class WeblogJS {
             adminApiRoot: config.adminApiRoot,
             publicApiRoot: config.publicApiRoot,
             sessionSecret: config.sessionSecret,
+            webpackDevServer: config.webpackDevServer,
             webpackDevServerHost: config.webpackDevServerHost,
             webpackDevServerPort: config.webpackDevServerPort,
             staticPath: config.staticPath
