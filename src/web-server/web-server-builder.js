@@ -22,6 +22,7 @@ import RestfulApiPublicRouter from '../routers/restful-api-public-router';
 import PassportManager from '../passport-manager';
 
 const build = ({
+    webProtocol,
     webHost,
     webPort,
 
@@ -76,9 +77,20 @@ const build = ({
 
     const pubicRenderer = new WebpageRenderer({Layout: PublicLayout});
 
+    const _publicActions = {};
+    const API_BASE = `${webProtocol}://${webHost}:${webPort}${publicApiRoot}`;
+    console.log(API_BASE);
+    for (const key of Object.keys(publicActions))
+    {
+        _publicActions[key] = (arg = {}) => {
+            arg.apiRoot = API_BASE;
+            return publicActions[key](arg);
+        }
+    }
+
     const publicHookRunner = new WebpackRouteHookRunner ({
         reducers: publicReducers,
-        actions: publicActions
+        actions: _publicActions
     });
 
     const publicHandler = webpageRouteHandlerBuilder.build({

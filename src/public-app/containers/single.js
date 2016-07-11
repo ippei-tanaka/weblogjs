@@ -20,7 +20,7 @@ class SinglePage extends Component {
     static _loadContent({params, actions, store}) {
         return co(function* () {
             yield actions.loadPublicFrontBlog();
-            yield actions.loadPublicSinglePost(params.id);
+            yield actions.loadPublicSinglePost({id: params.id});
             yield actions.loadPublicCategories();
             const state = store.getState();
             const blogName = state.publicBlog.get('name');

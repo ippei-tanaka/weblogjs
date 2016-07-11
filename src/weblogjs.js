@@ -12,6 +12,7 @@ const config =
     dbPort: 27017,
     dbName: "weblogjs",
 
+    webProtocol: "http",
     webHost: "localhost",
     webPort: 80,
 
@@ -95,7 +96,11 @@ class WeblogJS {
             webpackServerPort: config.webpackDevServerPort,
             webpageRootForAdmin: path.resolve(config.webpageRoot, config.adminDir),
             webpageRootForPublic: path.resolve(config.webpageRoot, config.publicDir),
-            adminApiRoot: config.adminApiRoot
+            adminApiRoot: config.adminApiRoot,
+            publicApiRoot: config.publicApiRoot,
+            webProtocol: config.webProtocol,
+            webHost: config.webHost,
+            webPort: config.webPort
         });
     }
 
@@ -105,6 +110,7 @@ class WeblogJS {
             dbHost: config.dbHost,
             dbPort: config.dbPort,
             dbName: config.dbName,
+            webProtocol: config.webProtocol,
             webHost: config.webHost,
             webPort: config.webPort,
             adminDir: config.adminDir,
