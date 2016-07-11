@@ -46,7 +46,7 @@ const build = ({
     const adminHandler = webpageRouteHandlerBuilder.build({
         basePath: webpageRoot,
         renderer: adminRenderer,
-        routes: adminRoutes({root: webpageRoot + adminDir}),
+        routes: adminRoutes({root: path.resolve(webpageRoot, adminDir)}),
         hookRunner: adminHookRunner
     });
 

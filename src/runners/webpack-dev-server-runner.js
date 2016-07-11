@@ -2,13 +2,18 @@ import webpack from "webpack";
 import WebpackDevServer from 'webpack-dev-server';
 import webpackConfigBuilder from './webpack-config-builder';
 
-const start = ({webpackServerHost, webpackServerPort, envVariables}) => new Promise((resolve, reject) =>
+const start = ({
+    webpackServerHost, webpackServerPort,
+    webpageRootForAdmin, adminApiRoot}) => new Promise((resolve, reject) =>
 {
     const webpackConfig = webpackConfigBuilder.build({
         webpackServerHost,
         webpackServerPort,
         sourceMap: true,
-        envVariables
+        envVariables: {
+            webpageRootForAdmin,
+            adminApiRoot
+        }
     });
 
     const compiler = webpack(webpackConfig);
