@@ -15,13 +15,13 @@ const build = ({webpackDevServer, webpackDevServerHost, webpackDevServerPort}) =
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <link href="/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
             <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
-            { webpackDevServer && <link href="/bundle/admin-style.css" media="all" rel="stylesheet"/> }
+            { !webpackDevServer && <link href="/bundle/admin-style.css" media="all" rel="stylesheet"/> }
             <title>{title}</title>
             { preloadedState && <script dangerouslySetInnerHTML={{__html:`window.__PRELOADED_STATE__ = ${safeStringify(preloadedState)}`}}></script> }
-            { !webpackDevServer && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/bundle/vendor.js`}></script> }
-            { !webpackDevServer && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/bundle/admin.js`}></script> }
-            { webpackDevServer && <script src="/bundle/vendor.js"></script> }
-            { webpackDevServer && <script src="/bundle/admin.js"></script> }
+            { webpackDevServer && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/bundle/vendor.js`}></script> }
+            { webpackDevServer && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/bundle/admin.js`}></script> }
+            { !webpackDevServer && <script src="/bundle/vendor.js"></script> }
+            { !webpackDevServer && <script src="/bundle/admin.js"></script> }
         </head>
         <body>
         <div id="AppContainer" className="module-app">{children}</div>
