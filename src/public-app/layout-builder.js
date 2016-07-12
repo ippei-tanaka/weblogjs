@@ -17,7 +17,7 @@ const build = ({webpackDevServer, webpackDevServerHost, webpackDevServerPort}) =
             <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
             { !webpackDevServer && <link href="/bundle/public-style.css" media="all" rel="stylesheet"/> }
             <title>{title}</title>
-            { preloadedState && <script dangerouslySetInnerHTML={{__html:`window.__PRELOADED_STATE__ = ${safeStringify(preloadedState)}`}}></script> }
+            { webpackDevServer && preloadedState && <script dangerouslySetInnerHTML={{__html:`window.__PRELOADED_STATE__ = ${safeStringify(preloadedState)}`}}></script> }
             { webpackDevServer && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/bundle/vendor.js`}></script> }
             { webpackDevServer && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/bundle/public.js`}></script> }
             {/* !webpackDevServer && <script src="/bundle/vendor.js"></script> */}

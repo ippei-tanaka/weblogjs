@@ -32,11 +32,11 @@ class PublicIndex extends Component {
     }
 
     render() {
-        const { publicPost, publicCategory, publicBlog, params } = this.props;
+        const { publicPost, publicCategory, publicBlog, publicSiteInfo, params } = this.props;
         const categories = publicCategory.toObject();
         const blog = publicBlog.toObject();
         const posts = publicPost.get('posts').toArray();
-
+        const rootDir = publicSiteInfo.get('publicDir');
         const page = params.page || 1;
         const totalPages = publicPost.get('totalPages');
 
@@ -44,7 +44,7 @@ class PublicIndex extends Component {
             <div>
                 {posts.map(post =>
                     <section key={post._id} className="module-section">
-                        <PublicPost blog={blog} categories={categories} post={post}/>
+                        <PublicPost blog={blog} categories={categories} post={post} rootDir={rootDir} />
                     </section>
                 )}
 
@@ -66,11 +66,13 @@ class PublicIndex extends Component {
     }
 
     _paginationLinkBuilder(page) {
-        const { params : { category, tag } } = this.props;
+        const { params : { category, tag }, publicSiteInfo } = this.props;
+        const rootDir = publicSiteInfo.get('publicDir');
+        const root = rootDir !== "" ? '/' + rootDir : "";
         const categoryQuery = category ? `/category/${category}` : "";
         const tagQuery = tag ? `/tag/${tag}` : "";
         const pageQuery = page > 1 ? `/page/${page}` : "";
-        return `${categoryQuery}${tagQuery}${pageQuery}/`;
+        return `${root}${categoryQuery}${tagQuery}${pageQuery}/`;
     }
 
     static get contextTypes() {
@@ -84,7 +86,8 @@ export default connect(
     state => ({
         publicPost: state.publicPost,
         publicCategory: state.publicCategory,
-        publicBlog: state.publicBlog
+        publicBlog: state.publicBlog,
+        publicSiteInfo: state.publicSiteInfo
     }),
     null
 )(PublicIndex);

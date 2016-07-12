@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 
 export default (
     {
+        rootDir,
         blog,
         post,
         categories,
@@ -15,11 +16,13 @@ export default (
     const category = categories && post.category_id && categories[post.category_id] ? categories[post.category_id] : null;
     const author = authors && post.author_id && authors[post.author_id] ? authors[post.author_id] : null;
 
+    rootDir = rootDir === "" ? "" : "/" + rootDir;
+
     return (
         <div className="module-post">
 
             <h2 className="m-pst-title"><Link className="m-pst-link"
-                                              to={`/post/${post._id}/${post.slug}`}>{post.title}</Link></h2>
+                                              to={`${rootDir}/post/${post._id}/${post.slug}`}>{post.title}</Link></h2>
 
             <div className="m-pst-content">
                 <article className="module-article"
@@ -31,12 +34,12 @@ export default (
 
             {author &&
                 <div className="m-pst-author">Written by <Link className="m-pst-author-link"
-                                                               to={`/author/${author.slug}`}>{author.display_name}</Link></div>
+                                                               to={`${rootDir}/author/${author.slug}`}>{author.display_name}</Link></div>
             }
 
             {category &&
                 <div className="m-pst-category">Category: <Link className="m-pst-category-link"
-                                                                to={`/category/${category.slug}`}>{category.name}</Link>
+                                                                to={`${rootDir}/category/${category.slug}`}>{category.name}</Link>
                 </div>
             }
 
@@ -44,8 +47,9 @@ export default (
                 <div className="m-pst-tag-container">
                     <ul className="m-pst-tags">
                         {post.tags.map(tag =>
-                            <li key={`${post._id}_${tag}`} className="m-pst-tag"><Link className="m-pst-tag-link"
-                                                                                       to={`/tag/${tag}`}>#{tag}</Link>
+                            <li key={`${post._id}_${tag}`} className="m-pst-tag">
+                                <Link className="m-pst-tag-link"
+                                      to={`${rootDir}/tag/${tag}`}>#{tag}</Link>
                             </li>
                         )}
                     </ul>

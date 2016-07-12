@@ -81,7 +81,17 @@ const build = ({
 
     const publicHookRunner = new WebpackRouteHookRunner ({
         reducers: publicReducers,
-        actions: publicActionBuilder.build({apiRoot: PUBLIC_API_BASE})
+        actions: publicActionBuilder.build({apiRoot: PUBLIC_API_BASE}),
+        state: {
+            publicSiteInfo : {
+                webpageRootForPublic: path.resolve(webpageRoot, publicDir),
+                webProtocol,
+                webHost,
+                webPort,
+                publicApiRoot,
+                publicDir
+            }
+        }
     });
 
     const publicHandler = webpageRouteHandlerBuilder.build({

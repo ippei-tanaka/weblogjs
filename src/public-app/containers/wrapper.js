@@ -15,14 +15,16 @@ class PublicWrapper extends Component {
     }
 
     render() {
-        const { publicBlog, publicCategory, children } = this.props;
+        const { publicBlog, publicCategory, publicSiteInfo, children } = this.props;
         const blog = publicBlog.toObject();
         const categories = publicCategory.toArray();
+        const rootDir = publicSiteInfo.get('publicDir');
+        const root = rootDir === "" ? "/" : '/' + rootDir;
 
         return (
             <div className="module-header-footer-layout">
                 <header className="m-hfl-header">
-                    <h1><Link className="m-hfl-header-link" to="/">{blog.name}</Link></h1>
+                    <h1><Link className="m-hfl-header-link" to={root}>{blog.name}</Link></h1>
                 </header>
                 <div className="m-hfl-body">
                     <div className="module-blog-layout">
@@ -48,7 +50,8 @@ class PublicWrapper extends Component {
 export default connect(
     state => ({
         publicBlog: state.publicBlog,
-        publicCategory: state.publicCategory
+        publicCategory: state.publicCategory,
+        publicSiteInfo: state.publicSiteInfo
     }),
     null
 )(PublicWrapper);
