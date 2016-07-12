@@ -15,7 +15,7 @@ class PublicWrapper extends Component {
     }
 
     render() {
-        const { publicBlog, publicCategory } = this.props;
+        const { publicBlog, publicCategory, children } = this.props;
         const blog = publicBlog.toObject();
         const categories = publicCategory.toArray();
 
@@ -27,7 +27,7 @@ class PublicWrapper extends Component {
                 <div className="m-hfl-body">
                     <div className="module-blog-layout">
                         <div className="m-bll-main">
-                            {this.props.children}
+                            {children}
                         </div>
                         <aside className="m-bll-sidebar">
                             <section className="module-section">

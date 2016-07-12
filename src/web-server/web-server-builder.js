@@ -91,6 +91,7 @@ const build = ({
         hookRunner: publicHookRunner
     });
 
+    webpageRouter.setHandler(path.resolve(webpageRoot, publicDir, "."), publicHandler);
     webpageRouter.setHandler(path.resolve(webpageRoot, publicDir, "*"), publicHandler);
 
     const adminApiRouter = new RestfulApiAdminRouter({

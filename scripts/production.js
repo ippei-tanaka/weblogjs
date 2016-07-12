@@ -14,10 +14,11 @@ co(function* () {
 
     yield WeblogJS.startWebServer();
 
-    const conf = WeblogJS.getConfig();
+    const c = WeblogJS.getConfig();
     console.log("");
     console.log("Web Server started...");
-    console.log(`Go to ${conf.webProtocol}://${conf.webHost}:${conf.webPort}/${conf.adminDir}`);
+    console.log(`Go to the public page: ${c.webProtocol}://${c.webHost}:${c.webPort}/${c.publicDir}`);
+    console.log(`Or, go to the admin page: ${c.webProtocol}://${c.webHost}:${c.webPort}/${c.adminDir}`);
 
 }).catch(e => {
     console.error(e);
