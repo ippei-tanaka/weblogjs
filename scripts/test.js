@@ -22,12 +22,10 @@ try
     {
         if (!failures)
         {
-            resolve();
             process.exit();
         }
         else
         {
-            reject();
             process.exit(failures);
         }
 

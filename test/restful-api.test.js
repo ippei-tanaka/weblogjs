@@ -2,7 +2,6 @@ import co from 'co';
 import { expect } from 'chai';
 import httpRequest from './lib/http-request';
 import WeblogJS from '../src/index';
-import { getEnv } from '../src/env-variables';
 
 const admin = Object.freeze(Object.assign({
     email: "ttt@ttt.com",
@@ -38,17 +37,22 @@ const testPost = Object.freeze({
     "is_draft": false
 });
 
-const ENV = getEnv();
-const WEBSERVER_HOST = ENV.web_host;
-const WEBSERVER_PORT = ENV.web_port;
-const ADMIN_API_ROOT = ENV.admin_api_root;
-const PUBLIC_API_ROOT = ENV.public_api_root;
+WeblogJS.setConfig({
+    webPort: 3003,
+    dbName: "weblogjstest",
+    adminEmail: admin.email,
+    adminPassword: admin.password,
+    adminDisplayName: admin.display_name,
+    adminSlug: admin.slug
+});
+
+const config = WeblogJS.getConfig();
+const WEBSERVER_HOST = config.webHost;
+const WEBSERVER_PORT = config.webPort;
+const ADMIN_API_ROOT = config.adminApiRoot;
+const PUBLIC_API_ROOT = config.publicApiRoot;
 const ADMIN_URL = `http://${WEBSERVER_HOST}:${WEBSERVER_PORT}${ADMIN_API_ROOT}`;
 const PUBLIC_URL = `http://${WEBSERVER_HOST}:${WEBSERVER_PORT}${PUBLIC_API_ROOT}`;
-
-WeblogJS.init({
-    dbName: "weblogjstest"
-});
 
 const login = () => httpRequest.post(`${ADMIN_URL}/login`, admin);
 const logout = () => httpRequest.get(`${ADMIN_URL}/logout`);
@@ -57,10 +61,10 @@ describe('Restful API', function () {
 
     this.timeout(5000);
 
-    before('web server starting', () => WeblogJS.webServer.start());
+    before('web server starting', () => WeblogJS.startWebServer());
     before('dropping darabase', () => WeblogJS.dropDatabase());
     beforeEach('emptying collections', () => WeblogJS.removeAllDocuments());
-    beforeEach('creating admin', () => WeblogJS.createUser(admin));
+    beforeEach('creating admin', () => WeblogJS.createAdmin());
 
     describe('Admin API', () => {
 

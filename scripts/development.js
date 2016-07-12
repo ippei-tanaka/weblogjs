@@ -4,7 +4,6 @@ import co from 'co';
 console.log("Starting Development Servers...");
 
 const config = {
-    //publicDir: "ddd",
     webPort: 3001,
     webpackDevServer: true,
     webpackDevServerPort: 3002
