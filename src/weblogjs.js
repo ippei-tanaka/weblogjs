@@ -1,6 +1,5 @@
 import co from 'co';
 import path from 'path';
-import UserModel from './models/user-model';
 import webpackDevServerRunner from './runners/webpack-dev-server-runner';
 import webpackRunner from './runners/webpack-runner';
 import dbRunner from './runners/db-runner';
@@ -33,7 +32,11 @@ const config =
     adminEmail: "t@t.com",
     adminPassword: "tttttttt",
     adminDisplayName: "Admin",
-    adminSlug: 'admin'
+    adminSlug: 'admin',
+
+    defaultBlogName: "My Blog",
+    defaultBlogSlug: "my-blog",
+    defaultBlogPostPerPage: 1
 };
 
 
@@ -61,6 +64,19 @@ class WeblogJS {
             password: config.adminPassword,
             display_name: config.adminDisplayName,
             slug: config.adminSlug
+        });
+    }
+
+    static createDefaultBlog ()
+    {
+        return dbRunner.createBlog({
+            host: config.dbHost,
+            port: config.dbPort,
+            database: config.dbName
+        }, {
+            name: config.defaultBlogName,
+            slug: config.defaultBlogSlug,
+            posts_per_page: config.defaultBlogPostPerPage
         });
     }
 
