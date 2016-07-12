@@ -1,10 +1,7 @@
 import React from 'react';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form, Textarea } from './form';
-//import AceEditor from 'react-ace';
-//import 'brace/mode/javascript';
-//import 'brace/theme/chrome';
 
-export default function BlogForm({
+export default function BlogForm ({
     title,
     values,
     errors,
@@ -13,26 +10,19 @@ export default function BlogForm({
     onClickBackButton,
     submitButtonLabel,
     PostsPerPageList = Object.freeze([1, 2, 3, 5, 10, 15])
-    }) {
+    })
+{
 
-    const _onChange = field => {
+    const _onChange = field =>
+    {
         return value => onChange(field, value);
     };
 
-    const _onSubmit = event => {
+    const _onSubmit = event =>
+    {
         event.preventDefault();
         onSubmit();
     };
-
-    let AceEditor;
-
-    try {
-        AceEditor = require('react-ace');
-        require('brace/mode/javascript');
-        require('brace/theme/chrome');
-    } catch (e) {
-        console.log(e);
-    }
 
     return (
         <Form onSubmit={_onSubmit}>
@@ -66,13 +56,8 @@ export default function BlogForm({
 
             <FieldSet label="Script Snippet"
                       error={errors.script_snippet}>
-                <AceEditor value={values.script_snippet}
-                           mode="javascript"
-                           theme="chrome"
-                           width="100%"
-                           height="300px"
-                           fontSize={14}
-                           onChange={_onChange("script_snippet")}/>
+                    <Textarea value={values.script_snippet}
+                              onChange={_onChange("script_snippet")}/>
             </FieldSet>
 
             <ButtonList>
