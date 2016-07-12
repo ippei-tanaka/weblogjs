@@ -1,11 +1,8 @@
 import React from 'react';
 import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Checkbox, Textarea, Datetime, TagList, Title, Form } from './form';
 import PublicPost from './public-post';
-//import AceEditor from 'react-ace';
-//import 'brace/mode/html';
-//import 'brace/theme/chrome';
 
-export default function PostForm({
+export default function PostForm ({
     title,
     values,
     errors,
@@ -18,27 +15,19 @@ export default function PostForm({
     onSubmit,
     onClickBackButton,
     submitButtonLabel
-    }) {
+    })
+{
 
-    const _onChange = field => {
+    const _onChange = field =>
+    {
         return value => onChange(field, value);
     };
 
-    const _onSubmit = event => {
+    const _onSubmit = event =>
+    {
         event.preventDefault();
         onSubmit();
     };
-
-    let AceEditor;
-
-    try {
-        AceEditor = require('react-ace');
-        require('brace/mode/html');
-        require('brace/theme/chrome');
-    } catch (e) {
-        console.log(e);
-    }
-
 
     return (
         <Form onSubmit={_onSubmit}>
@@ -59,18 +48,13 @@ export default function PostForm({
 
             <FieldSet label="Content"
                       error={errors.content}>
-                    <AceEditor value={values.content}
-                               mode="html"
-                               theme="chrome"
-                               width="100%"
-                               height="300px"
-                               fontSize={14}
-                               onChange={_onChange("content")}/>
+                    <Textarea value={values.content}
+                              onChange={_onChange("content")}/>
             </FieldSet>
 
 
             <div className="m-dte-preview">
-                <PublicPost post={values} categories={categoryMap} authors={authorMap} />
+                <PublicPost post={values} categories={categoryMap} authors={authorMap}/>
             </div>
 
             <FieldSet label="Category"
