@@ -5,16 +5,17 @@ import {OK} from './../constants/status-codes';
 
 export default class WebpackRouteHookRunner {
 
-    constructor ({reducers, actions})
+    constructor ({reducers, actions, state})
     {
         this._reducers = reducers;
         this._actions = actions;
+        this._state = state;
     }
 
     run ({renderProps})
     {
         const { components, params } = renderProps;
-        const store = createStore(this._reducers);
+        const store = createStore(this._reducers, this._state);
         const actions = createActions(store, this._actions);
 
         return co(function* ()

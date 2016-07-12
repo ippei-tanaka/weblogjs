@@ -7,8 +7,10 @@ const start = ({
     webpackServerHost,
     webpackServerPort,
     webpageRootForAdmin,
+    adminDir,
     adminApiRoot,
     webpageRootForPublic,
+    publicDir,
     publicApiRoot,
     webProtocol,
     webHost,
@@ -28,7 +30,9 @@ const start = ({
             publicApiRoot,
             webProtocol,
             webHost,
-            webPort
+            webPort,
+            adminDir,
+            publicDir
         }
     });
 

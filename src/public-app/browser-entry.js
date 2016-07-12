@@ -10,12 +10,11 @@ import publicRoutes from './routes';
 
 require('./styles/main.scss');
 
-const ENV = process.env.WEBLOG_WEBPACK_ENV || {};
-const PUBLIC_DIR = ENV.webpageRootForPublic;
-const API_BASE = `${ENV.webProtocol}://${ENV.webHost}:${ENV.webPort}${ENV.publicApiRoot}`;
 const preloadedState = window.__PRELOADED_STATE__;
 const store = createStore(reducers, preloadedState);
-
+const siteInfo = store.getState().publicSiteInfo.toJS();
+const API_BASE = `${siteInfo.webProtocol}://${siteInfo.webHost}:${siteInfo.webPort}${siteInfo.publicApiRoot}`;
+const PUBLIC_DIR = siteInfo.webpageRootForPublic;
 const actions = createActions(store, actionBuilder.build({apiRoot: API_BASE}));
 
 document.addEventListener("DOMContentLoaded", () =>
@@ -27,3 +26,4 @@ document.addEventListener("DOMContentLoaded", () =>
         </Provider>,
         document.getElementById('AppContainer')
     ));
+
