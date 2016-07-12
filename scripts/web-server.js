@@ -1,8 +1,6 @@
 import WeblogJS from '../src/index';
 import co from 'co';
 
-console.log("Building client entry files...");
-
 const config = {
     webPort: 3000
 };
@@ -10,8 +8,6 @@ const config = {
 WeblogJS.setConfig(config);
 
 co(function* () {
-    yield WeblogJS.buildBrowserEntryFiles();
-
     yield WeblogJS.startWebServer();
 
     const c = WeblogJS.getConfig();

@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
-import "babel-polyfill";
-import { getEnv, setEnv } from '../env-variables';
+import WeblogJS from '../src/index';
 
-const options = {};
+const config = {};
 const argsArr = process.argv.slice(2);
 let command = null;
 
@@ -24,60 +23,33 @@ for (let i = 0; i < argsArr.length; i++)
 
         if (!key || !value) continue;
 
-        options[key] = value;
-    } else {
+        config[key] = value;
+    }
+    else
+    {
         command = arg;
     }
 }
 
-switch (command) {
-    case 'init':
-        options.mode = "init";
-        break;
-    case 'development':
-        options.mode = "development";
-        options.web_port = options.web_port || 3001;
-        options.webpack_server_host = options.webpack_server_host || "localhost";
-        options.webpack_server_port = options.webpack_server_port || 8081;
-        break;
-    case 'webpack-dev-server':
-        options.mode = "webpack-dev-server";
-        options.web_port = options.web_port || 3001;
-        options.webpack_server_host = options.webpack_server_host || "localhost";
-        options.webpack_server_port = options.webpack_server_port || 8081;
-        break;
-    case 'webpack':
-        options.mode = "webpack";
-        break;
-    case 'test':
-        options.mode = "test";
-        options.web_port = options.web_port || 3002;
-        break;
-    case 'production':
-    default:
-        options.mode = "production";
-        options.web_port = options.web_port || 80;
-        break;
+WeblogJS.setConfig(config);
+
+try {
+    const result = WeblogJS[command]();
+
+    if (result instanceof Promise)
+    {
+        result.then(() =>
+        {
+            //process.exit();
+        }).catch((error) =>
+        {
+            console.error(error);
+            process.exit();
+        })
+    }
 }
-
-setEnv(options);
-
-switch (command) {
-    case 'init':
-        require('./db-init-runner').run();
-        break;
-    case 'webpack':
-        require('./webpack-runner').run();
-        break;
-    case 'webpack-dev-server':
-        require('./webpack-dev-server-runner').run();
-        break;
-    case 'test':
-        require('./test-runner').run();
-        break;
-    case 'development':
-    case 'production':
-    default:
-        require('./server-runner').run();
-        break;
+catch (error)
+{
+    console.error(error);
+    process.exit(error);
 }
