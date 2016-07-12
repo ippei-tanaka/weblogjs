@@ -1,6 +1,8 @@
 import co from 'co';
 import { mongoDriver, mongoDbBaseOperator } from 'simple-odm'
 import UserModel from '../models/user-model';
+import BlogModel from '../models/blog-model';
+import SettingModel from '../models/setting-model';
 
 const setupMongoDriver = ({host, port, database}) =>
 {
@@ -55,4 +57,16 @@ const createUser = ({host, port, database}, {email, password, display_name, slug
     yield model.save();
 });
 
-export default Object.freeze({removeAllDocuments, dropDatabase, createUser});
+const createBlog = ({host, port, database}, {name, slug, posts_per_page}) => co(function* ()
+{
+    setupMongoDriver({host, port, database});
+
+    const model = new BlogModel({name, slug, posts_per_page});
+    yield model.save();
+
+    yield SettingModel.setSetting({
+        front_blog_id: model.id
+    })
+});
+
+export default Object.freeze({removeAllDocuments, dropDatabase, createUser, createBlog});
