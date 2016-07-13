@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import WeblogJS from '../src/index';
+import co from 'co';
 
 const config = {};
 const argsArr = process.argv.slice(2);
@@ -33,23 +34,14 @@ for (let i = 0; i < argsArr.length; i++)
 
 WeblogJS.setConfig(config);
 
-try {
+co(function* () {
     const result = WeblogJS[command]();
 
     if (result instanceof Promise)
     {
-        result.then(() =>
-        {
-            //process.exit();
-        }).catch((error) =>
-        {
-            console.error(error);
-            process.exit();
-        })
+        yield result;
     }
-}
-catch (error)
-{
+}).catch(error => {
     console.error(error);
     process.exit(error);
-}
+});
