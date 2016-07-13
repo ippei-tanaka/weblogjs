@@ -51,7 +51,7 @@ class WeblogJS {
 
     static createAdmin ()
     {
-        const dbRunner = require('./runners/db-runner');
+        const dbRunner = require('./runners/db-runner').default;
 
         return dbRunner.createUser({
             host: config.dbHost,
@@ -67,7 +67,7 @@ class WeblogJS {
 
     static createDefaultBlog ()
     {
-        const dbRunner = require('./runners/db-runner');
+        const dbRunner = require('./runners/db-runner').default;
 
         return dbRunner.createBlog({
             host: config.dbHost,
@@ -82,7 +82,7 @@ class WeblogJS {
 
     static dropDatabase ()
     {
-        const dbRunner = require('./runners/db-runner');
+        const dbRunner = require('./runners/db-runner').default;
 
         return dbRunner.dropDatabase({
             host: config.dbHost,
@@ -93,7 +93,7 @@ class WeblogJS {
 
     static removeAllDocuments ()
     {
-        const dbRunner = require('./runners/db-runner');
+        const dbRunner = require('./runners/db-runner').default;
 
         return dbRunner.removeAllDocuments({
             host: config.dbHost,
@@ -104,7 +104,7 @@ class WeblogJS {
 
     static buildBrowserEntryFiles ()
     {
-        const webpackRunner = require('./runners/webpack-runner');
+        const webpackRunner = require('./runners/webpack-runner').default;
 
         return webpackRunner.build({
             staticPath: config.staticPath,
@@ -120,7 +120,7 @@ class WeblogJS {
 
     static startBrowserEntryFileServer ()
     {
-        const webpackDevServerRunner = require('./runners/webpack-dev-server-runner');
+        const webpackDevServerRunner = require('./runners/webpack-dev-server-runner').default;
 
         return webpackDevServerRunner.start({
             staticPath: config.staticPath,
@@ -140,7 +140,7 @@ class WeblogJS {
 
     static startWebServer ()
     {
-        const webServerRunner = require('./runners/web-server-runner');
+        const webServerRunner = require('./runners/web-server-runner').default;
 
         return webServerRunner.start({
             dbHost: config.dbHost,
