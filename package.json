@@ -5,7 +5,7 @@
   "main": "./lib/src",
   "scripts": {
     "build": "npm run build:browser-entry-files && npm run build:clean && npm run build:source && npm run build:scripts && npm run build:static",
-    "build:browser-entry-files": "./node_modules/.bin/babel-node ./scripts/build-browser-entry-files",
+    "build:browser-entry-files": "./node_modules/.bin/rimraf static/bundle && ./node_modules/.bin/babel-node ./scripts/build-browser-entry-files",
     "build:clean": "./node_modules/.bin/rimraf lib",
     "build:source": " ./node_modules/.bin/babel src --out-dir lib/src",
     "build:scripts": " ./node_modules/.bin/babel scripts --out-dir lib/scripts",
