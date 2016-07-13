@@ -1,9 +1,5 @@
 import co from 'co';
 import path from 'path';
-import webpackDevServerRunner from './runners/webpack-dev-server-runner';
-import webpackRunner from './runners/webpack-runner';
-import dbRunner from './runners/db-runner';
-import webServerRunner from './runners/web-server-runner';
 
 const config =
 {
@@ -55,6 +51,8 @@ class WeblogJS {
 
     static createAdmin ()
     {
+        const dbRunner = require('./runners/db-runner');
+
         return dbRunner.createUser({
             host: config.dbHost,
             port: config.dbPort,
@@ -69,6 +67,8 @@ class WeblogJS {
 
     static createDefaultBlog ()
     {
+        const dbRunner = require('./runners/db-runner');
+
         return dbRunner.createBlog({
             host: config.dbHost,
             port: config.dbPort,
@@ -82,6 +82,8 @@ class WeblogJS {
 
     static dropDatabase ()
     {
+        const dbRunner = require('./runners/db-runner');
+
         return dbRunner.dropDatabase({
             host: config.dbHost,
             port: config.dbPort,
@@ -91,6 +93,8 @@ class WeblogJS {
 
     static removeAllDocuments ()
     {
+        const dbRunner = require('./runners/db-runner');
+
         return dbRunner.removeAllDocuments({
             host: config.dbHost,
             port: config.dbPort,
@@ -100,6 +104,8 @@ class WeblogJS {
 
     static buildBrowserEntryFiles ()
     {
+        const webpackRunner = require('./runners/webpack-runner');
+
         return webpackRunner.build({
             staticPath: config.staticPath,
             webpageRootForAdmin: path.resolve(config.webpageRoot, config.adminDir),
@@ -114,6 +120,8 @@ class WeblogJS {
 
     static startBrowserEntryFileServer ()
     {
+        const webpackDevServerRunner = require('./runners/webpack-dev-server-runner');
+
         return webpackDevServerRunner.start({
             staticPath: config.staticPath,
             webpackServerHost: config.webpackDevServerHost,
@@ -132,6 +140,8 @@ class WeblogJS {
 
     static startWebServer ()
     {
+        const webServerRunner = require('./runners/web-server-runner');
+
         return webServerRunner.start({
             dbHost: config.dbHost,
             dbPort: config.dbPort,
