@@ -22,6 +22,7 @@ co(function* () {
 
     yield WeblogJS.startBrowserEntryFileServer();
 
-}).catch(e => {
-    console.error(e);
+}).catch(error => {
+    console.error(error);
+    process.exit(error);
 });
