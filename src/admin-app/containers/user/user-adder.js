@@ -4,7 +4,6 @@ import UserForm from '../../../react-components/user-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
-import { ADMIN_DIR } from '../../constants/config'
 
 class UserAdder extends Component {
     constructor(props) {
@@ -21,7 +20,7 @@ class UserAdder extends Component {
     }
 
     componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+        this.props.finishTransaction({actionId: this.state.actionId});
     }
 
     componentWillReceiveProps(props) {
@@ -58,11 +57,15 @@ class UserAdder extends Component {
     }
 
     _onSubmit() {
-        this.props.createUser(this.state.actionId, this.state.values);
+        this.props.createUser({
+            actionId:this.state.actionId,
+            data: this.state.values
+        });
     }
 
     _goToListPage() {
-        this.context.router.push(`${ADMIN_DIR}/users`);
+        const root = this.props.adminSiteInfoStore.toJS().webpageRootForAdmin;
+        this.context.router.push(`${root}/users`);
     }
 
     static get contextTypes() {
@@ -75,7 +78,8 @@ class UserAdder extends Component {
 
 export default connect(
     state => ({
-        transactionStore: state.transaction
+        transactionStore: state.transaction,
+        adminSiteInfoStore: state.adminSiteInfo
     }),
     actions
 )(UserAdder);

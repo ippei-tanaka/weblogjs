@@ -3,7 +3,6 @@ import Moment from 'moment';
 import List from '../../../react-components/list';
 import actions from '../../actions';
 import { connect } from 'react-redux';
-import { ADMIN_DIR } from '../../constants/config'
 
 class UserList extends Component {
 
@@ -12,15 +11,16 @@ class UserList extends Component {
     }
 
     render() {
-        const { userStore } = this.props;
+        const { userStore, adminSiteInfoStore } = this.props;
         const users = userStore.toArray();
+        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
 
         return <List title="User List"
-                     adderLocation={`${ADMIN_DIR}/users/adder`}
+                     adderLocation={`${root}/users/adder`}
                      fields={this._fields}
                      models={users}
-                     editorLocationBuilder={id => `${ADMIN_DIR}/users/${id}/editor`}
-                     deleterLocationBuilder={id => `${ADMIN_DIR}/users/${id}/deleter`}/>;
+                     editorLocationBuilder={id => `${root}/users/${id}/editor`}
+                     deleterLocationBuilder={id => `${root}/users/${id}/deleter`}/>;
     }
 
     get _fields() {
@@ -59,6 +59,9 @@ class UserList extends Component {
 
 
 export default connect(
-    state => ({userStore: state.user}),
+    state => ({
+        userStore: state.user,
+        adminSiteInfoStore: state.adminSiteInfo
+    }),
     actions
 )(UserList);

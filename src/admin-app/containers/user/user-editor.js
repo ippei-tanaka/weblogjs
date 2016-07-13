@@ -3,7 +3,6 @@ import UserForm from '../../../react-components/user-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
-import { ADMIN_DIR } from '../../constants/config'
 
 class UserEditor extends Component {
     constructor(props) {
@@ -21,7 +20,7 @@ class UserEditor extends Component {
     }
 
     componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+        this.props.finishTransaction({actionId: this.state.actionId});
     }
 
     componentWillReceiveProps(props) {
@@ -33,11 +32,12 @@ class UserEditor extends Component {
     }
 
     render() {
-        const {params: {id}, userStore, transactionStore} = this.props;
+        const {params: {id}, userStore, transactionStore, adminSiteInfoStore} = this.props;
         const editedUser = userStore.get(id) || null;
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
         const values = Object.assign({}, editedUser, this.state.values);
+        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
 
         return editedUser ? (
             <div>
@@ -49,7 +49,7 @@ class UserEditor extends Component {
                           onSubmit={this._onSubmit.bind(this)}
                           onClickBackButton={this._goToListPage.bind(this)}
                           submitButtonLabel="Update"
-                          pathToPasswordForm={`${ADMIN_DIR}/users/${id}/password-editor`}
+                          pathToPasswordForm={`${root}/users/${id}/password-editor`}
                 />
             </div>
         ) : (
@@ -67,11 +67,12 @@ class UserEditor extends Component {
 
     _onSubmit() {
         const { params : {id}, editUser } = this.props;
-        editUser(this.state.actionId, {id, data: this.state.values});
+        editUser({actionId: this.state.actionId, id, data: this.state.values});
     }
 
     _goToListPage() {
-        this.context.router.push(`${ADMIN_DIR}/users`);
+        const root = this.props.adminSiteInfoStore.toJS().webpageRootForAdmin;
+        this.context.router.push(`${root}/users`);
     }
 
     static get contextTypes() {
@@ -91,7 +92,8 @@ class UserEditor extends Component {
 export default connect(
     state => ({
         userStore: state.user,
-        transactionStore: state.transaction
+        transactionStore: state.transaction,
+        adminSiteInfoStore: state.adminSiteInfo
     }),
     actions
 )(UserEditor);
