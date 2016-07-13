@@ -33,34 +33,35 @@ import {
     TRANSACTION_REQUEST,
     TRANSACTION_REJECTED,
     TRANSACTION_RESOLVED,
-    TRANSACTION_FINISHED,
-
-    LOADED_FRONT_BLOG_RECEIVED,
-    LOADED_PUBLIC_CATEGORIES_RECEIVED,
-    LOADED_PUBLIC_POSTS_RECEIVED,
-    LOADED_PUBLIC_SINGLE_POST_RECEIVED
+    TRANSACTION_FINISHED
 
 } from '../constants/action-types';
 
-import { ADMIN_API_PATH, PUBLIC_API_PATH } from '../constants/config';
-
 import co from 'co';
 
-const modify = (dispatch, actionId, main) => {
-
+const modify = ({actionId, action}) => (dispatch, getState) =>
+{
     dispatch({
         type: TRANSACTION_REQUEST,
         id: actionId
     });
 
-    return co(function* () {
-        yield main();
+    return co(function* ()
+    {
+        const siteInfo = getState().adminSiteInfo.toJS();
+        const { webProtocol, webHost, webPort, adminApiRoot } = siteInfo;
+        const API_BASE = `${webProtocol}://${webHost}:${webPort}${adminApiRoot}`;
+        const actionPayload = yield action({apiBase: API_BASE});
+
+        dispatch(actionPayload);
 
         dispatch({
             type: TRANSACTION_RESOLVED,
             id: actionId
         });
-    }).catch((errors) => {
+
+    }).catch((errors) =>
+    {
         dispatch({
             type: TRANSACTION_REJECTED,
             id: actionId,
@@ -69,142 +70,215 @@ const modify = (dispatch, actionId, main) => {
     });
 };
 
-const load = (processData, path, doneType) => () => (dispatch, getState) => {
-    return modify(dispatch, null, () => co(function* () {
-        const response = yield getFromServer({path});
-        dispatch({
+const load = ({path, doneType, dataProcessor = d => d}) => modify({
+    actionId: null,
+    action: co.wrap(function* ({apiBase})
+    {
+        const response = yield getFromServer({path: `${apiBase}${path}`});
+        return {
             type: doneType,
-            data: processData(response)
-        });
-    }));
-};
+            data: dataProcessor(response)
+        };
+    })
+});
 
-const loadOne = load.bind(null, (response) => response);
+const loadOne = load;
 
-const loadMany = load.bind(null, (response) => response.items);
+const loadMany = ({path, doneType}) => load({
+    path,
+    doneType,
+    dataProcessor: data => data.items
+});
 
-const create = (path, doneType) => (actionId, newUser) => (dispatch, getState) => {
-    return modify(dispatch, actionId, () => co(function* () {
-        let response = yield postOnServer({data: newUser, path});
-        response = yield getFromServer({path: `${path}/${response._id}`});
-        dispatch({
-            type: doneType,
-            data: response
-        });
-    }));
-};
-
-const edit = (path, doneType) => (actionId, {id, data}) => (dispatch, getState) => {
-    return modify(dispatch, actionId, () => co(function* () {
-        yield putOneOnServer({data, path: `${path}/${id}`});
-        const response = yield getFromServer({path: `${path}/${id}`});
-        dispatch({
+const create = ({path, doneType, actionId, data}) => modify({
+    actionId,
+    action: co.wrap(function* ({apiBase})
+    {
+        const { _id } = yield postOnServer({data, path: `${apiBase}${path}`});
+        const response = yield getFromServer({path: `${apiBase}${path}/${_id}`});
+        return {
             type: doneType,
             data: response
-        });
-    }));
-};
+        };
+    })
+});
 
-const del = (path, doneType) => (actionId, {id}) => (dispatch, getState) => {
-    return modify(dispatch, actionId, () => co(function* () {
-        yield deleteOnServer({path: `${path}/${id}`});
-        dispatch({
+const edit = ({path, doneType, actionId, id, data}) => modify({
+    actionId,
+    action: co.wrap(function* ({apiBase})
+    {
+        yield putOneOnServer({data, path: `${apiBase}${path}/${id}`});
+        const response = yield getFromServer({path: `${apiBase}${path}/${id}`});
+        return {
+            type: doneType,
+            data: response
+        };
+    })
+});
+
+const del = ({path, doneType, actionId, id}) => modify({
+    actionId,
+    action: co.wrap(function* ({apiBase})
+    {
+        yield deleteOnServer({path: `${apiBase}${path}/${id}`});
+        return {
             type: doneType,
             id
-        });
-    }));
-};
+        };
+    })
+});
 
 //------------
 
-export const finishTransaction = (actionId) => (dispatch, getState) => {
+export const finishTransaction = ({actionId}) => (dispatch, getState) =>
+{
+    if (!actionId) {
+        throw new Error("actionId can't be empty.");
+    }
+
     dispatch({
         type: TRANSACTION_FINISHED,
         id: actionId
     });
 };
 
+export const loadUsers = () => loadMany({
+    path: "/users",
+    doneType: LOADED_USER_RECEIVED
+});
 
-export const loadUsers = loadMany(`${ADMIN_API_PATH}/users`, LOADED_USER_RECEIVED);
+export const createUser = ({actionId, data}) => create({
+    path: '/users',
+    doneType: CREATED_USER_RECEIVED,
+    actionId,
+    data
+});
 
-export const createUser = create(`${ADMIN_API_PATH}/users`, CREATED_USER_RECEIVED);
+export const editUser = ({actionId, id, data}) => edit({
+    path: '/users',
+    doneType: EDITED_USER_RECEIVED,
+    actionId,
+    data,
+    id
+});
 
-export const editUser = edit(`${ADMIN_API_PATH}/users`, EDITED_USER_RECEIVED);
+export const deleteUser = ({actionId, id}) => del({
+    path: '/users',
+    doneType: DELETED_USER_RECEIVED,
+    actionId,
+    id
+});
 
-export const deleteUser = del(`${ADMIN_API_PATH}/users`, DELETED_USER_RECEIVED);
-
-export const editUserPassword = (actionId, {id, data}) => (dispatch, getState) => {
-    return modify(dispatch, actionId, () => co(function* () {
-        yield putOneOnServer({data, path: `${ADMIN_API_PATH}/users/${id}/password`});
-        dispatch({
+export const editUserPassword = ({actionId, id, data}) => modify({
+    actionId,
+    action: co.wrap(function* ({apiBase}) {
+        yield putOneOnServer({data, path: `${apiBase}/users/${id}/password`});
+        return {
             type: USER_PASSWORD_EDIT_COMPLETE
-        });
-    }));
-};
+        };
+    })
+});
 
+export const loadCategories =  () => loadMany({
+    path: "/categories",
+    doneType: LOADED_CATEGORY_RECEIVED
+});
 
-export const loadCategories = loadMany(`${ADMIN_API_PATH}/categories`, LOADED_CATEGORY_RECEIVED);
+export const createCategory = ({actionId, data}) => create({
+    path: '/categories',
+    doneType: CREATED_CATEGORY_RECEIVED,
+    actionId,
+    data
+});
 
-export const createCategory = create(`${ADMIN_API_PATH}/categories`, CREATED_CATEGORY_RECEIVED);
+export const editCategory = ({actionId, id, data}) => edit({
+    path: '/categories',
+    doneType: EDITED_CATEGORY_RECEIVED,
+    actionId,
+    data,
+    id
+});
 
-export const editCategory = edit(`${ADMIN_API_PATH}/categories`, EDITED_CATEGORY_RECEIVED);
+export const deleteCategory = ({actionId, id}) => del({
+    path: '/categories',
+    doneType: DELETED_CATEGORY_RECEIVED,
+    actionId,
+    id
+});
 
-export const deleteCategory = del(`${ADMIN_API_PATH}/categories`, DELETED_CATEGORY_RECEIVED);
+export const loadBlogs =  () => loadMany({
+    path: "/blogs",
+    doneType: LOADED_BLOG_RECEIVED
+});
 
+export const createBlog = ({actionId, data}) => create({
+    path: '/blogs',
+    doneType: CREATED_BLOG_RECEIVED,
+    actionId,
+    data
+});
 
-export const loadBlogs = loadMany(`${ADMIN_API_PATH}/blogs`, LOADED_BLOG_RECEIVED);
+export const editBlog = ({actionId, id, data}) => edit({
+    path: '/blogs',
+    doneType: EDITED_BLOG_RECEIVED,
+    actionId,
+    data,
+    id
+});
 
-export const createBlog = create(`${ADMIN_API_PATH}/blogs`, CREATED_BLOG_RECEIVED);
+export const deleteBlog = ({actionId, id}) => del({
+    path: '/blogs',
+    doneType: DELETED_BLOG_RECEIVED,
+    actionId,
+    id
+});
 
-export const editBlog = edit(`${ADMIN_API_PATH}/blogs`, EDITED_BLOG_RECEIVED);
+export const loadPosts =  () => loadMany({
+    path: "/posts",
+    doneType: LOADED_POST_RECEIVED
+});
 
-export const deleteBlog = del(`${ADMIN_API_PATH}/blogs`, DELETED_BLOG_RECEIVED);
+export const createPost = ({actionId, data}) => create({
+    path: '/posts',
+    doneType: CREATED_POST_RECEIVED,
+    actionId,
+    data
+});
 
+export const editPost = ({actionId, id, data}) => edit({
+    path: '/posts',
+    doneType: EDITED_POST_RECEIVED,
+    actionId,
+    data,
+    id
+});
 
-export const loadPosts = loadMany(`${ADMIN_API_PATH}/posts`, LOADED_POST_RECEIVED);
+export const deletePost = ({actionId, id}) => del({
+    path: '/posts',
+    doneType: DELETED_POST_RECEIVED,
+    actionId,
+    id
+});
 
-export const createPost = create(`${ADMIN_API_PATH}/posts`, CREATED_POST_RECEIVED);
-
-export const editPost = edit(`${ADMIN_API_PATH}/posts`, EDITED_POST_RECEIVED);
-
-export const deletePost = del(`${ADMIN_API_PATH}/posts`, DELETED_POST_RECEIVED);
-
-export const loadSetting = () => (dispatch, getState) => {
-    return modify(dispatch, null, () => co(function* () {
-        const response = yield getFromServer({path: `${ADMIN_API_PATH}/setting`});
+export const loadSetting = () => modify({
+    actionId: null,
+    action: co.wrap(function* ({apiBase}) {
+        const response = yield getFromServer({path: `${apiBase}/setting`});
         dispatch({
             type: LOADED_SETTING_RECEIVED,
             data: response
         });
-    }));
-};
+    })
+});
 
-export const editSetting  = (actionId, {data}) => (dispatch, getState) => {
-    return modify(dispatch, actionId, () => co(function* () {
-        yield putOneOnServer({data, path: `${ADMIN_API_PATH}/setting`});
-        const response = yield getFromServer({path: `${ADMIN_API_PATH}/setting`});
+export const editSetting = ({actionId, data}) => modify({
+    actionId,
+    action: co.wrap(function* ({apiBase}) {
+        yield putOneOnServer({data, path: `${apiBase}/setting`});
+        const response = yield getFromServer({path: `${apiBase}/setting`});
         dispatch({
             type: EDITED_SETTING_RECEIVED,
             data: response
         });
-    }));
-};
-
-
-export const loadPublicPosts = ({category, tag, page} = {}) => {
-    const categoryQuery = category ? `/category/${category}` : "";
-    const tagQuery = tag ? `/tag/${tag}` : "";
-    const pageQuery = page ? `/page/${page}` : "";
-    return load((response) => ({ posts: response.items, totalPages: response.totalPages }),
-        `${PUBLIC_API_PATH}${categoryQuery}${tagQuery}/posts${pageQuery}`,
-        LOADED_PUBLIC_POSTS_RECEIVED
-    )();
-};
-
-export const loadPublicSinglePost = (id) => {
-    return loadOne(`${PUBLIC_API_PATH}/post/${id}`, LOADED_PUBLIC_SINGLE_POST_RECEIVED)();
-};
-
-export const loadPublicFrontBlog = loadOne(`${PUBLIC_API_PATH}/front-blog`, LOADED_FRONT_BLOG_RECEIVED);
-
-export const loadPublicCategories = loadMany(`${PUBLIC_API_PATH}/categories`, LOADED_PUBLIC_CATEGORIES_RECEIVED);
+    })
+});

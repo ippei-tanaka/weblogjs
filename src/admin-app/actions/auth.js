@@ -1,4 +1,3 @@
-import { ADMIN_API_PATH } from '../constants/config';
 import { getFromServer, postOnServer } from '../../utilities/web-api-utils';
 
 import {
@@ -18,30 +17,43 @@ import {
 
 import co from 'co';
 
-const getLoginUser = () =>
+//----------------------------
+
+const generateApiRoot = (arg) => {
+    const { webProtocol, webHost, webPort, adminApiRoot } = arg;
+    return `${webProtocol}://${webHost}:${webPort}${adminApiRoot}`;
+};
+
+//----------------------------
+
+const getLoginUser = ({apiRoot}) =>
     getFromServer({
-        path:`${ADMIN_API_PATH}/users/me`
+        path: `${apiRoot}/users/me`
     }).catch(() => null);
 
-const loginToAdmin = ({email, password}) =>
+const loginToAdmin = ({apiRoot, email, password}) =>
     postOnServer({
-        path:`${ADMIN_API_PATH}/login`,
+        path: `${apiRoot}/login`,
         data: {email, password}
     }).catch(() => null);
 
-const logoutFromAdmin = () =>
+const logoutFromAdmin = ({apiRoot}) =>
     getFromServer({
-        path:`${ADMIN_API_PATH}/logout`
+        path: `${apiRoot}/logout`
     }).then(() => true).catch(() => false);
 
-export const checkStatus = () => (dispatch, getState) => {
+//----------------------------
 
-    const { auth } = getState();
+export const checkStatus = () => (dispatch, getState) =>
+{
+    const { auth, adminSiteInfo } = getState();
+    const apiRoot = generateApiRoot(adminSiteInfo.toJS());
     const status = auth.get('status');
 
     if (status === WAITING_FOR_STATUS_CHECK
         || status === WAITING_FOR_LOGIN
-        || status === WAITING_FOR_LOGOUT) {
+        || status === WAITING_FOR_LOGOUT)
+    {
         return;
     }
 
@@ -51,15 +63,19 @@ export const checkStatus = () => (dispatch, getState) => {
     });
     */
 
-    co(function* () {
-        var user = yield getLoginUser();
+    co(function* ()
+    {
+        var user = yield getLoginUser({apiRoot});
 
-        if (user) {
+        if (user)
+        {
             dispatch({
                 type: AUTH_STATUS_RECEIVED,
                 user: user
             })
-        } else {
+        }
+        else
+        {
             dispatch({
                 type: AUTH_STATUS_RECEIVED,
                 user: null
@@ -69,14 +85,17 @@ export const checkStatus = () => (dispatch, getState) => {
 };
 
 
-export const requestLogin = ({email, password}) => (dispatch, getState) => {
+export const requestLogin = ({email, password}) => (dispatch, getState) =>
+{
 
-    const { auth } = getState();
+    const { auth, adminSiteInfo } = getState();
+    const apiRoot = generateApiRoot(adminSiteInfo.toJS());
     const status = auth.get('status');
 
     if (status === WAITING_FOR_STATUS_CHECK
         || status === WAITING_FOR_LOGIN
-        || status === WAITING_FOR_LOGOUT) {
+        || status === WAITING_FOR_LOGOUT)
+    {
         return;
     }
 
@@ -86,10 +105,12 @@ export const requestLogin = ({email, password}) => (dispatch, getState) => {
     });
     */
 
-    co(function* () {
-        let user = yield getLoginUser();
+    co(function* ()
+    {
+        let user = yield getLoginUser({apiRoot});
 
-        if (user) {
+        if (user)
+        {
             dispatch({
                 type: LOGIN_RESULT_RECEIVED,
                 user: user
@@ -97,7 +118,7 @@ export const requestLogin = ({email, password}) => (dispatch, getState) => {
             return;
         }
 
-        user = yield loginToAdmin({email, password});
+        user = yield loginToAdmin({apiRoot, email, password});
 
         dispatch({
             type: LOGIN_RESULT_RECEIVED,
@@ -107,14 +128,16 @@ export const requestLogin = ({email, password}) => (dispatch, getState) => {
 };
 
 
-export const requestLogout = () => (dispatch, getState) => {
-
-    const { auth } = getState();
+export const requestLogout = () => (dispatch, getState) =>
+{
+    const { auth, adminSiteInfo } = getState();
+    const apiRoot = generateApiRoot(adminSiteInfo.toJS());
     const status = auth.get('status');
 
     if (status === WAITING_FOR_STATUS_CHECK
         || status === WAITING_FOR_LOGIN
-        || status === WAITING_FOR_LOGOUT) {
+        || status === WAITING_FOR_LOGOUT)
+    {
         return;
     }
 
@@ -124,10 +147,12 @@ export const requestLogout = () => (dispatch, getState) => {
     });
     */
 
-    co(function* () {
-        let user = yield getLoginUser();
+    co(function* ()
+    {
+        let user = yield getLoginUser({apiRoot});
 
-        if (!user) {
+        if (!user)
+        {
             dispatch({
                 type: LOGOUT_RESULT_RECEIVED,
                 result: true
@@ -137,7 +162,7 @@ export const requestLogout = () => (dispatch, getState) => {
 
         dispatch({
             type: LOGOUT_RESULT_RECEIVED,
-            result: yield logoutFromAdmin()
+            result: yield logoutFromAdmin({apiRoot})
         })
     });
 

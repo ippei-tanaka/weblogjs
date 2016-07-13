@@ -3,7 +3,6 @@ import Confirmation from '../../../react-components/confirmation';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
-import { ADMIN_DIR } from '../../constants/config'
 
 class UserDeleter extends Component {
 
@@ -21,7 +20,7 @@ class UserDeleter extends Component {
     }
 
     componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+        this.props.finishTransaction({actionId: this.state.actionId});
     }
 
     componentWillReceiveProps(props) {
@@ -55,12 +54,12 @@ class UserDeleter extends Component {
 
     _onApproved() {
         const { params : {id}, deleteUser } = this.props;
-        deleteUser(this.state.actionId, {id});
+        deleteUser({actionId: this.state.actionId, id});
     }
 
     _goToListPage() {
-        this.context.router.push(`${ADMIN_DIR}/users`);
-
+        const root = this.props.adminSiteInfoStore.toJS().webpageRootForAdmin;
+        this.context.router.push(`${root}/users`);
     }
 
     static get contextTypes() {
@@ -80,7 +79,8 @@ class UserDeleter extends Component {
 export default connect(
     state => ({
         userStore: state.user,
-        transactionStore: state.transaction
+        transactionStore: state.transaction,
+        adminSiteInfoStore: state.adminSiteInfo
     }),
     actions
 )(UserDeleter);

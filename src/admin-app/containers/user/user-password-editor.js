@@ -4,7 +4,6 @@ import UserPasswordForm from '../../../react-components/user-password-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
-import { ADMIN_DIR } from '../../constants/config'
 
 class UserPasswordEditor extends Component {
     constructor(props) {
@@ -22,7 +21,7 @@ class UserPasswordEditor extends Component {
     }
 
     componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+        this.props.finishTransaction({actionId: this.state.actionId});
     }
 
     componentWillReceiveProps(props) {
@@ -64,12 +63,17 @@ class UserPasswordEditor extends Component {
 
     _onSubmit() {
         const { params : {id}, editUserPassword } = this.props;
-        editUserPassword(this.state.actionId, {id, data: this.state.values});
+        editUserPassword({
+            actionId: this.state.actionId,
+            id,
+            data: this.state.values
+        });
     }
 
     _goToListPage() {
-        const { params : {id} } = this.props;
-        this.context.router.push(`${ADMIN_DIR}/users/${id}/editor`);
+        const { params : {id}, adminSiteInfoStore } = this.props;
+        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
+        this.context.router.push(`${root}/users/${id}/editor`);
     }
 
     static get contextTypes() {
@@ -89,7 +93,8 @@ class UserPasswordEditor extends Component {
 export default connect(
     state => ({
         userStore: state.user,
-        transactionStore: state.transaction
+        transactionStore: state.transaction,
+        adminSiteInfoStore: state.adminSiteInfo
     }),
     actions
 )(UserPasswordEditor);

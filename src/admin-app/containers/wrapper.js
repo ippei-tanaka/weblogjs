@@ -7,7 +7,6 @@ import { Link, IndexLink } from 'react-router';
 import { connect } from 'react-redux';
 import actions from '../actions';
 import { LOGOUT_FAILED } from '../constants/auth-status';
-import { ADMIN_DIR } from '../constants/config';
 
 const FailedToLogout = <div>Failed to log out.</div>;
 
@@ -23,15 +22,16 @@ class AdminWrapper extends Component {
 
     render() {
         const { mobileMenuVisible } = this.state;
-        const { authStore, children } = this.props;
+        const { authStore, adminSiteInfoStore, children } = this.props;
         const authStatus = authStore.get('status');
         const content = authStatus !== LOGOUT_FAILED ? children : FailedToLogout;
+        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
 
         return (
             <div className="module-home-page">
                 <div className="m-hmp-menu-container">
                     <AdminMenu
-                        adminRoot={ADMIN_DIR}
+                        adminRoot={root}
                         onLinkClick={this._onMenuButtonClick.bind(this)}
                         onLogoutClick={this._onLogoutClick.bind(this)}
                         onToggleClick={this._onMenuToggle.bind(this)}
@@ -78,6 +78,9 @@ class AdminWrapper extends Component {
 
 
 export default connect(
-    state => ({authStore: state.auth}),
+    state => ({
+        authStore: state.auth,
+        adminSiteInfoStore: state.adminSiteInfo
+    }),
     actions
 )(AdminWrapper);
