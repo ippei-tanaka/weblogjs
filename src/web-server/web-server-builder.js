@@ -14,7 +14,7 @@ import adminLayoutBuilder from '../admin-app/layout-builder';
 
 import publicRoutes from '../public-app/routes';
 import publicReducers from '../public-app/reducers/index';
-import publicActionBuilder from '../public-app/actions/builder';
+import publicActions from '../public-app/actions/index';
 import publicLayoutBuilder from '../public-app/layout-builder';
 
 import RestfulApiAdminRouter from '../routers/restful-api-admin-router';
@@ -77,11 +77,9 @@ const build = ({
 
     const pubicRenderer = new WebpageRenderer({Layout: PublicLayout});
 
-    const PUBLIC_API_BASE = `${webProtocol}://${webHost}:${webPort}${publicApiRoot}`;
-
     const publicHookRunner = new WebpackRouteHookRunner ({
         reducers: publicReducers,
-        actions: publicActionBuilder.build({apiRoot: PUBLIC_API_BASE}),
+        actions: publicActions,
         state: {
             publicSiteInfo : {
                 webpageRootForPublic: path.resolve(webpageRoot, publicDir),
