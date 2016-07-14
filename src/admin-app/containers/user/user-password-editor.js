@@ -72,7 +72,7 @@ class UserPasswordEditor extends Component {
 
     _goToListPage() {
         const { params : {id}, adminSiteInfoStore } = this.props;
-        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
+        const root = adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/users/${id}/editor`);
     }
 

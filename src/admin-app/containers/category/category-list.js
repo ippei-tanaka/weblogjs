@@ -15,7 +15,7 @@ class CategoryList extends Component {
     {
         const { categoryStore, adminSiteInfoStore } = this.props;
         const categories = categoryStore.toArray();
-        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
+        const root = adminSiteInfoStore.get("webpageRootForAdmin");
 
         return <List title="Category List"
                      adderLocation={`${root}/categories/adder`}

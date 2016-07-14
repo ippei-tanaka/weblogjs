@@ -13,7 +13,7 @@ class BlogList extends Component {
     render() {
         const { blogStore, adminSiteInfoStore } = this.props;
         const blogs = blogStore.toArray();
-        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
+        const root = adminSiteInfoStore.get("webpageRootForAdmin");
 
         return <List title="Blog List"
                      adderLocation={`${root}/blogs/adder`}

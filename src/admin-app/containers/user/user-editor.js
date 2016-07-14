@@ -37,7 +37,7 @@ class UserEditor extends Component {
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
         const values = Object.assign({}, editedUser, this.state.values);
-        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
+        const root = adminSiteInfoStore.get("webpageRootForAdmin");
 
         return editedUser ? (
             <div>
@@ -71,7 +71,7 @@ class UserEditor extends Component {
     }
 
     _goToListPage() {
-        const root = this.props.adminSiteInfoStore.toJS().webpageRootForAdmin;
+        const root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/users`);
     }
 
