@@ -25,7 +25,7 @@ class AdminWrapper extends Component {
         const { authStore, adminSiteInfoStore, children } = this.props;
         const authStatus = authStore.get('status');
         const content = authStatus !== LOGOUT_FAILED ? children : FailedToLogout;
-        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
+        const root = adminSiteInfoStore.get("webpageRootForAdmin");
 
         return (
             <div className="module-home-page">

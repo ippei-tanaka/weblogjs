@@ -84,7 +84,7 @@ class CategoryEditor extends Component {
 
     _goToListPage ()
     {
-        const root = this.props.adminSiteInfoStore.toJS().webpageRootForAdmin;
+        const root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/categories`);
     }
 

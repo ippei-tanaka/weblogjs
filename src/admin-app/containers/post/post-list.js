@@ -21,7 +21,7 @@ class PostList extends Component {
         const categoryList = categoryStore.toArray();
         const blogList = blogStore.toArray();
         const authorList = userStore.toArray();
-        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
+        const root = adminSiteInfoStore.get("webpageRootForAdmin");
 
         return <List title="Post List"
                      adderLocation={`${root}/posts/adder`}
