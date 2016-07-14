@@ -13,8 +13,6 @@ const build = ({webpackDevServer, webpackDevServerHost, webpackDevServerPort}) =
             <meta charSet="utf-8"/>
             <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
-            <link href="/vendors/font-awesome/css/font-awesome.min.css" media="all" rel="stylesheet"/>
-            <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
             { !webpackDevServer && <link href="/bundle/admin-style.css" media="all" rel="stylesheet"/> }
             <title>{title}</title>
             { preloadedState && <script dangerouslySetInnerHTML={{__html:`window.__PRELOADED_STATE__ = ${safeStringify(preloadedState)}`}}></script> }
