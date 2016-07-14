@@ -38,7 +38,8 @@ const build = ({
     publicApiRoot,
 
     sessionSecret,
-    staticPath}) => {
+    staticPath}) =>
+{
 
     const webpageRouter = new WebpageRouter({
         basePath: webpageRoot
@@ -53,7 +54,7 @@ const build = ({
 
     const adminRenderer = new WebpageRenderer({Layout: AdminLayout});
 
-    const adminHookRunner = new WebpackRouteHookRunner ({
+    const adminHookRunner = new WebpackRouteHookRunner({
         reducers: adminReducers,
         actions: adminActions
     });
@@ -77,11 +78,11 @@ const build = ({
 
     const pubicRenderer = new WebpageRenderer({Layout: PublicLayout});
 
-    const publicHookRunner = new WebpackRouteHookRunner ({
+    const publicHookRunner = new WebpackRouteHookRunner({
         reducers: publicReducers,
         actions: publicActions,
         state: {
-            publicSiteInfo : {
+            publicSiteInfo: {
                 webpageRootForPublic: path.resolve(webpageRoot, publicDir),
                 webProtocol,
                 webHost,

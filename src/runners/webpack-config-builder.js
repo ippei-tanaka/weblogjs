@@ -3,8 +3,8 @@ import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 const build = ({
-    webpackServerHost = "localhost",
-    webpackServerPort = 8080,
+    webpackDevServerHost = "localhost",
+    webpackDevServerPort = 8080,
     envVariables = {},
     envNamespace = 'WEBLOG_WEBPACK_ENV',
     production = false,
@@ -63,7 +63,7 @@ const build = ({
         output: {
             path: outputDir,
             filename: "[name].js",
-            publicPath: `http://${webpackServerHost}:${webpackServerPort}/${bundleDirName}`
+            publicPath: `http://${webpackDevServerHost}:${webpackDevServerPort}/${bundleDirName}`
         },
 
         devtool: sourceMap ? 'source-map' : null,

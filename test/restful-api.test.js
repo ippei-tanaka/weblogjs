@@ -1,7 +1,7 @@
 import co from 'co';
 import { expect } from 'chai';
 import httpRequest from './lib/http-request';
-import WeblogJS from '../';
+import WeblogJS from '../src';
 
 const admin = Object.freeze(Object.assign({
     email: "ttt@ttt.com",
