@@ -4,35 +4,67 @@ import UserModel from '../models/user-model';
 import BlogModel from '../models/blog-model';
 import SettingModel from '../models/setting-model';
 
-const setupMongoDriver = ({host, port, database}) =>
+const setupMongoDriver = ({dbHost, dbPort, dbName}) =>
 {
-    mongoDriver.setUp({host, port, database})
+    mongoDriver.setUp({
+        host: dbHost,
+        port: dbPort,
+        database: dbName
+    })
 };
 
-const dropDatabase = ({host, port, database}) => co(function* ()
+const dropDatabase = ({
+    dbHost,
+    dbPort,
+    dbName}) => co(function* ()
 {
-    setupMongoDriver({host, port, database});
+    setupMongoDriver({dbHost, dbPort, dbName});
     yield mongoDbBaseOperator.dropDatabase();
 });
 
-const removeAllDocuments = ({host, port, database}) => co(function* ()
+const removeAllDocuments = ({
+    dbHost,
+    dbPort,
+    dbName}) => co(function* ()
 {
-    setupMongoDriver({host, port, database});
+    setupMongoDriver({dbHost, dbPort, dbName});
     yield mongoDbBaseOperator.removeAllDocuments();
 });
 
-const createUser = ({host, port, database}, {email, password, display_name, slug}) => co(function* ()
+const createAdminUser = ({
+    dbHost,
+    dbPort,
+    dbName,
+    adminEmail,
+    adminPassword,
+    adminDisplayName,
+    adminSlug}) => co(function* ()
 {
-    setupMongoDriver({host, port, database});
-    const model = new UserModel({email, password, display_name, slug});
+    setupMongoDriver({dbHost, dbPort, dbName});
+    const model = new UserModel({
+        email: adminEmail,
+        password: adminPassword,
+        display_name: adminDisplayName,
+        slug: adminSlug
+    });
     yield model.save();
 });
 
-const createBlog = ({host, port, database}, {name, slug, posts_per_page}) => co(function* ()
+const createDefaultBlog = ({
+    dbHost,
+    dbPort,
+    dbName,
+    defaultBlogName,
+    defaultBlogSlug,
+    defaultBlogPostPerPage}) => co(function* ()
 {
-    setupMongoDriver({host, port, database});
+    setupMongoDriver({dbHost, dbPort, dbName});
 
-    const model = new BlogModel({name, slug, posts_per_page});
+    const model = new BlogModel({
+        name: defaultBlogName,
+        slug: defaultBlogSlug,
+        posts_per_page: defaultBlogPostPerPage
+    });
     yield model.save();
 
     yield SettingModel.setSetting({
@@ -40,4 +72,4 @@ const createBlog = ({host, port, database}, {name, slug, posts_per_page}) => co(
     })
 });
 
-export default Object.freeze({removeAllDocuments, dropDatabase, createUser, createBlog});
+export default Object.freeze({removeAllDocuments, dropDatabase, createAdminUser, createDefaultBlog});

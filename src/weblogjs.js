@@ -1,8 +1,4 @@
-import co from 'co';
-import path from 'path';
-
-const config =
-{
+const initialConfig = Object.freeze({
     dbHost: "localhost",
     dbPort: 27017,
     dbName: "weblogjs",
@@ -17,7 +13,7 @@ const config =
 
     adminApiRoot: "/api",
     publicApiRoot: "/public-api",
-    staticPath: path.resolve(__dirname, "../static"),
+    staticPath: null,
 
     sessionSecret: "huashui155HOUDSDe21",
 
@@ -33,20 +29,20 @@ const config =
     defaultBlogName: "My Blog",
     defaultBlogSlug: "my-blog",
     defaultBlogPostPerPage: 1
-};
+});
 
+let config = initialConfig;
 
 class WeblogJS {
 
     static setConfig (value)
     {
-        Object.assign(config, value);
-        return this;
+        config = Object.freeze(Object.assign({}, initialConfig, value));
     }
 
     static getConfig ()
     {
-        return Object.assign({}, config);
+        return config;
     }
 
     static createAdmin ()
@@ -55,16 +51,8 @@ class WeblogJS {
 
         console.log(`Creating the admin user: ${config.adminDisplayName}...\n`);
 
-        return dbRunner.createUser({
-            host: config.dbHost,
-            port: config.dbPort,
-            database: config.dbName
-        }, {
-            email: config.adminEmail,
-            password: config.adminPassword,
-            display_name: config.adminDisplayName,
-            slug: config.adminSlug
-        }).then(() => {
+        return dbRunner.createAdminUser(this.getConfig()).then(() =>
+        {
             console.log(`Completed creating the admin user: ${config.adminDisplayName}.\n`);
         });
     }
@@ -75,15 +63,8 @@ class WeblogJS {
 
         console.log(`Creating the default blog: ${config.defaultBlogName}...\n`);
 
-        return dbRunner.createBlog({
-            host: config.dbHost,
-            port: config.dbPort,
-            database: config.dbName
-        }, {
-            name: config.defaultBlogName,
-            slug: config.defaultBlogSlug,
-            posts_per_page: config.defaultBlogPostPerPage
-        }).then(() => {
+        return dbRunner.createDefaultBlog(this.getConfig()).then(() =>
+        {
             console.log(`Complete creating the default blog: ${config.defaultBlogName}.\n`);
         });
     }
@@ -94,11 +75,8 @@ class WeblogJS {
 
         console.log(`Dropping the database: ${config.dbName}...\n`);
 
-        return dbRunner.dropDatabase({
-            host: config.dbHost,
-            port: config.dbPort,
-            database: config.dbName
-        }).then(() => {
+        return dbRunner.dropDatabase(this.getConfig()).then(() =>
+        {
             console.log(`Completed dropping the database: ${config.dbName}.\n`);
         });
     }
@@ -109,11 +87,8 @@ class WeblogJS {
 
         console.log("Removing all documents...\n");
 
-        return dbRunner.removeAllDocuments({
-            host: config.dbHost,
-            port: config.dbPort,
-            database: config.dbName
-        }).then(() => {
+        return dbRunner.removeAllDocuments(this.getConfig()).then(() =>
+        {
             console.log("Completed removing all documents.\n");
         });
     }
@@ -124,16 +99,8 @@ class WeblogJS {
 
         console.log("Building client entry files...\n");
 
-        return webpackRunner.build({
-            staticPath: config.staticPath,
-            webpageRootForAdmin: path.resolve(config.webpageRoot, config.adminDir),
-            webpageRootForPublic: path.resolve(config.webpageRoot, config.publicDir),
-            adminApiRoot: config.adminApiRoot,
-            publicApiRoot: config.publicApiRoot,
-            webProtocol: config.webProtocol,
-            webHost: config.webHost,
-            webPort: config.webPort
-        }).then(() => {
+        return webpackRunner.build(this.getConfig()).then(() =>
+        {
             console.log("Completed building client entry files.\n");
         });
     }
@@ -144,20 +111,8 @@ class WeblogJS {
 
         console.log("Starting Webpack Dev Server...\n");
 
-        return webpackDevServerRunner.start({
-            staticPath: config.staticPath,
-            webpackServerHost: config.webpackDevServerHost,
-            webpackServerPort: config.webpackDevServerPort,
-            webpageRootForAdmin: path.resolve(config.webpageRoot, config.adminDir),
-            adminDir: config.adminDir,
-            webpageRootForPublic: path.resolve(config.webpageRoot, config.publicDir),
-            publicDir: config.publicDir,
-            adminApiRoot: config.adminApiRoot,
-            publicApiRoot: config.publicApiRoot,
-            webProtocol: config.webProtocol,
-            webHost: config.webHost,
-            webPort: config.webPort
-        }).then(() => {
+        return webpackDevServerRunner.start(this.getConfig()).then(() =>
+        {
             console.log("Completed starting Webpack Dev Server.\n");
         });
     }
@@ -168,28 +123,12 @@ class WeblogJS {
 
         console.log("Starting a web server...\n");
 
-        return webServerRunner.start({
-            dbHost: config.dbHost,
-            dbPort: config.dbPort,
-            dbName: config.dbName,
-            webProtocol: config.webProtocol,
-            webHost: config.webHost,
-            webPort: config.webPort,
-            adminDir: config.adminDir,
-            publicDir: config.publicDir,
-            webpageRoot: config.webpageRoot,
-            adminApiRoot: config.adminApiRoot,
-            publicApiRoot: config.publicApiRoot,
-            sessionSecret: config.sessionSecret,
-            webpackDevServer: config.webpackDevServer,
-            webpackDevServerHost: config.webpackDevServerHost,
-            webpackDevServerPort: config.webpackDevServerPort,
-            staticPath: config.staticPath
-        }).then(() => {
-            const c = this.getConfig();
+        return webServerRunner.start(this.getConfig()).then(() =>
+        {
+            const config = this.getConfig();
             console.log("Completed starting the web server.\n");
-            console.log(`Go to the public page: ${c.webProtocol}://${c.webHost}:${c.webPort}/${c.publicDir}`);
-            console.log(`Or, go to the admin page: ${c.webProtocol}://${c.webHost}:${c.webPort}/${c.adminDir}\n`);
+            console.log(`Go to the public page: ${config.webProtocol}://${config.webHost}:${config.webPort}/${config.publicDir}`);
+            console.log(`Or, go to the admin page: ${config.webProtocol}://${config.webHost}:${config.webPort}/${config.adminDir}\n`);
         });
     }
 }

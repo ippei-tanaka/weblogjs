@@ -1,27 +1,28 @@
 import webpack from "webpack";
 import WebpackDevServer from 'webpack-dev-server';
 import webpackConfigBuilder from './webpack-config-builder';
+import path from 'path';
 
 const start = ({
     staticPath,
-    webpackServerHost,
-    webpackServerPort,
-    webpageRootForAdmin,
+    webpackDevServerHost,
+    webpackDevServerPort,
     adminDir,
     adminApiRoot,
-    webpageRootForPublic,
     publicDir,
     publicApiRoot,
+    webpageRoot,
     webProtocol,
     webHost,
     webPort
     }) => new Promise((resolve, reject) =>
 {
+    const webpageRootForAdmin = path.resolve(webpageRoot, adminDir);
+    const webpageRootForPublic = path.resolve(webpageRoot, publicDir);
     const webpackConfig = webpackConfigBuilder.build({
         staticPath,
-        webpackDevServer: true,
-        webpackServerHost,
-        webpackServerPort,
+        webpackDevServerHost,
+        webpackDevServerPort,
         sourceMap: true,
         envVariables: {
             webpageRootForAdmin,
@@ -46,8 +47,8 @@ const start = ({
     });
 
     server.listen(
-        webpackServerPort,
-        webpackServerHost,
+        webpackDevServerPort,
+        webpackDevServerHost,
         () =>
         {
             resolve();
