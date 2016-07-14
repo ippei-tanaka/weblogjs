@@ -264,10 +264,10 @@ export const loadSetting = () => modify({
     actionId: null,
     action: co.wrap(function* ({apiBase}) {
         const response = yield getFromServer({path: `${apiBase}/setting`});
-        dispatch({
+        return {
             type: LOADED_SETTING_RECEIVED,
             data: response
-        });
+        };
     })
 });
 
@@ -276,9 +276,9 @@ export const editSetting = ({actionId, data}) => modify({
     action: co.wrap(function* ({apiBase}) {
         yield putOneOnServer({data, path: `${apiBase}/setting`});
         const response = yield getFromServer({path: `${apiBase}/setting`});
-        dispatch({
+        return {
             type: EDITED_SETTING_RECEIVED,
             data: response
-        });
+        };
     })
 });
