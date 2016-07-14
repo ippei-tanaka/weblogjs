@@ -4,11 +4,11 @@ import PostForm from '../../../react-components/post-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
-import { ADMIN_DIR } from '../../constants/config'
 
 class PostEditor extends Component {
 
-    constructor(props) {
+    constructor (props)
+    {
         super(props);
 
         this.state = {
@@ -17,7 +17,8 @@ class PostEditor extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount ()
+    {
         this.setState({actionId: Symbol()});
         this.props.loadPosts();
         this.props.loadBlogs();
@@ -25,19 +26,23 @@ class PostEditor extends Component {
         this.props.loadUsers();
     }
 
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+    componentWillUnmount ()
+    {
+        this.props.finishTransaction({actionId: this.state.actionId});
     }
 
-    componentWillReceiveProps(props) {
+    componentWillReceiveProps (props)
+    {
         const transaction = props.transactionStore.get(this.state.actionId);
 
-        if (transaction && transaction.get('status') === RESOLVED) {
+        if (transaction && transaction.get('status') === RESOLVED)
+        {
             this._goToListPage();
         }
     }
 
-    render() {
+    render ()
+    {
         const {params: {id}, postStore, transactionStore, categoryStore, blogStore, userStore} = this.props;
         const editedPost = postStore.get(id) || null;
         const transaction = transactionStore.get(this.state.actionId);
@@ -72,28 +77,39 @@ class PostEditor extends Component {
         );
     }
 
-    _onChange(field, value) {
-        this.setState(state => {
+    _onChange (field, value)
+    {
+        this.setState(state =>
+        {
             state.values[field] = value;
         });
     }
 
-    _onSubmit() {
+    _onSubmit ()
+    {
         const { params : {id}, editPost } = this.props;
-        editPost(this.state.actionId, {id, data: this.state.values});
+        editPost({
+            id,
+            actionId: this.state.actionId,
+            data: this.state.values
+        });
     }
 
-    _goToListPage() {
-        this.context.router.push(`${ADMIN_DIR}/posts`);
+    _goToListPage ()
+    {
+        const root = this.props.adminSiteInfoStore.toJS().webpageRootForAdmin;
+        this.context.router.push(`${root}/posts`);
     }
 
-    static get contextTypes() {
+    static get contextTypes ()
+    {
         return {
             router: React.PropTypes.object.isRequired
         };
     }
 
-    static get propTypes() {
+    static get propTypes ()
+    {
         return {
             params: React.PropTypes.object.isRequired
         };
@@ -107,7 +123,8 @@ export default connect(
         blogStore: state.blog,
         userStore: state.user,
         categoryStore: state.category,
-        transactionStore: state.transaction
+        transactionStore: state.transaction,
+        adminSiteInfoStore: state.adminSiteInfo
     }),
     actions
 )(PostEditor);

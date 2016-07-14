@@ -4,10 +4,11 @@ import BlogForm from '../../../react-components/blog-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
-import { ADMIN_DIR } from '../../constants/config'
 
 class BlogAdder extends Component {
-    constructor(props) {
+
+    constructor (props)
+    {
         super(props);
 
         this.state = {
@@ -16,23 +17,28 @@ class BlogAdder extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount ()
+    {
         this.setState({actionId: Symbol()});
     }
 
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+    componentWillUnmount ()
+    {
+        this.props.finishTransaction({actionId: this.state.actionId});
     }
 
-    componentWillReceiveProps(props) {
+    componentWillReceiveProps (props)
+    {
         const transaction = props.transactionStore.get(this.state.actionId);
 
-        if (transaction && transaction.get('status') === RESOLVED) {
+        if (transaction && transaction.get('status') === RESOLVED)
+        {
             this._goToListPage();
         }
     }
 
-    render() {
+    render ()
+    {
         const {transactionStore} = this.props;
         const {values, actionId} = this.state;
         const transaction = transactionStore.get(actionId);
@@ -40,31 +46,40 @@ class BlogAdder extends Component {
 
         return (
             <BlogForm title="Create a New Blog"
-                          errors={errors}
-                          values={values}
-                          onChange={this._onChange.bind(this)}
-                          onSubmit={this._onSubmit.bind(this)}
-                          onClickBackButton={this._goToListPage.bind(this)}
-                          submitButtonLabel="Create"
+                      errors={errors}
+                      values={values}
+                      onChange={this._onChange.bind(this)}
+                      onSubmit={this._onSubmit.bind(this)}
+                      onClickBackButton={this._goToListPage.bind(this)}
+                      submitButtonLabel="Create"
             />
         );
     }
 
-    _onChange(field, value) {
-        this.setState(state => {
+    _onChange (field, value)
+    {
+        this.setState(state =>
+        {
             state.values[field] = value;
         });
     }
 
-    _onSubmit() {
-        this.props.createBlog(this.state.actionId, this.state.values);
+    _onSubmit ()
+    {
+        this.props.createBlog({
+            actionId: this.state.actionId,
+            data: this.state.values
+        });
     }
 
-    _goToListPage() {
-        this.context.router.push(`${ADMIN_DIR}/blogs`);
+    _goToListPage ()
+    {
+        const root = this.props.adminSiteInfoStore.toJS().webpageRootForAdmin;
+        this.context.router.push(`${root}/blogs`);
     }
 
-    static get contextTypes() {
+    static get contextTypes ()
+    {
         return {
             router: React.PropTypes.object.isRequired
         };
@@ -74,7 +89,8 @@ class BlogAdder extends Component {
 
 export default connect(
     state => ({
-        transactionStore: state.transaction
+        transactionStore: state.transaction,
+        adminSiteInfoStore: state.adminSiteInfo
     }),
     actions
 )(BlogAdder);

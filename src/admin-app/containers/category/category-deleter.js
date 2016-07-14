@@ -3,11 +3,11 @@ import Confirmation from '../../../react-components/confirmation';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
-import { ADMIN_DIR } from '../../constants/config'
 
 class CategoryDeleter extends Component {
 
-    constructor(props) {
+    constructor (props)
+    {
         super(props);
 
         this.state = {
@@ -15,24 +15,29 @@ class CategoryDeleter extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount ()
+    {
         this.setState({actionId: Symbol()});
         this.props.loadCategories();
     }
 
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+    componentWillUnmount ()
+    {
+        this.props.finishTransaction({actionId: this.state.actionId});
     }
 
-    componentWillReceiveProps(props) {
+    componentWillReceiveProps (props)
+    {
         const transaction = props.transactionStore.get(this.state.actionId);
 
-        if (transaction && transaction.get('status') === RESOLVED) {
+        if (transaction && transaction.get('status') === RESOLVED)
+        {
             this._goToListPage();
         }
     }
 
-    render() {
+    render ()
+    {
         const { params : {id}, categoryStore } = this.props;
 
         const deletedCategory = categoryStore.get(id) || null;
@@ -53,22 +58,31 @@ class CategoryDeleter extends Component {
         );
     }
 
-    _onApproved () {
+    _onApproved ()
+    {
         const { params : {id}, deleteCategory } = this.props;
-        deleteCategory(this.state.actionId, {id});
+
+        deleteCategory({
+            actionId: this.state.actionId,
+            id
+        });
     }
 
-    _goToListPage() {
-        this.context.router.push(`${ADMIN_DIR}/categories`);
+    _goToListPage ()
+    {
+        const root = this.props.adminSiteInfoStore.toJS().webpageRootForAdmin;
+        this.context.router.push(`${root}/categories`);
     }
 
-    static get contextTypes() {
+    static get contextTypes ()
+    {
         return {
             router: React.PropTypes.object.isRequired
         };
     }
 
-    static get propTypes() {
+    static get propTypes ()
+    {
         return {
             params: React.PropTypes.object.isRequired
         };
@@ -79,7 +93,8 @@ class CategoryDeleter extends Component {
 export default connect(
     state => ({
         categoryStore: state.category,
-        transactionStore: state.transaction
+        transactionStore: state.transaction,
+        adminSiteInfoStore: state.adminSiteInfo
     }),
     actions
 )(CategoryDeleter);

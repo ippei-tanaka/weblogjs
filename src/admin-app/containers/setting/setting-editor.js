@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
 
 class SettingEditor extends Component {
-    constructor(props) {
+
+    constructor (props)
+    {
         super(props);
 
         this.state = {
@@ -14,23 +16,25 @@ class SettingEditor extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount ()
+    {
         this.setState({actionId: Symbol()});
         this.props.loadBlogs();
         this.props.loadSetting();
     }
 
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+    componentWillUnmount ()
+    {
+        this.props.finishTransaction({actionId: this.state.actionId});
     }
 
-    render() {
+    render ()
+    {
         const {settingStore, blogStore, transactionStore} = this.props;
-        const setting = settingStore;
         const blogList = blogStore.toArray();
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
-        const values = Object.assign({}, setting, this.state.values);
+        const values = Object.assign({}, settingStore, this.state.values);
         const updateSucceeded = transaction && transaction.get('status') === RESOLVED;
 
         return (
@@ -58,15 +62,22 @@ class SettingEditor extends Component {
         );
     }
 
-    _onChange(field, value) {
-        this.setState(state => {
+    _onChange (field, value)
+    {
+        this.setState(state =>
+        {
             state.values[field] = value;
         });
     }
 
-    _onSubmit(e) {
+    _onSubmit (e)
+    {
         e.preventDefault();
-        this.props.editSetting(this.state.actionId, {data: this.state.values});
+
+        this.props.editSetting({
+            actionId: this.state.actionId,
+            data: this.state.values
+        });
     }
 }
 

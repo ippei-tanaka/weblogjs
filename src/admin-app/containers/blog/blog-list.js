@@ -3,7 +3,6 @@ import Moment from 'moment';
 import List from '../../../react-components/list';
 import actions from '../../actions';
 import { connect } from 'react-redux';
-import { ADMIN_DIR } from '../../constants/config'
 
 class BlogList extends Component {
 
@@ -12,15 +11,16 @@ class BlogList extends Component {
     }
 
     render() {
-        const { blogStore } = this.props;
+        const { blogStore, adminSiteInfoStore } = this.props;
         const blogs = blogStore.toArray();
+        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
 
         return <List title="Blog List"
-                     adderLocation={`${ADMIN_DIR}/blogs/adder`}
+                     adderLocation={`${root}/blogs/adder`}
                      fields={this._fields}
                      models={blogs}
-                     editorLocationBuilder={id => `${ADMIN_DIR}/blogs/${id}/editor`}
-                     deleterLocationBuilder={id => `${ADMIN_DIR}/blogs/${id}/deleter`}/>;
+                     editorLocationBuilder={id => `${root}/blogs/${id}/editor`}
+                     deleterLocationBuilder={id => `${root}/blogs/${id}/deleter`}/>;
     }
 
     get _fields() {
@@ -63,6 +63,9 @@ class BlogList extends Component {
 
 
 export default connect(
-    state => ({blogStore: state.blog}),
+    state => ({
+        blogStore: state.blog,
+        adminSiteInfoStore: state.adminSiteInfo
+    }),
     actions
 )(BlogList);

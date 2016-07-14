@@ -4,11 +4,11 @@ import PostForm from '../../../react-components/post-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
-import { ADMIN_DIR } from '../../constants/config'
 
 class PostAdder extends Component {
 
-    constructor(props) {
+    constructor (props)
+    {
         super(props);
 
         this.state = {
@@ -17,26 +17,31 @@ class PostAdder extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount ()
+    {
         this.setState({actionId: Symbol()});
         this.props.loadBlogs();
         this.props.loadCategories();
         this.props.loadUsers();
     }
 
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+    componentWillUnmount ()
+    {
+        this.props.finishTransaction({actionId: this.state.actionId});
     }
 
-    componentWillReceiveProps(props) {
+    componentWillReceiveProps (props)
+    {
         const transaction = props.transactionStore.get(this.state.actionId);
 
-        if (transaction && transaction.get('status') === RESOLVED) {
+        if (transaction && transaction.get('status') === RESOLVED)
+        {
             this._goToListPage();
         }
     }
 
-    render() {
+    render ()
+    {
         const {transactionStore, categoryStore, blogStore, userStore} = this.props;
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
@@ -64,21 +69,30 @@ class PostAdder extends Component {
         );
     }
 
-    _onChange(field, value) {
-        this.setState(state => {
+    _onChange (field, value)
+    {
+        this.setState(state =>
+        {
             state.values[field] = value;
         });
     }
 
-    _onSubmit() {
-        this.props.createPost(this.state.actionId, this.state.values);
+    _onSubmit ()
+    {
+        this.props.createPost({
+            actionId: this.state.actionId,
+            data: this.state.values
+        });
     }
 
-    _goToListPage() {
-        this.context.router.push(`${ADMIN_DIR}/posts`);
+    _goToListPage ()
+    {
+        const root = this.props.adminSiteInfoStore.toJS().webpageRootForAdmin;
+        this.context.router.push(`${root}/posts`);
     }
 
-    static get contextTypes() {
+    static get contextTypes ()
+    {
         return {
             router: React.PropTypes.object.isRequired
         };
@@ -91,7 +105,8 @@ export default connect(
         blogStore: state.blog,
         userStore: state.user,
         categoryStore: state.category,
-        transactionStore: state.transaction
+        transactionStore: state.transaction,
+        adminSiteInfoStore: state.adminSiteInfo
     }),
     actions
 )(PostAdder);
