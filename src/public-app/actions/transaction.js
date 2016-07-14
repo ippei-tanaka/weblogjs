@@ -72,5 +72,6 @@ export const loadPublicFrontBlog = () => load({
 
 export const loadPublicCategories = () => load({
     path: `/categories`,
-    doneType: LOADED_PUBLIC_CATEGORIES_RECEIVED
+    doneType: LOADED_PUBLIC_CATEGORIES_RECEIVED,
+    dataProcessor: data => data.items
 });

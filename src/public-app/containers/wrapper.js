@@ -33,7 +33,7 @@ class PublicWrapper extends Component {
                         </div>
                         <aside className="m-bll-sidebar">
                             <section className="module-section">
-                                <PublicCategoryList categories={categories} />
+                                <PublicCategoryList categories={categories} rootDir={rootDir} />
                             </section>
                         </aside>
                     </div>
