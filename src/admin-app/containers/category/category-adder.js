@@ -4,10 +4,10 @@ import CategoryForm from '../../../react-components/category-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
-import { ADMIN_DIR } from '../../constants/config'
 
 class CategoryAdder extends Component {
-    constructor(props) {
+    constructor (props)
+    {
         super(props);
 
         this.state = {
@@ -16,23 +16,28 @@ class CategoryAdder extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount ()
+    {
         this.setState({actionId: Symbol()});
     }
 
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+    componentWillUnmount ()
+    {
+        this.props.finishTransaction({actionId: this.state.actionId});
     }
 
-    componentWillReceiveProps(props) {
+    componentWillReceiveProps (props)
+    {
         const transaction = props.transactionStore.get(this.state.actionId);
 
-        if (transaction && transaction.get('status') === RESOLVED) {
+        if (transaction && transaction.get('status') === RESOLVED)
+        {
             this._goToListPage();
         }
     }
 
-    render() {
+    render ()
+    {
         const {transactionStore} = this.props;
         const {values, actionId} = this.state;
         const transaction = transactionStore.get(actionId);
@@ -50,21 +55,30 @@ class CategoryAdder extends Component {
         );
     }
 
-    _onChange(field, value) {
-        this.setState(state => {
+    _onChange (field, value)
+    {
+        this.setState(state =>
+        {
             state.values[field] = value;
         });
     }
 
-    _onSubmit() {
-        this.props.createCategory(this.state.actionId, this.state.values);
+    _onSubmit ()
+    {
+        this.props.createCategory({
+            actionId: this.state.actionId,
+            data: this.state.values
+        });
     }
 
-    _goToListPage() {
-        this.context.router.push(`${ADMIN_DIR}/categories`);
+    _goToListPage ()
+    {
+        const root = this.props.adminSiteInfoStore.toJS().webpageRootForAdmin;
+        this.context.router.push(`${root}/categories`);
     }
 
-    static get contextTypes() {
+    static get contextTypes ()
+    {
         return {
             router: React.PropTypes.object.isRequired
         };
@@ -74,7 +88,8 @@ class CategoryAdder extends Component {
 
 export default connect(
     state => ({
-        transactionStore: state.transaction
+        transactionStore: state.transaction,
+        adminSiteInfoStore: state.adminSiteInfo
     }),
     actions
 )(CategoryAdder);

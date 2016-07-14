@@ -3,11 +3,11 @@ import Confirmation from '../../../react-components/confirmation';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
-import { ADMIN_DIR } from '../../constants/config'
 
 class BlogDeleter extends Component {
 
-    constructor(props) {
+    constructor (props)
+    {
         super(props);
 
         this.state = {
@@ -15,24 +15,29 @@ class BlogDeleter extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount ()
+    {
         this.setState({actionId: Symbol()});
         this.props.loadBlogs();
     }
 
-    componentWillUnmount() {
-        this.props.finishTransaction(this.state.actionId);
+    componentWillUnmount ()
+    {
+        this.props.finishTransaction({actionId: this.state.actionId});
     }
 
-    componentWillReceiveProps(props) {
+    componentWillReceiveProps (props)
+    {
         const transaction = props.transactionStore.get(this.state.actionId);
 
-        if (transaction && transaction.get('status') === RESOLVED) {
+        if (transaction && transaction.get('status') === RESOLVED)
+        {
             this._goToListPage();
         }
     }
 
-    render() {
+    render ()
+    {
         const { params : {id}, blogStore } = this.props;
 
         const deletedBlog = blogStore.get(id) || null;
@@ -53,22 +58,30 @@ class BlogDeleter extends Component {
         );
     }
 
-    _onApproved () {
+    _onApproved ()
+    {
         const { params : {id}, deleteBlog } = this.props;
-        deleteBlog(this.state.actionId, {id});
+        deleteBlog({
+            actionId: this.state.actionId,
+            id
+        });
     }
 
-    _goToListPage() {
-        this.context.router.push(`${ADMIN_DIR}/blogs`);
+    _goToListPage ()
+    {
+        const root = this.props.adminSiteInfoStore.toJS().webpageRootForAdmin;
+        this.context.router.push(`${root}/blogs`);
     }
 
-    static get contextTypes() {
+    static get contextTypes ()
+    {
         return {
             router: React.PropTypes.object.isRequired
         };
     }
 
-    static get propTypes() {
+    static get propTypes ()
+    {
         return {
             params: React.PropTypes.object.isRequired
         };
@@ -79,7 +92,8 @@ class BlogDeleter extends Component {
 export default connect(
     state => ({
         blogStore: state.blog,
-        transactionStore: state.transaction
+        transactionStore: state.transaction,
+        adminSiteInfoStore: state.adminSiteInfo
     }),
     actions
 )(BlogDeleter);

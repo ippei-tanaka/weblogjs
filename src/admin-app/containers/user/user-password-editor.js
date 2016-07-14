@@ -94,7 +94,7 @@ export default connect(
     state => ({
         userStore: state.user,
         transactionStore: state.transaction,
-        adminSiteInfoStore: state.adminSiteInfo
+        adminSiteInfoStore: state.adminSiteInfo,
     }),
     actions
 )(UserPasswordEditor);

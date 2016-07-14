@@ -15,7 +15,7 @@ export default (state = initialState) => {
 
     if (!(state instanceof Immutable.Map)) {
         state = Immutable.Map(state);
-        state = initialState.merge(state);
+        state = state.merge(initialState);
     }
 
     return state;

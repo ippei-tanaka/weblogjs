@@ -3,27 +3,30 @@ import Moment from 'moment';
 import List from '../../../react-components/list';
 import actions from '../../actions';
 import { connect } from 'react-redux';
-import { ADMIN_DIR } from '../../constants/config'
 
 class CategoryList extends Component {
 
-    componentDidMount() {
+    componentDidMount ()
+    {
         this.props.loadCategories();
     }
 
-    render() {
-        const { categoryStore } = this.props;
+    render ()
+    {
+        const { categoryStore, adminSiteInfoStore } = this.props;
         const categories = categoryStore.toArray();
+        const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
 
         return <List title="Category List"
-                     adderLocation={`${ADMIN_DIR}/categories/adder`}
+                     adderLocation={`${root}/categories/adder`}
                      fields={this._fields}
                      models={categories}
-                     editorLocationBuilder={id => `${ADMIN_DIR}/categories/${id}/editor`}
-                     deleterLocationBuilder={id => `${ADMIN_DIR}/categories/${id}/deleter`}/>;
+                     editorLocationBuilder={id => `${root}/categories/${id}/editor`}
+                     deleterLocationBuilder={id => `${root}/categories/${id}/deleter`}/>;
     }
 
-    get _fields() {
+    get _fields ()
+    {
         return {
             name: {
                 label: "Name"
@@ -47,13 +50,16 @@ class CategoryList extends Component {
         }
     }
 
-    get noneElement () {
+    get noneElement ()
+    {
         return <span className="m-dtl-none">(None)</span>;
     }
 }
 
-
 export default connect(
-    state => ({categoryStore: state.category}),
+    state => ({
+        categoryStore: state.category,
+        adminSiteInfoStore: state.adminSiteInfo
+    }),
     actions
 )(CategoryList);

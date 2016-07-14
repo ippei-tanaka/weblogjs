@@ -6,11 +6,13 @@ import { connect } from 'react-redux';
 
 class UserList extends Component {
 
-    componentDidMount() {
+    componentDidMount ()
+    {
         this.props.loadUsers();
     }
 
-    render() {
+    render ()
+    {
         const { userStore, adminSiteInfoStore } = this.props;
         const users = userStore.toArray();
         const root = adminSiteInfoStore.toJS().webpageRootForAdmin;
@@ -23,7 +25,8 @@ class UserList extends Component {
                      deleterLocationBuilder={id => `${root}/users/${id}/deleter`}/>;
     }
 
-    get _fields() {
+    get _fields ()
+    {
         return {
             display_name: {
                 label: "Name"
@@ -51,7 +54,8 @@ class UserList extends Component {
         }
     }
 
-    get noneElement () {
+    get noneElement ()
+    {
         return <span className="m-dtl-none">(None)</span>;
     }
 
