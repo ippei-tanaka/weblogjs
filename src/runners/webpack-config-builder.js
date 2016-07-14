@@ -82,6 +82,10 @@ const build = ({
                     test: /\.scss$/,
                     loader: production ? ExtractTextPlugin.extract("style", "css!sass") : null,
                     loaders: production ? null : ["style", "css", "sass"]
+                },
+                {
+                    test: /\.(eot|svg|ttf|woff(2)?)(\?v=\d+\.\d+\.\d+)?/,
+                    loader: 'url-loader'
                 }
             ]
         },
