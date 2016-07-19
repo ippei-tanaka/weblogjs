@@ -2,11 +2,11 @@
   "name": "weblogjs",
   "version": "0.6.1",
   "description": "a library for weblogs",
-  "main": "./lib/src",
+  "main": "./lib",
   "scripts": {
     "build": "npm-run-all clean --parallel \"build:*\"",
-    "build:source": "babel src --out-dir lib/src",
-    "build:scripts": "babel scripts --out-dir lib/scripts",
+    "build:source": "babel src --out-dir lib",
+    "build:cli": "mkdirp lib && babel scripts/cli.js --out-file lib/cli.js",
     "clean": "rimraf lib",
     "development": "babel-node ./scripts/development",
     "init": "babel-node ./scripts/init",
@@ -23,7 +23,7 @@
     "url": "https://github.com/ippei-tanaka/weblogjs.git"
   },
   "bin": {
-    "weblogjs": "./lib/scripts/cli.js"
+    "weblogjs": "./lib/cli.js"
   },
   "license": "MIT",
   "dependencies": {
