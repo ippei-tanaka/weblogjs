@@ -57,14 +57,22 @@ const PUBLIC_URL = `http://${WEBSERVER_HOST}:${WEBSERVER_PORT}${PUBLIC_API_ROOT}
 const login = () => httpRequest.post(`${ADMIN_URL}/login`, admin);
 const logout = () => httpRequest.get(`${ADMIN_URL}/logout`);
 
+const suppressLog = (func) => () => {
+    const log = console.log;
+    console.log = () => {};
+    return func().then(() => {
+        console.log = log;
+    });
+};
+
 describe('Restful API', function () {
 
     this.timeout(5000);
 
-    before('web server starting', () => WeblogJS.startWebServer());
-    before('dropping darabase', () => WeblogJS.dropDatabase());
-    beforeEach('emptying collections', () => WeblogJS.removeAllDocuments());
-    beforeEach('creating admin', () => WeblogJS.createAdmin());
+    before('web server starting', suppressLog(WeblogJS.startWebServer.bind(WeblogJS)));
+    before('dropping darabase', suppressLog(WeblogJS.dropDatabase.bind(WeblogJS)));
+    beforeEach('emptying collections', suppressLog(WeblogJS.removeAllDocuments.bind(WeblogJS)));
+    beforeEach('creating admin', suppressLog(WeblogJS.createAdmin.bind(WeblogJS)));
 
     describe('Admin API', () => {
 
