@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import WeblogJS from '../src/index';
 import co from 'co';
+const WeblogJS = require('..').default;
 
 const config = {};
 const argsArr = process.argv.slice(2);
