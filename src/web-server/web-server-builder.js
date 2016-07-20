@@ -7,15 +7,15 @@ import WebpageRenderer from './webpage-renderer';
 import WebpackRouteHookRunner from './webpage-route-hook-runner';
 import webpageRouteHandlerBuilder from './webpage-route-handler-builder';
 
+import layoutBuilder from '../react-components/layout-builder';
+
 import adminRoutes from '../admin-app/routes';
 import adminReducers from '../admin-app/reducers/index';
 import adminActions from '../admin-app/actions/index';
-import adminLayoutBuilder from '../admin-app/layout-builder';
 
 import publicRoutes from '../public-app/routes';
 import publicReducers from '../public-app/reducers/index';
 import publicActions from '../public-app/actions/index';
-import publicLayoutBuilder from '../public-app/layout-builder';
 
 import RestfulApiAdminRouter from '../routers/restful-api-admin-router';
 import RestfulApiPublicRouter from '../routers/restful-api-public-router';
@@ -38,18 +38,30 @@ const build = ({
     publicApiRoot,
 
     sessionSecret,
-    staticPath}) =>
+    staticPath,
+
+    bundleDirName,
+    vendorJsFileName,
+    adminJsFileName,
+    adminCssFileName,
+    publicJsFileName,
+    publicCssFileName
+
+    }) =>
 {
 
     const webpageRouter = new WebpageRouter({
         basePath: webpageRoot
     });
 
-    const AdminLayout = adminLayoutBuilder.build({
-        title: "WeblogJS Admin",
+    const AdminLayout = layoutBuilder.build({
         webpackDevServer,
         webpackDevServerHost,
-        webpackDevServerPort
+        webpackDevServerPort,
+        bundleDirName,
+        vendorJsFileName,
+        jsFileName: adminJsFileName,
+        cssFileName: adminCssFileName
     });
 
     const adminRenderer = new WebpageRenderer({Layout: AdminLayout});
@@ -69,11 +81,14 @@ const build = ({
     webpageRouter.setHandler(path.resolve(webpageRoot, adminDir, "."), adminHandler);
     webpageRouter.setHandler(path.resolve(webpageRoot, adminDir, "*"), adminHandler);
 
-    const PublicLayout = publicLayoutBuilder.build({
-        title: "WeblogJS Public",
+    const PublicLayout = layoutBuilder.build({
         webpackDevServer,
         webpackDevServerHost,
-        webpackDevServerPort
+        webpackDevServerPort,
+        bundleDirName,
+        vendorJsFileName,
+        jsFileName: publicJsFileName,
+        cssFileName: publicCssFileName
     });
 
     const pubicRenderer = new WebpageRenderer({Layout: PublicLayout});

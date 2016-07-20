@@ -19,8 +19,11 @@ const start = ({
     publicEntryFile,
     envNamespace,
     bundleDirName,
-    vendorFileName,
+    vendorJsFileName,
     cssFileName,
+    jsFileName,
+    adminFileNameBase,
+    publicFileNameBase,
     nodeModuleDir
     }) => new Promise((resolve, reject) =>
 {
@@ -35,8 +38,11 @@ const start = ({
         publicEntryFile,
         envNamespace,
         bundleDirName,
-        vendorFileName,
+        vendorJsFileName,
         cssFileName,
+        jsFileName,
+        adminFileNameBase,
+        publicFileNameBase,
         nodeModuleDir,
         envVariables: {
             webpageRootForAdmin,

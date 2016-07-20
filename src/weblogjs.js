@@ -36,23 +36,56 @@ const initialConfig = Object.freeze({
     publicEntryFile: path.resolve(__dirname, "public-app/browser-entry.js"),
     envNamespace: 'WEBLOG_WEBPACK_ENV',
     bundleDirName: 'bundle',
-    vendorFileName: 'vendor.js',
+    vendorJsFileName: 'vendor.js',
     cssFileName: '[name]-style.css',
+    jsFileName: "[name].js",
+    adminFileNameBase: 'admin',
+    publicFileNameBase: 'public',
     nodeModuleDir: path.resolve(__dirname, "../node_modules")
 });
 
-let config = initialConfig;
+const config = Object.assign({}, initialConfig);
+
+Object.defineProperty(config, 'adminJsFileName', {
+    get: function () {
+        return this.jsFileName.replace(/\[name]/g, this.adminFileNameBase);
+    }
+});
+
+Object.defineProperty(config, 'adminCssFileName', {
+    get: function () {
+        return this.cssFileName.replace(/\[name]/g, this.adminFileNameBase);
+    }
+});
+
+Object.defineProperty(config, 'publicJsFileName', {
+    get: function () {
+        return this.jsFileName.replace(/\[name]/g, this.publicFileNameBase);
+    }
+});
+
+Object.defineProperty(config, 'publicCssFileName', {
+    get: function () {
+        return this.cssFileName.replace(/\[name]/g, this.publicFileNameBase);
+    }
+});
 
 class WeblogJS {
 
     static setConfig (value)
     {
-        config = Object.freeze(Object.assign({}, initialConfig, value));
+        Object.assign(config, value);
     }
 
     static getConfig ()
     {
-        return config;
+        const obj = {};
+
+        for (const key of Object.getOwnPropertyNames(config)) {
+            obj[key] = config[key];
+        }
+
+        return obj;
     }
 
     static createAdmin ()
