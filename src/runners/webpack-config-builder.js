@@ -14,8 +14,11 @@ const build = ({
     adminEntryFile,
     publicEntryFile,
     nodeModuleDir,
-    vendorFileName,
-    cssFileName
+    vendorJsFileName,
+    cssFileName,
+    jsFileName,
+    adminFileNameBase,
+    publicFileNameBase
     }) =>
 {
 
@@ -27,7 +30,7 @@ const build = ({
                 [envNamespace]: JSON.stringify(envVariables)
             }
         }),
-        new webpack.optimize.CommonsChunkPlugin(vendorFileName)
+        new webpack.optimize.CommonsChunkPlugin(vendorJsFileName)
     ];
 
     if (production)
@@ -50,11 +53,11 @@ const build = ({
 
     return {
         entry: {
-            admin: [
+            [adminFileNameBase]: [
                 "babel-polyfill",
                 adminEntryFile
             ],
-            public: [
+            [publicFileNameBase]: [
                 "babel-polyfill",
                 publicEntryFile
             ]
@@ -62,7 +65,7 @@ const build = ({
 
         output: {
             path: outputDir,
-            filename: "[name].js",
+            filename: jsFileName,
             publicPath: `http://${webpackDevServerHost}:${webpackDevServerPort}/${bundleDirName}`
         },
 
