@@ -1,3 +1,5 @@
+import path from 'path';
+
 const initialConfig = Object.freeze({
     dbHost: "localhost",
     dbPort: 27017,
@@ -28,7 +30,15 @@ const initialConfig = Object.freeze({
 
     defaultBlogName: "My Blog",
     defaultBlogSlug: "my-blog",
-    defaultBlogPostPerPage: 1
+    defaultBlogPostPerPage: 1,
+
+    adminEntryFile: path.resolve(__dirname, "admin-app/browser-entry.js"),
+    publicEntryFile: path.resolve(__dirname, "public-app/browser-entry.js"),
+    envNamespace: 'WEBLOG_WEBPACK_ENV',
+    bundleDirName: 'bundle',
+    vendorFileName: 'vendor.js',
+    cssFileName: '[name]-style.css',
+    nodeModuleDir: path.resolve(__dirname, "../node_modules")
 });
 
 let config = initialConfig;

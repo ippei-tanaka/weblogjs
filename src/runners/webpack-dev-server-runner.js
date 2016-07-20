@@ -14,7 +14,14 @@ const start = ({
     webpageRoot,
     webProtocol,
     webHost,
-    webPort
+    webPort,
+    adminEntryFile,
+    publicEntryFile,
+    envNamespace,
+    bundleDirName,
+    vendorFileName,
+    cssFileName,
+    nodeModuleDir
     }) => new Promise((resolve, reject) =>
 {
     const webpageRootForAdmin = path.resolve(webpageRoot, adminDir);
@@ -24,6 +31,13 @@ const start = ({
         webpackDevServerHost,
         webpackDevServerPort,
         sourceMap: true,
+        adminEntryFile,
+        publicEntryFile,
+        envNamespace,
+        bundleDirName,
+        vendorFileName,
+        cssFileName,
+        nodeModuleDir,
         envVariables: {
             webpageRootForAdmin,
             adminApiRoot,

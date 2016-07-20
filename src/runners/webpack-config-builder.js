@@ -3,19 +3,19 @@ import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 const build = ({
-    webpackDevServerHost = "localhost",
-    webpackDevServerPort = 8080,
+    webpackDevServerHost,
+    webpackDevServerPort,
     envVariables = {},
-    envNamespace = 'WEBLOG_WEBPACK_ENV',
+    envNamespace,
     production = false,
     sourceMap = false,
-    staticPath = null,
-    bundleDirName = "bundle",
-    adminEntryFile = path.resolve(__dirname, "../admin-app/browser-entry.js"),
-    publicEntryFile = path.resolve(__dirname, "../public-app/browser-entry.js"),
-    nodeModuleDir = path.resolve(__dirname, "../../node_modules"),
-    vendorFileName = "vendor.js",
-    cssFileName = "[name]-style.css"
+    staticPath,
+    bundleDirName,
+    adminEntryFile,
+    publicEntryFile,
+    nodeModuleDir,
+    vendorFileName,
+    cssFileName
     }) =>
 {
 
