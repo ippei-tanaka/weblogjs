@@ -6,13 +6,18 @@ function safeStringify (obj)
 }
 
 const build = ({
-    webpackDevServer,
     webpackDevServerHost,
     webpackDevServerPort,
     bundleDirName,
     vendorJsFileName,
     jsFileName,
-    cssFileName}) =>
+    cssFileName,
+    needCss,
+    needDevVendorJs,
+    needDevJs,
+    needVendorJs,
+    needJs
+    }) =>
 {
     return ({title, preloadedState, children}) => (
         <html lang="en">
@@ -21,12 +26,12 @@ const build = ({
             <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <title>{title}</title>
-            { !webpackDevServer && <link href={`/${bundleDirName}/${cssFileName}`} media="media" rel="stylesheet"/> }
+            { needCss && <link href={`/${bundleDirName}/${cssFileName}`} media="screen" rel="stylesheet"/> }
             { preloadedState && <script dangerouslySetInnerHTML={{__html:`window.__PRELOADED_STATE__ = ${safeStringify(preloadedState)}`}}></script> }
-            { webpackDevServer && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/${bundleDirName}/${vendorJsFileName}`}></script> }
-            { webpackDevServer && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/${bundleDirName}/${jsFileName}`}></script> }
-            { !webpackDevServer && <script src={`/${bundleDirName}/${vendorJsFileName}`}></script> }
-            { !webpackDevServer && <script src={`/${bundleDirName}/${jsFileName}`}></script> }
+            { needDevVendorJs && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/${bundleDirName}/${vendorJsFileName}`}></script> }
+            { needDevJs && <script src={`//${webpackDevServerHost}:${webpackDevServerPort}/${bundleDirName}/${jsFileName}`}></script> }
+            { needVendorJs && <script src={`/${bundleDirName}/${vendorJsFileName}`}></script> }
+            { needJs && <script src={`/${bundleDirName}/${jsFileName}`}></script> }
         </head>
         <body>
         <div id="AppContainer" className="module-app">{children}</div>

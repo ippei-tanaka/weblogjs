@@ -41,7 +41,10 @@ const initialConfig = Object.freeze({
     jsFileName: "[name].js",
     adminFileNameBase: 'admin',
     publicFileNameBase: 'public',
-    nodeModuleDir: path.resolve(__dirname, "../node_modules")
+    nodeModuleDir: path.resolve(__dirname, "../node_modules"),
+
+    themeDistDirName: 'themes',
+    themeSrcDirPath: []
 });
 
 const config = Object.assign({}, initialConfig);
@@ -64,9 +67,9 @@ Object.defineProperty(config, 'publicJsFileName', {
     }
 });
 
-Object.defineProperty(config, 'publicCssFileName', {
+Object.defineProperty(config, 'themeSrcDirPaths', {
     get: function () {
-        return this.cssFileName.replace(/\[name]/g, this.publicFileNameBase);
+        return this.themeSrcDirPath.concat([path.resolve(__dirname, "public-app/themes")])
     }
 });
 
@@ -139,12 +142,15 @@ class WeblogJS {
     static buildBrowserEntryFiles ()
     {
         const webpackRunner = require('./runners/webpack-runner').default;
+        const themeRunner = require('./runners/theme-runner').default;
 
         console.log("Building client entry files...\n");
 
         return webpackRunner.build(this.getConfig()).then(() =>
         {
-            console.log("Completed building client entry files.\n");
+            themeRunner.build(this.getConfig()).then(() => {
+                console.log("Completed building client entry files.\n");
+            });
         });
     }
 

@@ -45,7 +45,8 @@ const build = ({
     adminJsFileName,
     adminCssFileName,
     publicJsFileName,
-    publicCssFileName
+
+    themeDistDirName
 
     }) =>
 {
@@ -55,13 +56,17 @@ const build = ({
     });
 
     const AdminLayout = layoutBuilder.build({
-        webpackDevServer,
         webpackDevServerHost,
         webpackDevServerPort,
         bundleDirName,
-        vendorJsFileName,
+        vendorJsFileName: vendorJsFileName,
         jsFileName: adminJsFileName,
-        cssFileName: adminCssFileName
+        cssFileName: adminCssFileName,
+        needDevVendorJs: webpackDevServer,
+        needDevJs: webpackDevServer,
+        needCss: true,
+        needVendorJs: !webpackDevServer,
+        needJs: !webpackDevServer
     });
 
     const adminRenderer = new WebpageRenderer({Layout: AdminLayout});
@@ -82,13 +87,18 @@ const build = ({
     webpageRouter.setHandler(path.resolve(webpageRoot, adminDir, "*"), adminHandler);
 
     const PublicLayout = layoutBuilder.build({
-        webpackDevServer,
         webpackDevServerHost,
         webpackDevServerPort,
         bundleDirName,
         vendorJsFileName,
         jsFileName: publicJsFileName,
-        cssFileName: publicCssFileName
+        //needDevVendorJs: false,
+        //needDevJs: false,
+        needDevVendorJs: webpackDevServer,
+        needDevJs: webpackDevServer,
+        needCss: false,
+        needVendorJs: false,
+        needJs: false
     });
 
     const pubicRenderer = new WebpageRenderer({Layout: PublicLayout});
@@ -119,11 +129,15 @@ const build = ({
     webpageRouter.setHandler(path.resolve(webpageRoot, publicDir, "*"), publicHandler);
 
     const adminApiRouter = new RestfulApiAdminRouter({
-        basePath: adminApiRoot
+        basePath: adminApiRoot,
+        staticPath,
+        themeDistDirName
     });
 
     const publicApiRouter = new RestfulApiPublicRouter({
-        basePath: publicApiRoot
+        basePath: publicApiRoot,
+        staticPath,
+        themeDistDirName
     });
 
     return new WebServer({

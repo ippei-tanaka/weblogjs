@@ -54,6 +54,20 @@ const schema = new WeblogJsSchema({
             }
         },
 
+        theme: {
+            required: true,
+            type: types.String,
+            sanitize: (value) => value.trim()/*,
+            validate: function* (value)
+            {
+                const range = {min: 1, max: 200};
+                if (!validator.isLength(value, range))
+                {
+                    yield `A ${this.displayName} should be between ${range.min} and ${range.max} characters.`;
+                }
+            }*/
+        },
+
         script_snippet: {
             type: types.String,
             display_name: "script snippet",

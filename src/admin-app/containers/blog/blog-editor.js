@@ -21,6 +21,7 @@ class BlogEditor extends Component {
     {
         this.setState({actionId: Symbol()});
         this.props.loadBlogs();
+        this.props.loadThemes();
     }
 
     componentWillUnmount ()
@@ -40,9 +41,10 @@ class BlogEditor extends Component {
 
     render ()
     {
-        const {params: {id}, blogStore, transactionStore} = this.props;
+        const {params: {id}, blogStore, transactionStore, themeStore} = this.props;
         const editedBlog = blogStore.get(id) || null;
         const transaction = transactionStore.get(this.state.actionId);
+        const themes = themeStore.toArray().map(obj => obj.name);
         const errors = transaction ? transaction.get('errors') : {};
         const values = Object.assign({}, editedBlog, this.state.values);
 
@@ -55,6 +57,7 @@ class BlogEditor extends Component {
                           onSubmit={this._onSubmit.bind(this)}
                           onClickBackButton={this._goToListPage.bind(this)}
                           submitButtonLabel="Update"
+                          ThemeList={themes}
                 />
             </div>
         ) : (
@@ -109,6 +112,7 @@ export default connect(
     state => ({
         blogStore: state.blog,
         transactionStore: state.transaction,
+        themeStore: state.theme,
         adminSiteInfoStore: state.adminSiteInfo
     }),
     actions

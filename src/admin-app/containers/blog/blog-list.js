@@ -37,6 +37,10 @@ class BlogList extends Component {
                 label: "Posts Per Page"
             },
 
+            theme: {
+                label: "Theme"
+            },
+
             script_snippet: {
                 label: "Script Snippet"
             },

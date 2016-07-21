@@ -20,6 +20,7 @@ class BlogAdder extends Component {
     componentDidMount ()
     {
         this.setState({actionId: Symbol()});
+        this.props.loadThemes();
     }
 
     componentWillUnmount ()
@@ -39,10 +40,12 @@ class BlogAdder extends Component {
 
     render ()
     {
-        const {transactionStore} = this.props;
+        const {transactionStore, themeStore} = this.props;
         const {values, actionId} = this.state;
         const transaction = transactionStore.get(actionId);
         const errors = transaction ? transaction.get('errors') : {};
+        const themes = themeStore.toArray().map(obj => obj.name);
+        console.log(themes);
 
         return (
             <BlogForm title="Create a New Blog"
@@ -52,6 +55,7 @@ class BlogAdder extends Component {
                       onSubmit={this._onSubmit.bind(this)}
                       onClickBackButton={this._goToListPage.bind(this)}
                       submitButtonLabel="Create"
+                      ThemeList={themes}
             />
         );
     }
@@ -90,6 +94,7 @@ class BlogAdder extends Component {
 export default connect(
     state => ({
         transactionStore: state.transaction,
+        themeStore: state.theme,
         adminSiteInfoStore: state.adminSiteInfo
     }),
     actions

@@ -8,8 +8,6 @@ import createActions from '../redux-store/create-actions';
 import bareActions from './actions/index';
 import publicRoutes from './routes';
 
-require('./styles/main.scss');
-
 const preloadedState = window.__PRELOADED_STATE__;
 const store = createStore(reducers, preloadedState);
 const siteInfo = store.getState().publicSiteInfo.toJS();

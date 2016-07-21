@@ -4,6 +4,8 @@ import { ObjectID } from 'mongodb';
 import pluralize from 'pluralize';
 import PassportManager from '../passport-manager';
 import Models from '../models';
+import path from 'path';
+import fs from 'fs';
 import { successHandler, errorHandler, parseParameters } from './lib/handlers';
 
 const parseParam = (str, defaultValue) =>
@@ -221,14 +223,39 @@ const addRoutes = (router) =>
     return router;
 };
 
+const addRoutesForThemes = (router, themeDirPath, themeDistDirName) =>
+{
+    router.get(`/themes`, (request, response) => co(function* ()
+    {
+        const fileNames = yield new Promise((res, rej) => fs.readdir(themeDirPath, (err, result) =>
+        {
+            if (err) return rej(err);
+            res(result);
+        }));
+
+        successHandler(response, {
+            items: fileNames.map(name =>
+            {
+                return {
+                    name: name.replace(/\.css$/, ""),
+                    filePath: path.resolve("/", themeDistDirName, name)
+                }
+            })
+        });
+    }).catch(errorHandler(response)));
+
+    return router;
+};
+
 export default class PublicRestfulApiRouter {
 
-    constructor ({basePath})
+    constructor ({basePath, staticPath, themeDistDirName})
     {
         this._basePath = basePath;
 
         let router = new Router();
         router = addRoutes(router);
+        router = addRoutesForThemes(router, path.resolve(staticPath, themeDistDirName), themeDistDirName);
 
         this._router = router
     }

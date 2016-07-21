@@ -9,7 +9,8 @@ export default function BlogForm ({
     onSubmit,
     onClickBackButton,
     submitButtonLabel,
-    PostsPerPageList = Object.freeze([1, 2, 3, 5, 10, 15])
+    PostsPerPageList = Object.freeze([1, 2, 3, 5, 10, 15]),
+    ThemeList = []
     })
 {
 
@@ -49,6 +50,19 @@ export default function BlogForm ({
                         <Option key={index}
                                 value={value}>
                             {value === 1 ? `${value} post` : `${value} posts`}
+                        </Option>
+                    )}
+                </Select>
+            </FieldSet>
+
+            <FieldSet label="Theme"
+                      error={errors.theme}>
+                <Select value={values.theme}
+                        onChange={_onChange("theme")}>
+                    {ThemeList.map((value, index) =>
+                        <Option key={index}
+                                value={value}>
+                            {value}
                         </Option>
                     )}
                 </Select>
