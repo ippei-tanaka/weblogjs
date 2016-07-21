@@ -25,6 +25,7 @@ class PublicWrapper extends Component {
 
         return (
             <div className="module-header-footer-layout">
+                <link href={blogThemePath} media="all" rel="stylesheet"/>
                 <header className="m-hfl-header">
                     <h1><Link className="m-hfl-header-link" to={root}>{blog.name}</Link></h1>
                 </header>
@@ -44,7 +45,6 @@ class PublicWrapper extends Component {
                     <span>&copy;{blog.name}</span>
                 </footer>
                 <script dangerouslySetInnerHTML={{__html: blog.script_snippet}}></script>
-                <link href={blogThemePath} media="all" rel="stylesheet"/>
             </div>
         );
     }
