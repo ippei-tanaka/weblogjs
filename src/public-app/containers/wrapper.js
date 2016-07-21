@@ -11,13 +11,15 @@ class PublicWrapper extends Component {
         return co(function* () {
             yield actions.loadPublicFrontBlog();
             yield actions.loadPublicCategories();
+            yield actions.loadPublicThemes();
         });
     }
 
     render() {
-        const { publicBlog, publicCategory, publicSiteInfo, children } = this.props;
+        const { publicBlog, publicCategory, publicSiteInfo, theme, children } = this.props;
         const blog = publicBlog.toObject();
         const categories = publicCategory.toArray();
+        const blogThemePath = theme.get(blog.theme).filePath;
         const rootDir = publicSiteInfo.get('publicDir');
         const root = rootDir === "" ? "/" : '/' + rootDir;
 
@@ -42,6 +44,7 @@ class PublicWrapper extends Component {
                     <span>&copy;{blog.name}</span>
                 </footer>
                 <script dangerouslySetInnerHTML={{__html: blog.script_snippet}}></script>
+                <link href={blogThemePath} media="all" rel="stylesheet"/>
             </div>
         );
     }
@@ -51,7 +54,8 @@ export default connect(
     state => ({
         publicBlog: state.publicBlog,
         publicCategory: state.publicCategory,
-        publicSiteInfo: state.publicSiteInfo
+        publicSiteInfo: state.publicSiteInfo,
+        theme: state.theme
     }),
     null
 )(PublicWrapper);

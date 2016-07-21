@@ -7,6 +7,7 @@ import {
     LOADED_PUBLIC_CATEGORIES_RECEIVED,
     LOADED_PUBLIC_POSTS_RECEIVED,
     LOADED_PUBLIC_SINGLE_POST_RECEIVED,
+    LOADED_THEMES_RECEIVED,
     TRANSACTION_REQUEST,
     TRANSACTION_REJECTED,
     TRANSACTION_RESOLVED,
@@ -73,5 +74,11 @@ export const loadPublicFrontBlog = () => load({
 export const loadPublicCategories = () => load({
     path: `/categories`,
     doneType: LOADED_PUBLIC_CATEGORIES_RECEIVED,
+    dataProcessor: data => data.items
+});
+
+export const loadPublicThemes = () => load({
+    path: `/themes`,
+    doneType: LOADED_THEMES_RECEIVED,
     dataProcessor: data => data.items
 });

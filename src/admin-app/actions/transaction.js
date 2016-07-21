@@ -30,6 +30,8 @@ import {
     LOADED_SETTING_RECEIVED,
     EDITED_SETTING_RECEIVED,
 
+    LOADED_THEMES_RECEIVED,
+
     TRANSACTION_REQUEST,
     TRANSACTION_REJECTED,
     TRANSACTION_RESOLVED,
@@ -132,7 +134,8 @@ const del = ({path, doneType, actionId, id}) => modify({
 
 export const finishTransaction = ({actionId}) => (dispatch, getState) =>
 {
-    if (!actionId) {
+    if (!actionId)
+    {
         throw new Error("actionId can't be empty.");
     }
 
@@ -171,7 +174,8 @@ export const deleteUser = ({actionId, id}) => del({
 
 export const editUserPassword = ({actionId, id, data}) => modify({
     actionId,
-    action: co.wrap(function* ({apiBase}) {
+    action: co.wrap(function* ({apiBase})
+    {
         yield putOneOnServer({data, path: `${apiBase}/users/${id}/password`});
         return {
             type: USER_PASSWORD_EDIT_COMPLETE
@@ -179,7 +183,7 @@ export const editUserPassword = ({actionId, id, data}) => modify({
     })
 });
 
-export const loadCategories =  () => loadMany({
+export const loadCategories = () => loadMany({
     path: "/categories",
     doneType: LOADED_CATEGORY_RECEIVED
 });
@@ -206,7 +210,7 @@ export const deleteCategory = ({actionId, id}) => del({
     id
 });
 
-export const loadBlogs =  () => loadMany({
+export const loadBlogs = () => loadMany({
     path: "/blogs",
     doneType: LOADED_BLOG_RECEIVED
 });
@@ -233,7 +237,7 @@ export const deleteBlog = ({actionId, id}) => del({
     id
 });
 
-export const loadPosts =  () => loadMany({
+export const loadPosts = () => loadMany({
     path: "/posts",
     doneType: LOADED_POST_RECEIVED
 });
@@ -262,7 +266,8 @@ export const deletePost = ({actionId, id}) => del({
 
 export const loadSetting = () => modify({
     actionId: null,
-    action: co.wrap(function* ({apiBase}) {
+    action: co.wrap(function* ({apiBase})
+    {
         const response = yield getFromServer({path: `${apiBase}/setting`});
         return {
             type: LOADED_SETTING_RECEIVED,
@@ -273,12 +278,25 @@ export const loadSetting = () => modify({
 
 export const editSetting = ({actionId, data}) => modify({
     actionId,
-    action: co.wrap(function* ({apiBase}) {
+    action: co.wrap(function* ({apiBase})
+    {
         yield putOneOnServer({data, path: `${apiBase}/setting`});
         const response = yield getFromServer({path: `${apiBase}/setting`});
         return {
             type: EDITED_SETTING_RECEIVED,
             data: response
+        };
+    })
+});
+
+export const loadThemes = () => modify({
+    actionId: null,
+    action: co.wrap(function* ({apiBase})
+    {
+        const response = yield getFromServer({path: `${apiBase}/themes`});
+        return {
+            type: LOADED_THEMES_RECEIVED,
+            data: response.items
         };
     })
 });

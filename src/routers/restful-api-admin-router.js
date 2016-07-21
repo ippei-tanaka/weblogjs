@@ -6,6 +6,8 @@ import PassportManager from '../passport-manager';
 import Models from '../models';
 import { ObjectID } from 'mongodb';
 import { successHandler, errorHandler, parseParameters, isLoggedIn, isLoggedOut, bypass } from './lib/handlers';
+import fs from 'fs';
+import path from 'path';
 
 const addRoutesForCrudOperations = (schemaName, router, filter) =>
 {
@@ -135,6 +137,30 @@ const addRoutesForSetting = (router, filter) =>
     return router;
 };
 
+const addRoutesForThemes = (router, filter, themeDirPath, themeDistDirName) =>
+{
+    router.get(`/themes`, filter, (request, response) => co(function* ()
+    {
+        const fileNames = yield new Promise((res, rej) => fs.readdir(themeDirPath, (err, result) =>
+        {
+            if (err) return rej(err);
+            res(result);
+        }));
+
+        successHandler(response, {
+            items: fileNames.map(name =>
+            {
+                return {
+                    name: name.replace(/\.css$/, ""),
+                    filePath: path.resolve("/", themeDistDirName, name)
+                }
+            })
+        });
+    }).catch(errorHandler(response)));
+
+    return router;
+};
+
 /*
 
 //-------------------------------------------------------
@@ -148,12 +174,18 @@ router.get('/privileges', isLoggedIn, response((ok) => {
 
 export default class AdminRestfulApiRouter {
 
-    constructor ({basePath, authProtection = true})
+    constructor ({
+        basePath,
+        staticPath,
+        themeDistDirName,
+        authProtection = true
+        })
     {
         this._basePath = basePath;
 
         let router = new Router();
 
+        const themeDirPath = path.resolve(staticPath, themeDistDirName);
         const loginCheck = authProtection ? isLoggedIn : bypass;
         const logoutCheck = authProtection ? isLoggedOut : bypass;
         const authentication = authProtection ? PassportManager.localAuth : bypass;
@@ -167,6 +199,7 @@ export default class AdminRestfulApiRouter {
         router = addRoutesForCrudOperations("blog", router, loginCheck);
         router = addRoutesForCrudOperations("post", router, loginCheck);
         router = addRoutesForSetting(router, loginCheck);
+        router = addRoutesForThemes(router, loginCheck, themeDirPath, themeDistDirName);
 
         this._router = router
     }

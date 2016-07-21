@@ -6,6 +6,7 @@ import postReducer from './post-reducer';
 import settingReducer from './setting-reducer';
 import authReducer from './auth-reducer';
 import transactionReducer from './transaction-reducer';
+import themeReducer from './theme-reducer';
 import adminSiteInfoReducer from './admin-site-info-reducer';
 
 export default combineReducers({
@@ -16,5 +17,6 @@ export default combineReducers({
     setting: settingReducer,
     auth: authReducer,
     transaction: transactionReducer,
+    theme: themeReducer,
     adminSiteInfo: adminSiteInfoReducer
 });
