@@ -6,7 +6,7 @@ import UserModel from './models/user-model';
 
 const localAuth = passport.authenticate('local');
 
-const authHandler = (email, password, done) => co(function* ()
+passport.use(new LocalStrategy({usernameField: 'email'}, (email, password, done) => co(function* ()
 {
     const model = yield UserModel.findOne({email});
 
@@ -22,9 +22,14 @@ const authHandler = (email, password, done) => co(function* ()
 
     return done(null, model.values);
 
-}).catch(e => console.log);
+}).catch(e => console.error(e))));
 
-const deserializeUser = (_id, done) => co(function* ()
+passport.serializeUser((user, done) =>
+{
+    done(null, user._id);
+});
+
+passport.deserializeUser((_id, done) => co(function* ()
 {
     const model = yield UserModel.findOne({_id: new ObjectID(_id)});
 
@@ -35,16 +40,7 @@ const deserializeUser = (_id, done) => co(function* ()
 
     return done(null, model.values);
 
-}).catch(e => console.log);
-
-passport.use(new LocalStrategy({usernameField: 'email'}, authHandler));
-
-passport.serializeUser((user, done) =>
-{
-    done(null, user._id);
-});
-
-passport.deserializeUser(deserializeUser);
+}).catch(e => console.error(e)));
 
 export default {
 
