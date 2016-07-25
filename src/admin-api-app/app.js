@@ -138,7 +138,7 @@ const addRoutesForSetting = (app, filter) =>
 
 const addRoutesForThemes = (app, filter) =>
 {
-    const themeDir = path.resolve(__dirname, '../public-app/bundle/themes');
+    const themeDir = path.resolve(__dirname, '../public-app/static/bundle/themes');
 
     app.get(`/themes`, filter, (request, response) => co(function* ()
     {

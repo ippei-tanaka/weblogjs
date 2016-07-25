@@ -6,7 +6,7 @@ import publicRoutes from './routes';
 const publicSiteApp = express();
 
 // Register public site static path
-publicSiteApp.use(express.static(path.resolve(__dirname, './bundle')));
+publicSiteApp.use(express.static(path.resolve(__dirname, './static')));
 
 // Register configured static paths
 const _staticPaths = config.getValue('publicSiteStaticPaths') || [];

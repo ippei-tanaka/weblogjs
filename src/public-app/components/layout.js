@@ -11,7 +11,7 @@ export default ({children, blogName, categories, title, theme}) => (
         <meta charSet="utf-8"/>
         <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link href={path.resolve(root, `themes/${theme || 'default'}.css`)} media="screen" rel="stylesheet"/>
+        <link href={path.resolve(root, `bundle/themes/${theme || 'default'}.css`)} media="screen" rel="stylesheet"/>
         <title>{title}</title>
     </head>
     <body>
