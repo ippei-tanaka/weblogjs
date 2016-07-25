@@ -1,0 +1,334 @@
+@import "../reset";
+@import "../mixins";
+@import url(https://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic);
+
+
+/*==================================
+ Variables
+===================================*/
+
+/*----------------------------
+ Font Base
+----------------------------*/
+$font-family-default: Helvetica, sans-serif;
+$font-family-lato: 'Lato', sans-serif;
+$font-size-base: 16px;
+$color-default-font: #000000;
+
+
+$max-width: 880px;
+
+
+/*----------------------------
+ Media Query
+----------------------------*/
+$device-desktop-width: 700px;
+
+
+/*----------------------------
+ Utils
+----------------------------*/
+$border-color: #cccccc;
+$menu-title-color: #000000;
+$error-page-bg-color: #f0f0f0;
+$link-color: #00a6c0;
+
+/*==================================
+ Base Classes
+===================================*/
+
+/*----------------------------
+ Text Style (Base Class)
+----------------------------*/
+.text-style {
+    font-family: 'Libre Baskerville', serif;
+    color: $color-default-font;
+    font-size: $font-size-base;
+    line-height: 1.2;
+}
+
+/*----------------------------
+ Link Style (Base Class)
+----------------------------*/
+.link-style {
+    color: $link-color;
+    text-decoration: none;
+
+    &:hover {
+        @include opacity(0.7);
+    }
+}
+
+/*==================================
+ Modules
+===================================*/
+
+/*----------------------------
+ Header Footer Layout
+----------------------------*/
+.module-header-footer-layout {
+
+    @extend .text-style;
+    margin: 0 auto;
+    max-width: $max-width;
+
+    .m-hfl-header {
+        padding: 130px 40px 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .m-hfl-header-link {
+        font-size: 53px;
+        color: $color-default-font;
+        text-decoration: none;
+
+        &:hover {
+            @include opacity(0.7);
+        }
+    }
+
+    .m-hfl-body {
+
+    }
+
+    .m-hfl-footer {
+        font-size: 14px;
+        padding: 40px 40px 40px;
+    }
+}
+
+/*----------------------------
+ Blog Layout
+----------------------------*/
+.module-blog-layout {
+    //display: flex;
+    //align-items: stretch;
+    //flex-wrap: wrap;
+    //flex-direction: row;
+    @extend .text-style;
+
+    @include media-phone {
+
+    }
+
+    .m-bll-main {
+        width: 100%;
+
+        @include media-phone {
+            border-bottom: 0;
+        }
+    }
+
+    .m-bll-sidebar {
+        //display: flex;
+        //flex-direction: column;
+    }
+}
+
+
+/*----------------------------
+ Section
+----------------------------*/
+.module-section {
+
+    @extend .text-style;
+    padding: 45px 40px 50px;
+
+    &:last-child {
+        border-bottom: 0;
+    }
+
+    &.m-sct-short-section {
+        padding: 20px 40px;
+    }
+}
+
+/*----------------------------
+ Error Page
+----------------------------*/
+.module-error-page {
+    @extend .text-style;
+
+    padding: 100px 40px;
+    font-size: 26px;
+    background-color: $error-page-bg-color;
+}
+
+/*----------------------------
+ Post List
+----------------------------*/
+.module-post-list {
+    @extend .text-style;
+
+    .m-psl-post-section {
+        border-bottom: 1px solid $border-color;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+}
+
+/*----------------------------
+ Name And Number List
+----------------------------*/
+.module-name-and-number-list {
+    font-family: 'Quattrocento', serif;
+    @extend .text-style;
+
+    .m-nan-title {
+        margin-bottom: 15px;
+        color: $menu-title-color;
+    }
+
+    .m-nan-list {
+    }
+
+    .m-nan-list-item {
+        margin-bottom: 10px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .m-nan-link {
+        @extend .link-style;
+        white-space: nowrap;
+
+        &:hover {
+            @include opacity(0.7);
+        }
+    }
+}
+
+/*----------------------------
+ pagination
+----------------------------*/
+.module-pagination {
+    @extend .text-style;
+
+    .m-pgn-list {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .m-pgn-list-item {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .m-pgn-prev {
+        text-align: left;
+    }
+
+    .m-pgn-next {
+        text-align: right;
+    }
+
+    .m-pgn-link {
+        @extend .link-style;
+        white-space: nowrap;
+        font-size: 16px;
+
+        &:hover {
+            @include opacity(0.7);
+        }
+    }
+}
+
+/*----------------------------
+ Post
+----------------------------*/
+.module-post {
+    @extend .text-style;
+
+    font-family: 'Quattrocento', serif;
+
+    .m-pst-title {
+        font-size: 36px;
+        margin-bottom: 44px;
+    }
+
+    .m-pst-link {
+        @extend .link-style;
+    }
+
+    .m-pst-content {
+        margin-bottom: 40px;
+    }
+
+    .m-pst-date,
+    .m-pst-author,
+    .m-pst-category,
+    .m-pst-tag-container{
+        font-size: 13px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .m-pst-tags {
+        display: inline-block;
+    }
+
+    .m-pst-tag {
+        display: inline-block;
+        margin-right: 5px;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    .m-pst-author-link,
+    .m-pst-category-link,
+    .m-pst-tag-link {
+        @extend .link-style;
+    }
+
+}
+
+/*----------------------------
+ Article
+----------------------------*/
+.module-article {
+    @extend .text-style;
+
+    font-size: 18px;
+    line-height: 1.5em;
+
+    h1 {
+        font-size: 35px;
+        margin-bottom: 35px;
+    }
+
+    h2 {
+        font-size: 30px;
+        margin-bottom: 30px;
+    }
+
+    h3 {
+        font-size: 27px;
+        margin-bottom: 27px;
+    }
+
+    h4 {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
+
+    h5,
+    h6 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    a {
+        @extend .link-style;
+    }
+
+    p {
+        margin-bottom: 15px;
+    }
+
+}

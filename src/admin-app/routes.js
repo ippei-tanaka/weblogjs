@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { Route, IndexRoute } from 'react-router';
 import Admin from "./containers/index";
 import AdminWrapper from "./containers/wrapper";
@@ -23,9 +22,10 @@ import PostEditor from "./containers/post/post-editor";
 import PostDeleter from "./containers/post/post-deleter";
 import SettingEditor from "./containers/setting/setting-editor";
 import NotFound from "./containers/not-found";
+import config from '../config';
 
-export default ({root}) => (
-    <Route path={root} component={Admin}>
+export default (
+    <Route path={config.getValue('adminSiteRoot')} component={Admin}>
         <Route component={AdminWrapper}>
             <IndexRoute component={DashBoard}/>
             <Route path="users">

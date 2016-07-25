@@ -1,3 +1,1 @@
-import WeblogJS from './weblogjs';
-
-export default WeblogJS;
+require('./weblogjs-app');

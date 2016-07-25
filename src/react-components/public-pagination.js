@@ -1,6 +1,4 @@
 import React from 'react';
-import Moment from 'moment';
-import { Link } from 'react-router';
 
 export default ({
     totalPages,
@@ -19,12 +17,12 @@ export default ({
             <ul className="m-pgn-list">
                 {prevPage ? (
                     <li className="m-pgn-list-item m-pgn-prev">
-                        <Link className="m-pgn-link" to={linkBuilder(prevPage)}>{`<`} prev</Link>
+                        <a className="m-pgn-link" href={linkBuilder(prevPage)}>{`<`} prev</a>
                     </li>
                 ) : null}
                 {nextPage ? (
                     <li className="m-pgn-list-item m-pgn-next">
-                        <Link className="m-pgn-link" to={linkBuilder(nextPage)}>next {`>`}</Link>
+                        <a className="m-pgn-link" href={linkBuilder(nextPage)}>next {`>`}</a>
                     </li>
                 ) : null}
             </ul>

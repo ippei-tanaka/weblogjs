@@ -1,4 +1,3 @@
-import co from 'co';
 import user from './user-model';
 import category from './category-model';
 import blog from './blog-model';
