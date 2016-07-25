@@ -4,3 +4,5 @@ node_modules/
 .DS_Store
 /temp/
 /lib/
+/src/admin-app/static/bundle
+/src/public-app/static/bundle
