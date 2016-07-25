@@ -14,9 +14,10 @@
     "watch-brs:public-css": "npm run bundle-brs:public-css && npm run bundle-brs:public-css -- -w",
     "clear-brs": "rimraf ./src/admin-app/static/bundle && rimraf ./src/public-app/static/bundle",
     "watch": "nodemon ./src --exec babel-node",
-    "start": "babel-node ./src",
+    "start-dev": "babel-node ./src",
+    "start": "NODE_ENV=production babel-node ./src",
     "test": "npm run build && mocha $(find test -name '*.test.js') --compilers js:babel-core/register",
-    "prepublish": "npm run bundle-brs"
+    "prepublish": "NODE_ENV=production npm run bundle-brs"
   },
   "author": {
     "name": "Ippei Tanaka",
@@ -26,9 +27,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ippei-tanaka/weblogjs.git"
-  },
-  "bin": {
-    "weblogjs": "./lib/cli.js"
   },
   "license": "MIT",
   "dependencies": {
@@ -45,17 +43,14 @@
     "babel-runtime": "^6.9.2",
     "bcrypt": "^0.8.6",
     "body-parser": "^1.15.1",
-    "brace": "^0.8.0",
     "chai": "^3.5.0",
     "classnames": "^2.2.5",
     "co": "^4.6.0",
     "cookie-parser": "^1.4.3",
-    "css-loader": "^0.23.1",
     "deepcopy": "^0.6.1",
     "eslint": "^3.1.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
-    "extract-text-webpack-plugin": "^1.0.1",
     "history": "^3.0.0",
     "immutable": "^3.8.1",
     "keymirror": "^0.1.1",
@@ -72,16 +67,13 @@
     "passport-local": "^1.0.0",
     "pluralize": "^1.2.1",
     "react": "^15.1.0",
-    "react-ace": "^3.4.1",
     "react-dom": "^15.1.0",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.1",
     "react-router-redux": "^4.0.4",
     "redux": "^3.5.2",
     "rimraf": "^2.5.2",
-    "sass-loader": "^3.2.0",
     "simple-odm": "^0.4.0",
-    "style-loader": "^0.13.1",
     "superagent": "^1.8.3",
     "url-loader": "^0.5.7",
     "validator": "^5.3.0",
