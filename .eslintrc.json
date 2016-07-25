@@ -137,6 +137,15 @@
         "no-caller": "error",
         "no-catch-shadow": "error",
         "no-confusing-arrow": "off",
+        "no-console": [
+            "error",
+            {
+                "allow": [
+                    "warn",
+                    "error"
+                ]
+            }
+        ],
         "no-continue": "error",
         "no-div-regex": "error",
         "no-duplicate-imports": "error",
@@ -259,6 +268,8 @@
             "error",
             "never"
         ],
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error",
         "semi": "off",
         "semi-spacing": [
             "error",

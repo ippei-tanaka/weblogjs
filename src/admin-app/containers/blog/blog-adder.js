@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import BlogForm from '../../../react-components/blog-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
