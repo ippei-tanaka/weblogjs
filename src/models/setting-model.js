@@ -2,6 +2,8 @@ import co from 'co';
 import { MongoModel } from 'simple-odm';
 import schema from './setting-schema';
 
+require('./setup-db-connection');
+
 export default class SettingModel extends MongoModel {
 
     static get name () {

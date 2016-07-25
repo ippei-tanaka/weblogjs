@@ -17,29 +17,29 @@ import {
 
 import co from 'co';
 
-//----------------------------
-
-const generateApiRoot = (arg) => {
-    const { webProtocol, webHost, webPort, adminApiRoot } = arg;
-    return `${webProtocol}://${webHost}:${webPort}${adminApiRoot}`;
-};
+import config from '../../config';
 
 //----------------------------
 
-const getLoginUser = ({apiRoot}) =>
+const { webProtocol, webHost, webPort, adminApiRoot } = config.getValues();
+const API_ROOT = `${webProtocol}://${webHost}:${webPort}${adminApiRoot}`;
+
+//----------------------------
+
+const getLoginUser = () =>
     getFromServer({
-        path: `${apiRoot}/users/me`
+        path: `${API_ROOT}/users/me`
     }).catch(() => null);
 
-const loginToAdmin = ({apiRoot, email, password}) =>
+const loginToAdmin = ({email, password}) =>
     postOnServer({
-        path: `${apiRoot}/login`,
+        path: `${API_ROOT}/login`,
         data: {email, password}
     }).catch(() => null);
 
-const logoutFromAdmin = ({apiRoot}) =>
+const logoutFromAdmin = () =>
     getFromServer({
-        path: `${apiRoot}/logout`
+        path: `${API_ROOT}/logout`
     }).then(() => true).catch(() => false);
 
 //----------------------------
@@ -47,7 +47,6 @@ const logoutFromAdmin = ({apiRoot}) =>
 export const checkStatus = () => (dispatch, getState) =>
 {
     const { auth, adminSiteInfo } = getState();
-    const apiRoot = generateApiRoot(adminSiteInfo.toJS());
     const status = auth.get('status');
 
     if (status === WAITING_FOR_STATUS_CHECK
@@ -57,15 +56,9 @@ export const checkStatus = () => (dispatch, getState) =>
         return;
     }
 
-    /*
-    dispatch({
-        type: AUTH_STATUS_CHECK_REQUEST
-    });
-    */
-
     co(function* ()
     {
-        var user = yield getLoginUser({apiRoot});
+        var user = yield getLoginUser();
 
         if (user)
         {
@@ -89,7 +82,6 @@ export const requestLogin = ({email, password}) => (dispatch, getState) =>
 {
 
     const { auth, adminSiteInfo } = getState();
-    const apiRoot = generateApiRoot(adminSiteInfo.toJS());
     const status = auth.get('status');
 
     if (status === WAITING_FOR_STATUS_CHECK
@@ -99,15 +91,9 @@ export const requestLogin = ({email, password}) => (dispatch, getState) =>
         return;
     }
 
-    /*
-    dispatch({
-        type: LOGIN_REQUEST
-    });
-    */
-
     co(function* ()
     {
-        let user = yield getLoginUser({apiRoot});
+        let user = yield getLoginUser();
 
         if (user)
         {
@@ -118,7 +104,7 @@ export const requestLogin = ({email, password}) => (dispatch, getState) =>
             return;
         }
 
-        user = yield loginToAdmin({apiRoot, email, password});
+        user = yield loginToAdmin({email, password});
 
         dispatch({
             type: LOGIN_RESULT_RECEIVED,
@@ -131,7 +117,6 @@ export const requestLogin = ({email, password}) => (dispatch, getState) =>
 export const requestLogout = () => (dispatch, getState) =>
 {
     const { auth, adminSiteInfo } = getState();
-    const apiRoot = generateApiRoot(adminSiteInfo.toJS());
     const status = auth.get('status');
 
     if (status === WAITING_FOR_STATUS_CHECK
@@ -149,7 +134,7 @@ export const requestLogout = () => (dispatch, getState) =>
 
     co(function* ()
     {
-        let user = yield getLoginUser({apiRoot});
+        let user = yield getLoginUser();
 
         if (!user)
         {
@@ -162,7 +147,7 @@ export const requestLogout = () => (dispatch, getState) =>
 
         dispatch({
             type: LOGOUT_RESULT_RECEIVED,
-            result: yield logoutFromAdmin({apiRoot})
+            result: yield logoutFromAdmin()
         })
     });
 

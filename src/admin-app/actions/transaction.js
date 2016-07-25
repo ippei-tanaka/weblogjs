@@ -41,6 +41,15 @@ import {
 
 import co from 'co';
 
+import config from '../../config';
+
+//----------------------------
+
+const { webProtocol, webHost, webPort, adminApiRoot } = config.getValues();
+const API_ROOT = `${webProtocol}://${webHost}:${webPort}${adminApiRoot}`;
+
+//----------------------------
+
 const modify = ({actionId, action}) => (dispatch, getState) =>
 {
     dispatch({
@@ -50,10 +59,7 @@ const modify = ({actionId, action}) => (dispatch, getState) =>
 
     return co(function* ()
     {
-        const siteInfo = getState().adminSiteInfo.toJS();
-        const { webProtocol, webHost, webPort, adminApiRoot } = siteInfo;
-        const API_BASE = `${webProtocol}://${webHost}:${webPort}${adminApiRoot}`;
-        const actionPayload = yield action({apiBase: API_BASE});
+        const actionPayload = yield action();
 
         dispatch(actionPayload);
 
@@ -74,9 +80,9 @@ const modify = ({actionId, action}) => (dispatch, getState) =>
 
 const load = ({path, doneType, dataProcessor = d => d}) => modify({
     actionId: null,
-    action: co.wrap(function* ({apiBase})
+    action: co.wrap(function* ()
     {
-        const response = yield getFromServer({path: `${apiBase}${path}`});
+        const response = yield getFromServer({path: `${API_ROOT}${path}`});
         return {
             type: doneType,
             data: dataProcessor(response)
@@ -94,10 +100,10 @@ const loadMany = ({path, doneType}) => load({
 
 const create = ({path, doneType, actionId, data}) => modify({
     actionId,
-    action: co.wrap(function* ({apiBase})
+    action: co.wrap(function* ()
     {
-        const { _id } = yield postOnServer({data, path: `${apiBase}${path}`});
-        const response = yield getFromServer({path: `${apiBase}${path}/${_id}`});
+        const { _id } = yield postOnServer({data, path: `${API_ROOT}${path}`});
+        const response = yield getFromServer({path: `${API_ROOT}${path}/${_id}`});
         return {
             type: doneType,
             data: response
@@ -107,10 +113,10 @@ const create = ({path, doneType, actionId, data}) => modify({
 
 const edit = ({path, doneType, actionId, id, data}) => modify({
     actionId,
-    action: co.wrap(function* ({apiBase})
+    action: co.wrap(function* ()
     {
-        yield putOneOnServer({data, path: `${apiBase}${path}/${id}`});
-        const response = yield getFromServer({path: `${apiBase}${path}/${id}`});
+        yield putOneOnServer({data, path: `${API_ROOT}${path}/${id}`});
+        const response = yield getFromServer({path: `${API_ROOT}${path}/${id}`});
         return {
             type: doneType,
             data: response
@@ -120,9 +126,9 @@ const edit = ({path, doneType, actionId, id, data}) => modify({
 
 const del = ({path, doneType, actionId, id}) => modify({
     actionId,
-    action: co.wrap(function* ({apiBase})
+    action: co.wrap(function* ()
     {
-        yield deleteOnServer({path: `${apiBase}${path}/${id}`});
+        yield deleteOnServer({path: `${API_ROOT}${path}/${id}`});
         return {
             type: doneType,
             id
@@ -174,9 +180,9 @@ export const deleteUser = ({actionId, id}) => del({
 
 export const editUserPassword = ({actionId, id, data}) => modify({
     actionId,
-    action: co.wrap(function* ({apiBase})
+    action: co.wrap(function* ()
     {
-        yield putOneOnServer({data, path: `${apiBase}/users/${id}/password`});
+        yield putOneOnServer({data, path: `${API_ROOT}/users/${id}/password`});
         return {
             type: USER_PASSWORD_EDIT_COMPLETE
         };
@@ -266,9 +272,9 @@ export const deletePost = ({actionId, id}) => del({
 
 export const loadSetting = () => modify({
     actionId: null,
-    action: co.wrap(function* ({apiBase})
+    action: co.wrap(function* ()
     {
-        const response = yield getFromServer({path: `${apiBase}/setting`});
+        const response = yield getFromServer({path: `${API_ROOT}/setting`});
         return {
             type: LOADED_SETTING_RECEIVED,
             data: response
@@ -278,10 +284,10 @@ export const loadSetting = () => modify({
 
 export const editSetting = ({actionId, data}) => modify({
     actionId,
-    action: co.wrap(function* ({apiBase})
+    action: co.wrap(function* ()
     {
-        yield putOneOnServer({data, path: `${apiBase}/setting`});
-        const response = yield getFromServer({path: `${apiBase}/setting`});
+        yield putOneOnServer({data, path: `${API_ROOT}/setting`});
+        const response = yield getFromServer({path: `${API_ROOT}/setting`});
         return {
             type: EDITED_SETTING_RECEIVED,
             data: response
@@ -291,9 +297,9 @@ export const editSetting = ({actionId, data}) => modify({
 
 export const loadThemes = () => modify({
     actionId: null,
-    action: co.wrap(function* ({apiBase})
+    action: co.wrap(function* ()
     {
-        const response = yield getFromServer({path: `${apiBase}/themes`});
+        const response = yield getFromServer({path: `${API_ROOT}/themes`});
         return {
             type: LOADED_THEMES_RECEIVED,
             data: response.items
