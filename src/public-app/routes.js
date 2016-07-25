@@ -5,10 +5,9 @@ import ReactDOMServer from 'react-dom/server';
 import Layout from "./components/layout";
 import Multiple from "./components/multiple";
 import Single from "./components/single";
-import NotFound from "./components/not-found";
+import Message from "./components/message";
 import Models from '../models';
-import {successHandler, errorHandler, parseParameters} from './handlers';
-import {OK, NOT_FOUND} from '../constants/status-codes';
+import {OK, NOT_FOUND, ERROR} from '../constants/status-codes';
 import UserModel from '../models/user-model';
 import CategoryModel from '../models/category-model';
 import PostModel from '../models/post-model';
@@ -23,89 +22,101 @@ const parseParam = (str, defaultValue) =>
 const renderHtml = (element) =>
     ("<!DOCTYPE html>" + ReactDOMServer.renderToStaticMarkup(element));
 
+const isProduction = process.env.NODE_ENV === "production";
+
+const errorHandler = (response) => co.wrap(function* (e)
+{
+
+    const setting = (yield SettingModel.getSetting()).values;
+
+    response.type('html').status(ERROR).send(renderHtml(
+        <Layout title="Error" blogName={setting.name} theme={setting.theme}>
+            <Message message={isProduction ? "Error Occurred." : e.message} />
+        </Layout>
+    ));
+});
+
 const router = Router();
 
+router.get(/^(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?(\/|\/page\/[0-9]+\/?)?$/, (request,
+                                                                                              response) => co(function* ()
+{
+    const categorySlug = parseParam(request.params[0], null);
+    const authorSlug = parseParam(request.params[1], null);
+    const tag = parseParam(request.params[2], null);
+    const page = parseParam(request.params[3], 1);
 
-router.get(/^(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?(\/|\/page\/[0-9]+\/?)?$/,
-    (request, response) => co(function* ()
+    let _query = {
+        published_date: {$lt: new Date()},
+        is_draft: {$ne: true}
+    };
+
+    if (tag)
     {
-        const categorySlug = parseParam(request.params[0], null);
-        const authorSlug = parseParam(request.params[1], null);
-        const tag = parseParam(request.params[2], null);
-        const page = parseParam(request.params[3], 1);
+        _query.tags = {$in: [tag]};
+    }
 
-        let _query = {
-            published_date: {$lt: new Date()},
-            is_draft: {$ne: true}
-        };
+    const categoryModel = yield CategoryModel.findOne({slug: categorySlug});
+    const category = categoryModel ? categoryModel.values : null;
 
-        if (tag)
+    if (category)
+    {
+        _query.category_id = category._id;
+    }
+
+    const userModel = yield UserModel.findOne({slug: authorSlug});
+    const user = userModel ? userModel.values : null;
+
+    if (user)
+    {
+        _query.author_id = user._id;
+    }
+
+    const setting = (yield SettingModel.getSetting()).values;
+
+    const postModels = yield PostModel.findMany({
+        query: _query,
+        sort: {published_date: -1, created_date: 1},
+        skip: setting.posts_per_page * (page - 1),
+        limit: setting.posts_per_page
+    });
+
+    const sums = yield PostModel.aggregate([
         {
-            _query.tags = {$in: [tag]};
-        }
-
-        const categoryModel = yield CategoryModel.findOne({slug: categorySlug});
-        const category = categoryModel ? categoryModel.values : null;
-
-        if (category)
+            $match: _query
+        },
         {
-            _query.category_id = category._id;
-        }
-
-        const userModel = yield UserModel.findOne({slug: authorSlug});
-        const user = userModel ? userModel.values : null;
-
-        if (user)
-        {
-            _query.author_id = user._id;
-        }
-
-        const setting = (yield SettingModel.getSetting()).values;
-
-        const postModels = yield PostModel.findMany({
-            query: _query,
-            sort: {published_date: -1, created_date: 1},
-            skip: setting.posts_per_page * (page - 1),
-            limit: setting.posts_per_page
-        });
-
-        const sums = yield PostModel.aggregate([
-            {
-                $match: _query
-            },
-            {
-                $group: {
-                    _id: null,
-                    size: {$sum: 1}
-                }
+            $group: {
+                _id: null,
+                size: {$sum: 1}
             }
-        ]);
-
-        let totalPages = 0;
-
-        if (sums.length > 0)
-        {
-            const sum = sums[0];
-            totalPages = Math.ceil(sum.size / setting.posts_per_page);
         }
+    ]);
 
-        const props = {
-            categories: {},
-            posts: postModels.map(m => m.values),
-            page,
-            totalPages
-        };
+    let totalPages = 0;
 
-        response.type('html').status(OK).send(renderHtml(
-            <Layout {...props} title="Multi" blogName={setting.name} theme={setting.theme}>
-                <Multiple {...props} />
-            </Layout>
-        ));
+    if (sums.length > 0)
+    {
+        const sum = sums[0];
+        totalPages = Math.ceil(sum.size / setting.posts_per_page);
+    }
 
-    }).catch(errorHandler(response)));
+    const props = {
+        categories: {},
+        posts: postModels.map(m => m.values),
+        page,
+        totalPages
+    };
 
+    response.type('html').status(OK).send(renderHtml(
+        <Layout {...props} title="Multi" blogName={setting.name} theme={setting.theme}>
+            <Multiple {...props} />
+        </Layout>
+    ));
 
-router.get(/^\/post\/([^/]+)\/?$/, (request, response) => co(function* ()
+}).catch(errorHandler(response)));
+
+router.get(/^\/post\/([^/]+)\/?$/, (request, response, next) => co(function* ()
 {
     const postSlug = request.params[0];
 
@@ -117,6 +128,11 @@ router.get(/^\/post\/([^/]+)\/?$/, (request, response) => co(function* ()
         is_draft: {$ne: true}
     });
 
+    if (!post)
+    {
+        return next();
+    }
+
     const setting = (yield SettingModel.getSetting()).values;
 
     const props = {
@@ -124,14 +140,23 @@ router.get(/^\/post\/([^/]+)\/?$/, (request, response) => co(function* ()
         post: post.values
     };
 
-    const htmlString = ReactDOMServer.renderToStaticMarkup(
+    response.type('html').status(OK).send(renderHtml(
         <Layout {...props} title="Single" blogName={setting.name} theme={setting.theme}>
             <Single {...props} />
         </Layout>
-    );
+    ));
 
-    response.type('html').status(OK).send("<!DOCTYPE html>" + htmlString);
+}).catch(errorHandler(response)));
 
+router.get("*", (request, response) => co(function* ()
+{
+    const setting = (yield SettingModel.getSetting()).values;
+
+    response.type('html').status(NOT_FOUND).send(renderHtml(
+        <Layout title="Not Found" blogName={setting.name} theme={setting.theme}>
+            <Message message="The page you are looking for is not found."/>
+        </Layout>
+    ));
 }).catch(errorHandler(response)));
 
 export default router;

@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default () => (
+export default ({message}) => (
     <section className="module-section">
-        Page Not Found.
+        {message}
     </section>
 );
