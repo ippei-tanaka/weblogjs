@@ -16,7 +16,7 @@ import {OK, FOUND, NOT_FOUND, ERROR} from '../constants/status-codes';
 const adminSiteApp = express();
 
 // Register admin site static path
-adminSiteApp.use(express.static(path.resolve(__dirname, './bundle')));
+adminSiteApp.use(express.static(path.resolve(__dirname, './static')));
 
 // Register configured static paths
 const _staticPaths = config.getValue('adminSiteStaticPaths') || [];
