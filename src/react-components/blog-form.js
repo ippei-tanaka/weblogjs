@@ -68,12 +68,6 @@ export default function BlogForm ({
                 </Select>
             </FieldSet>
 
-            <FieldSet label="Script Snippet"
-                      error={errors.script_snippet}>
-                    <Textarea value={values.script_snippet}
-                              onChange={_onChange("script_snippet")}/>
-            </FieldSet>
-
             <ButtonList>
                 <SubmitButton>{submitButtonLabel}</SubmitButton>
                 <Button onClick={onClickBackButton}

@@ -4,10 +4,10 @@
   "description": "a library for weblogs",
   "main": "./lib",
   "scripts": {
-    "bundle-brs": "npm-run-all clear-brs --parallel \"bundle:*\"",
+    "bundle-brs": "npm-run-all clear-brs --parallel \"bundle-brs:*\"",
     "bundle-brs:admin-js": "webpack --config ./src/admin-app/webpack.config.babel.js",
     "bundle-brs:admin-css": "node-sass ./src/admin-app/scss/main.scss -o ./src/admin-app/static/bundle",
-    "bundle-brs:public-css": "node-sass ./src/public-app/scss/themes/*.scss -o ./src/public-app/static/bundle/themes",
+    "bundle-brs:public-css": "node-sass ./src/public-app/scss/themes -o ./src/public-app/static/bundle/themes",
     "watch-brs": "npm-run-all clear-brs --parallel \"watch-brs:*\"",
     "watch-brs:admin-js": "npm run bundle-brs:admin-js -- -w",
     "watch-brs:admin-css": "npm run bundle-brs:admin-css && npm run bundle-brs:admin-css -- -w",

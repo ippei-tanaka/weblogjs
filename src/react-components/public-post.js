@@ -1,5 +1,6 @@
 import React from 'react';
 import Moment from 'moment';
+import { Link } from 'react-router';
 
 export default ({
     root,

@@ -45,10 +45,6 @@ class BlogList extends Component {
                 label: "Theme"
             },
 
-            script_snippet: {
-                label: "Script Snippet"
-            },
-
             created_date: {
                 label: "Created Date",
                 stringify: value =>

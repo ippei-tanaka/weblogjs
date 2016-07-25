@@ -20,6 +20,7 @@ const schema = new WeblogJsSchema({
         },
 
         slug: {
+            unique: true,
             required: true,
             type: types.String,
             sanitize: (value) => value.trim(),
@@ -52,6 +53,7 @@ const schema = new WeblogJsSchema({
         },
 
         author_id: {
+            required: true,
             display_name: "author ID",
             type: types.MongoObjectID,
             validate: function* (value)
@@ -84,6 +86,7 @@ const schema = new WeblogJsSchema({
         },
 
         blog_id: {
+            required: true,
             display_name: "blog ID",
             type: types.MongoObjectID,
             validate: function* (value)
