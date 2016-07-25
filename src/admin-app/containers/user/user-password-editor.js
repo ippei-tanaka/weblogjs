@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import UserPasswordForm from '../../../react-components/user-password-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class UserPasswordEditor extends Component {
     constructor(props) {
@@ -71,8 +73,7 @@ class UserPasswordEditor extends Component {
     }
 
     _goToListPage() {
-        const { params : {id}, adminSiteInfoStore } = this.props;
-        const root = adminSiteInfoStore.get("webpageRootForAdmin");
+        const { params : {id} } = this.props;
         this.context.router.push(`${root}/users/${id}/editor`);
     }
 
@@ -93,8 +94,7 @@ class UserPasswordEditor extends Component {
 export default connect(
     state => ({
         userStore: state.user,
-        transactionStore: state.transaction,
-        adminSiteInfoStore: state.adminSiteInfo,
+        transactionStore: state.transaction
     }),
     actions
 )(UserPasswordEditor);

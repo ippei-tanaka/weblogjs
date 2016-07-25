@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import UserForm from '../../../react-components/user-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class UserAdder extends Component {
     constructor(props) {
@@ -64,7 +66,6 @@ class UserAdder extends Component {
     }
 
     _goToListPage() {
-        const root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/users`);
     }
 
@@ -78,8 +79,7 @@ class UserAdder extends Component {
 
 export default connect(
     state => ({
-        transactionStore: state.transaction,
-        adminSiteInfoStore: state.adminSiteInfo
+        transactionStore: state.transaction
     }),
     actions
 )(UserAdder);

@@ -6,7 +6,7 @@ import actions from '../actions';
 import { LOGOUT_FAILED } from '../constants/auth-status';
 import config from '../../config';
 
-const FailedToLogout = <div>Failed to log out.</div>;
+const failedToLogout = <div>Failed to log out.</div>;
 
 class AdminWrapper extends Component {
 
@@ -22,7 +22,7 @@ class AdminWrapper extends Component {
         const { mobileMenuVisible } = this.state;
         const { authStore, children } = this.props;
         const authStatus = authStore.get('status');
-        const content = authStatus !== LOGOUT_FAILED ? children : FailedToLogout;
+        const content = authStatus !== LOGOUT_FAILED ? children : failedToLogout;
 
         return (
             <div className="module-home-page">

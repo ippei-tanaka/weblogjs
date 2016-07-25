@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import BlogForm from '../../../react-components/blog-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class BlogEditor extends Component {
 
@@ -88,7 +90,6 @@ class BlogEditor extends Component {
 
     _goToListPage ()
     {
-        const root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/blogs`);
     }
 
@@ -112,8 +113,7 @@ export default connect(
     state => ({
         blogStore: state.blog,
         transactionStore: state.transaction,
-        themeStore: state.theme,
-        adminSiteInfoStore: state.adminSiteInfo
+        themeStore: state.theme
     }),
     actions
 )(BlogEditor);

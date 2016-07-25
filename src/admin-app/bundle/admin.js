@@ -36072,10 +36072,6 @@ webpackJsonp([0,1],[
 	
 	var _themeReducer2 = _interopRequireDefault(_themeReducer);
 	
-	var _adminSiteInfoReducer = __webpack_require__(565);
-	
-	var _adminSiteInfoReducer2 = _interopRequireDefault(_adminSiteInfoReducer);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = (0, _redux.combineReducers)({
@@ -36086,8 +36082,7 @@ webpackJsonp([0,1],[
 	    setting: _settingReducer2.default,
 	    auth: _authReducer2.default,
 	    transaction: _transactionReducer2.default,
-	    theme: _themeReducer2.default,
-	    adminSiteInfo: _adminSiteInfoReducer2.default
+	    theme: _themeReducer2.default
 	});
 
 /***/ },
@@ -41568,46 +41563,7 @@ webpackJsonp([0,1],[
 	};
 
 /***/ },
-/* 565 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _immutable = __webpack_require__(554);
-	
-	var _immutable2 = _interopRequireDefault(_immutable);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var ENV = process.env.WEBLOG_WEBPACK_ENV || {};
-	
-	var initialState = _immutable2.default.Map({
-	    webpageRootForAdmin: ENV.webpageRootForAdmin,
-	    webProtocol: ENV.webProtocol,
-	    webHost: ENV.webHost,
-	    webPort: ENV.webPort,
-	    adminApiRoot: ENV.adminApiRoot,
-	    adminDir: ENV.adminDir
-	});
-	
-	exports.default = function () {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
-	
-	
-	    if (!(state instanceof _immutable2.default.Map)) {
-	        state = _immutable2.default.Map(state);
-	        state = state.merge(initialState);
-	    }
-	
-	    return state;
-	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(295)))
-
-/***/ },
+/* 565 */,
 /* 566 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -59140,7 +59096,6 @@ webpackJsonp([0,1],[
 	        var _getState = getState();
 	
 	        var auth = _getState.auth;
-	        var adminSiteInfo = _getState.adminSiteInfo;
 	
 	        var status = auth.get('status');
 	
@@ -59190,7 +59145,6 @@ webpackJsonp([0,1],[
 	        var _getState2 = getState();
 	
 	        var auth = _getState2.auth;
-	        var adminSiteInfo = _getState2.adminSiteInfo;
 	
 	        var status = auth.get('status');
 	
@@ -59249,7 +59203,6 @@ webpackJsonp([0,1],[
 	        var _getState3 = getState();
 	
 	        var auth = _getState3.auth;
-	        var adminSiteInfo = _getState3.adminSiteInfo;
 	
 	        var status = auth.get('status');
 	
@@ -61242,30 +61195,6 @@ webpackJsonp([0,1],[
 	    defaultBlogName: "My Blog",
 	    defaultBlogSlug: "my-blog",
 	    defaultBlogPostPerPage: 1
-	
-	    /*
-	    webpageRoot: "/",
-	    adminDir: "admin",
-	    publicDir: "",
-	      adminApiRoot: "/api",
-	    publicApiRoot: "/public-api",
-	    staticPath: null,
-	        webpackDevServer: false,
-	    webpackDevServerHost: "localhost",
-	    webpackDevServerPort: 3000,
-	      adminEntryFile: path.resolve(__dirname, "admin-app/browser-entry.js"),
-	    publicEntryFile: path.resolve(__dirname, "public-app/browser-entry.js"),
-	    envNamespace: 'WEBLOG_WEBPACK_ENV',
-	    bundleDirName: 'bundle',
-	    vendorJsFileName: 'vendor.js',
-	    cssFileName: '[name]-style.css',
-	    jsFileName: "[name].js",
-	    adminFileNameBase: 'admin',
-	    publicFileNameBase: 'public',
-	    nodeModuleDir: path.resolve(__dirname, "../node_modules"),
-	      themeDistDirName: 'themes',
-	    themeSrcDirPath: []
-	    */
 	});
 	
 	var config = Object.assign({}, initialConfig);
@@ -61275,27 +61204,6 @@ webpackJsonp([0,1],[
 	    get: function ()
 	    {
 	        return this.jsFileName.replace(/\[name]/g, this.adminFileNameBase);
-	    }
-	});
-	
-	Object.defineProperty(config, 'adminCssFileName', {
-	    get: function ()
-	    {
-	        return this.cssFileName.replace(/\[name]/g, this.adminFileNameBase);
-	    }
-	});
-	
-	Object.defineProperty(config, 'publicJsFileName', {
-	    get: function ()
-	    {
-	        return this.jsFileName.replace(/\[name]/g, this.publicFileNameBase);
-	    }
-	});
-	
-	Object.defineProperty(config, 'themeSrcDirPaths', {
-	    get: function ()
-	    {
-	        return this.themeSrcDirPath.concat([path.resolve(__dirname, "public-app/themes")])
 	    }
 	});
 	*/
@@ -61945,7 +61853,7 @@ webpackJsonp([0,1],[
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var FailedToLogout = _react2.default.createElement(
+	var failedToLogout = _react2.default.createElement(
 	    'div',
 	    null,
 	    'Failed to log out.'
@@ -61974,7 +61882,7 @@ webpackJsonp([0,1],[
 	            var children = _props.children;
 	
 	            var authStatus = authStore.get('status');
-	            var content = authStatus !== _authStatus.LOGOUT_FAILED ? children : FailedToLogout;
+	            var content = authStatus !== _authStatus.LOGOUT_FAILED ? children : failedToLogout;
 	
 	            return _react2.default.createElement(
 	                'div',
@@ -62165,7 +62073,13 @@ webpackJsonp([0,1],[
 	
 	var _reactRedux = __webpack_require__(532);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var UserList = function (_Component) {
 	    (0, _inherits3.default)(UserList, _Component);
@@ -62183,12 +62097,9 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _props = this.props;
-	            var userStore = _props.userStore;
-	            var adminSiteInfoStore = _props.adminSiteInfoStore;
+	            var userStore = this.props.userStore;
 	
 	            var users = userStore.toArray();
-	            var root = adminSiteInfoStore.get("webpageRootForAdmin");
 	
 	            return _react2.default.createElement(_list2.default, { title: 'User List',
 	                adderLocation: root + '/users/adder',
@@ -62249,8 +62160,7 @@ webpackJsonp([0,1],[
 	
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
-	        userStore: state.user,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        userStore: state.user
 	    };
 	}, _actions2.default)(UserList);
 
@@ -62437,8 +62347,6 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(470);
-	
 	var _userForm = __webpack_require__(800);
 	
 	var _userForm2 = _interopRequireDefault(_userForm);
@@ -62451,7 +62359,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var UserAdder = function (_Component) {
 	    (0, _inherits3.default)(UserAdder, _Component);
@@ -62526,7 +62440,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/users');
 	        }
 	    }], [{
@@ -62542,8 +62455,7 @@ webpackJsonp([0,1],[
 	
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(UserAdder);
 
@@ -62696,7 +62608,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var UserEditor = function (_Component) {
 	    (0, _inherits3.default)(UserEditor, _Component);
@@ -62740,13 +62658,11 @@ webpackJsonp([0,1],[
 	            var id = _props.params.id;
 	            var userStore = _props.userStore;
 	            var transactionStore = _props.transactionStore;
-	            var adminSiteInfoStore = _props.adminSiteInfoStore;
 	
 	            var editedUser = userStore.get(id) || null;
 	            var transaction = transactionStore.get(this.state.actionId);
 	            var errors = transaction ? transaction.get('errors') : {};
 	            var values = Object.assign({}, editedUser, this.state.values);
-	            var root = adminSiteInfoStore.get("webpageRootForAdmin");
 	
 	            return editedUser ? _react2.default.createElement(
 	                'div',
@@ -62790,7 +62706,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/users');
 	        }
 	    }], [{
@@ -62814,8 +62729,7 @@ webpackJsonp([0,1],[
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        userStore: state.user,
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(UserEditor);
 
@@ -62849,8 +62763,6 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(470);
-	
 	var _userPasswordForm = __webpack_require__(803);
 	
 	var _userPasswordForm2 = _interopRequireDefault(_userPasswordForm);
@@ -62863,7 +62775,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var UserPasswordEditor = function (_Component) {
 	    (0, _inherits3.default)(UserPasswordEditor, _Component);
@@ -62953,11 +62871,8 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var _props3 = this.props;
-	            var id = _props3.params.id;
-	            var adminSiteInfoStore = _props3.adminSiteInfoStore;
+	            var id = this.props.params.id;
 	
-	            var root = adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/users/' + id + '/editor');
 	        }
 	    }], [{
@@ -62981,8 +62896,7 @@ webpackJsonp([0,1],[
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        userStore: state.user,
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(UserPasswordEditor);
 
@@ -63120,7 +63034,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var UserDeleter = function (_Component) {
 	    (0, _inherits3.default)(UserDeleter, _Component);
@@ -63205,7 +63125,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/users');
 	        }
 	    }], [{
@@ -63229,8 +63148,7 @@ webpackJsonp([0,1],[
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        userStore: state.user,
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(UserDeleter);
 
@@ -63382,7 +63300,13 @@ webpackJsonp([0,1],[
 	
 	var _reactRedux = __webpack_require__(532);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var CategoryList = function (_Component) {
 	    (0, _inherits3.default)(CategoryList, _Component);
@@ -63400,12 +63324,9 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _props = this.props;
-	            var categoryStore = _props.categoryStore;
-	            var adminSiteInfoStore = _props.adminSiteInfoStore;
+	            var categoryStore = this.props.categoryStore;
 	
 	            var categories = categoryStore.toArray();
-	            var root = adminSiteInfoStore.get("webpageRootForAdmin");
 	
 	            return _react2.default.createElement(_list2.default, { title: 'Category List',
 	                adderLocation: root + '/categories/adder',
@@ -63462,8 +63383,7 @@ webpackJsonp([0,1],[
 	
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
-	        categoryStore: state.category,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        categoryStore: state.category
 	    };
 	}, _actions2.default)(CategoryList);
 
@@ -63497,8 +63417,6 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(470);
-	
 	var _categoryForm = __webpack_require__(808);
 	
 	var _categoryForm2 = _interopRequireDefault(_categoryForm);
@@ -63511,7 +63429,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var CategoryAdder = function (_Component) {
 	    (0, _inherits3.default)(CategoryAdder, _Component);
@@ -63585,7 +63509,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/categories');
 	        }
 	    }], [{
@@ -63601,8 +63524,7 @@ webpackJsonp([0,1],[
 	
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(CategoryAdder);
 
@@ -63716,8 +63638,6 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(470);
-	
 	var _categoryForm = __webpack_require__(808);
 	
 	var _categoryForm2 = _interopRequireDefault(_categoryForm);
@@ -63730,7 +63650,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var CategoryEditor = function (_Component) {
 	    (0, _inherits3.default)(CategoryEditor, _Component);
@@ -63824,7 +63750,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/categories');
 	        }
 	    }], [{
@@ -63848,8 +63773,7 @@ webpackJsonp([0,1],[
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        categoryStore: state.category,
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(CategoryEditor);
 
@@ -63895,7 +63819,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var CategoryDeleter = function (_Component) {
 	    (0, _inherits3.default)(CategoryDeleter, _Component);
@@ -63984,7 +63914,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/categories');
 	        }
 	    }], [{
@@ -64008,8 +63937,7 @@ webpackJsonp([0,1],[
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        categoryStore: state.category,
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(CategoryDeleter);
 
@@ -64057,7 +63985,13 @@ webpackJsonp([0,1],[
 	
 	var _reactRedux = __webpack_require__(532);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var BlogList = function (_Component) {
 	    (0, _inherits3.default)(BlogList, _Component);
@@ -64075,13 +64009,9 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _props = this.props;
-	            var blogStore = _props.blogStore;
-	            var adminSiteInfoStore = _props.adminSiteInfoStore;
+	            var blogStore = this.props.blogStore;
 	
 	            var blogs = blogStore.toArray();
-	            var root = adminSiteInfoStore.get("webpageRootForAdmin");
-	
 	            return _react2.default.createElement(_list2.default, { title: 'Blog List',
 	                adderLocation: root + '/blogs/adder',
 	                fields: this._fields,
@@ -64149,8 +64079,7 @@ webpackJsonp([0,1],[
 	
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
-	        blogStore: state.blog,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        blogStore: state.blog
 	    };
 	}, _actions2.default)(BlogList);
 
@@ -64184,8 +64113,6 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(470);
-	
 	var _blogForm = __webpack_require__(813);
 	
 	var _blogForm2 = _interopRequireDefault(_blogForm);
@@ -64198,7 +64125,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var BlogAdder = function (_Component) {
 	    (0, _inherits3.default)(BlogAdder, _Component);
@@ -64250,7 +64183,6 @@ webpackJsonp([0,1],[
 	            var themes = themeStore.toArray().map(function (obj) {
 	                return obj.name;
 	            });
-	            console.log(themes);
 	
 	            return _react2.default.createElement(_blogForm2.default, { title: 'Create a New Blog',
 	                errors: errors,
@@ -64280,7 +64212,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/blogs');
 	        }
 	    }], [{
@@ -64297,8 +64228,7 @@ webpackJsonp([0,1],[
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        transactionStore: state.transaction,
-	        themeStore: state.theme,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        themeStore: state.theme
 	    };
 	}, _actions2.default)(BlogAdder);
 
@@ -64459,8 +64389,6 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(470);
-	
 	var _blogForm = __webpack_require__(813);
 	
 	var _blogForm2 = _interopRequireDefault(_blogForm);
@@ -64473,7 +64401,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var BlogEditor = function (_Component) {
 	    (0, _inherits3.default)(BlogEditor, _Component);
@@ -64574,7 +64508,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/blogs');
 	        }
 	    }], [{
@@ -64599,8 +64532,7 @@ webpackJsonp([0,1],[
 	    return {
 	        blogStore: state.blog,
 	        transactionStore: state.transaction,
-	        themeStore: state.theme,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        themeStore: state.theme
 	    };
 	}, _actions2.default)(BlogEditor);
 
@@ -64646,7 +64578,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var BlogDeleter = function (_Component) {
 	    (0, _inherits3.default)(BlogDeleter, _Component);
@@ -64734,7 +64672,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/blogs');
 	        }
 	    }], [{
@@ -64758,8 +64695,7 @@ webpackJsonp([0,1],[
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        blogStore: state.blog,
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(BlogDeleter);
 
@@ -64807,7 +64743,13 @@ webpackJsonp([0,1],[
 	
 	var _reactRedux = __webpack_require__(532);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var PostList = function (_Component) {
 	    (0, _inherits3.default)(PostList, _Component);
@@ -64833,13 +64775,11 @@ webpackJsonp([0,1],[
 	            var categoryStore = _props.categoryStore;
 	            var blogStore = _props.blogStore;
 	            var userStore = _props.userStore;
-	            var adminSiteInfoStore = _props.adminSiteInfoStore;
 	
 	            var posts = postStore.toArray();
 	            var categoryList = categoryStore.toArray();
 	            var blogList = blogStore.toArray();
 	            var authorList = userStore.toArray();
-	            var root = adminSiteInfoStore.get("webpageRootForAdmin");
 	
 	            return _react2.default.createElement(_list2.default, { title: 'Post List',
 	                adderLocation: root + '/posts/adder',
@@ -64980,8 +64920,7 @@ webpackJsonp([0,1],[
 	        blogStore: state.blog,
 	        userStore: state.user,
 	        categoryStore: state.category,
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(PostList);
 
@@ -65015,8 +64954,6 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(470);
-	
 	var _postForm = __webpack_require__(818);
 	
 	var _postForm2 = _interopRequireDefault(_postForm);
@@ -65029,7 +64966,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var PostAdder = function (_Component) {
 	    (0, _inherits3.default)(PostAdder, _Component);
@@ -65118,7 +65061,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/posts');
 	        }
 	    }], [{
@@ -65137,8 +65079,7 @@ webpackJsonp([0,1],[
 	        blogStore: state.blog,
 	        userStore: state.user,
 	        categoryStore: state.category,
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(PostAdder);
 
@@ -65449,8 +65390,6 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(470);
-	
 	var _postForm = __webpack_require__(818);
 	
 	var _postForm2 = _interopRequireDefault(_postForm);
@@ -65463,7 +65402,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var PostEditor = function (_Component) {
 	    (0, _inherits3.default)(PostEditor, _Component);
@@ -65573,7 +65518,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/posts');
 	        }
 	    }], [{
@@ -65600,8 +65544,7 @@ webpackJsonp([0,1],[
 	        blogStore: state.blog,
 	        userStore: state.user,
 	        categoryStore: state.category,
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(PostEditor);
 
@@ -65647,7 +65590,13 @@ webpackJsonp([0,1],[
 	
 	var _transactionStatus = __webpack_require__(563);
 	
+	var _config = __webpack_require__(793);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var root = _config2.default.getValue('adminSiteRoot');
 	
 	var PostDeleter = function (_Component) {
 	    (0, _inherits3.default)(PostDeleter, _Component);
@@ -65731,7 +65680,6 @@ webpackJsonp([0,1],[
 	    }, {
 	        key: '_goToListPage',
 	        value: function _goToListPage() {
-	            var root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
 	            this.context.router.push(root + '/posts');
 	        }
 	    }], [{
@@ -65755,8 +65703,7 @@ webpackJsonp([0,1],[
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        postStore: state.post,
-	        transactionStore: state.transaction,
-	        adminSiteInfoStore: state.adminSiteInfo
+	        transactionStore: state.transaction
 	    };
 	}, _actions2.default)(PostDeleter);
 
