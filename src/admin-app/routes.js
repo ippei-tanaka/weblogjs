@@ -12,10 +12,6 @@ import CategoryList from "./containers/category/category-list";
 import CategoryAdder from "./containers/category/category-adder";
 import CategoryEditor from "./containers/category/category-editor";
 import CategoryDeleter from "./containers/category/category-deleter";
-import BlogList from "./containers/blog/blog-list";
-import BlogAdder from "./containers/blog/blog-adder";
-import BlogEditor from "./containers/blog/blog-editor";
-import BlogDeleter from "./containers/blog/blog-deleter";
 import PostList from "./containers/post/post-list";
 import PostAdder from "./containers/post/post-adder";
 import PostEditor from "./containers/post/post-editor";
@@ -40,12 +36,6 @@ export default (
                 <Route path="adder" component={CategoryAdder}/>
                 <Route path=":id/editor" component={CategoryEditor}/>
                 <Route path=":id/deleter" component={CategoryDeleter}/>
-            </Route>
-            <Route path="blogs">
-                <IndexRoute component={BlogList}/>
-                <Route path="adder" component={BlogAdder}/>
-                <Route path=":id/editor" component={BlogEditor}/>
-                <Route path=":id/deleter" component={BlogDeleter}/>
             </Route>
             <Route path="posts">
                 <IndexRoute component={PostList}/>

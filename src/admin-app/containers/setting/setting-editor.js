@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FieldSet, SubmitButton, ButtonList, Select, Option, Title, Form, FlushMessage } from '../../../react-components/form';
+import { FieldSet, SubmitButton, ButtonList, Select, Option, Title, Form, FlushMessage, Input } from '../../../react-components/form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
@@ -19,8 +19,8 @@ class SettingEditor extends Component {
     componentDidMount ()
     {
         this.setState({actionId: Symbol()});
-        this.props.loadBlogs();
         this.props.loadSetting();
+        this.props.loadThemes();
     }
 
     componentWillUnmount ()
@@ -30,9 +30,10 @@ class SettingEditor extends Component {
 
     render ()
     {
-        const {settingStore, blogStore, transactionStore} = this.props;
-        const blogList = blogStore.toArray();
+        const {settingStore, transactionStore, themeStore} = this.props;
         const transaction = transactionStore.get(this.state.actionId);
+        const themeList = themeStore.toArray().map(obj => obj.name);
+        const postsPerPageList = Object.freeze([1, 2, 3, 5, 10, 15]);
         const errors = transaction ? transaction.get('errors') : {};
         const values = Object.assign({}, settingStore, this.state.values);
         const updateSucceeded = transaction && transaction.get('status') === RESOLVED;
@@ -42,11 +43,35 @@ class SettingEditor extends Component {
 
                 <Title>Setting</Title>
 
-                <FieldSet label="Front Blog"
-                          error={errors.front_blog_id}>
-                    <Select value={values.front_blog_id}
-                            onChange={this._onChange.bind(this, 'front_blog_id')}>
-                        {blogList.map(b => <Option key={b._id} value={b._id}>{b.name}</Option>)}
+                <FieldSet label="Name"
+                          error={errors.name}>
+                    <Input value={values.name}
+                           onChange={this._onChange.bind(this, "name")}/>
+                </FieldSet>
+
+                <FieldSet label="Posts per Page"
+                          error={errors.posts_per_page}>
+                    <Select value={values.posts_per_page}
+                            onChange={this._onChange.bind(this, "posts_per_page")}>
+                        {postsPerPageList.map((value, index) =>
+                            <Option key={index}
+                                    value={value}>
+                                {value === 1 ? `${value} post` : `${value} posts`}
+                            </Option>
+                        )}
+                    </Select>
+                </FieldSet>
+
+                <FieldSet label="Theme"
+                          error={errors.theme}>
+                    <Select value={values.theme}
+                            onChange={this._onChange.bind(this, "theme")}>
+                        {themeList.map((value, index) =>
+                            <Option key={index}
+                                    value={value}>
+                                {value}
+                            </Option>
+                        )}
                     </Select>
                 </FieldSet>
 
@@ -84,8 +109,8 @@ class SettingEditor extends Component {
 export default connect(
     state => ({
         settingStore: state.setting,
-        blogStore: state.blog,
-        transactionStore: state.transaction
+        transactionStore: state.transaction,
+        themeStore: state.theme
     }),
     actions
 )(SettingEditor);

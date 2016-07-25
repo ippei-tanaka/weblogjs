@@ -85,23 +85,6 @@ const schema = new WeblogJsSchema({
             }
         },
 
-        blog_id: {
-            required: true,
-            display_name: "blog ID",
-            type: types.MongoObjectID,
-            validate: function* (value)
-            {
-                if (value === null || value === undefined) {
-                    return;
-                }
-
-                if (!value)
-                {
-                    yield `"${value}" is an invalid ID.`
-                }
-            }
-        },
-
         tags: {
             type: [types.String],
             validate: function* (value)

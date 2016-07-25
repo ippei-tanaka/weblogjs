@@ -46,13 +46,6 @@ const AdminMenu = ({
             <li>
                 <Link className="module-button m-btn-clear m-nvg-button"
                       onClick={onLinkClick}
-                      to={`${adminRoot}/blogs`}>
-                    <i className="fa fa-th-large m-nvg-icon"/>Blogs
-                </Link>
-            </li>
-            <li>
-                <Link className="module-button m-btn-clear m-nvg-button"
-                      onClick={onLinkClick}
                       to={`${adminRoot}/posts`}>
                     <i className="fa fa-newspaper-o m-nvg-icon"/>Posts
                 </Link>

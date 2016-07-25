@@ -22,11 +22,7 @@ const initialConfig = Object.freeze({
     adminEmail: "t@t.com",
     adminPassword: "tttttttt",
     adminDisplayName: "Admin",
-    adminSlug: 'admin',
-
-    defaultBlogName: "My Blog",
-    defaultBlogSlug: "my-blog",
-    defaultBlogPostPerPage: 1
+    adminSlug: 'admin'
 });
 
 const config = Object.assign({}, initialConfig);

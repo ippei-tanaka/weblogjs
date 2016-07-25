@@ -27,7 +27,13 @@ export default class SettingModel extends MongoModel {
 
         return co(function* () {
             const model = yield findOne();
-            return model ? model : {};
+
+            if (model) {
+                return model;
+            } else {
+                yield this.setSetting({});
+                return yield findOne();
+            }
         }.bind(this));
     }
 

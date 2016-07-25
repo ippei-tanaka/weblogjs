@@ -17,11 +17,6 @@ import {
     EDITED_CATEGORY_RECEIVED,
     DELETED_CATEGORY_RECEIVED,
 
-    LOADED_BLOG_RECEIVED,
-    CREATED_BLOG_RECEIVED,
-    EDITED_BLOG_RECEIVED,
-    DELETED_BLOG_RECEIVED,
-
     LOADED_POST_RECEIVED,
     CREATED_POST_RECEIVED,
     EDITED_POST_RECEIVED,
@@ -212,33 +207,6 @@ export const editCategory = ({actionId, id, data}) => edit({
 export const deleteCategory = ({actionId, id}) => del({
     path: '/categories',
     doneType: DELETED_CATEGORY_RECEIVED,
-    actionId,
-    id
-});
-
-export const loadBlogs = () => loadMany({
-    path: "/blogs",
-    doneType: LOADED_BLOG_RECEIVED
-});
-
-export const createBlog = ({actionId, data}) => create({
-    path: '/blogs',
-    doneType: CREATED_BLOG_RECEIVED,
-    actionId,
-    data
-});
-
-export const editBlog = ({actionId, id, data}) => edit({
-    path: '/blogs',
-    doneType: EDITED_BLOG_RECEIVED,
-    actionId,
-    data,
-    id
-});
-
-export const deleteBlog = ({actionId, id}) => del({
-    path: '/blogs',
-    doneType: DELETED_BLOG_RECEIVED,
     actionId,
     id
 });

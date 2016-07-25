@@ -9,6 +9,10 @@ import NotFound from "./components/not-found";
 import Models from '../models';
 import {successHandler, errorHandler, parseParameters} from './handlers';
 import {OK, NOT_FOUND} from '../constants/status-codes';
+import UserModel from '../models/user-model';
+import CategoryModel from '../models/category-model';
+import PostModel from '../models/post-model';
+import SettingModel from '../models/setting-model';
 
 const parseParam = (str, defaultValue) =>
 {
@@ -16,55 +20,21 @@ const parseParam = (str, defaultValue) =>
     return arr.length >= 3 && arr[2] ? arr[2] : defaultValue;
 };
 
-const findBlog = (blogSlug) => co(function* ()
-{
-    const BlogModel = Models.getModel('blog');
-    const SettingModel = Models.getModel('setting');
-
-    let blogModel = yield BlogModel.findOne({slug: blogSlug});
-
-    if (blogModel) return blogModel;
-
-    const settingModel = yield SettingModel.getSetting();
-
-    if (!settingModel) return null;
-
-    const setting = settingModel.values;
-
-    if (!setting || !setting.front_blog_id) return null;
-
-    return yield BlogModel.findOne({_id: setting.front_blog_id});
-});
-
 const renderHtml = (element) =>
     ("<!DOCTYPE html>" + ReactDOMServer.renderToStaticMarkup(element));
 
 const router = Router();
 
 
-router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?(\/|\/page\/[0-9]+\/?)?$/,
+router.get(/^(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?(\/|\/page\/[0-9]+\/?)?$/,
     (request, response) => co(function* ()
     {
-        const UserModel = Models.getModel('user');
-        const CategoryModel = Models.getModel('category');
-        const PostModel = Models.getModel('post');
-
-        const blogSlug = parseParam(request.params[0], null);
-        const categorySlug = parseParam(request.params[1], null);
-        const authorSlug = parseParam(request.params[2], null);
-        const tag = parseParam(request.params[3], null);
-        const page = parseParam(request.params[4], 1);
-
-        const blogModel = yield findBlog(blogSlug);
-        if (!blogModel)
-        {
-            response.type('html').status(NOT_FOUND).send(renderHtml(<NotFound />));
-            return;
-        }
-        const blog = blogModel.values;
+        const categorySlug = parseParam(request.params[0], null);
+        const authorSlug = parseParam(request.params[1], null);
+        const tag = parseParam(request.params[2], null);
+        const page = parseParam(request.params[3], 1);
 
         let _query = {
-            blog_id: blog._id,
             published_date: {$lt: new Date()},
             is_draft: {$ne: true}
         };
@@ -90,11 +60,13 @@ router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+
             _query.author_id = user._id;
         }
 
+        const setting = (yield SettingModel.getSetting()).values;
+
         const postModels = yield PostModel.findMany({
             query: _query,
             sort: {published_date: -1, created_date: 1},
-            skip: blog.posts_per_page * (page - 1),
-            limit: blog.posts_per_page
+            skip: setting.posts_per_page * (page - 1),
+            limit: setting.posts_per_page
         });
 
         const sums = yield PostModel.aggregate([
@@ -114,11 +86,10 @@ router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+
         if (sums.length > 0)
         {
             const sum = sums[0];
-            totalPages = Math.ceil(sum.size / blog.posts_per_page);
+            totalPages = Math.ceil(sum.size / setting.posts_per_page);
         }
 
         const props = {
-            blog,
             categories: {},
             posts: postModels.map(m => m.values),
             page,
@@ -126,7 +97,7 @@ router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+
         };
 
         response.type('html').status(OK).send(renderHtml(
-            <Layout {...props} title="Multi" blogName={blog.name} theme={blog.theme}>
+            <Layout {...props} title="Multi" blogName={setting.name} theme={setting.theme}>
                 <Multiple {...props} />
             </Layout>
         ));
@@ -134,39 +105,27 @@ router.get(/^(\/blog\/[^/]+)?(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+
     }).catch(errorHandler(response)));
 
 
-router.get(/^(\/blog\/[^/]+)?\/post\/([^/]+)\/?$/, (request, response) => co(function* ()
+router.get(/^\/post\/([^/]+)\/?$/, (request, response) => co(function* ()
 {
-    const blogSlug = parseParam(request.params[0], null);
-
-    const postSlug = request.params[1];
+    const postSlug = request.params[0];
 
     const PostModel = Models.getModel('post');
 
-    const blogModel = yield findBlog(blogSlug);
-
-    if (!blogModel)
-    {
-        response.type('html').status(NOT_FOUND).send(renderHtml(<NotFound />));
-        return;
-    }
-
-    const blog = blogModel.values;
-
     const post = yield PostModel.findOne({
-        blog_id: blog._id,
         slug: postSlug,
         published_date: {$lt: new Date()},
         is_draft: {$ne: true}
     });
 
+    const setting = (yield SettingModel.getSetting()).values;
+
     const props = {
-        blog,
         categories: {},
         post: post.values
     };
 
     const htmlString = ReactDOMServer.renderToStaticMarkup(
-        <Layout {...props} title="Single" blogName={blog.name} theme={blog.theme}>
+        <Layout {...props} title="Single" blogName={setting.name} theme={setting.theme}>
             <Single {...props} />
         </Layout>
     );

@@ -12,28 +12,26 @@ class PostList extends Component {
     componentDidMount ()
     {
         this.props.loadPosts();
-        this.props.loadBlogs();
         this.props.loadCategories();
         this.props.loadUsers();
     }
 
     render ()
     {
-        const { postStore, categoryStore, blogStore, userStore } = this.props;
+        const { postStore, categoryStore, userStore } = this.props;
         const posts = postStore.toArray();
         const categoryList = categoryStore.toArray();
-        const blogList = blogStore.toArray();
         const authorList = userStore.toArray();
 
         return <List title="Post List"
                      adderLocation={`${root}/posts/adder`}
-                     fields={this._getFields({authorList, blogList, categoryList})}
+                     fields={this._getFields({authorList, categoryList})}
                      models={posts}
                      editorLocationBuilder={id => `${root}/posts/${id}/editor`}
                      deleterLocationBuilder={id => `${root}/posts/${id}/deleter`}/>;
     }
 
-    _getFields ({authorList, blogList, categoryList})
+    _getFields ({authorList, categoryList})
     {
         return {
             title: {
@@ -76,22 +74,6 @@ class PostList extends Component {
                     {
                         let category = categoryList.find(a => value === a._id);
                         return category ? category.name : this.deletedElement;
-                    }
-                }
-            },
-
-            blog_id: {
-                label: "Blog",
-                stringify: value =>
-                {
-                    if (!value)
-                    {
-                        return this.noneElement;
-                    }
-                    else
-                    {
-                        let blog = blogList.find(a => value === a._id);
-                        return blog ? blog.name : this.deletedElement;
                     }
                 }
             },
@@ -145,7 +127,6 @@ class PostList extends Component {
 export default connect(
     state => ({
         postStore: state.post,
-        blogStore: state.blog,
         userStore: state.user,
         categoryStore: state.category,
         transactionStore: state.transaction
