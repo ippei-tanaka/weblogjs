@@ -5,7 +5,7 @@ import path from 'path';
 
 const root = config.getValue('publicSiteRoot');
 
-export default ({children, blogName, categories, title, theme}) => (
+export default ({children, blogName = "", categories = {}, title = "", theme}) => (
     <html lang="en">
     <head>
         <meta charSet="utf-8"/>

@@ -1,22 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router';
 
 export default ({
     categories,
-    rootDir
+    root
     }) =>
 {
-
-    rootDir = rootDir === "" ? "" : "/" + rootDir;
-
     return Object.keys(categories).length > 0 ? (
         <div className="module-name-and-number-list">
             <h3 className="m-nan-title">Categories</h3>
                 <ul className="m-nan-list">
                     {categories.map(category => (
                         <li key={category._id} className="m-nan-list-item">
-                            <Link className="m-nan-link" to={`${rootDir}/category/${category.slug}`}>{category.name}
-                                ({category.size})</Link>
+                            <a className="m-nan-link" href={`${root}/category/${category.slug}`}>{category.name} ({category.size})</a>
                         </li>
                     ))}
                 </ul>
