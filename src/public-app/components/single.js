@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from './layout';
 import PublicPost from '../../react-components/public-post';
 import config from "../../config";
 
@@ -71,8 +70,8 @@ export default connect(
 const buildTitle = () => "";
 //`${categoryName}${tagName}${blogName}`;
 
-export default ({blog, categories, post}) => (
+export default ({categories, post}) => (
     <section className="module-section">
-        <PublicPost blog={blog} categories={categories} post={post} root={root}/>
+        <PublicPost categories={categories} post={post} root={root}/>
     </section>
 );

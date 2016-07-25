@@ -170,7 +170,6 @@ adminApiApp = addRoutesForAuth(adminApiApp, isLoggedIn, isLoggedOut, PassportMan
 adminApiApp = addRoutesForUser(adminApiApp, isLoggedIn);
 adminApiApp = addRoutesForCrudOperations("user", adminApiApp, isLoggedIn);
 adminApiApp = addRoutesForCrudOperations("category", adminApiApp, isLoggedIn);
-adminApiApp = addRoutesForCrudOperations("blog", adminApiApp, isLoggedIn);
 adminApiApp = addRoutesForCrudOperations("post", adminApiApp, isLoggedIn);
 adminApiApp = addRoutesForSetting(adminApiApp, isLoggedIn);
 adminApiApp = addRoutesForThemes(adminApiApp, isLoggedIn);

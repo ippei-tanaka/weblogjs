@@ -22,7 +22,6 @@ class PostAdder extends Component {
     componentDidMount ()
     {
         this.setState({actionId: Symbol()});
-        this.props.loadBlogs();
         this.props.loadCategories();
         this.props.loadUsers();
     }
@@ -44,11 +43,10 @@ class PostAdder extends Component {
 
     render ()
     {
-        const {transactionStore, categoryStore, blogStore, userStore} = this.props;
+        const {transactionStore, categoryStore, userStore} = this.props;
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
         const categoryList = categoryStore.toArray();
-        const blogList = blogStore.toArray();
         const userList = userStore.toArray();
         const values = this.state.values;
         const userMap = userStore.toObject();
@@ -58,7 +56,6 @@ class PostAdder extends Component {
             <PostForm title="Create a New Post"
                       errors={errors}
                       values={values}
-                      blogList={blogList}
                       categoryList={categoryList}
                       authorList={userList}
                       categoryMap={categoryMap}
@@ -103,7 +100,6 @@ class PostAdder extends Component {
 
 export default connect(
     state => ({
-        blogStore: state.blog,
         userStore: state.user,
         categoryStore: state.category,
         transactionStore: state.transaction

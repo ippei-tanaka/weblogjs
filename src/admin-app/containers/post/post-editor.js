@@ -23,7 +23,6 @@ class PostEditor extends Component {
     {
         this.setState({actionId: Symbol()});
         this.props.loadPosts();
-        this.props.loadBlogs();
         this.props.loadCategories();
         this.props.loadUsers();
     }
@@ -45,12 +44,11 @@ class PostEditor extends Component {
 
     render ()
     {
-        const {params: {id}, postStore, transactionStore, categoryStore, blogStore, userStore} = this.props;
+        const {params: {id}, postStore, transactionStore, categoryStore, userStore} = this.props;
         const editedPost = postStore.get(id) || null;
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
         const values = Object.assign({}, editedPost, this.state.values);
-        const blogList = blogStore.toArray();
         const userList = userStore.toArray();
         const categoryList = categoryStore.toArray();
         const userMap = userStore.toObject();
@@ -65,7 +63,6 @@ class PostEditor extends Component {
                           authorList={userList}
                           categoryMap={categoryMap}
                           authorMap={userMap}
-                          blogList={blogList}
                           onChange={this._onChange.bind(this)}
                           onSubmit={this._onSubmit.bind(this)}
                           onClickBackButton={this._goToListPage.bind(this)}
@@ -121,7 +118,6 @@ class PostEditor extends Component {
 export default connect(
     state => ({
         postStore: state.post,
-        blogStore: state.blog,
         userStore: state.user,
         categoryStore: state.category,
         transactionStore: state.transaction

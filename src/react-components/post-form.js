@@ -73,14 +73,6 @@ export default function PostForm ({
                 </Select>
             </FieldSet>
 
-            <FieldSet label="Blog"
-                      error={errors.blog_id}>
-                <Select value={values.blog_id}
-                        onChange={_onChange("blog_id")}>
-                    {blogList.map(b => <Option key={b._id} value={b._id}>{b.name}</Option>)}
-                </Select>
-            </FieldSet>
-
             <FieldSet label="Tags"
                       error={errors.tags}>
                 <TagList value={values.tags}

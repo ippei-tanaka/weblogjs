@@ -21,11 +21,11 @@ const buildTitle = () => "";
 //`${categoryName}${tagName}${blogName}`;
 
 
-export default ({blog, categories, category, tag, posts, page, totalPages}) => (
+export default ({categories, category, tag, posts, page, totalPages}) => (
     <div>
         {posts.map(post =>
             <section key={post._id} className="module-section">
-                <PublicPost blog={blog} categories={categories} post={post} root={root}/>
+                <PublicPost categories={categories} post={post} root={root}/>
             </section>
         )}
 
