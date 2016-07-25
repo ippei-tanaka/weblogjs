@@ -46,7 +46,7 @@ const logoutFromAdmin = () =>
 
 export const checkStatus = () => (dispatch, getState) =>
 {
-    const { auth, adminSiteInfo } = getState();
+    const { auth } = getState();
     const status = auth.get('status');
 
     if (status === WAITING_FOR_STATUS_CHECK
@@ -81,7 +81,7 @@ export const checkStatus = () => (dispatch, getState) =>
 export const requestLogin = ({email, password}) => (dispatch, getState) =>
 {
 
-    const { auth, adminSiteInfo } = getState();
+    const { auth } = getState();
     const status = auth.get('status');
 
     if (status === WAITING_FOR_STATUS_CHECK
@@ -116,7 +116,7 @@ export const requestLogin = ({email, password}) => (dispatch, getState) =>
 
 export const requestLogout = () => (dispatch, getState) =>
 {
-    const { auth, adminSiteInfo } = getState();
+    const { auth } = getState();
     const status = auth.get('status');
 
     if (status === WAITING_FOR_STATUS_CHECK

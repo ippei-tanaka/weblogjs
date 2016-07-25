@@ -3,6 +3,9 @@ import Moment from 'moment';
 import List from '../../../react-components/list';
 import actions from '../../actions';
 import { connect } from 'react-redux';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class CategoryList extends Component {
 
@@ -13,9 +16,8 @@ class CategoryList extends Component {
 
     render ()
     {
-        const { categoryStore, adminSiteInfoStore } = this.props;
+        const { categoryStore } = this.props;
         const categories = categoryStore.toArray();
-        const root = adminSiteInfoStore.get("webpageRootForAdmin");
 
         return <List title="Category List"
                      adderLocation={`${root}/categories/adder`}
@@ -58,8 +60,7 @@ class CategoryList extends Component {
 
 export default connect(
     state => ({
-        categoryStore: state.category,
-        adminSiteInfoStore: state.adminSiteInfo
+        categoryStore: state.category
     }),
     actions
 )(CategoryList);

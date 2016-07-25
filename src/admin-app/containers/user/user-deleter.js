@@ -3,6 +3,9 @@ import Confirmation from '../../../react-components/confirmation';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class UserDeleter extends Component {
 
@@ -58,7 +61,6 @@ class UserDeleter extends Component {
     }
 
     _goToListPage() {
-        const root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/users`);
     }
 
@@ -79,8 +81,7 @@ class UserDeleter extends Component {
 export default connect(
     state => ({
         userStore: state.user,
-        transactionStore: state.transaction,
-        adminSiteInfoStore: state.adminSiteInfo
+        transactionStore: state.transaction
     }),
     actions
 )(UserDeleter);

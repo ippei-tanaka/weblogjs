@@ -5,6 +5,8 @@ import PassportManager from '../passport-manager';
 import Models from '../models';
 import { ObjectID } from 'mongodb';
 import { successHandler, errorHandler, parseParameters, isLoggedIn, isLoggedOut, bypass } from './handlers';
+import fs from 'fs';
+import path from 'path';
 
 const addRoutesForCrudOperations = (schemaName, app, filter) =>
 {
@@ -134,6 +136,32 @@ const addRoutesForSetting = (app, filter) =>
     return app;
 };
 
+const addRoutesForThemes = (app, filter) =>
+{
+    const themeDir = path.resolve(__dirname, '../public-app/bundle/themes');
+
+    app.get(`/themes`, filter, (request, response) => co(function* ()
+    {
+        const fileNames = yield new Promise((res, rej) => fs.readdir(themeDir, (err, result) =>
+        {
+            if (err) return rej(err);
+            res(result);
+        }));
+
+        successHandler(response, {
+            items: fileNames.map(name =>
+            {
+                return {
+                    name: name.replace(/\.css$/, "")
+                }
+            })
+        });
+
+    }).catch(errorHandler(response)));
+
+    return app;
+};
+
 let adminApiApp = express();
 
 // The order of those functions matters.
@@ -145,5 +173,6 @@ adminApiApp = addRoutesForCrudOperations("category", adminApiApp, isLoggedIn);
 adminApiApp = addRoutesForCrudOperations("blog", adminApiApp, isLoggedIn);
 adminApiApp = addRoutesForCrudOperations("post", adminApiApp, isLoggedIn);
 adminApiApp = addRoutesForSetting(adminApiApp, isLoggedIn);
+adminApiApp = addRoutesForThemes(adminApiApp, isLoggedIn);
 
 export default adminApiApp;

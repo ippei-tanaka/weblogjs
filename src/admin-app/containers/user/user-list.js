@@ -3,6 +3,9 @@ import Moment from 'moment';
 import List from '../../../react-components/list';
 import actions from '../../actions';
 import { connect } from 'react-redux';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class UserList extends Component {
 
@@ -13,9 +16,8 @@ class UserList extends Component {
 
     render ()
     {
-        const { userStore, adminSiteInfoStore } = this.props;
+        const { userStore } = this.props;
         const users = userStore.toArray();
-        const root = adminSiteInfoStore.get("webpageRootForAdmin");
 
         return <List title="User List"
                      adderLocation={`${root}/users/adder`}
@@ -64,8 +66,7 @@ class UserList extends Component {
 
 export default connect(
     state => ({
-        userStore: state.user,
-        adminSiteInfoStore: state.adminSiteInfo
+        userStore: state.user
     }),
     actions
 )(UserList);

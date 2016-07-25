@@ -3,6 +3,9 @@ import Confirmation from '../../../react-components/confirmation';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class PostDeleter extends Component {
 
@@ -65,7 +68,6 @@ class PostDeleter extends Component {
 
     _goToListPage ()
     {
-        const root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/posts`);
     }
 
@@ -88,8 +90,7 @@ class PostDeleter extends Component {
 export default connect(
     state => ({
         postStore: state.post,
-        transactionStore: state.transaction,
-        adminSiteInfoStore: state.adminSiteInfo
+        transactionStore: state.transaction
     }),
     actions
 )(PostDeleter);

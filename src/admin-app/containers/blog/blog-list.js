@@ -1,20 +1,23 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Moment from 'moment';
 import List from '../../../react-components/list';
 import actions from '../../actions';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class BlogList extends Component {
 
-    componentDidMount() {
+    componentDidMount ()
+    {
         this.props.loadBlogs();
     }
 
-    render() {
-        const { blogStore, adminSiteInfoStore } = this.props;
+    render ()
+    {
+        const {blogStore} = this.props;
         const blogs = blogStore.toArray();
-        const root = adminSiteInfoStore.get("webpageRootForAdmin");
-
         return <List title="Blog List"
                      adderLocation={`${root}/blogs/adder`}
                      fields={this._fields}
@@ -23,7 +26,8 @@ class BlogList extends Component {
                      deleterLocationBuilder={id => `${root}/blogs/${id}/deleter`}/>;
     }
 
-    get _fields() {
+    get _fields ()
+    {
         return {
             name: {
                 label: "Name"
@@ -59,7 +63,8 @@ class BlogList extends Component {
         }
     }
 
-    get noneElement () {
+    get noneElement ()
+    {
         return <span className="m-dtl-none">(None)</span>;
     }
 
@@ -68,8 +73,7 @@ class BlogList extends Component {
 
 export default connect(
     state => ({
-        blogStore: state.blog,
-        adminSiteInfoStore: state.adminSiteInfo
+        blogStore: state.blog
     }),
     actions
 )(BlogList);

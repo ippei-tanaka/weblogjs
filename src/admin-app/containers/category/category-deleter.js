@@ -3,6 +3,9 @@ import Confirmation from '../../../react-components/confirmation';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class CategoryDeleter extends Component {
 
@@ -70,7 +73,6 @@ class CategoryDeleter extends Component {
 
     _goToListPage ()
     {
-        const root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/categories`);
     }
 
@@ -93,8 +95,7 @@ class CategoryDeleter extends Component {
 export default connect(
     state => ({
         categoryStore: state.category,
-        transactionStore: state.transaction,
-        adminSiteInfoStore: state.adminSiteInfo
+        transactionStore: state.transaction
     }),
     actions
 )(CategoryDeleter);

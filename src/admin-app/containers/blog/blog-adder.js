@@ -3,6 +3,9 @@ import BlogForm from '../../../react-components/blog-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class BlogAdder extends Component {
 
@@ -44,7 +47,6 @@ class BlogAdder extends Component {
         const transaction = transactionStore.get(actionId);
         const errors = transaction ? transaction.get('errors') : {};
         const themes = themeStore.toArray().map(obj => obj.name);
-        console.log(themes);
 
         return (
             <BlogForm title="Create a New Blog"
@@ -77,7 +79,6 @@ class BlogAdder extends Component {
 
     _goToListPage ()
     {
-        const root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/blogs`);
     }
 
@@ -93,8 +94,7 @@ class BlogAdder extends Component {
 export default connect(
     state => ({
         transactionStore: state.transaction,
-        themeStore: state.theme,
-        adminSiteInfoStore: state.adminSiteInfo
+        themeStore: state.theme
     }),
     actions
 )(BlogAdder);

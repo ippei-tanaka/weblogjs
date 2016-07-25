@@ -3,6 +3,9 @@ import Confirmation from '../../../react-components/confirmation';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class BlogDeleter extends Component {
 
@@ -69,7 +72,6 @@ class BlogDeleter extends Component {
 
     _goToListPage ()
     {
-        const root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/blogs`);
     }
 
@@ -92,8 +94,7 @@ class BlogDeleter extends Component {
 export default connect(
     state => ({
         blogStore: state.blog,
-        transactionStore: state.transaction,
-        adminSiteInfoStore: state.adminSiteInfo
+        transactionStore: state.transaction
     }),
     actions
 )(BlogDeleter);

@@ -3,6 +3,9 @@ import Moment from 'moment';
 import List from '../../../react-components/list';
 import actions from '../../actions';
 import { connect } from 'react-redux';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class PostList extends Component {
 
@@ -16,12 +19,11 @@ class PostList extends Component {
 
     render ()
     {
-        const { postStore, categoryStore, blogStore, userStore, adminSiteInfoStore } = this.props;
+        const { postStore, categoryStore, blogStore, userStore } = this.props;
         const posts = postStore.toArray();
         const categoryList = categoryStore.toArray();
         const blogList = blogStore.toArray();
         const authorList = userStore.toArray();
-        const root = adminSiteInfoStore.get("webpageRootForAdmin");
 
         return <List title="Post List"
                      adderLocation={`${root}/posts/adder`}
@@ -146,8 +148,7 @@ export default connect(
         blogStore: state.blog,
         userStore: state.user,
         categoryStore: state.category,
-        transactionStore: state.transaction,
-        adminSiteInfoStore: state.adminSiteInfo
+        transactionStore: state.transaction
     }),
     actions
 )(PostList);

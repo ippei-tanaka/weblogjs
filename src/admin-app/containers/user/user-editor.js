@@ -3,6 +3,9 @@ import UserForm from '../../../react-components/user-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class UserEditor extends Component {
     constructor(props) {
@@ -32,12 +35,11 @@ class UserEditor extends Component {
     }
 
     render() {
-        const {params: {id}, userStore, transactionStore, adminSiteInfoStore} = this.props;
+        const {params: {id}, userStore, transactionStore} = this.props;
         const editedUser = userStore.get(id) || null;
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
         const values = Object.assign({}, editedUser, this.state.values);
-        const root = adminSiteInfoStore.get("webpageRootForAdmin");
 
         return editedUser ? (
             <div>
@@ -71,7 +73,6 @@ class UserEditor extends Component {
     }
 
     _goToListPage() {
-        const root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/users`);
     }
 
@@ -92,8 +93,7 @@ class UserEditor extends Component {
 export default connect(
     state => ({
         userStore: state.user,
-        transactionStore: state.transaction,
-        adminSiteInfoStore: state.adminSiteInfo
+        transactionStore: state.transaction
     }),
     actions
 )(UserEditor);

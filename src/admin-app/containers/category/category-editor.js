@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import CategoryForm from '../../../react-components/category-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
+import config from '../../../config';
+
+const root = config.getValue('adminSiteRoot');
 
 class CategoryEditor extends Component {
 
@@ -84,7 +86,6 @@ class CategoryEditor extends Component {
 
     _goToListPage ()
     {
-        const root = this.props.adminSiteInfoStore.get("webpageRootForAdmin");
         this.context.router.push(`${root}/categories`);
     }
 
@@ -107,8 +108,7 @@ class CategoryEditor extends Component {
 export default connect(
     state => ({
         categoryStore: state.category,
-        transactionStore: state.transaction,
-        adminSiteInfoStore: state.adminSiteInfo
+        transactionStore: state.transaction
     }),
     actions
 )(CategoryEditor);
