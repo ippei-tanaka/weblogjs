@@ -1,0 +1,267 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+@import url(https://fonts.googleapis.com/css?family=Hind:400,700);
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul, menu {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after {
+  content: '';
+  content: none; }
+
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+/* -------------------------------------------------------------
+  Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
+  By: Matthieu Aussaguel, http://www.mynameismatthieu.com, @matthieu_tweets
+
+  List of CSS3 Sass Mixins File to be @imported and @included as you need
+
+  The purpose of this library is to facilitate the use of CSS3 on different browsers avoiding HARD TO READ and NEVER
+  ENDING css files
+
+  note: All CSS3 Properties are being supported by Safari 5
+  more info: http://www.findmebyip.com/litmus/#css3-properties
+
+------------------------------------------------------------- */
+/*==================================
+ Variables
+===================================*/
+/*----------------------------
+ Font Base
+----------------------------*/
+/*----------------------------
+ Media Query
+----------------------------*/
+/*----------------------------
+ Utils
+----------------------------*/
+/*==================================
+ Base Classes
+===================================*/
+/*----------------------------
+ Text Style (Base Class)
+----------------------------*/
+.text-style, body {
+  font-family: "Hind", sans-serif;
+  color: #000000;
+  font-size: 16px;
+  line-height: 1.2; }
+
+/*----------------------------
+ Link Style (Base Class)
+----------------------------*/
+.link-style, .module-name-and-number-list .m-nan-link, .module-pagination .m-pgn-link, .module-post .m-pst-link, .module-post .m-pst-author-link,
+.module-post .m-pst-category-link,
+.module-post .m-pst-tag-link, .module-article a {
+  font-size: 100%;
+  color: #7cb022;
+  text-decoration: none; }
+  .link-style:hover, .module-name-and-number-list .m-nan-link:hover, .module-pagination .m-pgn-link:hover, .module-post .m-pst-link:hover, .module-post .m-pst-author-link:hover,
+  .module-post .m-pst-category-link:hover,
+  .module-post .m-pst-tag-link:hover, .module-article a:hover {
+    filter: alpha(opacity=70);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+    -webkit-opacity: 0.7;
+    -khtml-opacity: 0.7;
+    -moz-opacity: 0.7;
+    -ms-opacity: 0.7;
+    -o-opacity: 0.7;
+    opacity: 0.7; }
+
+/*==================================
+ Modules
+===================================*/
+/*----------------------------
+ Header Footer Layout
+----------------------------*/
+.module-header-footer-layout {
+  margin: 0 auto;
+  max-width: 880px; }
+  .module-header-footer-layout .m-hfl-header {
+    padding: 60px 40px 40px;
+    position: relative;
+    text-align: center; }
+  .module-header-footer-layout .m-hfl-header-link {
+    font-size: 40px;
+    color: #000000;
+    text-decoration: none; }
+    .module-header-footer-layout .m-hfl-header-link:hover {
+      filter: alpha(opacity=70);
+      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+      -webkit-opacity: 0.7;
+      -khtml-opacity: 0.7;
+      -moz-opacity: 0.7;
+      -ms-opacity: 0.7;
+      -o-opacity: 0.7;
+      opacity: 0.7; }
+  .module-header-footer-layout .m-hfl-footer {
+    font-size: 14px;
+    padding: 40px 40px 40px;
+    text-align: right; }
+
+/*----------------------------
+ Blog Layout
+----------------------------*/
+.module-blog-layout .m-bll-main {
+  width: 100%; }
+  @media (max-width: 699px) {
+    .module-blog-layout .m-bll-main {
+      border-bottom: 0; } }
+
+/*----------------------------
+ Section
+----------------------------*/
+.module-section {
+  padding: 45px 40px 50px; }
+  .module-section:last-child {
+    border-bottom: 0; }
+  .module-section.m-sct-short-section {
+    padding: 20px 40px; }
+
+/*----------------------------
+ Error Page
+----------------------------*/
+.module-error-page {
+  padding: 100px 40px;
+  font-size: 26px;
+  background-color: #f0f0f0; }
+
+/*----------------------------
+ Post List
+----------------------------*/
+.module-post-list .m-psl-post-section {
+  border-bottom: 1px solid #cccccc; }
+  .module-post-list .m-psl-post-section:last-child {
+    border-bottom: 0; }
+
+/*----------------------------
+ Name And Number List
+----------------------------*/
+.module-name-and-number-list .m-nan-title {
+  margin-bottom: 15px;
+  color: #000000; }
+
+.module-name-and-number-list .m-nan-list-item {
+  margin-bottom: 10px; }
+  .module-name-and-number-list .m-nan-list-item:last-child {
+    margin-bottom: 0; }
+
+.module-name-and-number-list .m-nan-link {
+  white-space: nowrap; }
+  .module-name-and-number-list .m-nan-link:hover {
+    filter: alpha(opacity=70);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+    -webkit-opacity: 0.7;
+    -khtml-opacity: 0.7;
+    -moz-opacity: 0.7;
+    -ms-opacity: 0.7;
+    -o-opacity: 0.7;
+    opacity: 0.7; }
+
+/*----------------------------
+ pagination
+----------------------------*/
+.module-pagination .m-pgn-list {
+  display: flex;
+  justify-content: space-around; }
+
+.module-pagination .m-pgn-list-item {
+  display: inline-block;
+  width: 100%; }
+
+.module-pagination .m-pgn-prev {
+  text-align: left; }
+
+.module-pagination .m-pgn-next {
+  text-align: right; }
+
+.module-pagination .m-pgn-link {
+  white-space: nowrap;
+  font-size: 16px; }
+  .module-pagination .m-pgn-link:hover {
+    filter: alpha(opacity=70);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+    -webkit-opacity: 0.7;
+    -khtml-opacity: 0.7;
+    -moz-opacity: 0.7;
+    -ms-opacity: 0.7;
+    -o-opacity: 0.7;
+    opacity: 0.7; }
+
+/*----------------------------
+ Post
+----------------------------*/
+.module-post .m-pst-title {
+  font-size: 36px;
+  margin-bottom: 44px; }
+
+.module-post .m-pst-content {
+  margin-bottom: 40px; }
+
+.module-post .m-pst-date,
+.module-post .m-pst-author,
+.module-post .m-pst-category,
+.module-post .m-pst-tag-container {
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: block; }
+
+.module-post .m-pst-tags {
+  display: inline-block; }
+
+.module-post .m-pst-tag {
+  display: inline-block;
+  margin-right: 5px; }
+  .module-post .m-pst-tag:last-child {
+    margin-right: 0; }
+
+/*----------------------------
+ Article
+----------------------------*/
+.module-article {
+  font-size: 18px;
+  line-height: 1.5em; }
+  .module-article h1 {
+    font-size: 35px;
+    margin-bottom: 35px; }
+  .module-article h2 {
+    font-size: 30px;
+    margin-bottom: 30px; }
+  .module-article h3 {
+    font-size: 27px;
+    margin-bottom: 27px; }
+  .module-article h4 {
+    font-size: 24px;
+    margin-bottom: 24px; }
+  .module-article h5,
+  .module-article h6 {
+    font-size: 20px;
+    margin-bottom: 20px; }
+  .module-article p {
+    margin-bottom: 15px; }

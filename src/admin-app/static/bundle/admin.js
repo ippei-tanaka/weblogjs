@@ -64044,10 +64044,6 @@ webpackJsonp([0,1],[
 	                    label: "Theme"
 	                },
 	
-	                script_snippet: {
-	                    label: "Script Snippet"
-	                },
-	
 	                created_date: {
 	                    label: "Created Date",
 	                    stringify: function stringify(value) {
@@ -64332,13 +64328,6 @@ webpackJsonp([0,1],[
 	                    );
 	                })
 	            )
-	        ),
-	        _react2.default.createElement(
-	            _form.FieldSet,
-	            { label: 'Script Snippet',
-	                error: errors.script_snippet },
-	            _react2.default.createElement(_form.Textarea, { value: values.script_snippet,
-	                onChange: _onChange("script_snippet") })
 	        ),
 	        _react2.default.createElement(
 	            _form.ButtonList,
@@ -65276,6 +65265,8 @@ webpackJsonp([0,1],[
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
+	var _reactRouter = __webpack_require__(470);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = function (_ref) {
@@ -65318,7 +65309,7 @@ webpackJsonp([0,1],[
 	            { className: 'm-pst-author' },
 	            'Written by ',
 	            _react2.default.createElement(
-	                Link,
+	                _reactRouter.Link,
 	                { className: 'm-pst-author-link',
 	                    to: root + 'author/' + author.slug },
 	                author.display_name
@@ -65329,7 +65320,7 @@ webpackJsonp([0,1],[
 	            { className: 'm-pst-category' },
 	            'Category: ',
 	            _react2.default.createElement(
-	                Link,
+	                _reactRouter.Link,
 	                { className: 'm-pst-category-link',
 	                    to: root + 'category/' + category.slug },
 	                category.name
@@ -65346,7 +65337,7 @@ webpackJsonp([0,1],[
 	                        'li',
 	                        { key: post._id + '_' + tag, className: 'm-pst-tag' },
 	                        _react2.default.createElement(
-	                            Link,
+	                            _reactRouter.Link,
 	                            { className: 'm-pst-tag-link',
 	                                to: root + 'tag/' + tag },
 	                            '#',

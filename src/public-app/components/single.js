@@ -72,5 +72,7 @@ const buildTitle = () => "";
 //`${categoryName}${tagName}${blogName}`;
 
 export default ({blog, categories, post}) => (
-    <PublicPost blog={blog} categories={categories} post={post} root={root}/>
+    <section className="module-section">
+        <PublicPost blog={blog} categories={categories} post={post} root={root}/>
+    </section>
 );
