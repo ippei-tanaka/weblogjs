@@ -64058,8 +64058,13 @@ webpackJsonp([0,1],[
 	
 	        var _this = (0, _possibleConstructorReturn3.default)(this, Object.getPrototypeOf(PostAdder).call(this, props));
 	
+	        var loginUser = props.authStore.get('user');
+	
 	        _this.state = {
-	            values: { published_date: new Date() },
+	            values: {
+	                published_date: new Date(),
+	                author_id: loginUser._id
+	            },
 	            actionId: null
 	        };
 	        return _this;
@@ -64148,6 +64153,7 @@ webpackJsonp([0,1],[
 	
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
+	        authStore: state.auth,
 	        userStore: state.user,
 	        categoryStore: state.category,
 	        transactionStore: state.transaction
@@ -64185,7 +64191,6 @@ webpackJsonp([0,1],[
 	    var categoryMap = _ref.categoryMap;
 	    var authorList = _ref.authorList;
 	    var authorMap = _ref.authorMap;
-	    var blogList = _ref.blogList;
 	    var _onChange2 = _ref.onChange;
 	    var onSubmit = _ref.onSubmit;
 	    var onClickBackButton = _ref.onClickBackButton;
@@ -64592,6 +64597,7 @@ webpackJsonp([0,1],[
 	
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
+	        authStore: state.auth,
 	        postStore: state.post,
 	        userStore: state.user,
 	        categoryStore: state.category,
