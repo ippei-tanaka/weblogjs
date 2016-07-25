@@ -10,7 +10,6 @@ export default function PostForm ({
     categoryMap,
     authorList,
     authorMap,
-    blogList,
     onChange,
     onSubmit,
     onClickBackButton,
@@ -51,7 +50,6 @@ export default function PostForm ({
                     <Textarea value={values.content}
                               onChange={_onChange("content")}/>
             </FieldSet>
-
 
             <div className="m-dte-preview">
                 <PublicPost post={values} categories={categoryMap} authors={authorMap}/>

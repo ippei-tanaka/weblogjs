@@ -117,6 +117,7 @@ class PostEditor extends Component {
 
 export default connect(
     state => ({
+        authStore: state.auth,
         postStore: state.post,
         userStore: state.user,
         categoryStore: state.category,

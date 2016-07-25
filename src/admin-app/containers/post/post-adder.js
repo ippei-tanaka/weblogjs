@@ -13,8 +13,13 @@ class PostAdder extends Component {
     {
         super(props);
 
+        const loginUser = props.authStore.get('user');
+
         this.state = {
-            values: {published_date: new Date()},
+            values: {
+                published_date: new Date(),
+                author_id: loginUser._id
+            },
             actionId: null
         }
     }
@@ -100,6 +105,7 @@ class PostAdder extends Component {
 
 export default connect(
     state => ({
+        authStore: state.auth,
         userStore: state.user,
         categoryStore: state.category,
         transactionStore: state.transaction
