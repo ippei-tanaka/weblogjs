@@ -36,7 +36,7 @@ Object.defineProperty(config, 'adminJsFileName', {
 });
 */
 
-export default Object.freeze({
+const _exports = Object.freeze({
 
     setValues: (values) =>
     {
@@ -60,3 +60,6 @@ export default Object.freeze({
         return config[key];
     }
 });
+
+export default _exports;
+module.exports = _exports;
