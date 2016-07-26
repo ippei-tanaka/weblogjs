@@ -2,34 +2,37 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
-import config from './config';
-import adminApiApp from './admin-api-app/app';
-import adminSiteApp from './admin-app/app';
-import publicSiteApp from './public-app/app';
-import passportManager from './passport-manager';
-import UserModel from './models/user-model';
-import SettingModel from './models/setting-model';
 import co from 'co';
 
-const app = express();
+export const init = (values) => {
+    const config = require('./config');
+    config.setValues(values);
+};
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
-app.use(expressSession({
-    secret: config.getValue('sessionSecret'),
-    resave: false,
-    saveUninitialized: false
-}));
-
-app.use(passportManager.passport.initialize());
-app.use(passportManager.passport.session());
-app.use(config.getValue('adminApiRoot'), adminApiApp);
-app.use(config.getValue('adminSiteRoot'), adminSiteApp);
-app.use(config.getValue('publicSiteRoot'), publicSiteApp);
-
-co(function* ()
+export const start = () => co(function* ()
 {
+    const config = require('./config');
+    const adminApiApp = require('./admin-api-app/app');
+    const adminSiteApp = require('./admin-app/app');
+    const publicSiteApp = require('./public-app/app');
+    const passportManager = require('./passport-manager');
+    const UserModel = require('./models/user-model');
+    const app = express();
+
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({extended: false}));
+    app.use(cookieParser());
+    app.use(expressSession({
+        secret: config.getValue('sessionSecret'),
+        resave: false,
+        saveUninitialized: false
+    }));
+
+    app.use(passportManager.passport.initialize());
+    app.use(passportManager.passport.session());
+    app.use(config.getValue('adminApiRoot'), adminApiApp);
+    app.use(config.getValue('adminSiteRoot'), adminSiteApp);
+    app.use(config.getValue('publicSiteRoot'), publicSiteApp);
 
     // Create an admin user if it doesn't exist.
 

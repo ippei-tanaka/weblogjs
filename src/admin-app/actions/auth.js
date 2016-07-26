@@ -21,8 +21,8 @@ import config from '../../config';
 
 //----------------------------
 
-const { webProtocol, webHost, webPort, adminApiRoot } = config.getValues();
-const API_ROOT = `${webProtocol}://${webHost}:${webPort}${adminApiRoot}`;
+const { adminApiRoot } = config.getValues();
+const API_ROOT = adminApiRoot;
 
 //----------------------------
 
