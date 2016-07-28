@@ -4,6 +4,8 @@ import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
 import co from 'co';
 
+let server;
+
 export const init = (values) => {
     const config = require('./config');
     config.setValues(values);
@@ -61,11 +63,29 @@ export const start = () => co(function* ()
 
     // Start a web server
 
-    app.listen(
-        config.getValue('webPort'),
-        config.getValue('webHost')
-    );
+    const promise = new Promise((resolve, reject) => {
+        server = app.listen(
+            config.getValue('webPort'),
+            config.getValue('webHost'),
+            (e) => {
+                if (e) return reject(e);
+                resolve();
+            }
+        );
+    });
 
     console.log(`WeblogJS started listening ${config.getValue('webHost')}:${config.getValue('webPort')}`);
 
+    return yield promise;
+
 }).catch(e => console.error(e));
+
+export const stop = () => new Promise((resolve, reject) =>
+{
+    if (server) {
+        server.close((e) => {
+            if (e) return reject(e);
+            resolve();
+        });
+    }
+});

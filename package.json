@@ -2,7 +2,7 @@
   "name": "weblogjs",
   "version": "0.6.1",
   "description": "a library for weblogs",
-  "main": "./lib",
+  "main": "./lib/app.js",
   "scripts": {
     "compile": "NODE_ENV=production npm-run-all compile:*",
     "compile:clear": "rimraf lib",
@@ -18,8 +18,9 @@
     "watch-brs:admin-css": "npm run bundle-brs:admin-css && npm run bundle-brs:admin-css -- -w",
     "watch-brs:public-css": "npm run bundle-brs:public-css && npm run bundle-brs:public-css -- -w",
     "clear-brs": "rimraf ./src/admin-app/static/bundle && rimraf ./src/public-app/static/bundle",
+    "build": "npm run bundle-brs && npm run compile",
     "start-dev": "concurrently -k -r \"npm run watch-brs\" \"nodemon ./scripts/start-dev --exec babel-node\"",
-    "start": "NODE_ENV=production npm run bundle-brs && npm run compile && node ./scripts/start",
+    "start": "NODE_ENV=production npm run build && node ./scripts/start",
     "test": "npm run build && mocha $(find test -name '*.test.js') --compilers js:babel-core/register",
     "prepublish": "NODE_ENV=production npm run bundle-brs"
   },
