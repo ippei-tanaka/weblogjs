@@ -101,15 +101,22 @@ router.get(/^(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?(\/|\/page\/[0
         totalPages = Math.ceil(sum.size / setting.posts_per_page);
     }
 
+    const categoryName = category ? category.name + " - " : "";
+    const tagName = tag ? tag + " - " : "";
+    const authorName = user ? user.display_name + " - " : "";
+
+    const categories = yield CategoryModel.findMany();
+
     const props = {
-        categories: {},
+        categories: {},//categories.map(m => m.values),
         posts: postModels.map(m => m.values),
         page,
-        totalPages
+        totalPages,
+        title: `${authorName}${categoryName}${tagName}${setting.name}`
     };
 
     response.type('html').status(OK).send(renderHtml(
-        <Layout {...props} title="Multi" blogName={setting.name} theme={setting.theme}>
+        <Layout {...props} blogName={setting.name} theme={setting.theme}>
             <Multiple {...props} />
         </Layout>
     ));
@@ -135,13 +142,16 @@ router.get(/^\/post\/([^/]+)\/?$/, (request, response, next) => co(function* ()
 
     const setting = (yield SettingModel.getSetting()).values;
 
+    const values = post.values;
+
     const props = {
         categories: {},
-        post: post.values
+        post: values,
+        title: `${values.title} - ${setting.name}`
     };
 
     response.type('html').status(OK).send(renderHtml(
-        <Layout {...props} title="Single" blogName={setting.name} theme={setting.theme}>
+        <Layout {...props} blogName={setting.name} theme={setting.theme}>
             <Single {...props} />
         </Layout>
     ));
