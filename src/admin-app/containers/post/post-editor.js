@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PostForm from '../../../react-components/post-form';
+import PostForm from '../../components/post-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';

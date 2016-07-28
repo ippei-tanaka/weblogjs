@@ -1,5 +1,5 @@
 import React from "react";
-import config from "../config";
+import config from "../../config";
 import path from 'path';
 
 const root = config.getValue('adminSiteRoot');

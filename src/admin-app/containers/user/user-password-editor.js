@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UserPasswordForm from '../../../react-components/user-password-form';
+import UserPasswordForm from '../../components/user-password-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';

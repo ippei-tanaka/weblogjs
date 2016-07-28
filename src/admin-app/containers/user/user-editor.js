@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UserForm from '../../../react-components/user-form';
+import UserForm from '../../components/user-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';

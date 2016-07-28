@@ -1,5 +1,5 @@
 import React from 'react';
-import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Title, Form } from './form';
+import { FieldSet, SubmitButton, Button, ButtonList, Input, Title, Form } from '../../react-components/form';
 
 export default function CategoryForm({
     title,

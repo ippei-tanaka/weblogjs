@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Moment from 'moment';
 import { Link } from 'react-router';
 
 const List = ({ title, adderLocation, fields, models, editorLocationBuilder, deleterLocationBuilder }) => (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, ErrorMessage, Label } from './form';
+import { Input, Label } from '../../react-components/form';
 
 const trimValue = (field, onChange) => {
     return value => onChange({field, value: value.trim()});
