@@ -17,10 +17,6 @@ const paginationLinkBuilder = ({category, tag}) =>
     }
 };
 
-const buildTitle = () => "";
-//`${categoryName}${tagName}${blogName}`;
-
-
 export default ({categories, category, tag, posts, page, totalPages}) => (
     <div>
         {posts.map(post =>
