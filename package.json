@@ -24,6 +24,9 @@
     "test": "npm run build && mocha $(find test -name '*.test.js') --compilers js:babel-core/register",
     "prepublish": "NODE_ENV=production npm run bundle-brs"
   },
+  "bin": {
+    "weblogjs": "./lib/scripts/start.js"
+  },
   "author": {
     "name": "Ippei Tanaka",
     "email": "tanaka.ippei.jp@gmail.com",
