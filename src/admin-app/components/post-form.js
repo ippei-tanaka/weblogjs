@@ -1,6 +1,6 @@
 import React from 'react';
-import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Checkbox, Textarea, Datetime, TagList, Title, Form } from './form';
-import PublicPost from './public-post';
+import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Checkbox, Textarea, Datetime, TagList, Title, Form } from '../../react-components/form';
+import PublicPost from '../../react-components/public-post';
 
 export default function PostForm ({
     title,

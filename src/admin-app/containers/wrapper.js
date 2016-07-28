@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import AdminMenu from '../../react-components/admin-menu';
+import AdminMenu from '../components/admin-menu';
 import { connect } from 'react-redux';
 import actions from '../actions';
 import { LOGOUT_FAILED } from '../constants/auth-status';

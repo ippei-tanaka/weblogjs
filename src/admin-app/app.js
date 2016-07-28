@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { RouterContext } from 'react-router';
 import reactRouteFind from '../react-router/react-route-find';
 import adminRoutes from './routes';
-import Layout from './layout';
+import Layout from './components/layout';
 import createStore from '../redux-store/create-store';
 import reducers from './reducers/index';
 import {OK, FOUND, NOT_FOUND, ERROR} from '../constants/status-codes';

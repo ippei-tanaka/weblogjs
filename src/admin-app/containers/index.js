@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import LoginForm from '../../react-components/login-form';
-import AdminMenu from '../../react-components/admin-menu';
+import LoginForm from '../components/login-form';
+import AdminMenu from '../components/admin-menu';
 import Loader from '../../react-components/loader';
 import { Link, IndexLink } from 'react-router';
 import { connect } from 'react-redux';

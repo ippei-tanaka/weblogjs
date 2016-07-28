@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CategoryForm from '../../../react-components/category-form';
+import CategoryForm from '../../components/category-form';
 import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
