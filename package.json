@@ -25,7 +25,7 @@
     "prepublish": "NODE_ENV=production npm run bundle-brs"
   },
   "bin": {
-    "weblogjs": "./lib/scripts/start.js"
+    "weblogjs": "./scripts/start.js"
   },
   "author": {
     "name": "Ippei Tanaka",
