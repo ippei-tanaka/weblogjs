@@ -3,15 +3,17 @@ import {Router} from "express";
 import React from "react";
 import ReactDOMServer from 'react-dom/server';
 import Layout from "./components/layout";
-import Multiple from "./components/multiple";
-import Single from "./components/single";
+import Posts from "./components/posts";
 import Message from "./components/message";
+import CategoryList from "./components/category-list";
+import Pagination from "./components/pagination";
 import Models from '../models';
 import {OK, NOT_FOUND, ERROR} from '../constants/status-codes';
 import UserModel from '../models/user-model';
 import CategoryModel from '../models/category-model';
 import PostModel from '../models/post-model';
 import SettingModel from '../models/setting-model';
+import urlResolver from "../utilities/url-resolver";
 
 const parseParam = (str, defaultValue) =>
 {
@@ -31,9 +33,54 @@ const errorHandler = (response) => co.wrap(function* (e)
 
     response.type('html').status(ERROR).send(renderHtml(
         <Layout title="Error" blogName={setting.name} theme={setting.theme}>
-            <Message message={isProduction ? "Error Occurred." : e.message} />
+            <Message message={isProduction ? "Error Occurred." : e.message}/>
         </Layout>
     ));
+});
+
+const pageLinkBuilder = ({page, author, category, tag}) =>
+{
+    if (!Number.isInteger(page))
+    {
+        return null;
+    }
+
+    const authorQuery = author ? `author/${author.display_name}` : "";
+    const categoryQuery = category ? `category/${category.name}` : "";
+    const tagQuery = tag ? `tag/${tag}` : "";
+    const pageQuery = page > 1 ? `page/${page}` : "";
+
+    return urlResolver.resolve(authorQuery, categoryQuery, tagQuery, pageQuery);
+};
+
+const getUsedCategories = () => co(function* ()
+{
+    const categorySums = yield PostModel.aggregate([
+        {
+            $match: {
+                category_id: {$ne: null},
+                published_date: {$lt: new Date()},
+                is_draft: {$ne: true}
+            }
+        },
+        {
+            $group: {
+                _id: "$category_id",
+                size: {$sum: 1}
+            }
+        }
+    ]);
+
+    const categoryModels = yield CategoryModel.findMany({
+        query: {_id: {$in: categorySums.map(obj => obj._id)}}
+    });
+
+    return categoryModels.map((model) =>
+    {
+        const values = model.values;
+        const sumObj = categorySums.find(obj => obj._id.equals(values._id));
+        return Object.assign({}, values, {size: sumObj.size});
+    });
 });
 
 const router = Router();
@@ -65,11 +112,11 @@ router.get(/^(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?(\/|\/page\/[0
     }
 
     const userModel = yield UserModel.findOne({slug: authorSlug});
-    const user = userModel ? userModel.values : null;
+    const author = userModel ? userModel.values : null;
 
-    if (user)
+    if (author)
     {
-        _query.author_id = user._id;
+        _query.author_id = author._id;
     }
 
     const setting = (yield SettingModel.getSetting()).values;
@@ -103,23 +150,23 @@ router.get(/^(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?(\/|\/page\/[0
 
     const categoryName = category ? category.name + " - " : "";
     const tagName = tag ? tag + " - " : "";
-    const authorName = user ? user.display_name + " - " : "";
-
-    const categories = yield CategoryModel.findMany();
-
-    const props = {
-        categories: {},//categories.map(m => m.values),
-        posts: postModels.map(m => m.values),
-        page,
-        totalPages,
-        title: `${authorName}${categoryName}${tagName}${setting.name}`
-    };
+    const authorName = author ? author.display_name + " - " : "";
+    const prevPage = 1 <= page - 1 ? page - 1 : null;
+    const nextPage = page + 1 <= totalPages ? page + 1 : null;
 
     response.type('html').status(OK).send(renderHtml(
-        <Layout {...props} blogName={setting.name} theme={setting.theme}>
-            <Multiple {...props} />
+        <Layout title={`${authorName}${categoryName}${tagName}${setting.name}`}
+                blogName={setting.name}
+                theme={setting.theme}
+                menu={<CategoryList categories={yield getUsedCategories()}/>}>
+            <Posts posts={postModels.map(m => m.values)}/>
+            <Pagination prevPageLink={pageLinkBuilder({page: prevPage, category, author, tag})}
+                        nextPageLink={pageLinkBuilder({page: nextPage, category, author, tag})}
+            />
         </Layout>
     ));
+
+    response.type('html').status(OK).send("test");
 
 }).catch(errorHandler(response)));
 
@@ -144,15 +191,13 @@ router.get(/^\/post\/([^/]+)\/?$/, (request, response, next) => co(function* ()
 
     const values = post.values;
 
-    const props = {
-        categories: {},
-        post: values,
-        title: `${values.title} - ${setting.name}`
-    };
-
     response.type('html').status(OK).send(renderHtml(
-        <Layout {...props} blogName={setting.name} theme={setting.theme}>
-            <Single {...props} />
+        <Layout title={`${values.title} - ${setting.name}`}
+                blogName={setting.name}
+                theme={setting.theme}
+                menu={<CategoryList categories={yield getUsedCategories()}/>}
+        >
+            <Posts posts={[values]}/>
         </Layout>
     ));
 

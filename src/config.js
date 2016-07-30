@@ -12,8 +12,6 @@ const initialConfig = Object.freeze({
     adminSiteRoot: "/admin",
     adminSiteStaticPaths: [],
 
-    publicApiRoot: "/public-api",
-
     publicSiteRoot: "/",
     publicSiteStaticPaths: [],
 
