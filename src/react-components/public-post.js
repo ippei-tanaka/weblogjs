@@ -4,12 +4,16 @@ import Moment from 'moment';
 export default ({
     root,
     post,
-    categories,
-    authors
+    categories = {},
+    authors = {}
 }) =>
 {
-    const category = categories && post.category_id && categories[post.category_id] ? categories[post.category_id] : null;
-    const author = authors && post.author_id && authors[post.author_id] ? authors[post.author_id] : null;
+    const category = Array.isArray(categories)
+                        ? categories.find(c => String(c._id) === String(post.category_id))
+                        : categories[post.category_id];
+    const author = Array.isArray(authors)
+                        ? authors.find(a => String(a._id) === String(post.author_id))
+                        : authors[post.author_id];
 
     return (
         <div className="module-post">
@@ -30,8 +34,7 @@ export default ({
             <date className="m-pst-date">Published on {Moment(post.published_date).format("MMM DD, YYYY")}</date>
 
             {author ?
-                <div className="m-pst-author">Written by
-                    <a className="m-pst-author-link"
+                <div className="m-pst-author">Written by <a className="m-pst-author-link"
                        href={`${root}author/${author.slug}`}>{author.display_name}</a>
                 </div> : null
             }

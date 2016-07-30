@@ -45,8 +45,8 @@ const pageLinkBuilder = ({page, author, category, tag}) =>
         return null;
     }
 
-    const authorQuery = author ? `author/${author.display_name}` : "";
-    const categoryQuery = category ? `category/${category.name}` : "";
+    const authorQuery = author ? `author/${author.slug}` : "";
+    const categoryQuery = category ? `category/${category.slug}` : "";
     const tagQuery = tag ? `tag/${tag}` : "";
     const pageQuery = page > 1 ? `page/${page}` : "";
 
@@ -153,13 +153,19 @@ router.get(/^(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?(\/|\/page\/[0
     const authorName = author ? author.display_name + " - " : "";
     const prevPage = 1 <= page - 1 ? page - 1 : null;
     const nextPage = page + 1 <= totalPages ? page + 1 : null;
+    const categories = yield getUsedCategories();
+    const authors = (yield UserModel.findMany()).map(m => m.values);
+    const menu = <CategoryList categories={categories}/>;
 
     response.type('html').status(OK).send(renderHtml(
         <Layout title={`${authorName}${categoryName}${tagName}${setting.name}`}
                 blogName={setting.name}
                 theme={setting.theme}
-                menu={<CategoryList categories={yield getUsedCategories()}/>}>
-            <Posts posts={postModels.map(m => m.values)}/>
+                menu={menu}>
+            <Posts posts={postModels.map(m => m.values)}
+                   categories={categories}
+                   authors={authors}
+            />
             <Pagination prevPageLink={pageLinkBuilder({page: prevPage, category, author, tag})}
                         nextPageLink={pageLinkBuilder({page: nextPage, category, author, tag})}
             />
