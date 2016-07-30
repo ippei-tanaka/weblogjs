@@ -1,9 +1,8 @@
 import React from 'react';
 import PublicPagination from "../../react-components/public-pagination";
 import config from "../../config";
-import urlResolver from "../../utilities/url-resolver";
 
-const root = urlResolver.resolve(config.getValue('publicSiteRoot')) + "/";
+const root = config.getValue('publicSiteRoot');
 
 export default ({prevPageLink = null, nextPageLink = null}) =>
 {
