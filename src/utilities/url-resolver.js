@@ -1,8 +1,10 @@
 const resolve = (base, ...args) =>
 {
-    base = base.replace(/\/+$/, '');
+    base = base.replace(/^\s+/, "");
 
-    let paths = [];
+    const isAbsolute = base[0] === "/";
+
+    let paths = base.split('/');
 
     for (const arg of args)
     {
@@ -11,9 +13,11 @@ const resolve = (base, ...args) =>
 
     const _paths = [];
 
-    for (const path of paths)
+    for (let path of paths)
     {
-        if (path === "")
+        path = path.replace(/^\s+/, "").replace(/\s+$/, "");
+
+        if (path === "" || path === ".")
         {
             continue;
         }
@@ -21,7 +25,7 @@ const resolve = (base, ...args) =>
         _paths.push(path);
     }
 
-    return base + _paths.join('/');
+    return (isAbsolute ? '/' : '') +_paths.join('/');
 };
 
 export default Object.freeze({resolve});
