@@ -74,7 +74,9 @@ export const start = () => co(function* ()
         );
     });
 
-    console.log(`WeblogJS started listening ${config.getValue('webHost')}:${config.getValue('webPort')}`);
+    console.log(`WeblogJS started.`);
+    console.log(`Public Site: http://${config.getValue('webHost')}:${config.getValue('webPort')}${config.getValue('publicSiteRoot')}`);
+    console.log(`Admin Site: http://${config.getValue('webHost')}:${config.getValue('webPort')}${config.getValue('adminSiteRoot')}`);
 
     return yield promise;
 
