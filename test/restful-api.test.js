@@ -2,7 +2,7 @@
 
 import co from 'co';
 import {expect} from 'chai';
-import httpRequest from './lib/http-request';
+import httpRequest from './http-request';
 import {mongoDriver, mongoDbBaseOperator} from 'simple-odm';
 
 const weblogjs = require('../lib/app');
