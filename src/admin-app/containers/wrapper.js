@@ -5,7 +5,10 @@ import { connect } from 'react-redux';
 import actions from '../actions';
 import { LOGOUT_FAILED } from '../constants/auth-status';
 import config from '../../config';
+import urlResolver from '../../utilities/url-resolver';
 
+const root = config.getValue('adminSiteRoot');
+const publicRoot = config.getValue('publicSiteRoot');
 const failedToLogout = <div>Failed to log out.</div>;
 
 class AdminWrapper extends Component {
@@ -18,17 +21,23 @@ class AdminWrapper extends Component {
         }
     }
 
+    componentDidMount() {
+        this.props.loadSetting();
+    }
+
     render() {
         const { mobileMenuVisible } = this.state;
-        const { authStore, children } = this.props;
+        const { authStore, children, settingStore } = this.props;
         const authStatus = authStore.get('status');
         const content = authStatus !== LOGOUT_FAILED ? children : failedToLogout;
+        const theme = settingStore ? settingStore.theme : null;
 
         return (
             <div className="module-home-page">
+                {theme && <link href={urlResolver.resolve(publicRoot, `bundle/themes/${theme}.css`)} media="screen" rel="stylesheet"/>}
                 <div className="m-hmp-menu-container">
                     <AdminMenu
-                        adminRoot={config.getValue('adminSiteRoot')}
+                        adminRoot={root}
                         onLinkClick={this._onMenuButtonClick.bind(this)}
                         onLogoutClick={this._onLogoutClick.bind(this)}
                         onToggleClick={this._onMenuToggle.bind(this)}
@@ -76,7 +85,8 @@ class AdminWrapper extends Component {
 
 export default connect(
     state => ({
-        authStore: state.auth
+        authStore: state.auth,
+        settingStore: state.setting
     }),
     actions
 )(AdminWrapper);

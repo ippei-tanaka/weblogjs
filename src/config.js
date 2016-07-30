@@ -7,12 +7,8 @@ const initialConfig = Object.freeze({
     webHost: "localhost",
     webPort: 8080,
 
-    adminApiRoot: "/admin-api",
-
-    adminSiteRoot: "/admin",
     adminSiteStaticPaths: [],
 
-    publicSiteRoot: "/",
     publicSiteStaticPaths: [],
 
     sessionSecret: "sdnIdjSe2AE2SADfD",
@@ -25,20 +21,29 @@ const initialConfig = Object.freeze({
 
 const config = Object.assign({}, initialConfig);
 
-/*
-Object.defineProperty(config, 'adminJsFileName', {
-    get: function ()
-    {
-        return this.jsFileName.replace(/\[name]/g, this.adminFileNameBase);
-    }
+Object.defineProperty(config, 'adminApiRoot', {
+    get: () => "/admin-api"
 });
-*/
+
+Object.defineProperty(config, 'adminSiteRoot', {
+    get: () => "/admin"
+});
+
+Object.defineProperty(config, 'publicSiteRoot', {
+    get: () => "/"
+});
 
 const _exports = Object.freeze({
 
     setValues: (values) =>
     {
-        Object.assign(config, values);
+        for (const key of Object.keys(values))
+        {
+            if (config[key] !== undefined)
+            {
+                config[key] = values[key];
+            }
+        }
     },
 
     getValues: () =>
