@@ -5,7 +5,7 @@ const argv = minimist(process.argv.slice(2));
 delete argv._;
 
 weblogjs.init({
-    publicSiteRoot: "/test/"
+    webPort: 3000
 });
 
 weblogjs.start();
