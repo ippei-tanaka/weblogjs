@@ -1,17 +1,16 @@
 import React from 'react';
-import PublicCategoryList from '../../react-components/public-category-list';
 import config from "../../config";
-import path from 'path';
+import urlResolver from "../../utilities/url-resolver";
 
-const root = config.getValue('publicSiteRoot');
+const root = urlResolver.resolve(config.getValue('publicSiteRoot')) + "/";
 
-export default ({children, blogName = "", categories = {}, title = "", theme}) => (
+export default ({children, blogName = "", title = "", theme, menu}) => (
     <html lang="en">
     <head>
         <meta charSet="utf-8"/>
         <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link href={path.resolve(root, `bundle/themes/${theme}.css`)} media="screen" rel="stylesheet"/>
+        <link href={`${root}bundle/themes/${theme}.css`} media="screen" rel="stylesheet"/>
         <title>{title}</title>
     </head>
     <body>
@@ -24,11 +23,11 @@ export default ({children, blogName = "", categories = {}, title = "", theme}) =
                 <div className="m-bll-main">
                     {children}
                 </div>
-                <aside className="m-bll-sidebar">
-                    <section className="module-section">
-                        <PublicCategoryList categories={categories} rootDir={root} />
-                    </section>
-                </aside>
+                {menu && (
+                    <aside className="m-bll-menu">
+                        {menu}
+                    </aside>
+                )}
             </div>
         </div>
         <footer className="m-hfl-footer">

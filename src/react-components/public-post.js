@@ -1,6 +1,5 @@
 import React from 'react';
 import Moment from 'moment';
-import { Link } from 'react-router';
 
 export default ({
     root,
@@ -15,8 +14,12 @@ export default ({
     return (
         <div className="module-post">
 
-            <h2 className="m-pst-title"><a className="m-pst-link"
-                                           href={`${root}post/${post.slug}`}>{post.title}</a></h2>
+            <h2 className="m-pst-title">
+                <a className="m-pst-link"
+                   href={`${root}post/${post.slug}`}>
+                    {post.title}
+                </a>
+            </h2>
 
             <div className="m-pst-content">
                 <article className="module-article"
@@ -26,16 +29,17 @@ export default ({
 
             <date className="m-pst-date">Published on {Moment(post.published_date).format("MMM DD, YYYY")}</date>
 
-            {author &&
-            <div className="m-pst-author">Written by <Link className="m-pst-author-link"
-                                                           to={`${root}author/${author.slug}`}>{author.display_name}</Link>
-            </div>
+            {author ?
+                <div className="m-pst-author">Written by
+                    <a className="m-pst-author-link"
+                       href={`${root}author/${author.slug}`}>{author.display_name}</a>
+                </div> : null
             }
 
-            {category &&
-            <div className="m-pst-category">Category: <Link className="m-pst-category-link"
-                                                            to={`${root}category/${category.slug}`}>{category.name}</Link>
-            </div>
+            {category ?
+                <div className="m-pst-category">Category: <a className="m-pst-category-link"
+                                                             href={`${root}category/${category.slug}`}>{category.name}</a>
+                </div> : null
             }
 
             {post.tags && post.tags.length > 0 ?
@@ -43,8 +47,8 @@ export default ({
                     <ul className="m-pst-tags">
                         {post.tags.map(tag =>
                             <li key={`${post._id}_${tag}`} className="m-pst-tag">
-                                <Link className="m-pst-tag-link"
-                                      to={`${root}tag/${tag}`}>#{tag}</Link>
+                                <a className="m-pst-tag-link"
+                                   href={`${root}tag/${tag}`}>#{tag}</a>
                             </li>
                         )}
                     </ul>

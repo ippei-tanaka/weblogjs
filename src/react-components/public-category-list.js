@@ -11,7 +11,7 @@ export default ({
                 <ul className="m-nan-list">
                     {categories.map(category => (
                         <li key={category._id} className="m-nan-list-item">
-                            <a className="m-nan-link" href={`${root}/category/${category.slug}`}>{category.name} ({category.size})</a>
+                            <a className="m-nan-link" href={`${root}category/${category.slug}`}>{category.name} ({category.size})</a>
                         </li>
                     ))}
                 </ul>
