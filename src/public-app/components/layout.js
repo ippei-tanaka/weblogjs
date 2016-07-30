@@ -1,8 +1,7 @@
 import React from 'react';
 import config from "../../config";
-import urlResolver from "../../utilities/url-resolver";
 
-const root = urlResolver.resolve(config.getValue('publicSiteRoot')) + "/";
+const root = config.getValue('publicSiteRoot');
 
 export default ({children, blogName = "", title = "", theme, menu}) => (
     <html lang="en">

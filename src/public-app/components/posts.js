@@ -1,9 +1,8 @@
 import React from 'react';
 import PublicPost from "../../react-components/public-post";
 import config from "../../config";
-import urlResolver from "../../utilities/url-resolver";
 
-const root = urlResolver.resolve(config.getValue('publicSiteRoot')) + "/";
+const root = config.getValue('publicSiteRoot');
 
 export default ({posts, categories, authors}) => (
     <div>
