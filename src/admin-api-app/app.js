@@ -7,6 +7,11 @@ import { ObjectID } from 'mongodb';
 import { successHandler, errorHandler, parseParameters, isLoggedIn, isLoggedOut, bypass } from './handlers';
 import fs from 'fs';
 import path from 'path';
+import passportManager from '../passport-manager';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import expressSession from 'express-session';
+import config from '../config';
 
 const addRoutesForCrudOperations = (schemaName, app, filter) =>
 {
@@ -163,6 +168,18 @@ const addRoutesForThemes = (app, filter) =>
 };
 
 let adminApiApp = express();
+
+adminApiApp.use(bodyParser.json());
+adminApiApp.use(bodyParser.urlencoded({extended: false}));
+adminApiApp.use(cookieParser());
+adminApiApp.use(expressSession({
+    secret: config.getValue('sessionSecret'),
+    resave: true,
+    saveUninitialized: true
+}));
+
+adminApiApp.use(passportManager.passport.initialize());
+adminApiApp.use(passportManager.passport.session());
 
 // The order of those functions matters.
 adminApiApp = addRoutesForHome(adminApiApp);

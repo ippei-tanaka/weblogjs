@@ -1,7 +1,4 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import expressSession from 'express-session';
 import co from 'co';
 
 let server;
@@ -17,21 +14,9 @@ export const start = () => co(function* ()
     const adminApiApp = require('./admin-api-app/app');
     const adminSiteApp = require('./admin-app/app');
     const publicSiteApp = require('./public-app/app');
-    const passportManager = require('./passport-manager');
     const UserModel = require('./models/user-model');
     const app = express();
 
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: false}));
-    app.use(cookieParser());
-    app.use(expressSession({
-        secret: config.getValue('sessionSecret'),
-        resave: false,
-        saveUninitialized: false
-    }));
-
-    app.use(passportManager.passport.initialize());
-    app.use(passportManager.passport.session());
     app.use(config.getValue('adminApiRoot'), adminApiApp);
     app.use(config.getValue('adminSiteRoot'), adminSiteApp);
     app.use(config.getValue('publicSiteRoot'), publicSiteApp);
