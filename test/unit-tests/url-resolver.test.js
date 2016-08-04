@@ -1,7 +1,9 @@
 /* global describe it before beforeEach after afterEach */
 
 import {expect} from 'chai';
-import urlResolver from '../lib/utilities/url-resolver';
+
+const rootPath = process.env.NODE_ENV === "production" ? '../../lib' : '../../src';
+const urlResolver = require(`${rootPath}/utilities/url-resolver`);
 
 describe('urlResolver', () =>
 {
