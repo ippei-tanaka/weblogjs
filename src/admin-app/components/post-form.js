@@ -1,5 +1,19 @@
 import React from 'react';
-import { FieldSet, SubmitButton, Button, ButtonList, Input, Select, Option, Checkbox, Textarea, Datetime, TagList, Title, Form } from '../../react-components/form';
+import {
+    FieldSet,
+    SubmitButton,
+    Button,
+    ButtonList,
+    Input,
+    Select,
+    Option,
+    Checkbox,
+    Textarea,
+    Datetime,
+    TagList,
+    Title,
+    Form
+} from '../../react-components/form';
 import PublicPost from '../../react-components/public-post';
 
 export default function PostForm ({
@@ -13,8 +27,9 @@ export default function PostForm ({
     onChange,
     onSubmit,
     onClickBackButton,
-    submitButtonLabel
-    })
+    submitButtonLabel,
+    root
+})
 {
 
     const _onChange = field =>
@@ -52,7 +67,17 @@ export default function PostForm ({
             </FieldSet>
 
             <div className="m-dte-preview">
-                <PublicPost post={values} categories={categoryMap} authors={authorMap}/>
+                <PublicPost root={root}
+                            _id={values._id}
+                            title={values.title}
+                            slug={values.slug}
+                            content={values.content_edited}
+                            category_id={values.category_id}
+                            author_id={values.author_id}
+                            published_date={values.published_date}
+                            tags={values.tags}
+                            categories={categoryMap}
+                            authors={authorMap}/>
             </div>
 
             <FieldSet label="Category"

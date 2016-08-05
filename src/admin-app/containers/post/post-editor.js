@@ -4,7 +4,9 @@ import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
 import config from '../../../config';
+import { Converter } from 'showdown';
 
+const converter = new Converter();
 const root = config.getValue('adminSiteRoot');
 
 class PostEditor extends Component {
@@ -48,17 +50,21 @@ class PostEditor extends Component {
         const editedPost = postStore.get(id) || null;
         const transaction = transactionStore.get(this.state.actionId);
         const errors = transaction ? transaction.get('errors') : {};
-        const values = Object.assign({}, editedPost, this.state.values);
         const userList = userStore.toArray();
         const categoryList = categoryStore.toArray();
         const userMap = userStore.toObject();
         const categoryMap = categoryStore.toObject();
+        const values = Object.assign({}, editedPost, this.state.values);
+
+        const _values = Object.assign({}, values, {
+            content_edited: converter.makeHtml(values.content)
+        });
 
         return editedPost ? (
             <div>
                 <PostForm title={`Edit the Post "${editedPost.title}"`}
                           errors={errors}
-                          values={values}
+                          values={_values}
                           categoryList={categoryList}
                           authorList={userList}
                           categoryMap={categoryMap}
@@ -67,6 +73,7 @@ class PostEditor extends Component {
                           onSubmit={this._onSubmit.bind(this)}
                           onClickBackButton={this._goToListPage.bind(this)}
                           submitButtonLabel="Update"
+                          root={root}
                 />
             </div>
         ) : (

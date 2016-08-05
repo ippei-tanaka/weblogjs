@@ -4,6 +4,9 @@ import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
 import config from '../../../config';
+import { Converter } from 'showdown';
+
+const converter = new Converter();
 
 const root = config.getValue('adminSiteRoot');
 
@@ -53,14 +56,18 @@ class PostAdder extends Component {
         const errors = transaction ? transaction.get('errors') : {};
         const categoryList = categoryStore.toArray();
         const userList = userStore.toArray();
-        const values = this.state.values;
         const userMap = userStore.toObject();
         const categoryMap = categoryStore.toObject();
+        const values = this.state.values;
+
+        const _values = Object.assign({}, values, {
+            content_edited: converter.makeHtml(values.content)
+        });
 
         return (
             <PostForm title="Create a New Post"
                       errors={errors}
-                      values={values}
+                      values={_values}
                       categoryList={categoryList}
                       authorList={userList}
                       categoryMap={categoryMap}
@@ -69,6 +76,7 @@ class PostAdder extends Component {
                       onSubmit={this._onSubmit.bind(this)}
                       onClickBackButton={this._goToListPage.bind(this)}
                       submitButtonLabel="Create"
+                      root={root}
             />
         );
     }

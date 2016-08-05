@@ -9,7 +9,8 @@ export default ({children, blogName = "", title = "", theme, menu}) => (
         <meta charSet="utf-8"/>
         <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link href={`${root}bundle/themes/${theme}.css`} media="screen" rel="stylesheet"/>
+        <link href={`${root}bundle/themes/${theme}-base.css`} media="screen" rel="stylesheet"/>
+        <link href={`${root}bundle/themes/${theme}-post.css`} media="screen" rel="stylesheet"/>
         <title>{title}</title>
     </head>
     <body>

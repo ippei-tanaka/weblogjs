@@ -3,8 +3,8 @@ import express from 'express';
 import pluralize from 'pluralize';
 import PassportManager from '../passport-manager';
 import Models from '../models';
-import { ObjectID } from 'mongodb';
-import { successHandler, errorHandler, parseParameters, isLoggedIn, isLoggedOut, bypass } from './handlers';
+import {ObjectID} from 'mongodb';
+import {successHandler, errorHandler, parseParameters, isLoggedIn, isLoggedOut} from './handlers';
 import fs from 'fs';
 import path from 'path';
 import passportManager from '../passport-manager';
@@ -21,7 +21,7 @@ const addRoutesForCrudOperations = (schemaName, app, filter) =>
 
     app.get(`/${path}`, filter, (request, response) => co(function* ()
     {
-        const { query, sort, limit, skip } = parseParameters(request.url);
+        const {query, sort, limit, skip} = parseParameters(request.url);
         const models = yield Model.findMany({query, sort, limit, skip});
         successHandler(response, {items: models});
     }).catch(errorHandler(response)));
@@ -153,14 +153,35 @@ const addRoutesForThemes = (app, filter) =>
             res(result);
         }));
 
-        successHandler(response, {
-            items: fileNames.map(name =>
+        const nameCounts = {};
+        const regexBase = /^(.+)-base\.css$/;
+        const regexPost = /^(.+)-post\.css$/;
+
+        for (const fileName of fileNames)
+        {
+            if (regexBase.test(fileName))
             {
-                return {
-                    name: name.replace(/\.css$/, "")
-                }
-            })
-        });
+                const name = RegExp.$1;
+                nameCounts[name] = Number.isInteger(nameCounts[name]) ? nameCounts[name] + 1 : 1;
+            }
+            else if (regexPost.test(fileName))
+            {
+                const name = RegExp.$1;
+                nameCounts[name] = Number.isInteger(nameCounts[name]) ? nameCounts[name] + 1 : 1;
+            }
+        }
+
+        const items = [];
+
+        for (const name of Object.keys(nameCounts))
+        {
+            if (nameCounts[name] >= 2)
+            {
+                items.push({name});
+            }
+        }
+
+        successHandler(response, {items});
 
     }).catch(errorHandler(response)));
 

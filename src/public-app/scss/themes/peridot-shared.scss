@@ -1,0 +1,54 @@
+@import "../mixins";
+@import url(https://fonts.googleapis.com/css?family=Hind:400,700);
+
+/*==================================
+ Variables
+===================================*/
+
+/*----------------------------
+ Font Base
+----------------------------*/
+$font-size-base: 16px;
+$font-family: 'Hind', sans-serif;
+$color-default-font: #000000;
+$max-width: 880px;
+
+/*----------------------------
+ Media Query
+----------------------------*/
+$device-desktop-width: 700px;
+
+/*----------------------------
+ Utils
+----------------------------*/
+$border-color: #cccccc;
+$menu-title-color: #000000;
+$error-page-bg-color: #f0f0f0;
+$link-color: #7cb022;
+
+/*==================================
+ Base Classes
+===================================*/
+
+/*----------------------------
+ Text Style (Base Class)
+----------------------------*/
+.text-style {
+    font-family: $font-family;
+    color: $color-default-font;
+    font-size: $font-size-base;
+    line-height: 1.2;
+}
+
+/*----------------------------
+ Link Style (Base Class)
+----------------------------*/
+.link-style {
+    font-size: 100%;
+    color: $link-color;
+    text-decoration: none;
+
+    &:hover {
+        @include opacity(0.7);
+    }
+}

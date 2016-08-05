@@ -34,7 +34,7 @@ class AdminWrapper extends Component {
 
         return (
             <div className="module-home-page">
-                {theme && <link href={urlResolver.resolve(publicRoot, `bundle/themes/${theme}.css`)} media="screen" rel="stylesheet"/>}
+                {theme && <link href={urlResolver.resolve(publicRoot, `bundle/themes/${theme}-post.css`)} media="screen" rel="stylesheet"/>}
                 <div className="m-hmp-menu-container">
                     <AdminMenu
                         adminRoot={root}
