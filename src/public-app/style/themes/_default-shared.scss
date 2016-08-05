@@ -1,6 +1,5 @@
 @import "../mixins";
-@import url(https://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic);
-
+@import url(https://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic|Source+Code+Pro:400,700);
 
 /*==================================
  Variables
@@ -14,7 +13,9 @@ $font-family-lato: 'Lato', sans-serif;
 $font-size-base: 16px;
 $color-default-font: #000000;
 
-
+/*----------------------------
+ Width
+----------------------------*/
 $max-width: 880px;
 
 
@@ -31,6 +32,7 @@ $border-color: #cccccc;
 $menu-title-color: #000000;
 $error-page-bg-color: #f0f0f0;
 $link-color: #00a6c0;
+$body-background-color: #ffffff;
 
 /*==================================
  Base Classes

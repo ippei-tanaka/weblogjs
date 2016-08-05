@@ -1,14 +1,10 @@
 @import "../mixins";
-@import "./default-shared";
+@import "./_peridot-shared";
 
 /*----------------------------
  Post
 ----------------------------*/
 .module-post {
-    @extend .text-style;
-
-    font-family: 'Quattrocento', serif;
-
     .m-pst-title {
         font-size: 36px;
         margin-bottom: 44px;
@@ -25,7 +21,7 @@
     .m-pst-date,
     .m-pst-author,
     .m-pst-category,
-    .m-pst-tag-container{
+    .m-pst-tag-container {
         font-size: 13px;
         margin-bottom: 10px;
         display: block;
@@ -55,8 +51,6 @@
  Article
 ----------------------------*/
 .module-article {
-    @extend .text-style;
-
     font-size: 18px;
     line-height: 1.5em;
 

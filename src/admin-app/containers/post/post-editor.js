@@ -4,9 +4,11 @@ import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
 import config from '../../../config';
-import { Converter } from 'showdown';
+import showdown from 'showdown';
 
-const converter = new Converter();
+require('../../../helpers/showdown-codehighlight-extension');
+
+const converter = new showdown.Converter({extensions: ['codehighlight']});
 const root = config.getValue('adminSiteRoot');
 
 class PostEditor extends Component {
@@ -56,15 +58,13 @@ class PostEditor extends Component {
         const categoryMap = categoryStore.toObject();
         const values = Object.assign({}, editedPost, this.state.values);
 
-        const _values = Object.assign({}, values, {
-            content_edited: converter.makeHtml(values.content)
-        });
+        values.content_edited = converter.makeHtml(values.content);
 
         return editedPost ? (
             <div>
                 <PostForm title={`Edit the Post "${editedPost.title}"`}
                           errors={errors}
-                          values={_values}
+                          values={values}
                           categoryList={categoryList}
                           authorList={userList}
                           categoryMap={categoryMap}
@@ -94,10 +94,13 @@ class PostEditor extends Component {
     _onSubmit ()
     {
         const { params : {id}, editPost } = this.props;
+        const values = Object.assign({}, this.state.values);
+        delete values.content_edited;
+
         editPost({
             id,
             actionId: this.state.actionId,
-            data: this.state.values
+            data: values
         });
     }
 

@@ -4,10 +4,11 @@ import actions from '../../actions';
 import { connect } from 'react-redux';
 import { RESOLVED } from '../../constants/transaction-status';
 import config from '../../../config';
-import { Converter } from 'showdown';
+import showdown from 'showdown';
 
-const converter = new Converter();
+require('../../../helpers/showdown-codehighlight-extension');
 
+const converter = new showdown.Converter({extensions: ['codehighlight']});
 const root = config.getValue('adminSiteRoot');
 
 class PostAdder extends Component {
@@ -60,14 +61,12 @@ class PostAdder extends Component {
         const categoryMap = categoryStore.toObject();
         const values = this.state.values;
 
-        const _values = Object.assign({}, values, {
-            content_edited: converter.makeHtml(values.content)
-        });
+        values.content_edited = converter.makeHtml(values.content);
 
         return (
             <PostForm title="Create a New Post"
                       errors={errors}
-                      values={_values}
+                      values={values}
                       categoryList={categoryList}
                       authorList={userList}
                       categoryMap={categoryMap}
@@ -91,9 +90,12 @@ class PostAdder extends Component {
 
     _onSubmit ()
     {
+        const values = Object.assign({}, this.state.values);
+        delete values.content_edited;
+
         this.props.createPost({
             actionId: this.state.actionId,
-            data: this.state.values
+            data: values
         });
     }
 

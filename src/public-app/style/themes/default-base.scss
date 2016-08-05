@@ -1,9 +1,12 @@
 @import "../mixins";
 @import "../reset";
-@import "./peridot-shared";
+@import "./_default-shared";
 
+/*----------------------------
+ Header Footer Layout
+----------------------------*/
 body {
-    @extend .text-style;
+    background-color: $body-background-color;
 }
 
 /*----------------------------
@@ -11,17 +14,18 @@ body {
 ----------------------------*/
 .module-header-footer-layout {
 
+    @extend .text-style;
     margin: 0 auto;
     max-width: $max-width;
 
     .m-hfl-header {
-        padding: 60px 40px 40px;
+        padding: 130px 40px 40px;
         position: relative;
-        text-align: center;
+        overflow: hidden;
     }
 
     .m-hfl-header-link {
-        font-size: 40px;
+        font-size: 53px;
         color: $color-default-font;
         text-decoration: none;
 
@@ -36,8 +40,7 @@ body {
 
     .m-hfl-footer {
         font-size: 14px;
-        padding: 40px 40px 40px;
-        text-align: right;
+        padding: 40px 40px 60px;
     }
 }
 
@@ -45,6 +48,8 @@ body {
  Blog Layout
 ----------------------------*/
 .module-blog-layout {
+    @extend .text-style;
+
     @include media-phone {
 
     }
@@ -58,10 +63,12 @@ body {
     }
 }
 
+
 /*----------------------------
  Section
 ----------------------------*/
 .module-section {
+    @extend .text-style;
     padding: 45px 40px 50px;
 
     &:last-child {
@@ -77,6 +84,8 @@ body {
  Error Page
 ----------------------------*/
 .module-error-page {
+    @extend .text-style;
+
     padding: 100px 40px;
     font-size: 26px;
     background-color: $error-page-bg-color;
@@ -86,6 +95,8 @@ body {
  Post List
 ----------------------------*/
 .module-post-list {
+    @extend .text-style;
+
     .m-psl-post-section {
         border-bottom: 1px solid $border-color;
 
@@ -99,6 +110,9 @@ body {
  Name And Number List
 ----------------------------*/
 .module-name-and-number-list {
+    font-family: 'Quattrocento', serif;
+    @extend .text-style;
+
     .m-nan-title {
         margin-bottom: 15px;
         color: $menu-title-color;
@@ -129,6 +143,8 @@ body {
  pagination
 ----------------------------*/
 .module-pagination {
+    @extend .text-style;
+
     .m-pgn-list {
         display: flex;
         justify-content: space-around;

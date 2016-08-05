@@ -66,18 +66,22 @@ export default function PostForm ({
                               onChange={_onChange("content")}/>
             </FieldSet>
 
-            <div className="m-dte-preview">
-                <PublicPost root={root}
-                            _id={values._id}
-                            title={values.title}
-                            slug={values.slug}
-                            content={values.content_edited}
-                            category_id={values.category_id}
-                            author_id={values.author_id}
-                            published_date={values.published_date}
-                            tags={values.tags}
-                            categories={categoryMap}
-                            authors={authorMap}/>
+            <div className="m-dte-preview-frame">
+                <div className="module-post-preview">
+                    <div className="m-dte-preview-container">
+                        <PublicPost root={root}
+                                    _id={values._id}
+                                    title={values.title}
+                                    slug={values.slug}
+                                    content={values.content_edited}
+                                    category_id={values.category_id}
+                                    author_id={values.author_id}
+                                    published_date={values.published_date}
+                                    tags={values.tags}
+                                    categories={categoryMap}
+                                    authors={authorMap}/>
+                    </div>
+                </div>
             </div>
 
             <FieldSet label="Category"

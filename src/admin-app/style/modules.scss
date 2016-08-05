@@ -410,11 +410,15 @@
         @include border-radius(5px);
     }
 
-    .m-dte-preview {
-        padding: 20px;
+    .m-dte-preview-frame {
         margin-top: 20px;
         @include border-radius(5px);
         border: 1px solid $color-border-plain;
+        overflow: hidden;
+    }
+
+    .m-dte-preview-container {
+        padding: 20px;
     }
 }
 

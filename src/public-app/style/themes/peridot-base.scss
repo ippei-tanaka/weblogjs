@@ -1,24 +1,27 @@
 @import "../mixins";
 @import "../reset";
-@import "./default-shared";
+@import "./_peridot-shared";
+
+body {
+    @extend .text-style;
+}
 
 /*----------------------------
  Header Footer Layout
 ----------------------------*/
 .module-header-footer-layout {
 
-    @extend .text-style;
     margin: 0 auto;
     max-width: $max-width;
 
     .m-hfl-header {
-        padding: 130px 40px 40px;
+        padding: 60px 40px 40px;
         position: relative;
-        overflow: hidden;
+        text-align: center;
     }
 
     .m-hfl-header-link {
-        font-size: 53px;
+        font-size: 40px;
         color: $color-default-font;
         text-decoration: none;
 
@@ -34,6 +37,7 @@
     .m-hfl-footer {
         font-size: 14px;
         padding: 40px 40px 40px;
+        text-align: right;
     }
 }
 
@@ -41,12 +45,6 @@
  Blog Layout
 ----------------------------*/
 .module-blog-layout {
-    //display: flex;
-    //align-items: stretch;
-    //flex-wrap: wrap;
-    //flex-direction: row;
-    @extend .text-style;
-
     @include media-phone {
 
     }
@@ -58,20 +56,12 @@
             border-bottom: 0;
         }
     }
-
-    .m-bll-menu {
-        //display: flex;
-        //flex-direction: column;
-    }
 }
-
 
 /*----------------------------
  Section
 ----------------------------*/
 .module-section {
-
-    @extend .text-style;
     padding: 45px 40px 50px;
 
     &:last-child {
@@ -87,8 +77,6 @@
  Error Page
 ----------------------------*/
 .module-error-page {
-    @extend .text-style;
-
     padding: 100px 40px;
     font-size: 26px;
     background-color: $error-page-bg-color;
@@ -98,8 +86,6 @@
  Post List
 ----------------------------*/
 .module-post-list {
-    @extend .text-style;
-
     .m-psl-post-section {
         border-bottom: 1px solid $border-color;
 
@@ -113,9 +99,6 @@
  Name And Number List
 ----------------------------*/
 .module-name-and-number-list {
-    font-family: 'Quattrocento', serif;
-    @extend .text-style;
-
     .m-nan-title {
         margin-bottom: 15px;
         color: $menu-title-color;
@@ -146,8 +129,6 @@
  pagination
 ----------------------------*/
 .module-pagination {
-    @extend .text-style;
-
     .m-pgn-list {
         display: flex;
         justify-content: space-around;
