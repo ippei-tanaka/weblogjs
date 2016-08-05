@@ -1,5 +1,3 @@
-/* global describe it beforeEach afterEach */
-
 import co from 'co';
 import {expect} from 'chai';
 import httpRequest from '../http-request';

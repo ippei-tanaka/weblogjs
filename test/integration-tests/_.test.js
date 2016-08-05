@@ -1,5 +1,3 @@
-/* global describe before beforeEach */
-
 import {mongoDbBaseOperator} from 'simple-odm';
 import {weblogjs} from './_setup';
 

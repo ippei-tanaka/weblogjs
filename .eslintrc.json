@@ -3,7 +3,8 @@
         "browser": true,
         "commonjs": true,
         "es6": true,
-        "node": true
+        "node": true,
+        "mocha": true
     },
     "extends": "eslint:recommended",
     "installedESLint": true,
@@ -155,6 +156,7 @@
         "no-extra-bind": "off",
         "no-extra-label": "error",
         "no-extra-parens": "off",
+        "no-extra-semi": "off",
         "no-floating-decimal": "error",
         "no-implicit-coercion": "error",
         "no-implicit-globals": "error",
@@ -218,7 +220,7 @@
                 "defaultAssignment": true
             }
         ],
-        "no-unused-expressions": "error",
+        "no-unused-expressions": "off",
         "no-use-before-define": "error",
         "no-useless-call": "error",
         "no-useless-computed-key": "error",

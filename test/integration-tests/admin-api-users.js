@@ -1,5 +1,3 @@
-/* global describe it beforeEach afterEach */
-
 import co from 'co';
 import {expect} from 'chai';
 import httpRequest from '../http-request';
@@ -10,7 +8,6 @@ export default function ()
 {
     describe('/users', () =>
     {
-
         beforeEach('login', () => login());
         afterEach('logout', () => logout());
 
@@ -49,7 +46,6 @@ export default function ()
             co(function* ()
             {
                 let errors;
-
                 try
                 {
                     yield httpRequest.post(`${ADMIN_URL}/users`, {});
@@ -58,7 +54,6 @@ export default function ()
                 {
                     errors = e;
                 }
-
                 expect(errors.body.email[0]).to.equal("The email is required.");
                 expect(errors.body.password[0]).to.equal("The password is required.");
                 expect(errors.body.display_name[0]).to.equal("The display name is required.");
@@ -112,7 +107,6 @@ export default function ()
             co(function* ()
             {
                 let error;
-
                 try
                 {
                     const {_id} = yield httpRequest.post(`${ADMIN_URL}/users`, testUser);
@@ -126,11 +120,8 @@ export default function ()
                 {
                     error = e;
                 }
-
                 expect(error.body.password[0]).to.equal("The password can't be updated.");
-
                 done();
-
             }).catch((e) =>
             {
                 done(e);
@@ -142,7 +133,6 @@ export default function ()
             co(function* ()
             {
                 let error;
-
                 try
                 {
                     const {_id} = yield httpRequest.post(`${ADMIN_URL}/users`, testUser);
@@ -154,12 +144,10 @@ export default function ()
                 {
                     error = e;
                 }
-
                 expect(error.body.old_password[0]).to.equal('The current password is required.');
                 expect(error.body.password_confirmed[0]).to.equal('The confirmed password is required.');
 
                 done();
-
             }).catch((e) =>
             {
                 done(e);
@@ -171,7 +159,6 @@ export default function ()
             co(function* ()
             {
                 let error;
-
                 try
                 {
                     const {_id} = yield httpRequest.post(`${ADMIN_URL}/users`, testUser);
@@ -185,11 +172,8 @@ export default function ()
                 {
                     error = e;
                 }
-
                 expect(error.body.password[0]).to.equal('The new password is required.');
-
                 done();
-
             }).catch((e) =>
             {
                 done(e);
@@ -251,9 +235,7 @@ export default function ()
         {
             co(function* ()
             {
-
                 let error;
-
                 try
                 {
                     const {_id} = yield httpRequest.post(`${ADMIN_URL}/users`, testUser);
@@ -268,9 +250,7 @@ export default function ()
                 {
                     error = e;
                 }
-
                 expect(error.body.old_password[0]).to.equal('The current password sent is not correct.');
-
                 done();
             }).catch((e) =>
             {
@@ -282,9 +262,7 @@ export default function ()
         {
             co(function* ()
             {
-
                 let error;
-
                 try
                 {
                     const {_id} = yield httpRequest.post(`${ADMIN_URL}/users`, testUser);
@@ -299,10 +277,8 @@ export default function ()
                 {
                     error = e;
                 }
-
                 expect(error.body.password_confirmed[0]).to
                                                         .equal('The confirmed password sent is not the same as the new password.');
-
                 done();
             }).catch((e) =>
             {

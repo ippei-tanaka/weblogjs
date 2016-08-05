@@ -1,5 +1,3 @@
-/* global describe it before beforeEach after afterEach */
-
 import {expect} from 'chai';
 
 const rootPath = process.env.NODE_ENV === "production" ? '../../lib' : '../../src';
