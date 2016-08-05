@@ -155,7 +155,7 @@ router.get(/^(\/category\/[^/]+)?(\/author\/[^/]+)?(\/tag\/[^/]+)?(\/|\/page\/[0
     const nextPage = page + 1 <= totalPages ? page + 1 : null;
     const categories = yield getUsedCategories();
     const authors = (yield UserModel.findMany()).map(m => m.values);
-    const menu = <CategoryList categories={categories}/>;
+    const menu = categories.length > 0 ? <CategoryList categories={categories}/> : null;
 
     response.type('html').status(OK).send(renderHtml(
         <Layout title={`${authorName}${categoryName}${tagName}${setting.name}`}
@@ -194,16 +194,20 @@ router.get(/^\/post\/([^/]+)\/?$/, (request, response, next) => co(function* ()
     }
 
     const setting = (yield SettingModel.getSetting()).values;
-
     const values = post.values;
+    const categories = yield getUsedCategories();
+    const authors = (yield UserModel.findMany()).map(m => m.values);
+    const menu = categories.length > 0 ? <CategoryList categories={categories}/> : null;
 
     response.type('html').status(OK).send(renderHtml(
         <Layout title={`${values.title} - ${setting.name}`}
                 blogName={setting.name}
                 theme={setting.theme}
-                menu={<CategoryList categories={yield getUsedCategories()}/>}
+                menu={menu}
         >
-            <Posts posts={[values]}/>
+            <Posts posts={[values]}
+                   categories={categories}
+                   authors={authors}/>
         </Layout>
     ));
 
