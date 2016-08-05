@@ -1,13 +1,17 @@
 @import "../mixins";
 @import "./_peridot-shared";
+@import "../highlightjs/railscasts";
 
 /*----------------------------
  Post
 ----------------------------*/
 .module-post {
+    @extend .text-style;
+
     .m-pst-title {
-        font-size: 36px;
+        font-size: 34px;
         margin-bottom: 44px;
+        font-weight: bold;
     }
 
     .m-pst-link {
@@ -21,7 +25,7 @@
     .m-pst-date,
     .m-pst-author,
     .m-pst-category,
-    .m-pst-tag-container {
+    .m-pst-tag-container{
         font-size: 13px;
         margin-bottom: 10px;
         display: block;
@@ -47,37 +51,47 @@
 
 }
 
+
+/*----------------------------
+ Post Preview
+----------------------------*/
+.module-post-preview {
+    background-color: $body-background-color;
+}
+
 /*----------------------------
  Article
 ----------------------------*/
 .module-article {
-    font-size: 18px;
+    @extend .text-style;
+
+    font-size: 16px;
     line-height: 1.5em;
 
     h1 {
-        font-size: 35px;
+        font-size: 30px;
         margin-bottom: 35px;
     }
 
     h2 {
-        font-size: 30px;
-        margin-bottom: 30px;
+        font-size: 26px;
+        margin-bottom: 26px;
     }
 
     h3 {
-        font-size: 27px;
-        margin-bottom: 27px;
+        font-size: 23px;
+        margin-bottom: 23px;
     }
 
     h4 {
-        font-size: 24px;
-        margin-bottom: 24px;
+        font-size: 20px;
+        margin-bottom: 20px;
     }
 
     h5,
     h6 {
-        font-size: 20px;
-        margin-bottom: 20px;
+        font-size: 18px;
+        margin-bottom: 18px;
     }
 
     a {
@@ -86,6 +100,13 @@
 
     p {
         margin-bottom: 15px;
+    }
+
+    code {
+        font-family: 'Source Code Pro', sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+        padding: 15px;
     }
 
 }
