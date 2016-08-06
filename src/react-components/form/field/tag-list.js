@@ -105,6 +105,8 @@ class TagList extends React.Component {
         if (index !== -1) {
             this.setState(state => {
                 state.tags.splice(index, 1);
+            }, () => {
+                this.props.onChange(this.state.tags);
             });
         }
     }
