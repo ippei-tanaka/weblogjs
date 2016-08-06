@@ -1,5 +1,5 @@
 @import "../mixins";
-@import url(https://fonts.googleapis.com/css?family=Candal|Oxygen:400,700);
+@import url(https://fonts.googleapis.com/css?family=Candal|Oxygen:400,700|Lora:400,700|Source+Code+Pro:400,700);
 
 /*==================================
  Variables
@@ -9,7 +9,6 @@
  Font Base
 ----------------------------*/
 $font-family-default: Helvetica, sans-serif;
-$font-family-lato: 'Lato', sans-serif;
 $font-size-base: 16px;
 $color-default-font: #000000;
 
@@ -32,7 +31,7 @@ $border-color: #cccccc;
 $menu-title-color: #000000;
 $error-page-bg-color: #f0f0f0;
 $link-color: #496900;
-$body-background-color: #87b700;
+$body-background-color: #dee4ca;
 
 /*==================================
  Base Classes
@@ -42,7 +41,7 @@ $body-background-color: #87b700;
  Text Style (Base Class)
 ----------------------------*/
 .text-style {
-    font-family: 'Oxygen', sans-serif;
+    font-family: 'Lora', serif;
     color: $color-default-font;
     font-size: $font-size-base;
     line-height: 1.2;

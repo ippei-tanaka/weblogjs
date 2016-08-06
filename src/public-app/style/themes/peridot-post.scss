@@ -66,7 +66,8 @@
     @extend .text-style;
 
     font-size: 16px;
-    line-height: 1.5em;
+    line-height: 1.7;
+    font-family: 'Oxygen', sans-serif;
 
     h1 {
         font-size: 30px;
@@ -99,7 +100,7 @@
     }
 
     p {
-        margin-bottom: 15px;
+        margin-bottom: 25px;
     }
 
     code {
@@ -107,6 +108,7 @@
         font-size: 14px;
         line-height: 1.5;
         padding: 15px;
+        margin-bottom: 25px;
     }
 
 }
