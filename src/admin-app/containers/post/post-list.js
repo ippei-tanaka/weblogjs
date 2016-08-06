@@ -39,7 +39,18 @@ class PostList extends Component {
             },
 
             content: {
-                label: "Content"
+                label: "Content",
+                stringify: value =>
+                {
+                    if (value.length > 100)
+                    {
+                        return value.substr(0, 100) + '...';
+                    }
+                    else
+                    {
+                        return value;
+                    }
+                }
             },
 
             slug: {
