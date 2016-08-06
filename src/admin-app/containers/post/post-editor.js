@@ -73,7 +73,7 @@ class PostEditor extends Component {
                           onSubmit={this._onSubmit.bind(this)}
                           onClickBackButton={this._goToListPage.bind(this)}
                           submitButtonLabel="Update"
-                          root={root}
+                          root={root + "/"}
                 />
             </div>
         ) : (

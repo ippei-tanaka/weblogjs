@@ -75,7 +75,7 @@ class PostAdder extends Component {
                       onSubmit={this._onSubmit.bind(this)}
                       onClickBackButton={this._goToListPage.bind(this)}
                       submitButtonLabel="Create"
-                      root={root}
+                      root={root + "/"}
             />
         );
     }
