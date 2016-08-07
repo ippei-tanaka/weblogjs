@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import AdminMenu from '../components/admin-menu';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import actions from '../actions';
-import { LOGOUT_FAILED } from '../constants/auth-status';
+import {LOGOUT_FAILED} from '../constants/auth-status';
 import config from '../../config';
 import urlResolver from '../../utilities/url-resolver';
 
@@ -13,7 +13,8 @@ const failedToLogout = <div>Failed to log out.</div>;
 
 class AdminWrapper extends Component {
 
-    constructor (props) {
+    constructor (props)
+    {
         super(props);
 
         this.state = {
@@ -21,20 +22,23 @@ class AdminWrapper extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount ()
+    {
         this.props.loadSetting();
     }
 
-    render() {
-        const { mobileMenuVisible } = this.state;
-        const { authStore, children, settingStore } = this.props;
+    render ()
+    {
+        const {mobileMenuVisible} = this.state;
+        const {authStore, children, settingStore} = this.props;
         const authStatus = authStore.get('status');
         const content = authStatus !== LOGOUT_FAILED ? children : failedToLogout;
         const theme = settingStore ? settingStore.theme : null;
 
         return (
             <div className="module-home-page">
-                {theme && <link href={urlResolver.resolve(publicRoot, `bundle/themes/${theme}-post.css`)} media="screen" rel="stylesheet"/>}
+                {theme && <link href={urlResolver.resolve(publicRoot, `bundle/themes/${theme}-post.css`)} media="screen"
+                                rel="stylesheet"/>}
                 <div className="m-hmp-menu-container">
                     <AdminMenu
                         adminRoot={root}
@@ -46,37 +50,41 @@ class AdminWrapper extends Component {
                         mobileMenuVisible={mobileMenuVisible}
                     />
                 </div>
-                <div className="m-hmp-content-container1">
-                    <div className="m-hmp-content-container2">
-                        {content}
-                    </div>
+                <div className="m-hmp-content-container">
+                    {content}
                 </div>
             </div>
         );
     }
 
-    _onMenuButtonClick () {
+    _onMenuButtonClick ()
+    {
         this.setState({mobileMenuVisible: false});
     }
 
-    _onMenuToggle () {
+    _onMenuToggle ()
+    {
         this.setState({mobileMenuVisible: !this.state.mobileMenuVisible});
     }
 
-    _onLogoutClick () {
+    _onLogoutClick ()
+    {
         const message = "Are you sure that you want to log out?";
 
-        if (window.confirm(message)) {
+        if (window.confirm(message))
+        {
             this.props.requestLogout();
         }
     }
 
-    _onBlueOutMenuToTop () {
+    _onBlueOutMenuToTop ()
+    {
         const el = ReactDOM.findDOMNode(this);
         el.querySelector('[data-weblog="m-nvg-log-out-button"]').focus();
     }
 
-    _onBlueOutMenuToBottom () {
+    _onBlueOutMenuToBottom ()
+    {
         const el = ReactDOM.findDOMNode(this);
         el.querySelector('[data-weblog="m-nvg-toggle-button"]').focus();
     }

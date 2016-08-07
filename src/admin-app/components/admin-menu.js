@@ -11,7 +11,7 @@ const AdminMenu = ({
     onLastElementFocus,
     mobileMenuVisible
     }) => (
-    <nav className="module-navigation">
+    <nav className={classNames("module-navigation", {"m-nvg-container-show": mobileMenuVisible})}>
         <div tabIndex="0"
              onFocus={onFirstElementFocus}
              className={classNames("m-nvg-mobile-tab-stopper", {"m-nvg-stopper-show": mobileMenuVisible})}
